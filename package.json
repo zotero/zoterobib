@@ -35,7 +35,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-select": "^1.0.0-rc.3",
-    "zotero-bib": "github:tnajdek/bib#v0.0.2-release"
+    "zotero-bib": "github:zotero/bib#v0.0.2-release"
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
