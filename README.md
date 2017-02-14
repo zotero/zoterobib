@@ -1,5 +1,8 @@
 # Zotero Bib React Component
 
+Overview
+--------
+This is a react component that is renders and manages GUI for zotero-bib.
 
 Prerequisites
 ------------
@@ -12,7 +15,7 @@ Local Demo
 
 Getting The Library
 
-1. `git clone https://github.com/zotero/bib-web`
+1. `git clone git@github.com:zotero/bib-web.git`
 
 1. `cd bib-web`
 
