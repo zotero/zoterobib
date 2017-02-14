@@ -1,0 +1,184 @@
+@import "react-select";
+
+* {
+	box-sizing: border-box;
+}
+
+body, html, .zotero-bib {
+	width: 100%;
+}
+
+.zotero-bib {
+	overflow: hidden;
+}
+
+@keyframes spinning {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.zotero-bib-form {
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	padding-top: 7em;
+	padding-bottom: 1em;
+}
+
+.zotero-bib-form-url {
+	padding: .5em;
+	font-size: 1.25em;
+	border: 1px solid #900;
+	flex: 1 0 auto;
+
+	&:focus {
+		box-shadow: 0 0 3px 1px rgba(153, 0, 0, .25);
+		outline: none;
+		border: 1px solid #900;
+	}
+}
+
+button {
+	border: 1px solid #900;
+	color: #900;
+	background: #fff;
+}
+
+.zotero-bib-form-config-button {
+	color: #900;
+	vertical-align: middle;
+	padding: .5em .75em;
+
+	svg {
+		vertical-align: middle;
+		margin-right: .5em;
+	}
+}
+
+.zotero-bib-form-submit-button {
+	flex: 0 1 20%;
+	margin-left: 0.5em;
+	font-size: 1.25em;
+	text-transform: uppercase;
+
+	&.loading:after {
+		content: '';
+		animation: spinning .75s steps(8, end) infinite;
+		background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZlcnNpb249IjEuMSIgeT0iMHB4IiB4PSIwcHgiIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgdmlld0JveD0iMCAwIDUwIDUwIj48cGF0aCBkPSJtMzUuODMgMy43NTljNC4zNzcgMi4yMjUgOC4wODYgNS44NiAxMC4yOSAxMC41M2wtMTAuMjEgNC42NDljLTAuODkwMi0yLjEyNy0yLjg0NC0zLjk1Ni01LjE2OC01LjExOWw1LjA5LTEwLjA2eiIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9Ii4zNTYxIiBjbGFzcz0ic3QxIi8+PGcgc3Ryb2tlPSIjZTdlN2U3IiBzdHJva2Utd2lkdGg9Ii4zNTYxIiBmaWxsPSIjZTdlN2U3Ij48cGF0aCBkPSJtNDcuNjcgMTcuNjNjMS41MzMgNC42NzMgMS41ODMgOS44NDEtMC4xNzMxIDE0LjcxbC0xMC41MS0zLjkwN2MwLjg2NTUtMi4xMjcgMC43NjY1LTQuNzk3LTAuMDQ5NDUtNy4yN2wxMC43My0zLjUzNnoiIGNsYXNzPSJzdDAiLz48cGF0aCBkPSJtNDYuMjQgMzUuODNjLTIuMjI1IDQuMzc3LTUuODYgOC4wODYtMTAuNTMgMTAuMjlsLTQuNjQ5LTEwLjE5YzIuMTI3LTAuODkwMiAzLjk1Ni0yLjg0NCA1LjExOS01LjE2OGwxMC4wNiA1LjA2OXoiIGNsYXNzPSJzdDAiLz48cGF0aCBkPSJtMzIuMzcgNDcuNjdjLTQuNjczIDEuNTMzLTkuODQxIDEuNTgzLTE0LjcxLTAuMTczMWwzLjkwNy0xMC41MWMyLjEyNyAwLjg2NTQgNC43OTcgMC43NjY1IDcuMjctMC4wNDk1bDMuNTM2IDEwLjczeiIgY2xhc3M9InN0MCIvPjxwYXRoIGQ9Im0xNC4xNyA0Ni4yNGMtNC4zNzctMi4yMi04LjA4Ni01Ljg2LTEwLjI5LTEwLjUzbDEwLjE5LTQuNjQ5YzAuODkwMiAyLjEyNyAyLjg0NCAzLjk1NiA1LjE2OCA1LjExOWwtNS4wNjkgMTAuMDZ6IiBjbGFzcz0ic3QwIi8+PHBhdGggZD0ibTIuMzI1IDMyLjM3Yy0xLjUzMy00LjY3My0xLjU4My05Ljg0MSAwLjE3MzEtMTQuNzFsMTAuNTEgMy45MDdjLTAuODY1NSAyLjEyNy0wLjc2NjUgNC43OTcgMC4wNDk0NSA3LjI3bC0xMC43MyAzLjUzNnoiIGNsYXNzPSJzdDAiLz48cGF0aCBkPSJtMy43NTkgMTQuMTdjMi4yMjYtNC4zNzcgNS44NjEtOC4wODYgMTAuNTMtMTAuMjlsNC42NDkgMTAuMTljLTIuMTI3IDAuODkwMi0zLjk1NiAyLjg0NC01LjExOSA1LjE2OGwtMTAuMDYtNS4wN3oiIGNsYXNzPSJzdDAiLz48cGF0aCBkPSJtMTcuNjMgMi4zMjVjNC42NzMtMS41MzMgOS44NDEtMS41ODMgMTQuNzEgMC4xNzMxbC0zLjkgMTAuNTFjLTIuMTI3LTAuODY1NC00Ljc5Ny0wLjc2NjUtNy4yNyAwLjA0OTVsLTMuNTQtMTAuNzR6IiBjbGFzcz0ic3QwIi8+PC9nPjwvc3ZnPgo=') 0 0 no-repeat;
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+	}
+}
+
+.zotero-bib-form-main {
+	display: flex;
+	width: 100%;
+	max-width: 640px;
+	margin: 0 auto;
+
+}
+
+.zotero-bib-preferences {
+	width: 320px;
+	position: absolute;
+	top: 2em;
+	right: -272px;
+	bottom: 0;
+	transition: transform 0.3s ease-out;
+
+	&.open {
+		transform: translate(-272px);
+	}
+}
+
+.zotero-bib-preferences-outer {
+	border-radius: 5px 0 0 5px;
+	padding: 0.5em 0.5em 0.35em 0.5em;
+	background: #7a8799;
+
+	h2 {
+		display: inline-block;
+		width: 200px;
+		font-size: 1.25em;
+		text-transform: uppercase;
+		color: #fff;
+		margin: 0 0 0 32px;
+		vertical-align: 4px;
+	}
+}
+
+.zotero-bib-preferences-inner {
+	margin-left: 48px;
+	background: #7a8799;
+	padding: 2em .75em;
+    position: absolute;
+    bottom: 0;
+    top: 2.5em;
+    right: 0;
+    left: 0;
+    color: #fff;
+}
+
+.zotero-bib-preferences-item {
+	margin-top: 1em;
+
+	label {
+		vertical-align: middle;
+		line-height: 2em;
+	}
+}
+
+.zotero-bib-citation-style-selector {
+	.Select-control {
+		border-radius: 0;
+	}
+}
+
+.zotero-bib-form-options-icon {
+	color: #fff;
+	cursor: pointer;
+
+	&:hover {
+		animation: spinning .75s steps(10, end) infinite;
+	}
+}
+
+.zotero-bib-citations {
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.zotero-bib-preferences-delete-all-button {
+	width: 100%;
+	padding: .5em;
+	font-size: 1em;
+}
+
+.zotero-bib-citation-wrapper {
+	display: flex;
+	padding: .75em;
+	background: #f6f6f6;
+	margin-top: 1em;
+}
+
+.zotero-bib-citation {
+	flex: 1 0 calc(100% - 32px - .5em);
+}
+
+.zotero-bib-citation-action {
+	flex: 0 0 calc(32px + 1em);
+}
+
+footer {
+	margin: 2em auto;
+	font-size: .8em;
+	text-align: center;
+
+	a {
+		color: #900;
+		text-decoration: none;
+	}
+}

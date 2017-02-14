@@ -1,0 +1,11 @@
+[*.js]
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{html,tpl}]
+indent_style = tab
+
+[*.scss]
+indent_style = tab
+trim_trailing_whitespace = true

@@ -1,0 +1,58 @@
+{
+  "name": "zotero-bib-web",
+  "license": "AGPL-3.0",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "repository": "",
+  "main": "",
+  "config": {
+    "port": "8001",
+    "translation_server": "http://localhost:1969"
+  },
+  "scripts": {
+    "serve": "http-server -a 127.0.0.1 -p $npm_package_config_port -P $npm_package_config_translation_server build/",
+    "live-reload": "live-reload --port 9091 build/",
+    "prebuild": "npm run clean -s && mkdir -p build/icons",
+    "clean": "rimraf build/*",
+    "build": "run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:icons -s'",
+    "build:js": "browserify -s ZoteroBibComponent --extension=.jsx -d src/js/main.js -t [babelify] -o build/bib-component.js",
+    "build:scss": "node-sass src/scss/bib.scss --source-map true --output build/",
+    "build:html": "cp src/html/index.html build/",
+    "build:icons": "cp src/icons/*.svg build/icons/",
+    "watch": "run-p 'watch:js -s' 'watch:scss -s' 'watch:html -s' 'build:icons -s'",
+    "watch:js": "watchify -s ZoteroBibComponent --extension=.jsx -d src/js/main.js -v -t [babelify] src/js/main.js -o build/bib-component.js",
+    "watch:scss": "node-sass src/scss/bib.scss --watch --recursive --source-map true --output build/",
+    "watch:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
+    "watch:icons": "nodemon -q -w src/icons --ext '.' --exec 'npm run build:icons'",
+    "test": "NODE_ENV=test karma start --single-run --browsers $npm_package_config_test_browsers",
+    "start": "run-p \"build\" \"live-reload -s {@}\" \"serve -s {@}\" \"watch -s {@}\""
+  },
+  "dependencies": {
+    "babel-regenerator-runtime": "^6.5.0",
+    "es6-promise": "^4.0.5",
+    "isomorphic-fetch": "^2.2.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-select": "^1.0.0-rc.3",
+    "zotero-bib": "github:tnajdek/bib"
+  },
+  "devDependencies": {
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-plugin-transform-regenerator": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.0.0",
+    "http-server": "^0.9.0",
+    "live-reload": "^1.1.0",
+    "node-sass": "^4.5.0",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.1",
+    "rimraf": "^2.5.4",
+    "uglifyify": "^3.0.4",
+    "watchify": "^3.9.0"
+  }
+}
