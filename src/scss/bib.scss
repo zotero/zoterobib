@@ -164,6 +164,21 @@ button {
 	margin-top: 1em;
 }
 
+.zotero-bib-error {
+	width: 100%;
+	max-width: 960px;
+	margin: 0 auto;
+	text-align: center;
+	background: rgba(200, 30, 30, .6);
+	padding: 1.5em 1em;
+	color: #fff;
+	display: none;
+
+	&.visible {
+		display: block;
+	}
+}
+
 .zotero-bib-citation {
 	flex: 1 0 calc(100% - 32px - .5em);
 }

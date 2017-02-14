@@ -39,6 +39,7 @@ export default class ZoteroBibComponent extends React.Component {
 		this.state = {
 			url: '',
 			busy: false,
+			error: '',
 			citeprocReady: false,
 			preferencesOpen: false,
 			citations: []
@@ -126,24 +127,37 @@ export default class ZoteroBibComponent extends React.Component {
 
 	async translateUrlHandler(ev) {
 		ev.preventDefault();
-		this.setState({
-			busy: true
-		});
 		let url = validateUrl(this.state.url);
+		this.setState({
+			busy: true,
+			error: '',
+			url: url
+		});
 
 		if(url) {
-			await this.updating;
-			await this.bib.translateUrl(url.toString());
-			this.updateBibliography();
-			this.setState({
-				url: '',
-				busy: false
-			});
+			try {
+				await this.updating;
+				await this.bib.translateUrl(url.toString());
+				this.updateBibliography();
+				this.setState({
+					url: '',
+					busy: false
+				});
+				this.inputField.focus();
+			}
+			catch(e) {
+				this.setState({
+					error: 'An error occured when citing this source',
+					busy: false
+				});	
+				this.inputField.focus();
+			}
 		} else {
 			this.setState({
 				error: 'Value entered doesn\'t appear to be a valid URL',
 				busy: false
 			});
+			this.inputField.focus();
 		}
 	}
 
@@ -197,6 +211,8 @@ export default class ZoteroBibComponent extends React.Component {
 				<div className="zotero-bib-form">
 					<div className="zotero-bib-form-main">
 						<input
+							ref = { i => this.inputField = i }
+							autoFocus
 							placeholder="Cite a source by entering its url"
 							className="zotero-bib-form-url"
 							type="text" value={ this.state.url }
@@ -209,6 +225,9 @@ export default class ZoteroBibComponent extends React.Component {
 								{ this.state.busy ? '' : 'Cite it' }
 						</button>
 					</div>
+				</div>
+				<div className={ `zotero-bib-error ${ this.state.error ? 'visible' : ''}` }>
+					{ this.state.error }
 				</div>
 				<div className="zotero-bib-citations">
 					{
