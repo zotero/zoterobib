@@ -131,7 +131,7 @@ export default class ZoteroBibComponent extends React.Component {
 		this.setState({
 			busy: true,
 			error: '',
-			url: url
+			url: url || ''
 		});
 
 		if(url) {
