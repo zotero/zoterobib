@@ -2,11 +2,34 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClipboardButton from 'react-clipboard.js';
+
 import ZoteroBib from 'zotero-bib';
-
 import citationStyles from './citation-styles';
-
 import Select from 'react-select';
+
+const EXPORT_FORMATS = {
+	'html': {
+		mime: 'text/html',
+		label: 'HTML',
+		isDownloadable: false,
+		isCopyable: true
+	},
+
+	'text': {
+		mime: 'text/plain',
+		label: 'plain text',
+		isDownloadable: false,
+		isCopyable: true
+	},
+
+	'rtf': {
+		mime: 'text/rtf',
+		label: 'RTF',
+		isDownloadable: true,
+		isCopyable: false
+	}
+};
 
 const syncRequestAsText = url => {
 	let xhr = new XMLHttpRequest();
@@ -42,7 +65,8 @@ export default class ZoteroBibComponent extends React.Component {
 			error: '',
 			citeprocReady: false,
 			preferencesOpen: false,
-			citations: []
+			citations: [],
+			clipboardConfirmations: {}
 		};
 	}
 
@@ -104,6 +128,22 @@ export default class ZoteroBibComponent extends React.Component {
 		};
 	}
 
+	getExportData(format, asDataUrl = false) {
+		if(this.state.citeprocReady) {
+			this.citeproc.setOutputFormat(format);
+			const bib = this.citeproc.makeBibliography();
+			this.citeproc.setOutputFormat('html');
+
+			if(asDataUrl) {
+				return `data:${EXPORT_FORMATS[format]},${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+			} else {
+				return `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;	
+			}
+		}
+
+		return '';
+	}
+
 	selectCitationStyleHandler(selectedStyle) {
 		this.selectedStyleId = selectedStyle.value;
 		this.updating = this.updateCiteproc();
@@ -123,6 +163,28 @@ export default class ZoteroBibComponent extends React.Component {
 	deleteAllCitationsHandler() {
 		this.bib.clearItems();
 		this.updateBibliography();
+	}
+
+	clipboardSuccessHandler(format) {
+		if(this.state.clipboardConfirmations[format]) {
+			return;
+		}
+
+		this.setState({
+			clipboardConfirmations: {
+				...this.state.clipboardConfirmations,
+				[format]: true
+			}
+		}, () => {
+			setTimeout(() => {
+				this.setState({
+					clipboardConfirmations: {
+						...this.state.clipboardConfirmations,
+						[format]: false
+					}
+				});
+			}, 1000);
+		});
 	}
 
 	async translateUrlHandler(ev) {
@@ -170,7 +232,6 @@ export default class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
 			<div className="zotero-bib">
-				
 				<div className={ `zotero-bib-preferences ${ this.state.preferencesOpen ? 'open' : '' }` }>
 					<div className="zotero-bib-preferences-outer">
 						<svg 
@@ -183,7 +244,7 @@ export default class ZoteroBibComponent extends React.Component {
 								<use xlinkHref="/icons/cog.svg#cog"></use>
 						</svg>
 						<h2>
-							Preferences
+							Options
 						</h2>
 					</div>
 					<div className="zotero-bib-preferences-inner">
@@ -198,6 +259,36 @@ export default class ZoteroBibComponent extends React.Component {
 							/>
 						</div>
 						<div className="zotero-bib-preferences-item">
+							<label>Export bibliography:</label>
+							{
+								Object.keys(EXPORT_FORMATS).map(format => {
+									if(EXPORT_FORMATS[format].isCopyable) {
+										return (
+											<ClipboardButton
+												className="zotero-bib-preferences-export-all-button"
+												data-clipboard-text={ this.getExportData(format, false) }
+												onSuccess={ this.clipboardSuccessHandler.bind(this, format) }
+											>
+												{ this.state.clipboardConfirmations[format] ? 'Copied!' : `Copy as ${EXPORT_FORMATS[format].label}` }
+											</ClipboardButton>
+										);
+									}
+
+									if(EXPORT_FORMATS[format].isDownloadable) {
+										return(
+											<a href={ this.getExportData('rtf', true) } download="citations.rtf">
+												<button
+													className="zotero-bib-preferences-export-all-button">
+													Download { EXPORT_FORMATS[format].label }
+												</button>
+											</a>
+										);
+									}
+								})
+							}
+							
+						</div>
+						<div className="zotero-bib-preferences-item">
 							<label>Delete Citations:</label>
 							<button 
 								onClick={ this.deleteAllCitationsHandler.bind(this) }
@@ -206,7 +297,6 @@ export default class ZoteroBibComponent extends React.Component {
 							</button>
 						</div>
 					</div>
-					
 				</div>
 				<div className="zotero-bib-form">
 					<div className="zotero-bib-form-main">
@@ -238,7 +328,7 @@ export default class ZoteroBibComponent extends React.Component {
 										<div dangerouslySetInnerHTML={ this.getCitation(this.state.citations[itemId]) } />
 									</div>
 									<div className="zotero-bib-citation-action">
-										<button>
+										<button className="zotero-bib-citation-action-button delete">
 											<svg 
 												onClick= { this.deleteCitationHandler.bind(this, itemId) }
 												className="zotero-bib-citation-action-icon"

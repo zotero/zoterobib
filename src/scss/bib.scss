@@ -39,12 +39,6 @@ body, html, .zotero-bib {
 	}
 }
 
-button {
-	border: 1px solid #900;
-	color: #900;
-	background: #fff;
-}
-
 .zotero-bib-form-config-button {
 	color: #900;
 	vertical-align: middle;
@@ -61,6 +55,9 @@ button {
 	margin-left: 0.5em;
 	font-size: 1.25em;
 	text-transform: uppercase;
+	background: #fff;
+	border: 1px solid #000;
+	cursor: pointer;
 
 	&.loading:after {
 		content: '';
@@ -151,10 +148,21 @@ button {
 	margin: 0 auto;
 }
 
-.zotero-bib-preferences-delete-all-button {
-	width: 100%;
-	padding: .5em;
+.zotero-bib-preferences-delete-all-button,
+.zotero-bib-preferences-export-all-button {
+	background: #fff;
+	border: 1px solid #000;
+	color: #000;
+	cursor: pointer;
 	font-size: 1em;
+	margin-bottom: 5px;
+	padding: .5em;
+	width: 100%;
+}
+
+.zotero-bib-preferences-delete-all-button {
+	border: 1px solid #900;
+	color: #900;
 }
 
 .zotero-bib-citation-wrapper {
@@ -185,6 +193,23 @@ button {
 
 .zotero-bib-citation-action {
 	flex: 0 0 calc(32px + 1em);
+
+	&.delete {
+		color: #900;
+		border: 1px solid #900;
+	}
+}
+
+.zotero-bib-citation-action-button {
+	background: #fff;
+	border: 1px solid #000;
+	color: #000;
+	cursor: pointer;
+
+	&.delete {
+		color: #900;
+		border: 1px solid #900;
+	}
 }
 
 footer {
