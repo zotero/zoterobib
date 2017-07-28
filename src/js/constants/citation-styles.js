@@ -1,4 +1,4 @@
-export default [
+module.exports = [
 	{
 		value: 'american-anthropological-association',
 		label: 'American Anthropological Association'

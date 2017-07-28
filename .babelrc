@@ -1,8 +1,6 @@
 {
-	"presets": ["es2015", "react"],
+	"presets": ["react"],
 	"plugins": [
-		"transform-async-to-generator",
-		"add-module-exports",
 		"transform-object-rest-spread"
 	]
 }

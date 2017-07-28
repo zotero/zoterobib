@@ -11,8 +11,7 @@
     "translation_server": "http://localhost:1969"
   },
   "scripts": {
-    "serve": "http-server -a 127.0.0.1 -p $npm_package_config_port -P $npm_package_config_translation_server build/",
-    "live-reload": "live-reload --port 9091 build/",
+    "serve": "node scripts/server.js -p $npm_package_config_port -t $npm_package_config_translation_server",
     "prebuild": "npm run clean -s && mkdir -p build/icons",
     "clean": "rimraf build/*",
     "build": "run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:icons -s'",
@@ -26,17 +25,22 @@
     "watch:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
     "watch:icons": "nodemon -q -w src/icons --ext '.' --exec 'npm run build:icons'",
     "test": "NODE_ENV=test karma start --single-run --browsers $npm_package_config_test_browsers",
-    "start": "run-p \"build\" \"live-reload -s {@}\" \"serve -s {@}\" \"watch -s {@}\""
+    "start": "run-p \"build\" \"serve -s {@}\" \"watch -s {@}\""
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
+    "citeproc-js": "github:tnajdek/citeproc-js",
     "es6-promise": "^4.0.5",
     "isomorphic-fetch": "^2.2.1",
+    "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-clipboard.js": "^1.1.1",
     "react-dom": "^15.4.2",
+    "react-router-dom": "^4.1.2",
     "react-select": "^1.0.0-rc.3",
-    "zotero-bib": "github:zotero/bib#v0.0.2-release"
+    "zotero-api-client": "^0.9.0",
+    "zotero-bib": "github:zotero/bib#v0.1.3-release",
+    "zotero-web-library": "file:../web-library/zotero-web-library-0.9.5-alpha.tgz"
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -47,12 +51,14 @@
     "babel-preset-react": "^6.22.0",
     "babelify": "^7.3.0",
     "browserify": "^14.0.0",
+    "http-proxy": "^1.16.2",
     "http-server": "^0.9.0",
-    "live-reload": "^1.1.0",
+    "minimist": "^1.2.0",
     "node-sass": "^4.5.0",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.1",
     "rimraf": "^2.5.4",
+    "serve-static": "^1.12.3",
     "uglifyify": "^3.0.4",
     "watchify": "^3.9.0"
   }
