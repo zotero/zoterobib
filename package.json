@@ -15,12 +15,12 @@
     "prebuild": "npm run clean -s && mkdir -p build/icons",
     "clean": "rimraf build/*",
     "build": "run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:icons -s'",
-    "build:js": "browserify -s ZoteroBibComponent --extension=.jsx -d src/js/main.js -t [babelify] -o build/bib-component.js",
+    "build:js": "browserify -s ZoteroBibComponent --extension=.jsx src/js/main.js -d -v -t [babelify] -o build/bib-component.js",
     "build:scss": "node-sass src/scss/bib.scss --source-map true --output build/",
     "build:html": "cp src/html/index.html build/",
-    "build:icons": "cp src/icons/*.svg build/icons/",
+    "build:icons": "rsync -vaz src/icons/ build/icons",
     "watch": "run-p 'watch:js -s' 'watch:scss -s' 'watch:html -s' 'build:icons -s'",
-    "watch:js": "watchify -s ZoteroBibComponent --extension=.jsx -d src/js/main.js -v -t [babelify] src/js/main.js -o build/bib-component.js",
+    "watch:js": "watchify -s ZoteroBibComponent --extension=.jsx src/js/main.js -d -v -t [babelify] -o build/bib-component.js",
     "watch:scss": "node-sass src/scss/bib.scss --watch --recursive --source-map true --output build/",
     "watch:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
     "watch:icons": "nodemon -q -w src/icons --ext '.' --exec 'npm run build:icons'",
@@ -39,8 +39,8 @@
     "react-router-dom": "^4.1.2",
     "react-select": "^1.0.0-rc.3",
     "zotero-api-client": "^0.9.0",
-    "zotero-bib": "github:zotero/bib#v0.1.3-release",
-    "zotero-web-library": "file:../web-library/zotero-web-library-0.9.5-alpha.tgz"
+    "zotero-bib": "github:zotero/bib#v0.1.7-release",
+    "zotero-web-library": "^0.9.8-alpha"
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",

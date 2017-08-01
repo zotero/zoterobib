@@ -8,10 +8,18 @@ class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			url: '',
-			busy: false,
-			error: ''
+			url: props.url
 		};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			url: nextProps.url
+		}, () => {
+			if(this.props.busy && !nextProps.busy) {
+				this.inputField.focus();
+			}
+		});
 	}
 
 	handleUrlChange(ev) {
@@ -20,8 +28,8 @@ class Dashboard extends React.Component {
 		});
 	}
 
-	handleUrlTranslation() {
-		console.log('translate url', this.state.url);
+	handleTranslateUrl() {
+		this.props.onTranslationRequest(this.state.url);
 	}
 
 	handleDeleteCitation(itemId) {
@@ -49,15 +57,15 @@ class Dashboard extends React.Component {
 							onChange={ this.handleUrlChange.bind(this) }
 						/>
 						<button
-							disabled = { this.state.busy }
-							className={ `zotero-bib-form-submit-button ${ this.state.busy ? 'loading' : '' }` }
-							onClick={ this.handleUrlTranslation.bind(this) }>
-								{ this.state.busy ? '' : 'Cite it' }
+							disabled = { this.props.busy }
+							className={ `zotero-bib-form-submit-button ${ this.props.busy ? 'loading' : '' }` }
+							onClick={ this.handleTranslateUrl.bind(this) }>
+								{ this.props.busy ? '' : 'Cite it' }
 						</button>
 					</div>
 				</div>
-				<div className={ `zotero-bib-error ${ this.state.error ? 'visible' : ''}` }>
-					{ this.state.error }
+				<div className={ `zotero-bib-error ${ this.props.error ? 'visible' : ''}` }>
+					{ this.props.error }
 				</div>
 				<div className="zotero-bib-citations">
 					{

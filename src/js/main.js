@@ -11,6 +11,7 @@ const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('./utils');
 
 const Sidebar = require('./components/sidebar');
 
+//@TODO fix naming convention (bib vs this.bib)
 class ZoteroBibComponent extends React.Component {
 	constructor(props) {
 		super(props);
@@ -18,7 +19,11 @@ class ZoteroBibComponent extends React.Component {
 		this.selectedStyleId = 'chicago-note-bibliography';
 		this.updating = Promise.resolve();
 		this.state = {
-			citeprocReady: false
+			citeprocReady: false,
+			url: '',
+			busy: false,
+			error: '',
+			items: []
 		};
 	}
 
@@ -38,7 +43,8 @@ class ZoteroBibComponent extends React.Component {
 		this.citeproc = new CSL.Engine(sys, style);
 		this.updateBibliography();
 		this.setState({
-			citeprocReady: true
+			citeprocReady: true,
+			items: this.bib.items
 		});
 	}
 
@@ -55,9 +61,8 @@ class ZoteroBibComponent extends React.Component {
 		});
 	}
 
-	async translateUrlHandler(ev) {
-		ev.preventDefault();
-		let url = validateUrl(this.state.url);
+	async handleTranslateUrl(url) {
+		url = validateUrl(url);
 		this.setState({
 			busy: true,
 			error: '',
@@ -73,32 +78,41 @@ class ZoteroBibComponent extends React.Component {
 					url: '',
 					busy: false
 				});
-				this.inputField.focus();
 			}
 			catch(e) {
 				this.setState({
 					error: 'An error occured when citing this source',
 					busy: false
 				});
-				this.inputField.focus();
 			}
 		} else {
 			this.setState({
 				error: 'Value entered doesn\'t appear to be a valid URL',
 				busy: false
 			});
-			this.inputField.focus();
 		}
 	}
 
-	deleteCitationsHandler() {
+	handleDeleteCitations() {
 		this.bib.clearItems();
 		this.updateBibliography();
 	}
 
-	selectCitationStyleHandler(selectedStyle) {
+	handleSelectCitationStyle(selectedStyle) {
 		this.selectedStyleId = selectedStyle.value;
 		this.updating = this.updateCiteproc();
+	}
+
+	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
+		await this.updating;
+
+		const index = this.bib.items.findIndex(item => item.itemKey === itemKey);
+		this.bib.updateItem(index, {
+			...this.bib.items[index],
+			[fieldKey]: fieldValue
+		});
+
+		this.updateBibliography();
 	}
 
 	render() {
@@ -107,18 +121,23 @@ class ZoteroBibComponent extends React.Component {
 				<div>
 					<Sidebar
 						onCotationStyleChanged={ citationStyle => this.setState({ citationStyle }) }
-						onDeleteCitations={ this.deleteCitationsHandler }
+						onDeleteCitations={ this.handleDeleteCitations }
 					/>
 					<div>
 						<Route exact path="/" render={
 							props => <Dashboard
+								url={ this.state.url }
+								busy={ this.state.busy }
+								error={ this.state.error }
 								citations={ this.state.citations }
+								onTranslationRequest={ this.handleTranslateUrl.bind(this) }
 								{ ...props } />
 						} />
 						<Route
 							path="/item/:item" render={
 							props => <Editor
-								items={ this.bib.items }
+								items={ this.state.items }
+								onItemUpdate={ this.handleItemUpdate.bind(this) }
 								{ ...props }
 							/>
 						} />
