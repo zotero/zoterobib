@@ -38,11 +38,12 @@ class Editor extends React.Component {
 			}));
 
 		const fields = [
-			...itemTypeFields, 
 			{ field: 'itemType', localized: 'Item Type' },
-			{ field: 'creators', localized: 'creators' }
+			itemTypeFields.find(itf => itf.field === 'title'),
+			{ field: 'creators', localized: 'Creators' },
+			...itemTypeFields.filter(itf => itf.field !== 'title')
 		]
-			.filter(f => !hideFields.includes(f.field))
+			.filter(f => f && !hideFields.includes(f.field))
 			.map(f => ({
 				options: f.field === 'itemType' ? itemTypes : null,
 				key: f.field,
