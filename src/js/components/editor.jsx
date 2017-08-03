@@ -25,13 +25,24 @@ class Editor extends React.Component {
 		if(!item) {
 			return;
 		}
-		const itemTypes = (await api().itemTypes().get()).getData()
+
+		try {
+			var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
+				api().itemTypes().get(),
+				api().itemTypeFields(item.itemType).get(),
+				api().itemTypeCreatorTypes(item.itemType).get()
+			]);
+		} catch(e) {
+			// @TODO: handle error
+		}
+
+		const itemTypes = itemTypeR.getData()
 			.map(it => ({
 				value: it.itemType,
 				label: it.localized
 			}));
-		const itemTypeFields = (await api().itemTypeFields(item.itemType).get()).getData();
-		const creatorTypes = (await api().itemTypeCreatorTypes(item.itemType).get()).getData()
+		const itemTypeFields = itemTypeFieldsR.getData();
+		const creatorTypes = creatorTypesR.getData()
 			.map(ct => ({
 				value: ct.creatorType,
 				label: ct.localized
