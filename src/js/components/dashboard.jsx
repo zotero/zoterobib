@@ -32,9 +32,12 @@ class Dashboard extends React.Component {
 		this.props.onTranslationRequest(this.state.url);
 	}
 
+	handleManualEntry() {
+		this.props.onManualEntry();
+	}
+
 	handleDeleteCitation(itemId) {
-		this.bib.removeItem(this.bib.rawItems.find(item => item.itemKey == itemId));
-		this.updateBibliography();
+		this.props.onDeleteEntry(itemId);
 	}
 
 	getCitation(citation) {
@@ -61,6 +64,12 @@ class Dashboard extends React.Component {
 							className={ `zotero-bib-form-submit-button ${ this.props.busy ? 'loading' : '' }` }
 							onClick={ this.handleTranslateUrl.bind(this) }>
 								{ this.props.busy ? '' : 'Cite it' }
+						</button>
+						<button
+							disabled = { this.props.busy }
+							className={ `zotero-bib-form-submit-button ${ this.props.busy ? 'loading' : '' }` }
+							onClick={ this.handleManualEntry.bind(this) }>
+								Manual Entry
 						</button>
 					</div>
 				</div>

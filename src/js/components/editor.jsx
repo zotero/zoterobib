@@ -12,22 +12,15 @@ class Editor extends React.Component {
 		this.state = {
 			isLoading: true
 		};
+	}
+
+	async componentWillReceiveProps(nextProps) {
+		const item = nextProps.items.find(item => item.itemKey === nextProps.match.params.item);
 		
-		this.onRouterChange(props);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if(this.props.items != nextProps.items || 
-			('match' in nextProps && 
-			nextProps.match.params.item !== this.props.match.params.item
-		)) {
-			this.onRouterChange(nextProps);
-		}
-	}
-
-	async onRouterChange(props) {
-		const item = props.items.find(item => item.itemKey === props.match.params.item);
 		if(!item) {
+			this.setState({
+				isLoading: true
+			});
 			return;
 		}
 
