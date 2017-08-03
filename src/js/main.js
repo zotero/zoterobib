@@ -1,7 +1,5 @@
 'use strict';
 
-const Dashboard = require('./components/dashboard');
-const Editor = require('./components/editor');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ZoteroBib = require('zotero-bib');
@@ -9,7 +7,10 @@ const { CSL } = require('citeproc-js');
 const { BrowserRouter, Route } = require('react-router-dom');
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('./utils');
 
+const Dashboard = require('./components/dashboard');
+const Editor = require('./components/editor');
 const Sidebar = require('./components/sidebar');
+const ErrorMessage = require('./components/error-message');
 
 //@TODO fix naming convention (bib vs this.bib)
 class ZoteroBibComponent extends React.Component {
@@ -115,6 +116,14 @@ class ZoteroBibComponent extends React.Component {
 		this.updateBibliography();
 	}
 
+	handleErrorMessage(error) {
+		this.setState({ error });
+	}
+
+	handleClearErrorMessage() {
+		this.setState({ error: '' });
+	}
+
 	render() {
 		return (
 			<BrowserRouter>
@@ -123,14 +132,18 @@ class ZoteroBibComponent extends React.Component {
 						onCotationStyleChanged={ citationStyle => this.setState({ citationStyle }) }
 						onDeleteCitations={ this.handleDeleteCitations }
 					/>
+					<ErrorMessage
+						error={ this.state.error }
+						onDismiss={ this.handleClearErrorMessage.bind(this) }
+					/>
 					<div>
 						<Route exact path="/" render={
 							props => <Dashboard
 								url={ this.state.url }
 								busy={ this.state.busy }
-								error={ this.state.error }
 								citations={ this.state.citations }
 								onTranslationRequest={ this.handleTranslateUrl.bind(this) }
+								onError={ this.handleErrorMessage.bind(this) }
 								{ ...props } />
 						} />
 						<Route
@@ -138,6 +151,7 @@ class ZoteroBibComponent extends React.Component {
 							props => <Editor
 								items={ this.state.items }
 								onItemUpdate={ this.handleItemUpdate.bind(this) }
+								onError={ this.handleErrorMessage.bind(this) }
 								{ ...props }
 							/>
 						} />

@@ -176,15 +176,27 @@ body, html, .zotero-bib {
 .zotero-bib-error {
 	width: 100%;
 	max-width: 960px;
-	margin: 0 auto;
+	margin: 1em auto;
 	text-align: center;
 	background: rgba(200, 30, 30, .6);
 	padding: 1.5em 1em;
 	color: #fff;
 	display: none;
+	position: relative;
 
 	&.visible {
 		display: block;
+	}
+
+	.zotero-bib-error-dismiss {
+		background: transparent;
+		border: transparent;
+		color: white;
+		cursor: pointer;
+		font-weight: bold;
+		position: absolute;
+		right: 5px;
+		top: 5px;
 	}
 }
 

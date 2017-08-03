@@ -17,7 +17,12 @@ class Editor extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.onRouterChange(nextProps);
+		if(this.props.items != nextProps.items || 
+			('match' in nextProps && 
+			nextProps.match.params.item !== this.props.match.params.item
+		)) {
+			this.onRouterChange(nextProps);
+		}
 	}
 
 	async onRouterChange(props) {
@@ -33,7 +38,11 @@ class Editor extends React.Component {
 				api().itemTypeCreatorTypes(item.itemType).get()
 			]);
 		} catch(e) {
-			// @TODO: handle error
+			this.props.onError('Failed to obtain meta data. Please check your connection and try again.');
+			this.setState({
+				isLoading: false
+			});
+			return;
 		}
 
 		const itemTypes = itemTypeR.getData()

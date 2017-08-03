@@ -64,9 +64,7 @@ class Dashboard extends React.Component {
 						</button>
 					</div>
 				</div>
-				<div className={ `zotero-bib-error ${ this.props.error ? 'visible' : ''}` }>
-					{ this.props.error }
-				</div>
+				
 				<div className="zotero-bib-citations">
 					{
 						Object.keys(this.props.citations).map(itemId => {
