@@ -22,23 +22,7 @@ class Sidebar extends React.Component {
 		});
 	}
 
-	getExportData(format, asDataUrl = false) {
-		if(this.state.citeprocReady) {
-			this.citeproc.setOutputFormat(format);
-			const bib = this.citeproc.makeBibliography();
-			this.citeproc.setOutputFormat('html');
-
-			if(asDataUrl) {
-				return `data:${exportFormats[format]},${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
-			} else {
-				return `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
-			}
-		}
-
-		return '';
-	}
-
-	clipboardSuccessHandler(format) {
+	handleClipoardSuccess(format) {
 		if(this.state.clipboardConfirmations[format]) {
 			return;
 		}
@@ -83,8 +67,8 @@ class Sidebar extends React.Component {
 						<Select
 							clearable={ false }
 							className="zotero-bib-citation-style-selector"
-							value={ this.state.selectedStyleId }
-							options={ citationStyles }
+							value={ this.props.citationStyle }
+							options={ this.props.citationStyles }
 							onChange={ ev => this.props.onCitationStyleChanged(ev.value) }
 						/>
 					</div>
@@ -96,8 +80,8 @@ class Sidebar extends React.Component {
 									return (
 										<ClipboardButton
 											className="zotero-bib-preferences-export-all-button"
-											data-clipboard-text={ this.getExportData(format, false) }
-											onSuccess={ this.clipboardSuccessHandler.bind(this, format) }
+											data-clipboard-text={ this.props.getExportData(format, false) }
+											onSuccess={ this.handleClipoardSuccess.bind(this, format) }
 											key={ `export-copy-as-${format}` }
 										>
 											{ this.state.clipboardConfirmations[format] ? 'Copied!' : `Copy as ${exportFormats[format].label}` }
@@ -108,7 +92,7 @@ class Sidebar extends React.Component {
 								if(exportFormats[format].isDownloadable) {
 									return(
 										<a 
-											href={ this.getExportData('rtf', true) } download="citations.rtf"
+											href={ this.props.getExportData('rtf', true) } download="citations.rtf"
 											key={ `export-download-as-${format}` } >
 											<button className="zotero-bib-preferences-export-all-button">
 												Download { exportFormats[format].label }
@@ -132,15 +116,5 @@ class Sidebar extends React.Component {
 		);
 	}
 }
-
-Sidebar.defaultProps = {
-	onDeleteCitations: () => {},
-	onCitationStyleChanged: () => {}
-};
-
-Sidebar.propTypes = {
-	onDeleteCitations: PropTypes.func,
-	onCitationStyleChanged: PropTypes.func
-};
 
 module.exports = Sidebar;

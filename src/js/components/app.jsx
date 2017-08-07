@@ -5,19 +5,21 @@ const ZoteroBib = require('zotero-bib');
 const { CSL } = require('citeproc-js');
 const { Route, withRouter } = require('react-router-dom');
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
+const exportFormats = require('../constants/export-formats');
 
 const Dashboard = require('./dashboard');
 const Editor = require('./editor');
 const Sidebar = require('./sidebar');
 const ErrorMessage = require('./error-message');
+const citationStyles = require('../constants/citation-styles');
 
 class App extends React.Component {
 		constructor(props) {
 		super(props);
 		this.bib = new ZoteroBib();
-		this.selectedStyleId = 'chicago-note-bibliography';
 		this.updating = Promise.resolve();
 		this.state = {
+			citationStyle: 'chicago-note-bibliography',
 			citeprocReady: false,
 			url: '',
 			busy: false,
@@ -38,7 +40,7 @@ class App extends React.Component {
 			retrieveLocale: retrieveLocaleSync,
 			retrieveItem: itemId => this.bib.itemsCSL.find(item => item.id === itemId)
 		};
-		const style = await retrieveStyle(this.selectedStyleId);
+		const style = await retrieveStyle(this.state.citationStyle);
 		this.citeproc = new CSL.Engine(sys, style);
 		this.updateBibliography();
 		this.setState({
@@ -59,6 +61,22 @@ class App extends React.Component {
 				}), {}
 			)
 		});
+	}
+
+	getExportData(format, asDataUrl = false) {
+		if(this.state.citeprocReady) {
+			this.citeproc.setOutputFormat(format);
+			const bib = this.citeproc.makeBibliography();
+			this.citeproc.setOutputFormat('html');
+
+			if(asDataUrl) {
+				return `data:${exportFormats[format]},${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+			} else {
+				return `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+			}
+		}
+
+		return '';
 	}
 
 	async handleTranslateUrl(url) {
@@ -98,8 +116,8 @@ class App extends React.Component {
 		this.updateBibliography();
 	}
 
-	handleSelectCitationStyle(selectedStyle) {
-		this.selectedStyleId = selectedStyle.value;
+	handleSelectCitationStyle(citationStyle) {
+		this.setState({ citationStyle });
 		this.updating = this.updateCiteproc();
 	}
 
@@ -145,8 +163,11 @@ class App extends React.Component {
 		return (
 			<div>
 				<Sidebar
-					onCotationStyleChanged={ citationStyle => this.setState({ citationStyle }) }
-					onDeleteCitations={ this.handleDeleteCitations }
+					citationStyle={ this.state.citationStyle }
+					citationStyles= { citationStyles }
+					getExportData={ this.getExportData.bind(this) }
+					onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
+					onDeleteCitations={ this.handleDeleteCitations.bind(this) }
 				/>
 				<ErrorMessage
 					error={ this.state.error }

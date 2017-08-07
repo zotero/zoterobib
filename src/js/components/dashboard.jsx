@@ -66,8 +66,7 @@ class Dashboard extends React.Component {
 								{ this.props.busy ? '' : 'Cite it' }
 						</button>
 						<button
-							disabled = { this.props.busy }
-							className={ `zotero-bib-form-submit-button ${ this.props.busy ? 'loading' : '' }` }
+							className="zotero-bib-form-submit-button"
 							onClick={ this.handleManualEntry.bind(this) }>
 								Manual Entry
 						</button>
