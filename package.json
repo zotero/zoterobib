@@ -25,7 +25,7 @@
     "watch:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
     "watch:icons": "nodemon -q -w src/icons --ext '.' --exec 'npm run build:icons'",
     "test": "NODE_ENV=test karma start --single-run --browsers $npm_package_config_test_browsers",
-    "start": "run-p \"build\" \"serve -s {@}\" \"watch -s {@}\""
+    "start": "run-p \"build:scss\" \"build:html\" \"build:icons\" \"serve -s {@}\" \"watch -s {@}\""
   },
   "dependencies": {
     "babel-regenerator-runtime": "^6.5.0",
