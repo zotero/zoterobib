@@ -38,7 +38,8 @@
     "react-dom": "^15.4.2",
     "react-router-dom": "^4.1.2",
     "react-select": "^1.0.0-rc.3",
-    "zotero-api-client": "^0.9.0",
+    "zotero-api-client": "^0.9.1",
+    "zotero-api-client-cache": "^0.1.1",
     "zotero-bib": "github:zotero/bib#v0.1.8-release",
     "zotero-web-library": "^0.9.9-alpha"
   },

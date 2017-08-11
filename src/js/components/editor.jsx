@@ -1,10 +1,13 @@
 'use strict';
 
 const api = require('zotero-api-client');
+const apiCache = require('zotero-api-client-cache');
 const React = require('react');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { Link } = require('react-router-dom');
+
+const cachedApi = api().use(apiCache());
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -14,7 +17,19 @@ class Editor extends React.Component {
 		};
 	}
 
+	async componentDidMount() {
+		this.prepareState(this.props);
+	}
+
 	async componentWillReceiveProps(nextProps) {
+		if(this.props.location === nextProps.location && this.props.items === nextProps.items) {
+			return;
+		}
+
+		this.prepareState(nextProps);
+	}
+
+	async prepareState(nextProps) {
 		const item = nextProps.items.find(item => item.itemKey === nextProps.match.params.item);
 		
 		if(!item) {
@@ -26,9 +41,9 @@ class Editor extends React.Component {
 
 		try {
 			var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
-				api().itemTypes().get(),
-				api().itemTypeFields(item.itemType).get(),
-				api().itemTypeCreatorTypes(item.itemType).get()
+				cachedApi.itemTypes().get(),
+				cachedApi.itemTypeFields(item.itemType).get(),
+				cachedApi.itemTypeCreatorTypes(item.itemType).get()
 			]);
 		} catch(e) {
 			this.props.onError('Failed to obtain meta data. Please check your connection and try again.');
