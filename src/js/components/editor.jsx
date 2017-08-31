@@ -1,13 +1,10 @@
 'use strict';
 
-const api = require('zotero-api-client');
-const apiCache = require('zotero-api-client-cache');
 const React = require('react');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { Link } = require('react-router-dom');
-
-const cachedApi = api().use(apiCache());
+const { getItemTypeMeta } = require('../utils');
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -22,6 +19,11 @@ class Editor extends React.Component {
 	}
 
 	async componentWillReceiveProps(nextProps) {
+		if(this.props.location === nextProps.location 
+			&& this.props.items === nextProps.items) {
+			return;
+		}
+
 		this.prepareState(nextProps);
 	}
 
@@ -36,11 +38,7 @@ class Editor extends React.Component {
 		}
 
 		try {
-			var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
-				cachedApi.itemTypes().get(),
-				cachedApi.itemTypeFields(item.itemType).get(),
-				cachedApi.itemTypeCreatorTypes(item.itemType).get()
-			]);
+			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 		} catch(e) {
 			this.props.onError('Failed to obtain meta data. Please check your connection and try again.');
 			this.setState({
@@ -49,17 +47,15 @@ class Editor extends React.Component {
 			return;
 		}
 
-		const itemTypes = itemTypeR.getData()
-			.map(it => ({
-				value: it.itemType,
-				label: it.localized
-			}));
-		const itemTypeFields = itemTypeFieldsR.getData();
-		const creatorTypes = creatorTypesR.getData()
-			.map(ct => ({
-				value: ct.creatorType,
-				label: ct.localized
-			}));
+		itemTypes = itemTypes.map(it => ({
+			value: it.itemType,
+			label: it.localized
+		}));
+
+		itemTypeCreatorTypes = itemTypeCreatorTypes.map(ct => ({
+			value: ct.creatorType,
+			label: ct.localized
+		}));
 
 		const fields = [
 			{ field: 'itemType', localized: 'Item Type' },
@@ -80,7 +76,7 @@ class Editor extends React.Component {
 		this.setState({
 			item,
 			fields,
-			creatorTypes,
+			creatorTypes: itemTypeCreatorTypes,
 			isLoading: false
 		});
 	}

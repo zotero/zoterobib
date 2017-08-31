@@ -1,5 +1,9 @@
 'use strict';
 
+const api = require('zotero-api-client');
+const apiCache = require('zotero-api-client-cache');
+const cachedApi = api().use(apiCache());
+
 const syncRequestAsText = url => {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', url, false);
@@ -40,13 +44,26 @@ const retrieveLocaleSync = lang => {
 	return retval;
 };
 
-const validateItem = (item, itemTypeFields, itemTypeCreators) => {
-	itemTypeFields = itemTypeFields.map(f => f.field);
-	itemTypeFields = [...itemTypeFields, 'creators', 'itemKey', 'itemType', 'itemVersion', 'tags'];
+const getItemTypeMeta = async (itemType) => {
+	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
+		cachedApi.itemTypes().get(),
+		cachedApi.itemTypeFields(itemType).get(),
+		cachedApi.itemTypeCreatorTypes(itemType).get()
+	]);
+
+	return {
+		itemTypes: itemTypeR.getData(),
+		itemTypeFields: itemTypeFieldsR.getData(),
+		itemTypeCreatorTypes: creatorTypesR.getData()
+	};
+};
+
+const validateItem = async item => {
+	const { itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 
 	//remove item properties that should not appear on this item type
 	for (var prop in item) {
-		if(!(itemTypeFields.includes(prop))) {
+		if(!([...itemTypeFields.map(f => f.field), 'creators', 'itemKey', 'itemType', 'itemVersion', 'tags'].includes(prop))) {
 			delete item[prop];
 		}
 	}
@@ -54,8 +71,8 @@ const validateItem = (item, itemTypeFields, itemTypeCreators) => {
 	//convert item creators to match creators appropriate for this item type
 	if(item.creators && Array.isArray(item.creators)) {
 		for(var creator of item.creators) {
-			if(typeof itemTypeCreators.find(c => c.creatorType === creator.creatorType) === 'undefined') {
-				creator.creatorType = itemTypeCreators[0].creatorType;
+			if(typeof itemTypeCreatorTypes.find(c => c.creatorType === creator.creatorType) === 'undefined') {
+				creator.creatorType = itemTypeCreatorTypes[0].creatorType;
 			}
 		}
 	}
@@ -63,7 +80,7 @@ const validateItem = (item, itemTypeFields, itemTypeCreators) => {
 	//do not allow empty creators array
 	if(!item.creators || (Array.isArray(item.creators) && item.creators.length === 0)) {
 		item.creators = [{
-			creatorType: itemTypeCreators[0].creatorType,
+			creatorType: itemTypeCreatorTypes[0].creatorType,
 			firstName: '',
 			lastName: ''
 		}];
@@ -76,5 +93,6 @@ module.exports = {
 	validateUrl,
 	retrieveLocaleSync,
 	retrieveStyle,
-	validateItem
+	validateItem,
+	getItemTypeMeta
 };

@@ -1,7 +1,5 @@
 'use strict';
 
-const api = require('zotero-api-client');
-const apiCache = require('zotero-api-client-cache');
 const React = require('react');
 const ZoteroBib = require('zotero-bib');
 const { CSL } = require('citeproc-js');
@@ -15,8 +13,6 @@ const Sidebar = require('./sidebar');
 const ErrorMessage = require('./error-message');
 const citationStyles = require('../constants/citation-styles');
 const { validateItem } = require('../utils');
-
-const cachedApi = api().use(apiCache());
 
 class App extends React.Component {
 		constructor(props) {
@@ -50,7 +46,7 @@ class App extends React.Component {
 		this.updateBibliography();
 		this.setState({
 			citeprocReady: true,
-			items: this.bib.items
+			items: [...this.bib.items]
 		});
 	}
 
@@ -58,7 +54,7 @@ class App extends React.Component {
 		this.citeproc.updateItems(this.bib.itemsCSL.map(item => item.id));
 		let bib = this.citeproc.makeBibliography();
 		this.setState({
-			items: this.bib.items,
+			items: [...this.bib.items],
 			citations: bib[0].entry_ids.reduce(
 				(obj, key, id) => ({
 					...obj,
@@ -136,17 +132,12 @@ class App extends React.Component {
 		};
 
 		try {
-			var [itemTypeFieldsR, creatorTypesR] = await Promise.all([
-				cachedApi.itemTypeFields(updatedItem.itemType).get(),
-				cachedApi.itemTypeCreatorTypes(updatedItem.itemType).get()
-			]);
+			await validateItem(updatedItem);	
 		} catch(e) {
 			this.handleErrorMessage('Failed to obtain meta data. Please check your connection and try again.');
 			return;
 		}
 
-		validateItem(updatedItem, itemTypeFieldsR.getData(), creatorTypesR.getData());
-		
 		this.bib.updateItem(index, updatedItem);
 		this.updateBibliography();
 	}
@@ -161,13 +152,18 @@ class App extends React.Component {
 
 	handleManualEntry() {
 		const key = Math.random().toString(36).substr(2, 8).toUpperCase();
-		this.bib.addItem({
+		const item = {
 			'itemKey': key,
 			'itemVersion': 0,
 			'itemType': 'book',
-			'creators': [],
+			'creators': [{
+				creatorType: 'author',
+				firstName: '',
+				lastName: ''
+			}],
 			'title': '(No Title)'
-		});
+		};
+		this.bib.addItem(item);
 		this.updateBibliography();
 		this.props.history.push(`/item/${key}`);
 	}
