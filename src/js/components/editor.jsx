@@ -22,10 +22,6 @@ class Editor extends React.Component {
 	}
 
 	async componentWillReceiveProps(nextProps) {
-		if(this.props.location === nextProps.location && this.props.items === nextProps.items) {
-			return;
-		}
-
 		this.prepareState(nextProps);
 	}
 

@@ -40,10 +40,41 @@ const retrieveLocaleSync = lang => {
 	return retval;
 };
 
+const validateItem = (item, itemTypeFields, itemTypeCreators) => {
+	itemTypeFields = itemTypeFields.map(f => f.field);
+	itemTypeFields = [...itemTypeFields, 'creators', 'itemKey', 'itemType', 'itemVersion', 'tags'];
+
+	//remove item properties that should not appear on this item type
+	for (var prop in item) {
+		if(!(itemTypeFields.includes(prop))) {
+			delete item[prop];
+		}
+	}
+
+	//convert item creators to match creators appropriate for this item type
+	if(item.creators && Array.isArray(item.creators)) {
+		for(var creator of item.creators) {
+			if(typeof itemTypeCreators.find(c => c.creatorType === creator.creatorType) === 'undefined') {
+				creator.creatorType = itemTypeCreators[0].creatorType;
+			}
+		}
+	}
+
+	//do not allow empty creators array
+	if(!item.creators || (Array.isArray(item.creators) && item.creators.length === 0)) {
+		item.creators = [{
+			creatorType: itemTypeCreators[0].creatorType,
+			firstName: '',
+			lastName: ''
+		}];
+	}
+};
+
 
 module.exports = {
 	syncRequestAsText,
 	validateUrl,
 	retrieveLocaleSync,
-	retrieveStyle
+	retrieveStyle,
+	validateItem
 };

@@ -1,5 +1,7 @@
 'use strict';
 
+const api = require('zotero-api-client');
+const apiCache = require('zotero-api-client-cache');
 const React = require('react');
 const ZoteroBib = require('zotero-bib');
 const { CSL } = require('citeproc-js');
@@ -12,6 +14,9 @@ const Editor = require('./editor');
 const Sidebar = require('./sidebar');
 const ErrorMessage = require('./error-message');
 const citationStyles = require('../constants/citation-styles');
+const { validateItem } = require('../utils');
+
+const cachedApi = api().use(apiCache());
 
 class App extends React.Component {
 		constructor(props) {
@@ -123,13 +128,26 @@ class App extends React.Component {
 
 	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
 		await this.updating;
-
 		const index = this.bib.items.findIndex(item => item.itemKey === itemKey);
-		this.bib.updateItem(index, {
+
+		let updatedItem = {
 			...this.bib.items[index],
 			[fieldKey]: fieldValue
-		});
+		};
 
+		try {
+			var [itemTypeFieldsR, creatorTypesR] = await Promise.all([
+				cachedApi.itemTypeFields(updatedItem.itemType).get(),
+				cachedApi.itemTypeCreatorTypes(updatedItem.itemType).get()
+			]);
+		} catch(e) {
+			this.handleErrorMessage('Failed to obtain meta data. Please check your connection and try again.');
+			return;
+		}
+
+		validateItem(updatedItem, itemTypeFieldsR.getData(), creatorTypesR.getData());
+		
+		this.bib.updateItem(index, updatedItem);
 		this.updateBibliography();
 	}
 
