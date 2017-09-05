@@ -101,9 +101,11 @@ class Dashboard extends React.Component {
 												</svg>
 											</button>
 										</Link>
-										<button className="zotero-bib-citation-action-button delete">
+										<button 
+											onClick= { this.handleDeleteCitation.bind(this, itemId) }
+											className="zotero-bib-citation-action-button delete"
+										>
 											<svg
-												onClick= { this.handleDeleteCitation.bind(this, itemId) }
 												className="zotero-bib-citation-action-icon"
 												style={{ width: 24, height: 24 }}
 												aria-labelledby="title"
