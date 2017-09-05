@@ -6,6 +6,7 @@ const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/i
 const { Link } = require('react-router-dom');
 const { getItemTypeMeta } = require('../utils');
 
+
 class Editor extends React.Component {
 	constructor(props) {
 		super(props);
@@ -63,7 +64,7 @@ class Editor extends React.Component {
 			{ field: 'creators', localized: 'Creators' },
 			...itemTypeFields.filter(itf => itf.field !== 'title')
 		]
-			.filter(f => f && !hideFields.includes(f.field))
+			.filter(f => f && !hideFields.filter(f => f != 'abstractNote').includes(f.field))
 			.map(f => ({
 				options: f.field === 'itemType' ? itemTypes : null,
 				key: f.field,
