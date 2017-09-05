@@ -28,6 +28,12 @@ class Dashboard extends React.Component {
 		});
 	}
 
+	handleKeyboard(ev) {
+		if(ev.key === 'Enter' && this.state.url.length > 0 && !this.props.busy) {
+			this.handleTranslateUrl();
+		}
+	}
+
 	handleTranslateUrl() {
 		this.props.onTranslationRequest(this.state.url);
 	}
@@ -58,6 +64,7 @@ class Dashboard extends React.Component {
 							className="zotero-bib-form-url"
 							type="text" value={ this.state.url }
 							onChange={ this.handleUrlChange.bind(this) }
+							onKeyPress={ this.handleKeyboard.bind(this) }
 						/>
 						<button
 							disabled = { this.props.busy }
