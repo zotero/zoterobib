@@ -1,6 +1,23 @@
 {
-	"presets": ["react"],
-	"plugins": [
-		"transform-object-rest-spread"
-	]
+  "env": {
+    "browser": {
+      "presets": [
+        "es2015",
+        "minify"
+      ],
+      "plugins": [
+        "transform-async-to-generator",
+        "transform-object-rest-spread",
+        ["transform-runtime", {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true
+        }]
+      ]
+    }
+  },
+  "presets": ["react"],
+  "plugins": [
+    "transform-object-rest-spread"
+  ]
 }
