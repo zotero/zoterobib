@@ -17,7 +17,7 @@ const { validateItem } = require('../utils');
 class App extends React.Component {
 		constructor(props) {
 		super(props);
-		this.bib = new ZoteroBib();
+		this.bib = new ZoteroBib(props.config);
 		this.updating = Promise.resolve();
 		this.state = {
 			citationStyle: 'chicago-note-bibliography',

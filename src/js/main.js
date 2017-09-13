@@ -11,13 +11,13 @@ class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
 			<BrowserRouter>
-				<App />
+				<App config = { this.props.config } />
 			</BrowserRouter>
 		);
 	}
 
-	static init(domEl) {
-		ReactDOM.render(<ZoteroBibComponent />, domEl);
+	static init(domEl, config={}) {
+		ReactDOM.render(<ZoteroBibComponent config={ config } />, domEl);
 	}
 }
 
