@@ -26,7 +26,6 @@
     "devel:scss": "node-sass src/scss/bib.scss --recursive --source-map true --output build/ && node-sass src/scss/bib.scss --watch --recursive --source-map true --output build/",
     "devel:html": "nodemon -q -w src/html --ext '.' --exec 'npm run build:html'",
     "devel:icons": "nodemon -q -w src/icons --ext '.' --exec 'npm run build:icons'",
-    "test": "NODE_ENV=test karma start --single-run --browsers $npm_package_config_test_browsers",
     "start": "mkdir -p build/ && run-p \"build:html\" \"build:icons\" \"serve -s {@}\" \"devel -s {@}\""
   },
   "dependencies": {
@@ -42,7 +41,7 @@
     "react-select": "^1.0.0-rc.3",
     "zotero-api-client": "^0.9.1",
     "zotero-api-client-cache": "^0.1.1",
-    "zotero-bib": "github:zotero/bib#v0.1.9-release",
+    "zotero-bib": "github:zotero/bib#v0.1.10-release",
     "zotero-web-library": "^0.9.13-alpha"
   },
   "devDependencies": {

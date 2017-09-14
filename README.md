@@ -50,4 +50,6 @@ Or if using within another react app:
 
     <ZoteroBibComponent config={ { translationServerUrl: 'http://some-url:1234' } }
 
+It's also possible to specify an additional prefix for where translation server request should be send using `translationServerPrefix` configuration option. E.g. setting `translationServerPrefix` to `foo/` while serving bib-web on http:://example.com will assume translation server endpoint is **http:://example.com/foo/web**. `translationServerPrefix` and `translationServerUrl` can be used together.
+
 
