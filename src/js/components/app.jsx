@@ -51,7 +51,11 @@ class App extends React.Component {
 	}
 
 	updateBibliography() {
-		this.citeproc.updateItems(this.bib.itemsCSL.map(item => item.id));
+		this.citeproc.updateItems(
+			this.bib.itemsRaw
+				.filter(item => item.itemKey && !item.parentItem)
+				.map(item => item.itemKey)
+		);
 		let bib = this.citeproc.makeBibliography();
 		this.setState({
 			items: [...this.bib.items],
