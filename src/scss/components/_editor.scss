@@ -1,0 +1,38 @@
+
+.editor {
+	@include bp-up(sm) {
+		width: 100%;
+		display: none;
+
+		.editor-active & {
+			display: block;
+		}
+	}
+
+	@include bp-down(xs) {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: $items-bg;
+		padding: 0 $space-md;
+
+		&.slide-enter {
+			transform: translate3d(100%, 0, 0);
+		}
+		&.slide-enter-active {
+			transition: transform $nav-transition;
+			transform: translate3d(0, 0, 0);
+		}
+
+		&.slide-leave {
+			transform: translate3d(0, 0, 0);
+		}
+
+		&.slide-leave.slide-leave-active {
+			transition: transform $nav-transition;
+			transform: translate3d(100%, 0, 0);
+		}
+	}
+}

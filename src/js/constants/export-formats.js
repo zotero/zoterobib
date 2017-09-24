@@ -7,7 +7,7 @@ module.exports = {
 	},
 	'text': {
 		mime: 'text/plain',
-		label: 'plain text',
+		label: 'Text',
 		isDownloadable: false,
 		isCopyable: true
 	},

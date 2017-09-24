@@ -1,0 +1,58 @@
+* {
+	box-sizing: border-box;
+}
+
+body, html, [data-widget=zotero-bib], .zotero-bib-wrap, .zotero-bib {
+	height: 100%;
+}
+
+.toolbar-large {
+	height: auto;
+	margin: 1em 0;
+
+	z-index: $z-index-toolbar;
+
+	@include bp-up(sm) {
+		padding: 0 $space-sm;
+	}
+
+	@include bp-up(md) {
+		padding: 0;
+	}
+
+	.btn {
+		@include bp-up(xs) {
+			width: 100px;
+			margin-right: $space-sm;
+		}
+
+		@include bp-up(md) {
+			min-width: 124px;
+			margin-right: $space-sm;
+		}
+	}
+}
+
+
+.zotero-bib {
+	display: flex;
+	flex-direction: column;
+
+	@include bp-up(sm) {
+		display: block;
+		width: 100%;
+		max-width: 960px;
+		margin: 0 auto;
+	}
+}
+
+footer {
+	padding: $space-md 0;
+	font-size: .8em;
+	text-align: center;
+
+	a {
+		color: #900;
+		text-decoration: none;
+	}
+}

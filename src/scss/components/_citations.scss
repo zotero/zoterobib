@@ -1,0 +1,61 @@
+.citations-tool {
+	@include bp-up(sm) {
+		display: none;
+
+		.citations-active & {
+			display: block;
+		}
+	}
+
+	@include bp-down(xs) {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: $items-bg;
+		transform: translate3d(-25%, 0, 0);
+
+		transition: transform $nav-transition;
+
+		.citations-active & {
+			transform: translate3d(0, 0, 0);
+		}
+	}
+
+	&.scroll-container {
+		overflow: scroll;
+		-webkit-overflow-scrolling: touch; // Momentum scrolling
+		height: 100%;
+	}
+}
+
+.citations {
+	margin-top: 1em;
+	overflow-wrap: break-word;
+
+	.settings-active & {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+.citation-wrap {
+	padding: 0 $default-padding-horizontal-touch;
+
+	@include bp-down(sm) {
+		padding: $item-touch-padding-vertical $item-touch-padding-horizontal;
+	}
+
+	@include touch-or-bp-up(md) {
+		padding: $item-touch-padding-vertical $item-touch-padding-horizontal;
+	}
+
+	&:nth-child(odd) {
+		background: $item-odd-bg;
+	}
+
+	&.active {
+		color: $item-active-color;
+		background: $item-active-bg;
+	}
+}

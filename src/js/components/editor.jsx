@@ -1,9 +1,12 @@
 'use strict';
 
 const React = require('react');
+const cx = require('classnames');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
+const { Toolbar } = require('zotero-web-library/lib/component/ui/toolbars');
+const Button = require('zotero-web-library/lib/component/ui/button');
+const { withRouter, Link } = require('react-router-dom');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
-const { Link } = require('react-router-dom');
 const { getItemTypeMeta } = require('../utils');
 
 
@@ -28,8 +31,8 @@ class Editor extends React.Component {
 		this.prepareState(nextProps);
 	}
 
-	async prepareState(nextProps) {
-		const item = nextProps.items.find(item => item.itemKey === nextProps.match.params.item);
+	async prepareState(props) {
+		const item = props.items.find(item => item.itemKey === props.match.params.item);
 		
 		if(!item) {
 			this.setState({
@@ -101,8 +104,16 @@ class Editor extends React.Component {
 
 	render() {
 		return (
-			<div className="item-box-container">
-				<Link to="/">Back</Link>
+			<div className={ cx('editor', this.props.className ) }>
+				<Toolbar className="hidden-xs-down toolbar-large">
+					<div className="toolbar-left">
+						<Link to="/">
+							<Button>
+								Back
+							</Button>
+						</Link>
+					</div>
+				</Toolbar>
 				<ItemBox 
 					{ ...this.state }
 					onSave={ this.handleItemUpdate.bind(this) } />
@@ -111,4 +122,4 @@ class Editor extends React.Component {
 	}
 }
 
-module.exports = Editor;
+module.exports = withRouter(Editor);

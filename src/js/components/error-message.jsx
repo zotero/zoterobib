@@ -13,9 +13,9 @@ class ErrorMessage extends React.Component {
 
 	render() {
 		return (
-			<div className={ `zotero-bib-error ${ this.props.error ? 'visible' : ''}` }>
+			<div className={ `error-message ${ this.props.error ? 'visible' : ''}` }>
 				<button 
-					className="zotero-bib-error-dismiss"
+					className="dismiss"
 					onClick={ this.props.onDismiss }
 				>x</button>
 				{ this.props.error }

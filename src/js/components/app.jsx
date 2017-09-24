@@ -3,16 +3,32 @@
 const React = require('react');
 const ZoteroBib = require('zotero-bib');
 const { CSL } = require('citeproc-js');
-const { Route, withRouter } = require('react-router-dom');
+const cx = require('classnames');
+const { BrowserRouter, Route, withRouter, Switch, Link } = require('react-router-dom');
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
 const exportFormats = require('../constants/export-formats');
+const { CSSTransitionGroup } = require('react-transition-group')
 
-const Dashboard = require('./dashboard');
+
+const UrlInput = require('./url-input');
+const Citations = require('./citations');
 const Editor = require('./editor');
-const Sidebar = require('./sidebar');
+const StyleSelector = require('./style-selector');
+const ExportDialog = require('./export-dialog');
+const Button = require('zotero-web-library/lib/component/ui/button');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
+const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/toolbars');
+const TouchNavigation = require('zotero-web-library/lib/component/touch-navigation');
 const ErrorMessage = require('./error-message');
 const citationStyles = require('../constants/citation-styles');
 const { validateItem } = require('../utils');
+const { get } = require('zotero-web-library/lib/utils');
+
+function firstChild(props) {
+	const childrenArray = React.Children.toArray(props.children);
+	return childrenArray[0] || null;
+}
+
 
 class App extends React.Component {
 		constructor(props) {
@@ -25,7 +41,8 @@ class App extends React.Component {
 			url: '',
 			busy: false,
 			error: '',
-			items: []
+			items: [],
+			active: 'citations'
 		};
 	}
 
@@ -177,45 +194,139 @@ class App extends React.Component {
 		this.updateBibliography();
 	}
 
+	handleNavigation(key) {
+		this.props.history.push(`/${key === null ? '' : key}`);
+	}
+
+	get currentView() {
+		if(this.props.location.pathname === '/style-selector') {
+			return 'style-selector';
+		}
+		if(this.props.location.pathname === '/export') {
+			return 'export-dialog';
+		}
+		if(this.props.location.pathname.startsWith('/item')) {
+			return 'editor';
+		}
+		return 'citations';
+	}
+
+	get currentPath() {
+		const viewPathMap = {
+			'style-selector': [{
+				key: 'style-selector',
+				label: 'Select Citation Style'
+			}],
+			'export-dialog': [{
+				key: 'export',
+				label: 'Export'
+			}],
+			'editor': [{
+				key: 'editor',
+				label: 'Editor'
+			}]
+		};
+
+		return this.currentView in viewPathMap ? viewPathMap[this.currentView] : [];
+	}
+
 	render() {
 		return (
-			<div>
-				<Sidebar
-					citationStyle={ this.state.citationStyle }
-					citationStyles= { citationStyles }
-					getExportData={ this.getExportData.bind(this) }
-					onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
-					onDeleteCitations={ this.handleDeleteCitations.bind(this) }
-				/>
-				<ErrorMessage
-					error={ this.state.error }
-					onDismiss={ this.handleClearErrorMessage.bind(this) }
-				/>
-				<div>
-					<Route exact path="/" render={
-						props => <Dashboard
-							url={ this.state.url }
-							busy={ this.state.busy }
-							citations={ this.state.citations }
-							onTranslationRequest={ this.handleTranslateUrl.bind(this) }
-							onManualEntry={ this.handleManualEntry.bind(this) }
-							onDeleteEntry={ this.handleDeleteEntry.bind(this) }
-							onError={ this.handleErrorMessage.bind(this) }
-							{ ...props } />
-					} />
-					<Route
-						path="/item/:item" render={
-						props => <Editor
-							items={ this.state.items }
-							onItemUpdate={ this.handleItemUpdate.bind(this) }
-							onError={ this.handleErrorMessage.bind(this) }
-							{ ...props }
+			<div className="zotero-bib-wrap">
+				<header className="touch-header hidden-sm-up">
+					<TouchNavigation
+						root="Citations"
+						path={ this.currentPath }
+						onNavigation={ this.handleNavigation.bind(this) }
+					/>
+				</header>
+				<div className="zotero-bib">
+					<ErrorMessage
+						error={ this.state.error }
+						onDismiss={ this.handleClearErrorMessage.bind(this) }
+					/>
+					<main className={ `${this.currentView}-active` }>
+						<div className="citations-tool scroll-container">
+							<Toolbar className="hidden-xs-down toolbar-large">
+								<div className="toolbar-left">
+									<StyleSelector
+										citationStyle={ this.state.citationStyle }
+										citationStyles= { citationStyles }
+										onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
+									/>
+								</div>
+								<div className="toolbar-right">
+									<Button onClick={ this.handleManualEntry.bind(this) }>
+										Manual Entry
+									</Button>
+									<ExportDialog
+										getExportData={ this.getExportData.bind(this) }
+									/>
+								</div>
+							</Toolbar>
+							<Toolbar className="hidden-sm-up">
+								<div className="toolbar-left">
+									<ToolGroup>
+										<Button onClick={ this.handleManualEntry.bind(this) }>
+											<Icon type={ '16/new' } width="16" height="16" />
+										</Button>
+										<Link to="/export">
+											<Button>
+												<Icon type={ '16/export' } width="16" height="16" />
+											</Button>
+										</Link>
+										<Link to="/style-selector">
+											<Button>
+												<Icon type={ '16/cog' } width="16" height="16" />
+											</Button>
+										</Link>
+									</ToolGroup>
+								</div>
+							</Toolbar>
+							<UrlInput
+								url={ this.state.url }
+								busy={ this.state.busy }
+								onTranslationRequest={ this.handleTranslateUrl.bind(this) }
+							/>
+							<Citations
+								citations={ this.state.citations }
+								onDeleteEntry={ this.handleDeleteEntry.bind(this) }
+								{ ...this.props } />
+						</div>
+						<ExportDialog
+							className="hidden-sm-up"
+							getExportData={ this.getExportData.bind(this) }
 						/>
-					} />
+						<StyleSelector
+							className="hidden-sm-up"
+							citationStyle={ this.state.citationStyle }
+							citationStyles= { citationStyles }
+							onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
+						/>
+						<CSSTransitionGroup
+							component={ firstChild }
+							transitionName="slide"
+							transitionEnterTimeout={600}
+							transitionLeaveTimeout={600}
+						>
+							{ this.currentView == 'editor' &&
+								<Route path="/item/:item">
+									<Editor
+										items={ this.state.items }
+										onItemUpdate={ this.handleItemUpdate.bind(this) }
+										onError={ this.handleErrorMessage.bind(this) }
+										{ ...this.props }
+									/>
+								</Route>
+							}
+						</CSSTransitionGroup>
+					</main>
 				</div>
+				<footer>
+					Powered by <a href="http://zotero.org/">Zotero</a>
+				</footer>
 			</div>
 		);
 	}
 }
-
 module.exports = withRouter(App);
