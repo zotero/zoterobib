@@ -1,4 +1,6 @@
 .citations-tool {
+	width: 100%;
+
 	@include bp-up(sm) {
 		display: none;
 
