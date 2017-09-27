@@ -26,9 +26,14 @@
 	}
 
 	&.scroll-container {
+		height: 100%;
 		overflow: scroll;
 		-webkit-overflow-scrolling: touch; // Momentum scrolling
-		height: 100%;
+
+		@include bp-up(sm) {
+			min-height: 300px;
+			overflow: auto;
+		}
 	}
 }
 

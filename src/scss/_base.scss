@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 
-body, html, [data-widget=zotero-bib], .zotero-bib-wrap, .zotero-bib {
+body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 	height: 100%;
 }
 
@@ -33,16 +33,18 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap, .zotero-bib {
 	}
 }
 
-
 .zotero-bib {
 	display: flex;
 	flex-direction: column;
+	flex: 1 1 auto;
+	height: 100%;
 
 	@include bp-up(sm) {
 		display: block;
-		width: 100%;
-		max-width: 960px;
+		height: auto;
 		margin: 0 auto;
+		max-width: 960px;
+		width: 100%;
 	}
 }
 
