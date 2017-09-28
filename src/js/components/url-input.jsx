@@ -50,7 +50,7 @@ class UrlInput extends React.PureComponent {
 					onKeyPress={ this.handleKeyboard.bind(this) }
 				/>
 				<button
-					disabled = { this.props.busy }
+					disabled = { this.props.busy || this.state.url.length === 0 }
 					className={ cx({ loading: this.props.busy }) }
 					onClick={ this.handleTranslateUrl.bind(this) }>
 						{ this.props.busy ? '' : 'Cite it' }
