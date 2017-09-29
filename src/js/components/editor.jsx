@@ -32,15 +32,28 @@ class Editor extends React.Component {
 	}
 
 	async prepareState(props) {
-		const item = props.items.find(item => item.itemKey === props.match.params.item);
-		
-		if(!item) {
-			this.setState({
-				isLoading: true
-			});
-			return;
+		var item;
+		if('item' in props.match.params && typeof props.match.params.item === 'undefined') {
+			item = {
+				'itemVersion': 0,
+				'itemType': 'book',
+				'creators': [{
+					creatorType: 'author',
+					firstName: '',
+					lastName: ''
+				}],
+				'title': '(No Title)'
+			};
+		} else {
+			item = props.items.find(item => item.itemKey === props.match.params.item);
+			if(!item) {
+				this.setState({
+					isLoading: true
+				});
+				return;
+			}
 		}
-
+		
 		try {
 			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 		} catch(e) {
@@ -86,6 +99,12 @@ class Editor extends React.Component {
 	}
 
 	async handleItemUpdate(key, newValue) {
+		if(!('itemKey' in this.state.item)) {
+			this.state.item.itemKey = Math.random().toString(36).substr(2, 8).toUpperCase();
+			this.props.onItemCreated(this.state.item);
+			this.props.history.replace(`/item/${this.state.item.itemKey}`);
+		}
+
 		let fieldIndex = this.state.fields.findIndex(field => field.key == key);
 		this.setState({
 			fields: [
@@ -101,7 +120,7 @@ class Editor extends React.Component {
 			this.props.onItemUpdate(this.state.item.itemKey, key, newValue);
 		});
 	}
-
+	
 	render() {
 		return (
 			<div className={ cx('editor', this.props.className ) }>

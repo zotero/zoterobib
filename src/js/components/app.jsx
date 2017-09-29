@@ -143,6 +143,11 @@ class App extends React.Component {
 		this.updating = this.updateCiteproc();
 	}
 
+	handleItemCreated(item) {
+		this.bib.addItem(item);
+		this.updateBibliography();
+	}
+
 	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
 		await this.updating;
 		const index = this.bib.items.findIndex(item => item.itemKey === itemKey);
@@ -169,24 +174,6 @@ class App extends React.Component {
 
 	handleClearErrorMessage() {
 		this.setState({ error: '' });
-	}
-
-	handleManualEntry() {
-		const key = Math.random().toString(36).substr(2, 8).toUpperCase();
-		const item = {
-			'itemKey': key,
-			'itemVersion': 0,
-			'itemType': 'book',
-			'creators': [{
-				creatorType: 'author',
-				firstName: '',
-				lastName: ''
-			}],
-			'title': '(No Title)'
-		};
-		this.bib.addItem(item);
-		this.updateBibliography();
-		this.props.history.push(`/item/${key}`);
 	}
 
 	handleDeleteEntry(itemId) {
@@ -256,9 +243,11 @@ class App extends React.Component {
 									/>
 								</div>
 								<div className="toolbar-right">
-									<Button onClick={ this.handleManualEntry.bind(this) }>
-										Manual Entry
-									</Button>
+									<Link to="/item">
+										<Button>
+											Manual Entry
+										</Button>
+									</Link>
 									<ExportDialog
 										getExportData={ this.getExportData.bind(this) }
 									/>
@@ -267,9 +256,11 @@ class App extends React.Component {
 							<Toolbar className="hidden-sm-up">
 								<div className="toolbar-left">
 									<ToolGroup>
-										<Button onClick={ this.handleManualEntry.bind(this) }>
-											<Icon type={ '16/new' } width="16" height="16" />
-										</Button>
+										<Link to="/item">
+											<Button>
+												<Icon type={ '16/new' } width="16" height="16" />
+											</Button>
+										</Link>
 										<Link to="/export">
 											<Button>
 												<Icon type={ '16/export' } width="16" height="16" />
@@ -310,9 +301,10 @@ class App extends React.Component {
 							transitionLeaveTimeout={600}
 						>
 							{ this.currentView == 'editor' &&
-								<Route path="/item/:item">
+								<Route path="/item/:item?">
 									<Editor
 										items={ this.state.items }
+										onItemCreated={ this.handleItemCreated.bind(this) }
 										onItemUpdate={ this.handleItemUpdate.bind(this) }
 										onError={ this.handleErrorMessage.bind(this) }
 										{ ...this.props }
