@@ -135,6 +135,7 @@ class Editor extends React.Component {
 				</Toolbar>
 				<ItemBox 
 					{ ...this.state }
+					isEditing={ true }
 					onSave={ this.handleItemUpdate.bind(this) } />
 			</div>
 		);
