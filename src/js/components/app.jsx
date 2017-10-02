@@ -2,7 +2,7 @@
 
 const React = require('react');
 const ZoteroBib = require('zotero-bib');
-const { CSL } = require('citeproc-js');
+const CSL = require('citeproc');
 const cx = require('classnames');
 const { BrowserRouter, Route, withRouter, Switch, Link } = require('react-router-dom');
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
@@ -85,16 +85,23 @@ class App extends React.Component {
 		});
 	}
 
-	getExportData(format, asDataUrl = false) {
+	getExportData(format, asFile = false) {
 		if(this.state.citeprocReady) {
 			this.citeproc.setOutputFormat(format);
 			const bib = this.citeproc.makeBibliography();
 			this.citeproc.setOutputFormat('html');
+			const fileContents = `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
 
-			if(asDataUrl) {
-				return `data:${exportFormats[format]},${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+			if(asFile) {
+				const fileName = `citations.${exportFormats[format].extension}`;
+				const file = new File(
+					[fileContents],
+					fileName,
+					{ type: exportFormats[format].mime }
+				);
+				return file;
 			} else {
-				return `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+				return fileContents;
 			}
 		}
 

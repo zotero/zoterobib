@@ -1,4 +1,5 @@
 const React = require('react');
+const { saveAs } = require('file-saver');
 const cx = require('classnames');
 const ClipboardButton = require('react-clipboard.js');
 const Button = require('zotero-web-library/lib/component/ui/button');
@@ -35,6 +36,11 @@ class ExportDialog extends React.Component {
 		});
 	}
 
+	handleDownloadFile(format) {
+		const file = this.props.getExportData(format, true);
+		saveAs(file);
+	}
+
 	render() {
 		return (
 			<div className={ cx('export-dialog', this.props.className ) }>
@@ -56,7 +62,7 @@ class ExportDialog extends React.Component {
 						if(exportFormats[format].isDownloadable) {
 							return(
 								<a 
-									href={ this.props.getExportData('rtf', true) } download="citations.rtf"
+									onClick={ this.handleDownloadFile.bind(this, format) }
 									key={ `export-download-as-${format}` } >
 									<Button>
 										Download { exportFormats[format].label }
