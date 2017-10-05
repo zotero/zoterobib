@@ -31,14 +31,17 @@ class ExportDialog extends React.Component {
 						...this.state.clipboardConfirmations,
 						[format]: false
 					}
+				}, () => {
+					this.props.onExported();
 				});
-			}, 1000);
+			}, 500);
 		});
 	}
 
 	handleDownloadFile(format) {
 		const file = this.props.getExportData(format, true);
 		saveAs(file);
+		this.props.onExported();
 	}
 
 	render() {

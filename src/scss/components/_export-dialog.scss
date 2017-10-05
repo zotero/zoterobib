@@ -29,4 +29,32 @@
 			}
 		}
 	}
+
+	.Popover & {
+		width: 300px;
+		width: 150px;
+		padding: 1em;
+		background-color: $shade-0;
+		border: 1px solid $text-color;
+		border-radius: 3px;
+
+		.btn {
+			display: block;
+			margin: .5em 0;
+			width: 100%;
+		}
+	}
+}
+
+.export-button:after {
+	margin-left: 3px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	vertical-align: -2px;
+	content: "";
+	border: 4px solid;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	border-left-color: transparent;
 }

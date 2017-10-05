@@ -8,7 +8,7 @@ const { BrowserRouter, Route, withRouter, Switch, Link } = require('react-router
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
 const exportFormats = require('../constants/export-formats');
 const { CSSTransitionGroup } = require('react-transition-group')
-
+const Popover = require('react-popover');
 
 const UrlInput = require('./url-input');
 const Citations = require('./citations');
@@ -42,12 +42,21 @@ class App extends React.Component {
 			busy: false,
 			error: '',
 			items: [],
-			active: 'citations'
+			active: 'citations',
+			isExportDialogOpen: false
 		};
 	}
 
 	componentDidMount() {
 		this.updating = this.updateCiteproc();
+		this.globalClickListener = window.addEventListener(
+			'click',
+			this.handleDocumentClick.bind(this)
+		);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener(this.globalClickListener);
 	}
 
 	async updateCiteproc() {
@@ -106,6 +115,12 @@ class App extends React.Component {
 		}
 
 		return '';
+	}
+
+	handleDocumentClick(ev) {
+		if(!ev.target.closest('.export-button') && !ev.target.closest('.Popover')) {
+			this.setState({ isExportDialogOpen: false });
+		}
 	}
 
 	async handleTranslateUrl(url) {
@@ -255,9 +270,29 @@ class App extends React.Component {
 											Manual Entry
 										</Button>
 									</Link>
-									<ExportDialog
-										getExportData={ this.getExportData.bind(this) }
-									/>
+
+									<Button>
+										Save
+									</Button>
+
+									<Popover 
+										isOpen={ this.state.isExportDialogOpen }
+										preferPlace="end"
+										place="below"
+										body={
+											<ExportDialog
+												onExported={ () => this.setState({ isExportDialogOpen: false }) }
+												getExportData={ this.getExportData.bind(this) }
+											/>
+										}
+									>
+										<Button 
+											className="export-button"
+											onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
+										>
+											Export
+										</Button>
+									</Popover>
 								</div>
 							</Toolbar>
 							<Toolbar className="hidden-sm-up">

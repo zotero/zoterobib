@@ -22,7 +22,6 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 
 	.btn {
 		@include bp-up(xs) {
-			width: 100px;
 			margin-right: $space-sm;
 		}
 

@@ -1,0 +1,11 @@
+.Popover {
+	z-index: $z-index-popover;
+
+	//disable animation
+	transition: none!important;
+}
+
+.Popover-tip {
+	position: relative;
+	left: 21px;
+}
