@@ -37,7 +37,7 @@ To obtain production-ready files use the following npm command:
 
 `npm run build`
 
-By default current host is assumed to proxy request to the translation server, i.e. if serving at http:://example.com/index.html, request to the translation server will use the following url: http:://example.com/web.
+By default current host is assumed to proxy request to the translation server, i.e. if serving at http://example.com/index.html, request to the translation server will use the following url: http://example.com/web.
 
 If instead you would like client (i.e. browser) talk directly to the translation server (that should be then configured for CORS), it's possible with the following configuration:
 
