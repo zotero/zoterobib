@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const { Link } = require('react-router-dom');
+const { withRouter, Link } = require('react-router-dom');
 const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/toolbars');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
@@ -25,7 +25,7 @@ class Citations extends React.PureComponent {
 								<Toolbar>
 									<div className="toolbar-right">
 										<ToolGroup>
-											<Link to={ `/item/${itemId}` } >
+											<Link to={ `${this.props.match.url}editor/${itemId}/` } >
 												<Button>
 													<Icon type={ '16/pencil' } width="16" height="16" />
 												</Button>
@@ -83,4 +83,4 @@ class Citations extends React.PureComponent {
 	// </div>
 // </div>
 
-module.exports = Citations;
+module.exports = withRouter(Citations);

@@ -204,20 +204,13 @@ class App extends React.Component {
 	}
 
 	handleNavigation(key) {
-		this.props.history.push(`/${key === null ? '' : key}`);
+		const baseUrl = get(this.props.match, 'params.id') ? `/id/${get(this.props.match, 'params.id')}/` : '/';
+		this.props.history.push(key ? baseUrl + key : baseUrl);
 	}
 
 	get currentView() {
-		if(this.props.location.pathname === '/style-selector') {
-			return 'style-selector';
-		}
-		if(this.props.location.pathname === '/export') {
-			return 'export-dialog';
-		}
-		if(this.props.location.pathname.startsWith('/item')) {
-			return 'editor';
-		}
-		return 'citations';
+		let currentView = this.props.match.params.active ? this.props.match.params.active : 'citations';
+		return currentView;
 	}
 
 	get currentPath() {
@@ -265,13 +258,13 @@ class App extends React.Component {
 									/>
 								</div>
 								<div className="toolbar-right">
-									<Link to="/item">
+									<Link to={ `${this.props.match.url}editor/` }>
 										<Button>
 											Manual Entry
 										</Button>
 									</Link>
 
-									<Button>
+									<Button onClick={ this.handleSave.bind(this) }>
 										Save
 									</Button>
 
@@ -298,17 +291,17 @@ class App extends React.Component {
 							<Toolbar className="hidden-sm-up">
 								<div className="toolbar-left">
 									<ToolGroup>
-										<Link to="/item">
+										<Link to={ `${this.props.match.url}editor/` }>
 											<Button>
 												<Icon type={ '16/new' } width="16" height="16" />
 											</Button>
 										</Link>
-										<Link to="/export">
+										<Link to={ `${this.props.match.url}export-dialog/` }>
 											<Button>
 												<Icon type={ '16/export' } width="16" height="16" />
 											</Button>
 										</Link>
-										<Link to="/style-selector">
+										<Link to={ `${this.props.match.url}style-selector/` }>
 											<Button>
 												<Icon type={ '16/cog' } width="16" height="16" />
 											</Button>
@@ -343,7 +336,7 @@ class App extends React.Component {
 							transitionLeaveTimeout={600}
 						>
 							{ this.currentView == 'editor' &&
-								<Route path="/item/:item?">
+								<Route path={ `${this.props.match.url}/:item?` }>
 									<Editor
 										items={ this.state.items }
 										onItemCreated={ this.handleItemCreated.bind(this) }

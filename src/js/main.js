@@ -2,7 +2,8 @@
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const { BrowserRouter } = require('react-router-dom');
+const { BrowserRouter, Route, Switch } = require('react-router-dom');
+const { Redirect } = require('react-router');
 
 const App = require('./components/app');
 
@@ -11,7 +12,15 @@ class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
 			<BrowserRouter>
-				<App config = { this.props.config } />
+				<Switch>
+					<Route exact strict path="/:url*" render={props => <Redirect to={`${props.location.pathname}/`}/>} />
+					<Route path="/id/:id/:active(style-selector|export-dialog|editor)?">
+						<App config = { this.props.config } />
+					</Route>
+					<Route path="/:active(style-selector|export-dialog|editor)?">
+						<App config = { this.props.config } />
+					</Route>
+				</Switch>
 			</BrowserRouter>
 		);
 	}
