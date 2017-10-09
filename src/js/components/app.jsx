@@ -29,11 +29,17 @@ function firstChild(props) {
 	return childrenArray[0] || null;
 }
 
-
 class App extends React.Component {
 		constructor(props) {
 		super(props);
-		this.bib = new ZoteroBib(props.config);
+		this.config = {
+			storeUrl: this.props.config.storeUrl || (typeof window != 'undefined' && window.location.origin || '')
+		};
+
+		if(this.config.storeUrl.endsWith('/')) {
+			this.config.storeUrl = this.config.storeUrl.substr(0, this.config.storeUrl.length - 1);
+		}
+
 		this.updating = Promise.resolve();
 		this.state = {
 			citationStyle: 'chicago-note-bibliography',
@@ -43,20 +49,47 @@ class App extends React.Component {
 			error: '',
 			items: [],
 			active: 'citations',
-			isExportDialogOpen: false
+			isExportDialogOpen: false,
+			isSaving: false
 		};
 	}
 
-	componentDidMount() {
-		this.updating = this.updateCiteproc();
+	async componentDidMount() {
 		this.globalClickListener = window.addEventListener(
 			'click',
 			this.handleDocumentClick.bind(this)
 		);
+
+		const bibConfig = { ...this.props.config };
+
+		if(this.props.match.params.id) {
+			const items = await this.fetchStoredItems(this.props.match.params.id);
+			if(items) {
+				bibConfig['override'] = true;
+				bibConfig['initialItems'] = items;
+			}
+		}
+		this.bib = new ZoteroBib(bibConfig);
+		this.updating = this.updateCiteproc();
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener(this.globalClickListener);
+	}
+
+	async fetchStoredItems(id) {
+		try {
+			const response = await fetch(`${this.config.storeUrl}/${id}`);
+			if(!response.ok) {
+				throw new Error();	
+			}
+			const items = await response.json();
+			return items;
+		} catch(e) {
+			this.props.history.push('/');
+			this.handleErrorMessage('Failed to load citations by id');
+		}
+		return false;
 	}
 
 	async updateCiteproc() {
@@ -208,6 +241,35 @@ class App extends React.Component {
 		this.props.history.push(key ? baseUrl + key : baseUrl);
 	}
 
+	async handleSave() {
+		this.setState({
+			isSaving: true
+		}, async () => {
+			const response = await fetch(this.config.storeUrl, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.bib.itemsRaw)
+			});
+
+			if(response.ok) {
+				this.setState({
+					isSaving: false
+				});
+				const { key } = await response.json();
+				if(key) {
+					this.props.history.push(`/id/${key}/`);
+				} else {
+					this.handleErrorMessage('There was a problem while saving citations.');
+				}
+			} else {
+				let errorMessage = await response.text();
+				this.handleErrorMessage(errorMessage);
+			}
+		});
+	}
+
 	get currentView() {
 		let currentView = this.props.match.params.active ? this.props.match.params.active : 'citations';
 		return currentView;
@@ -264,8 +326,11 @@ class App extends React.Component {
 										</Button>
 									</Link>
 
-									<Button onClick={ this.handleSave.bind(this) }>
-										Save
+									<Button 
+										onClick={ this.handleSave.bind(this) }
+										disabled={ this.props.isSaving }
+									>
+										{ this.props.isSaving ? 'Saving...' : 'Save' }
 									</Button>
 
 									<Popover 

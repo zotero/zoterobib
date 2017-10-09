@@ -11,7 +11,12 @@
 	<div data-widget="zotero-bib" />
 	<script src="/static/bib-component.js"></script>
 	<script>
-		ZoteroBibComponent.init(document.querySelector('[data-widget=zotero-bib]'));
+		ZoteroBibComponent.init(
+			document.querySelector('[data-widget=zotero-bib]'),
+			{
+				storeUrl: 'http://localhost:8080/'
+			}
+		);
 	</script>
 </body>
 </html

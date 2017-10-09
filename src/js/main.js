@@ -1,5 +1,6 @@
 'use strict';
 
+require('isomorphic-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const { BrowserRouter, Route, Switch } = require('react-router-dom');
