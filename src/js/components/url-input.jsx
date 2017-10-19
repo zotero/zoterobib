@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 const cx = require('classnames');
 
 class UrlInput extends React.PureComponent {
@@ -51,9 +52,12 @@ class UrlInput extends React.PureComponent {
 				/>
 				<button
 					disabled = { this.props.busy || this.state.url.length === 0 }
-					className={ cx({ loading: this.props.busy }) }
 					onClick={ this.handleTranslateUrl.bind(this) }>
-						{ this.props.busy ? '' : 'Cite it' }
+						{ 
+							this.props.busy ? (
+								<Icon type={ '16/spin' } width="16" height="16" />
+							) : 'Cite it'
+						}
 				</button>
 			</div>
 		);

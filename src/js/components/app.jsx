@@ -50,7 +50,8 @@ class App extends React.Component {
 			items: [],
 			active: 'citations',
 			isExportDialogOpen: false,
-			isSaving: false
+			isSaving: false,
+			isLoading: false
 		};
 	}
 
@@ -62,15 +63,26 @@ class App extends React.Component {
 
 		const bibConfig = { ...this.props.config };
 
-		if(this.props.match.params.id) {
-			const items = await this.fetchStoredItems(this.props.match.params.id);
-			if(items) {
-				bibConfig['override'] = true;
-				bibConfig['initialItems'] = items;
+		
+		this.setState({
+			isLoading: true
+		}, async () => {
+			if(this.props.match.params.id) {
+				const items = await this.fetchStoredItems(this.props.match.params.id);
+				if(items) {
+					bibConfig['override'] = true;
+					bibConfig['initialItems'] = items;
+				}
 			}
-		}
-		this.bib = new ZoteroBib(bibConfig);
-		this.updating = this.updateCiteproc();
+
+			this.bib = new ZoteroBib(bibConfig);
+			this.updating = this.updateCiteproc();
+
+			this.setState({
+				isLoading: false
+			});
+		});
+		
 	}
 
 	componentWillUnmount() {
@@ -87,7 +99,7 @@ class App extends React.Component {
 			return items;
 		} catch(e) {
 			this.props.history.push('/');
-			this.handleErrorMessage('Failed to load citations by id');
+			this.handleErrorMessage('Failed to load citations by id.');
 		}
 		return false;
 	}
@@ -297,6 +309,11 @@ class App extends React.Component {
 	render() {
 		return (
 			<div className="zotero-bib-wrap">
+				{
+					this.state.isSaving || this.state.isLoading && <div className="zotero-bib-busy-layer hidden-sm-up">
+						<Icon type={ '16/spin' } width="32" height="32" />
+					</div>
+				}
 				<header className="touch-header hidden-sm-up">
 					<TouchNavigation
 						root="Citations"
@@ -330,7 +347,7 @@ class App extends React.Component {
 										onClick={ this.handleSave.bind(this) }
 										disabled={ this.props.isSaving }
 									>
-										{ this.props.isSaving ? 'Saving...' : 'Save' }
+										{ this.state.isSaving ? 'Saving...' : 'Save' }
 									</Button>
 
 									<Popover 
@@ -371,6 +388,12 @@ class App extends React.Component {
 												<Icon type={ '16/cog' } width="16" height="16" />
 											</Button>
 										</Link>
+										<Button 
+											onClick={ this.handleSave.bind(this) }
+											disabled={ this.props.isSaving }
+										>
+											<Icon type={ '16/floppy' } width="16" height="16" />
+										</Button>
 									</ToolGroup>
 								</div>
 							</Toolbar>
@@ -379,10 +402,16 @@ class App extends React.Component {
 								busy={ this.state.busy }
 								onTranslationRequest={ this.handleTranslateUrl.bind(this) }
 							/>
-							<Citations
-								citations={ this.state.citations }
-								onDeleteEntry={ this.handleDeleteEntry.bind(this) }
-								{ ...this.props } />
+							{
+								this.state.isLoading ? (
+									<div className="zotero-citations-loading">
+										<Icon type={ '16/spin' } width="32" height="32" />
+									</div>
+								) : <Citations
+									citations={ this.state.citations }
+									onDeleteEntry={ this.handleDeleteEntry.bind(this) }
+									{ ...this.props } />
+							}
 						</div>
 						<ExportDialog
 							className="hidden-sm-up"

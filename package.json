@@ -20,7 +20,7 @@
     "build:js": "run-s browserify minify",
     "build:scss": "node-sass src/scss/bib.scss --output-style compressed --output build/static/",
     "build:html": "cp src/html/index.html build/",
-    "build:icons": "mkdir -p build/static/icons && rsync -vaz src/icons/ build/static/icons",
+    "build:icons": "mkdir -p build/static/icons && rsync -vazL src/icons/ build/static/icons",
     "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:icons -s'",
     "devel:js": "watchify -s ZoteroBibComponent --extension=.jsx src/js/main.js -d -v -t [babelify] -o build/static/bib-component.js",
     "devel:scss": "node-sass src/scss/bib.scss --recursive --source-map true --output build/static && node-sass src/scss/bib.scss --watch --recursive --source-map true --output build/static",

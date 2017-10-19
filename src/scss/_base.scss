@@ -47,6 +47,25 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 	}
 }
 
+.zotero-citations-loading {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.zotero-bib-busy-layer {
+	align-items: center;
+	background-color: rgba(0, 0, 0, .05);
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: $z-index-overlay;
+}
+
 footer {
 	padding: $space-md 0;
 	font-size: .8em;
