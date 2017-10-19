@@ -310,7 +310,7 @@ class App extends React.Component {
 		return (
 			<div className="zotero-bib-wrap">
 				{
-					this.state.isSaving || this.state.isLoading && <div className="zotero-bib-busy-layer hidden-sm-up">
+					(this.state.isSaving || this.state.isLoading) && <div className="zotero-bib-busy-layer hidden-sm-up">
 						<Icon type={ '16/spin' } width="32" height="32" />
 					</div>
 				}
@@ -345,7 +345,7 @@ class App extends React.Component {
 
 									<Button 
 										onClick={ this.handleSave.bind(this) }
-										disabled={ this.props.isSaving }
+										disabled={ this.state.isSaving }
 									>
 										{ this.state.isSaving ? 'Saving...' : 'Save' }
 									</Button>
@@ -390,7 +390,7 @@ class App extends React.Component {
 										</Link>
 										<Button 
 											onClick={ this.handleSave.bind(this) }
-											disabled={ this.props.isSaving }
+											disabled={ this.state.isSaving }
 										>
 											<Icon type={ '16/floppy' } width="16" height="16" />
 										</Button>
@@ -404,7 +404,7 @@ class App extends React.Component {
 							/>
 							{
 								this.state.isLoading ? (
-									<div className="zotero-citations-loading">
+									<div className="zotero-citations-loading hidden-xs-down">
 										<Icon type={ '16/spin' } width="32" height="32" />
 									</div>
 								) : <Citations
