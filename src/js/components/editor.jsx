@@ -97,7 +97,7 @@ class Editor extends React.Component {
 		if(!('itemKey' in this.state.item)) {
 			this.state.item.itemKey = Math.random().toString(36).substr(2, 8).toUpperCase();
 			this.props.onItemCreated(this.state.item);
-			this.props.history.replace(`/item/${this.state.item.itemKey}`);
+			this.props.history.replace(`/editor/${this.state.item.itemKey}/`);
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == key);

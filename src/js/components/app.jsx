@@ -86,7 +86,7 @@ class App extends React.Component {
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener(this.globalClickListener);
+		window.removeEventListener('click', this.globalClickListener);
 	}
 
 	async fetchStoredItems(id) {
