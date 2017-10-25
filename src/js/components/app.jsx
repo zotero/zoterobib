@@ -206,8 +206,22 @@ class App extends React.Component {
 	}
 
 	handleSelectCitationStyle(citationStyle) {
-		this.setState({ citationStyle });
-		this.updating = this.updateCiteproc();
+		let previousCitationStyle = this.state.citationStyle;
+		this.setState({
+			isLoading: true,
+			citationStyle
+		}, async () => {
+			try {
+				await this.updateCiteproc();
+			} catch(c) {
+				this.handleErrorMessage('Failed to obtain selected citations style.');
+				this.setState({ citationStyle: previousCitationStyle });
+			} finally {
+				this.setState({
+					isLoading: false
+				});
+			}
+		});
 	}
 
 	handleItemCreated(item) {
