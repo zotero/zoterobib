@@ -37,11 +37,6 @@ class Editor extends React.Component {
 			item = {
 				'itemVersion': 0,
 				'itemType': 'book',
-				'creators': [{
-					creatorType: 'author',
-					firstName: '',
-					lastName: ''
-				}],
 				'title': '(No Title)'
 			};
 		} else {

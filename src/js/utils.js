@@ -76,15 +76,6 @@ const validateItem = async item => {
 			}
 		}
 	}
-
-	//do not allow empty creators array
-	if(!item.creators || (Array.isArray(item.creators) && item.creators.length === 0)) {
-		item.creators = [{
-			creatorType: itemTypeCreatorTypes[0].creatorType,
-			firstName: '',
-			lastName: ''
-		}];
-	}
 };
 
 
