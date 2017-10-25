@@ -46,7 +46,7 @@
     "zotero-api-client": "^0.9.1",
     "zotero-api-client-cache": "^0.1.1",
     "zotero-bib": "github:zotero/bib#v0.2.0-release",
-    "zotero-web-library": "^0.9.18-alpha"
+    "zotero-web-library": "^0.9.19-alpha"
   },
   "devDependencies": {
     "babel-minify": "^0.2.0",
