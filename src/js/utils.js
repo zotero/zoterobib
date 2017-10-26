@@ -3,6 +3,24 @@
 const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
+const load = require('load-script');
+
+
+const getCSL = () => {
+	if('CSL' in window) {
+		return Promise.resolve(window.CSL);
+	}
+
+	return new Promise((resolve, reject) => {
+		load('https://cdn.rawgit.com/Juris-M/citeproc-js/cb9bef87/citeproc.js', (err) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(window.CSL);
+			}
+		});
+	});
+};
 
 const syncRequestAsText = url => {
 	let xhr = new XMLHttpRequest();
@@ -80,10 +98,11 @@ const validateItem = async item => {
 
 
 module.exports = {
-	syncRequestAsText,
-	validateUrl,
+	getCSL,
+	getItemTypeMeta,
 	retrieveLocaleSync,
 	retrieveStyle,
+	syncRequestAsText,
 	validateItem,
-	getItemTypeMeta
+	validateUrl
 };

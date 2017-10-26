@@ -3,7 +3,6 @@
     "browser": {
       "presets": [
         "es2015",
-        "minify"
       ],
       "plugins": [
         "transform-async-to-generator",

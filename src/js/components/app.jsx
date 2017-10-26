@@ -2,12 +2,11 @@
 
 const React = require('react');
 const ZoteroBib = require('zotero-bib');
-const CSL = require('citeproc');
 const cx = require('classnames');
 const { BrowserRouter, Route, withRouter, Switch, Link } = require('react-router-dom');
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
 const exportFormats = require('../constants/export-formats');
-const { CSSTransitionGroup } = require('react-transition-group')
+const { CSSTransitionGroup } = require('react-transition-group');
 const Popover = require('react-popover');
 
 const UrlInput = require('./url-input');
@@ -21,7 +20,7 @@ const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/tool
 const TouchNavigation = require('zotero-web-library/lib/component/touch-navigation');
 const ErrorMessage = require('./error-message');
 const citationStyles = require('../constants/citation-styles');
-const { validateItem } = require('../utils');
+const { validateItem, getCSL } = require('../utils');
 const { get } = require('zotero-web-library/lib/utils');
 
 function firstChild(props) {
@@ -104,21 +103,29 @@ class App extends React.Component {
 		return false;
 	}
 
-	async updateCiteproc() {
-		this.setState({
-			citeprocReady: false
+	updateCiteproc() {
+		return new Promise((resolve) => {
+			this.setState({
+				citeprocReady: false
+			}, async () => {
+				const sys = {
+					retrieveLocale: retrieveLocaleSync,
+					retrieveItem: itemId => this.bib.itemsCSL.find(item => item.id === itemId)
+				};
+				const [ CSL, style ] = await Promise.all([
+					getCSL(),
+					retrieveStyle(this.state.citationStyle)
+				]);
+
+				this.citeproc = new CSL.Engine(sys, style);
+				this.updateBibliography();
+				this.setState({
+					citeprocReady: true,
+					items: [...this.bib.items]
+				}, resolve);
+			});
 		});
-		const sys = {
-			retrieveLocale: retrieveLocaleSync,
-			retrieveItem: itemId => this.bib.itemsCSL.find(item => item.id === itemId)
-		};
-		const style = await retrieveStyle(this.state.citationStyle);
-		this.citeproc = new CSL.Engine(sys, style);
-		this.updateBibliography();
-		this.setState({
-			citeprocReady: true,
-			items: [...this.bib.items]
-		});
+		
 	}
 
 	updateBibliography() {
