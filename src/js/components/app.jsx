@@ -125,7 +125,6 @@ class App extends React.Component {
 				}, resolve);
 			});
 		});
-		
 	}
 
 	updateBibliography() {

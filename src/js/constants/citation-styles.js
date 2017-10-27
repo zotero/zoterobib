@@ -4,7 +4,7 @@ module.exports = [
 		label: 'American Anthropological Association'
 	},
 	{
-		value: 'asa',
+		value: 'apa',
 		label: 'American Psychological Association 6th edition'
 	},
 	{
