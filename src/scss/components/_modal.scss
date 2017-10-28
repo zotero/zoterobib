@@ -1,0 +1,46 @@
+.overlay {
+	z-index: $z-index-overlay;
+	background: rgba(0, 0, 0, .5);
+	position: absolute;
+	left:0;
+	top:0;
+	bottom:0;
+	right:0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.modal {
+		flex: 0 1 auto;
+		background-color: $shade-0;
+		padding: $space-md;
+		max-width: 90%;
+		border: 1px solid rgba(0, 0, 0, .3);
+		box-shadow: 0 3px 7px rgba(0, 0, 0, .3);
+
+		@include bp-up(md) {
+			max-width: 50%;
+		}
+
+		.title {
+			font-size: $font-size-h1;
+			font-family: $headings-font-family;
+			font-weight: $headings-font-weight;
+			line-height: $headings-line-height;
+			margin-bottom: 0.5em;
+		}
+
+		.buttons {
+			margin: 2.5em 0 0;
+			text-align: right;
+
+			button + button {
+				margin-left: $default-padding-horizontal;
+
+				@include touch-or-bp-down(sm) {
+					margin-left: $default-padding-horizontal-touch;
+				}
+			}
+		}
+	}
+}

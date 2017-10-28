@@ -22,20 +22,24 @@ class Citations extends React.PureComponent {
 								<div className="citation">
 									<div dangerouslySetInnerHTML={ { __html: this.props.citations[itemId] } } />
 								</div>
-								<Toolbar>
-									<div className="toolbar-right">
-										<ToolGroup>
-											<Link to={ `${this.props.match.url}editor/${itemId}/` } >
-												<Button>
-													<Icon type={ '16/pencil' } width="16" height="16" />
-												</Button>
-											</Link>
-											<Button onClick={ () => this.handleDeleteCitation(itemId) }>
-												<Icon type={ '16/trash' } width="16" height="16" />
-											</Button>
-										</ToolGroup>
-									</div>
-								</Toolbar>
+								{
+									!this.props.readOnly && (
+										<Toolbar>
+											<div className="toolbar-right">
+												<ToolGroup>
+													<Link to={ `${this.props.match.url}editor/${itemId}/` } >
+														<Button>
+															<Icon type={ '16/pencil' } width="16" height="16" />
+														</Button>
+													</Link>
+													<Button onClick={ () => this.handleDeleteCitation(itemId) }>
+														<Icon type={ '16/trash' } width="16" height="16" />
+													</Button>
+												</ToolGroup>
+											</div>
+										</Toolbar>
+									)
+								}
 							</div>
 						);
 					})

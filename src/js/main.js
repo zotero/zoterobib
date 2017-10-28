@@ -15,7 +15,7 @@ class ZoteroBibComponent extends React.Component {
 			<BrowserRouter>
 				<Switch>
 					<Route exact strict path="/:url*" render={props => <Redirect to={`${props.location.pathname}/`}/>} />
-					<Route path="/id/:id/:active(style-selector|export-dialog|editor)?">
+					<Route path="/id/:id/">
 						<App config = { this.props.config } />
 					</Route>
 					<Route path="/:active(style-selector|export-dialog|editor)?">

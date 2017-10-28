@@ -7,16 +7,13 @@ const { BrowserRouter, Route, withRouter, Switch, Link } = require('react-router
 const { retrieveStyle, retrieveLocaleSync, validateUrl } = require('../utils');
 const exportFormats = require('../constants/export-formats');
 const { CSSTransitionGroup } = require('react-transition-group');
-const Popover = require('react-popover');
-
-const UrlInput = require('./url-input');
 const Citations = require('./citations');
 const Editor = require('./editor');
 const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
-const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
-const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/toolbars');
+const Controls = require('./controls');
+const ReadOnlyControls = require('./read-only-controls');
 const TouchNavigation = require('zotero-web-library/lib/component/touch-navigation');
 const ErrorMessage = require('./error-message');
 const citationStyles = require('../constants/citation-styles');
@@ -39,14 +36,16 @@ class App extends React.Component {
 			this.config.storeUrl = this.config.storeUrl.substr(0, this.config.storeUrl.length - 1);
 		}
 
+		this.branch = 'local';
 		this.updating = Promise.resolve();
 		this.state = {
 			citationStyle: 'chicago-note-bibliography',
 			citeprocReady: false,
 			url: '',
-			busy: false,
+			isBusy: false,
 			error: '',
 			items: [],
+			readOnly: false,
 			active: 'citations',
 			isExportDialogOpen: false,
 			isSaving: false,
@@ -55,37 +54,34 @@ class App extends React.Component {
 	}
 
 	async componentDidMount() {
-		this.globalClickListener = window.addEventListener(
-			'click',
-			this.handleDocumentClick.bind(this)
-		);
-
-		const bibConfig = { ...this.props.config };
-
-		
 		this.setState({
+			readOnly: !!this.props.match.params.id,
 			isLoading: true
 		}, async () => {
 			if(this.props.match.params.id) {
 				const items = await this.fetchStoredItems(this.props.match.params.id);
 				if(items) {
-					bibConfig['override'] = true;
-					bibConfig['initialItems'] = items;
+					this.bibRemote = new ZoteroBib({
+						...this.props.config,
+						initialItems: items,
+						persist: false
+					});
+				} else {
+					this.props.history.push('/');
 				}
 			}
 
-			this.bib = new ZoteroBib(bibConfig);
-			this.updating = this.updateCiteproc();
-
+			this.branch = this.bibRemote ? 'remote' : 'local';
 			this.setState({
-				isLoading: false
+				readOnly: !!this.bibRemote
+			}, async () => {
+				this.bib = new ZoteroBib({ ...this.props.config });
+				this.updating = await this.updateCiteproc();
+				this.setState({
+					isLoading: false
+				});	
 			});
 		});
-		
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener('click', this.globalClickListener);
 	}
 
 	async fetchStoredItems(id) {
@@ -104,13 +100,14 @@ class App extends React.Component {
 	}
 
 	updateCiteproc() {
+		const bib = this.branch === 'remote' ? this.bibRemote : this.bib;
 		return new Promise((resolve) => {
 			this.setState({
 				citeprocReady: false
 			}, async () => {
 				const sys = {
 					retrieveLocale: retrieveLocaleSync,
-					retrieveItem: itemId => this.bib.itemsCSL.find(item => item.id === itemId)
+					retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
 				};
 				const [ CSL, style ] = await Promise.all([
 					getCSL(),
@@ -121,25 +118,26 @@ class App extends React.Component {
 				this.updateBibliography();
 				this.setState({
 					citeprocReady: true,
-					items: [...this.bib.items]
+					items: [...bib.items]
 				}, resolve);
 			});
 		});
 	}
 
 	updateBibliography() {
+		const bib = this.branch === 'remote' ? this.bibRemote : this.bib;
 		this.citeproc.updateItems(
-			this.bib.itemsRaw
+			bib.itemsRaw
 				.filter(item => item.itemKey && !item.parentItem)
 				.map(item => item.itemKey)
 		);
-		let bib = this.citeproc.makeBibliography();
+		let bibliography = this.citeproc.makeBibliography();
 		this.setState({
-			items: [...this.bib.items],
-			citations: bib[0].entry_ids.reduce(
+			items: [...bib.items],
+			citations: bibliography[0].entry_ids.reduce(
 				(obj, key, id) => ({
 					...obj,
-					[key]: bib[1][id]
+					[key]: bibliography[1][id]
 				}), {}
 			)
 		});
@@ -168,16 +166,10 @@ class App extends React.Component {
 		return '';
 	}
 
-	handleDocumentClick(ev) {
-		if(!ev.target.closest('.export-button') && !ev.target.closest('.Popover')) {
-			this.setState({ isExportDialogOpen: false });
-		}
-	}
-
 	async handleTranslateUrl(url) {
 		url = validateUrl(url);
 		this.setState({
-			busy: true,
+			isBusy: true,
 			error: '',
 			url: url || ''
 		});
@@ -189,19 +181,19 @@ class App extends React.Component {
 				this.updateBibliography();
 				this.setState({
 					url: '',
-					busy: false
+					isBusy: false
 				});
 			}
 			catch(e) {
 				this.setState({
 					error: 'An error occured when citing this source',
-					busy: false
+					isBusy: false
 				});
 			}
 		} else {
 			this.setState({
 				error: 'Value entered doesn\'t appear to be a valid URL',
-				busy: false
+				isBusy: false
 			});
 		}
 	}
@@ -261,6 +253,21 @@ class App extends React.Component {
 
 	handleClearErrorMessage() {
 		this.setState({ error: '' });
+	}
+
+	handleOverride() {
+		this.branch = 'local';
+		this.bib.clearItems();
+		this.bib = this.bibRemote;
+		this.bib.setItemsStorage(this.bib.items);
+		delete this.bibRemote;
+		this.props.history.push('/');
+		this.setState({
+			readOnly: false
+		}, () => {
+			this.updateBibliography();
+
+		});
 	}
 
 	handleDeleteEntry(itemId) {
@@ -348,80 +355,24 @@ class App extends React.Component {
 					/>
 					<main className={ `${this.currentView}-active` }>
 						<div className="citations-tool scroll-container">
-							<Toolbar className="hidden-xs-down toolbar-large">
-								<div className="toolbar-left">
-									<StyleSelector
-										citationStyle={ this.state.citationStyle }
-										citationStyles= { citationStyles }
-										onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
+							{ 
+								this.state.readOnly ?
+									<ReadOnlyControls
+										localCitationsCount={ this.state.citeprocReady ? this.bib.itemsRaw.length : null }
+										citations={ this.state.citations }
+										onOverride={ this.handleOverride.bind(this) }
 									/>
-								</div>
-								<div className="toolbar-right">
-									<Link to={ `${this.props.match.url}editor/` }>
-										<Button>
-											Manual Entry
-										</Button>
-									</Link>
-
-									<Button 
-										onClick={ this.handleSave.bind(this) }
-										disabled={ this.state.isSaving }
-									>
-										{ this.state.isSaving ? 'Saving...' : 'Save' }
-									</Button>
-
-									<Popover 
-										isOpen={ this.state.isExportDialogOpen }
-										preferPlace="end"
-										place="below"
-										body={
-											<ExportDialog
-												onExported={ () => this.setState({ isExportDialogOpen: false }) }
-												getExportData={ this.getExportData.bind(this) }
-											/>
-										}
-									>
-										<Button 
-											className="export-button"
-											onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
-										>
-											Export
-										</Button>
-									</Popover>
-								</div>
-							</Toolbar>
-							<Toolbar className="hidden-sm-up">
-								<div className="toolbar-left">
-									<ToolGroup>
-										<Link to={ `${this.props.match.url}editor/` }>
-											<Button>
-												<Icon type={ '16/new' } width="16" height="16" />
-											</Button>
-										</Link>
-										<Link to={ `${this.props.match.url}export-dialog/` }>
-											<Button>
-												<Icon type={ '16/export' } width="16" height="16" />
-											</Button>
-										</Link>
-										<Link to={ `${this.props.match.url}style-selector/` }>
-											<Button>
-												<Icon type={ '16/cog' } width="16" height="16" />
-											</Button>
-										</Link>
-										<Button 
-											onClick={ this.handleSave.bind(this) }
-											disabled={ this.state.isSaving }
-										>
-											<Icon type={ '16/floppy' } width="16" height="16" />
-										</Button>
-									</ToolGroup>
-								</div>
-							</Toolbar>
-							<UrlInput
-								url={ this.state.url }
-								busy={ this.state.busy }
-								onTranslationRequest={ this.handleTranslateUrl.bind(this) }
-							/>
+								: <Controls
+										citationStyle={ this.state.citationStyle }
+										getExportData={ this.getExportData.bind(this) }
+										url={ this.state.url }
+										isSaving={ this.state.isSaving }
+										onSave={ this.handleSave.bind(this) }
+										isBusy={ this.state.isBusy }
+										onCitationStyleChanged={ this.handleSelectCitationStyle.bind(this) }
+										onTranslationRequest={ this.handleTranslateUrl.bind(this) }
+								/>
+							}
 							{
 								this.state.isLoading ? (
 									<div className="zotero-citations-loading hidden-xs-down">
@@ -429,6 +380,7 @@ class App extends React.Component {
 									</div>
 								) : <Citations
 									citations={ this.state.citations }
+									readOnly= { this.state.readOnly }
 									onDeleteEntry={ this.handleDeleteEntry.bind(this) }
 									{ ...this.props } />
 							}
