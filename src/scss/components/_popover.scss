@@ -3,9 +3,8 @@
 
 	//disable animation
 	transition: none!important;
-}
 
-.Popover-tip {
-	position: relative;
-	left: 21px;
+	@include bp-down(xs) {
+		display: none!important;
+	}
 }

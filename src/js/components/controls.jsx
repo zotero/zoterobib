@@ -9,12 +9,17 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const ClipboardButton = require('react-clipboard.js');
 
 class Controls extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isExportDialogOpen: false
+			isExportDialogOpen: false,
+			isPermalinkDialogOpen: false,
+			clipboardConfirmations: false,
+			permalink: null
 		};
 		this.handleDocumentClick = this.handleDocumentClick.bind(this);
 	}
@@ -31,9 +36,44 @@ class Controls extends React.PureComponent {
 	}
 
 	handleDocumentClick(ev) {
-		if(!ev.target.closest('.export-button') && !ev.target.closest('.Popover')) {
+		if(!ev.target.closest('.export-button') && !ev.target.closest('.export-dialog-popover')) {
 			this.setState({ isExportDialogOpen: false });
 		}
+
+		if(!ev.target.closest('.permalink-button') && !ev.target.closest('.permalink-dialog-popover')) {
+			this.handlePermalinkDialogClose();
+		}
+	}
+
+	handlePermalinkDialog() {
+		this.setState({ 
+			isPermalinkDialogOpen: !this.state.isPermalinkDialogOpen
+		}, async () => {
+			const key = await this.props.onSave();
+			this.setState({
+				permalink: `${window.location.origin}/id/${key}/`
+			});
+		});
+	}
+
+	handlePermalinkDialogClose() {
+		this.setState({
+			isPermalinkDialogOpen: false,
+			permalink: null,
+			clipboardConfirmation: false
+		});
+	}
+
+	handleClipoardSuccess() {
+		if(this.state.clipboardConfirmation) {
+			return;
+		}
+
+		this.setState({
+			clipboardConfirmation: true
+		}, () => {
+			setTimeout(this.handlePermalinkDialogClose.bind(this), 500);
+		});
 	}
 
 	render() {
@@ -53,14 +93,40 @@ class Controls extends React.PureComponent {
 								Manual Entry
 							</Button>
 						</Link>
-
-						<Button 
-							onClick={ this.props.onSave }
-							disabled={ this.props.isSaving }
-						>
-							{ this.state.isSaving ? 'Saving...' : 'Save' }
-						</Button>
 						<Popover 
+							className="permalink-dialog-popover"
+							isOpen={ this.state.isPermalinkDialogOpen }
+							preferPlace="end"
+							place="below"
+							body={
+									this.state.permalink ? (
+										<div className="permalink-dialog">
+											<input value={ this.state.permalink } readOnly />
+											<ClipboardButton
+												className="btn"
+												data-clipboard-text={ this.state.permalink }
+												onSuccess={ this.handleClipoardSuccess.bind(this) }
+											>
+												{ this.state.clipboardConfirmation ? 'Copied!' : 'Copy' }
+											</ClipboardButton>
+										</div>
+									) : (
+										<div className="permalink-dialog">
+											Please Wait...
+											<Spinner />
+										</div>
+									)
+							}
+						>
+							<Button
+								className="btn btn-drop-down permalink-button"
+								onClick={ this.handlePermalinkDialog.bind(this) }
+							>
+								Get Permalink
+							</Button>
+						</Popover>
+						<Popover
+							className="export-dialog-popover"
 							isOpen={ this.state.isExportDialogOpen }
 							preferPlace="end"
 							place="below"
@@ -72,7 +138,7 @@ class Controls extends React.PureComponent {
 							}
 						>
 							<Button 
-								className="export-button"
+								className="btn btn-drop-down export-button"
 								onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
 							>
 								Export

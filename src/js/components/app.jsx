@@ -281,31 +281,35 @@ class App extends React.Component {
 	}
 
 	async handleSave() {
-		this.setState({
-			isSaving: true
-		}, async () => {
-			const response = await fetch(this.config.storeUrl, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(this.bib.itemsRaw)
-			});
-
-			if(response.ok) {
-				this.setState({
-					isSaving: false
+		return new Promise((resolve, reject) => {
+			this.setState({
+				isSaving: true
+			}, async () => {
+				const response = await fetch(this.config.storeUrl, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(this.bib.itemsRaw)
 				});
-				const { key } = await response.json();
-				if(key) {
-					this.props.history.push(`/id/${key}/`);
+
+				if(response.ok) {
+					this.setState({
+						isSaving: false
+					});
+					const { key } = await response.json();
+					if(key) {
+						resolve(key);
+					} else {
+						this.handleErrorMessage('There was a problem while saving citations.');
+						reject();
+					}
 				} else {
-					this.handleErrorMessage('There was a problem while saving citations.');
+					let errorMessage = await response.text();
+					this.handleErrorMessage(errorMessage);
+					reject();
 				}
-			} else {
-				let errorMessage = await response.text();
-				this.handleErrorMessage(errorMessage);
-			}
+			});
 		});
 	}
 
