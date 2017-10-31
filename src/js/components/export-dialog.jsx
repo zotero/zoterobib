@@ -1,17 +1,31 @@
 const React = require('react');
+const PropTypes = require('prop-types');
 const { saveAs } = require('file-saver');
 const cx = require('classnames');
 const ClipboardButton = require('react-clipboard.js');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const exportFormats = require('../constants/export-formats');
-const { withRouter, Link } = require('react-router-dom');
+const { withRouter } = require('react-router-dom');
 
 class ExportDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			permalink: null,
+			isGettingPermalink: false,
 			clipboardConfirmations: {}
 		};
+	}
+
+	componentWillReceiveProps(props) {
+		// reset status on navigation
+		if(this.props.match.params.active != props.match.params.active) {
+			this.setState({
+				permalink: null,
+				isGettingPermalink: false,
+				clipboardConfirmations: {}
+			});
+		}
 	}
 
 	handleClipoardSuccess(format) {
@@ -32,7 +46,9 @@ class ExportDialog extends React.Component {
 						[format]: false
 					}
 				}, () => {
-					this.props.onExported();
+					if(format !== 'permalink') {
+						this.props.onExported();
+					}
 				});
 			}, 500);
 		});
@@ -42,6 +58,18 @@ class ExportDialog extends React.Component {
 		const file = this.props.getExportData(format, true);
 		saveAs(file);
 		this.props.onExported();
+	}
+
+	handleGetPermalink() {
+		this.setState({ 
+			isGettingPermalink: true
+		}, async () => {
+			const key = await this.props.onSave();
+			this.setState({
+				permalink: `${window.location.origin}/id/${key}/`,
+				isGettingPermalink: false
+			});
+		});
 	}
 
 	render() {
@@ -75,8 +103,37 @@ class ExportDialog extends React.Component {
 						}
 					})
 				}
+				<div className="hidden-sm-up">
+					{
+						this.state.permalink ? (
+							<div className="permalink-dialog">
+								<ClipboardButton
+									className="btn"
+									data-clipboard-text={ this.state.permalink }
+									onSuccess={ this.handleClipoardSuccess.bind(this, 'permalink') }
+								>
+									{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy' }
+								</ClipboardButton>
+							</div>
+						) : (
+							<Button onClick={ this.handleGetPermalink.bind(this) }>
+								{
+									this.state.isGettingPermalink ? 'Please wait...' : 'Get Permalink'
+								}
+							</Button>
+						)
+					}
+				</div>
 			</div>
 		);
+	}
+
+	static defaultProps = {
+		onExported: () => {}
+	}
+	
+	static propTypes = {
+		onExported: PropTypes.func
 	}
 }
 

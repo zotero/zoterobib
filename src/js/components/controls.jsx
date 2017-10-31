@@ -164,12 +164,6 @@ class Controls extends React.PureComponent {
 									<Icon type={ '16/cog' } width="16" height="16" />
 								</Button>
 							</Link>
-							<Button 
-								onClick={ this.props.onSave }
-								disabled={ this.props.isSaving }
-							>
-								<Icon type={ '16/floppy' } width="16" height="16" />
-							</Button>
 						</ToolGroup>
 					</div>
 				</Toolbar>

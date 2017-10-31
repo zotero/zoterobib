@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<symbol id="floppy" viewBox="0 0 16 16">
-		<path fill-rule="evenodd" fill="currentColor" d="M13.138,0l2.862,2.804l0,13.196l-16,0l0,-16l13.138,0Zm-0.471,15.347l0,-6.204l-9.667,0l0,6.204l9.667,0Zm2.666,0l0,-12.273l-2.471,-2.421l-0.529,0l0,5.225l-9.333,0l0,-5.225l-2.333,0l0,14.694l1.666,0l0,-6.857l11,0l0,6.857l2,0Zm-3.666,-10.123l0,-4.571l-8,0l0,4.571l8,0Zm-1.167,-4.224l0,3.5l-2,0l0,-3.5l2,0Zm-0.667,2.8l0,-2.1l-0.666,0l0,2.1l0.666,0Z" />	
-	</symbol>
-	<use xlink:href="#floppy" viewBox="0 0 16 16"/>
-</svg>

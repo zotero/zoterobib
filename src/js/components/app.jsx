@@ -341,7 +341,7 @@ class App extends React.Component {
 		return (
 			<div className="zotero-bib-wrap">
 				{
-					(this.state.isSaving || this.state.isLoading) && <div className="zotero-bib-busy-layer hidden-sm-up">
+					this.state.isLoading && <div className="zotero-bib-busy-layer hidden-sm-up">
 						<Icon type={ '16/spin' } width="32" height="32" />
 					</div>
 				}
@@ -391,6 +391,7 @@ class App extends React.Component {
 						</div>
 						<ExportDialog
 							className="hidden-sm-up"
+							onSave={ this.handleSave.bind(this) }
 							getExportData={ this.getExportData.bind(this) }
 						/>
 						<StyleSelector

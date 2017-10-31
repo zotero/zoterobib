@@ -1,18 +1,14 @@
 .permalink-dialog-popover {
-    .Popover-tip {
+	.Popover-tip {
 		position: relative;
 		left: 44px;
 	}
 }
 
 .permalink-dialog {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-
-    svg {
-    	margin: 1em auto;
-    }
+	svg {
+		margin: 1em auto;
+	}
 
 	.Popover & {
 		width: 300px;
@@ -27,5 +23,11 @@
 			margin: .5em 0;
 			width: 100%;
 		}
+	}
+
+	@include bp-up(sm) {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
 	}
 }
