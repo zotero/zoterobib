@@ -59,10 +59,11 @@ class Editor extends React.Component {
 			return;
 		}
 
+
 		itemTypes = itemTypes.map(it => ({
 			value: it.itemType,
 			label: it.localized
-		}));
+		})).filter(it => it.value != 'note');
 
 		itemTypeCreatorTypes = itemTypeCreatorTypes.map(ct => ({
 			value: ct.creatorType,
