@@ -49,7 +49,8 @@ class App extends React.Component {
 			active: 'citations',
 			isExportDialogOpen: false,
 			isSaving: false,
-			isLoading: false
+			isLoading: false,
+			permalink: null
 		};
 	}
 
@@ -133,6 +134,7 @@ class App extends React.Component {
 		);
 		let bibliography = this.citeproc.makeBibliography();
 		this.setState({
+			permalink: null,
 			items: [...bib.items],
 			citations: bibliography[0].entry_ids.reduce(
 				(obj, key, id) => ({
@@ -299,7 +301,11 @@ class App extends React.Component {
 					});
 					const { key } = await response.json();
 					if(key) {
-						resolve(key);
+						this.setState({
+							permalink: `${window.location.origin}/id/${key}/`
+						}, () => {
+							resolve(key);	
+						});
 					} else {
 						this.handleErrorMessage('There was a problem while saving citations.');
 						reject();
@@ -367,6 +373,7 @@ class App extends React.Component {
 										onOverride={ this.handleOverride.bind(this) }
 									/>
 								: <Controls
+										permalink={ this.state.permalink }
 										citationStyle={ this.state.citationStyle }
 										getExportData={ this.getExportData.bind(this) }
 										url={ this.state.url }

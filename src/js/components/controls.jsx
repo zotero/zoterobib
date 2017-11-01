@@ -18,8 +18,7 @@ class Controls extends React.PureComponent {
 		this.state = {
 			isExportDialogOpen: false,
 			isPermalinkDialogOpen: false,
-			clipboardConfirmations: false,
-			permalink: null
+			clipboardConfirmations: false
 		};
 		this.handleDocumentClick = this.handleDocumentClick.bind(this);
 	}
@@ -49,17 +48,15 @@ class Controls extends React.PureComponent {
 		this.setState({ 
 			isPermalinkDialogOpen: !this.state.isPermalinkDialogOpen
 		}, async () => {
-			const key = await this.props.onSave();
-			this.setState({
-				permalink: `${window.location.origin}/id/${key}/`
-			});
+			if(!this.props.permalink) {
+				this.props.onSave();
+			}
 		});
 	}
 
 	handlePermalinkDialogClose() {
 		this.setState({
 			isPermalinkDialogOpen: false,
-			permalink: null,
 			clipboardConfirmation: false
 		});
 	}
@@ -99,12 +96,12 @@ class Controls extends React.PureComponent {
 							preferPlace="end"
 							place="below"
 							body={
-									this.state.permalink ? (
+									this.props.permalink ? (
 										<div className="permalink-dialog">
-											<input value={ this.state.permalink } readOnly />
+											<input value={ this.props.permalink } readOnly />
 											<ClipboardButton
 												className="btn"
-												data-clipboard-text={ this.state.permalink }
+												data-clipboard-text={ this.props.permalink }
 												onSuccess={ this.handleClipoardSuccess.bind(this) }
 											>
 												{ this.state.clipboardConfirmation ? 'Copied!' : 'Copy' }
