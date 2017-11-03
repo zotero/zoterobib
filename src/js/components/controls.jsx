@@ -101,7 +101,11 @@ class Controls extends React.PureComponent {
 							body={
 									this.props.permalink ? (
 										<div className="permalink-dialog">
-											<input value={ this.props.permalink } readOnly />
+											<input 
+												value={ this.props.permalink } 
+												onClick={ ev => ev.target.select() }
+												readOnly
+											/>
 											<ClipboardButton
 												className="btn"
 												data-clipboard-text={ this.props.permalink }
