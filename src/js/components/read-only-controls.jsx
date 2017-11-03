@@ -16,12 +16,13 @@ class ReadOnlyControls extends React.PureComponent {
 			showModal: false,
 			isExportDialogOpen: false
 		};
+		this.handleDocumentClick = this.handleDocumentClick.bind(this);
 	}
 
 	componentDidMount() {
 		window.addEventListener(
 			'click',
-			this.handleDocumentClick.bind(this)
+			this.handleDocumentClick
 		);
 	}
 
