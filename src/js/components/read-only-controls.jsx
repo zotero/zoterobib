@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const { withRouter, Link } = require('react-router-dom');
 
 const Popover = require('react-popover');
 const { Toolbar } = require('zotero-web-library/lib/component/ui/toolbars');
@@ -62,6 +63,11 @@ class ReadOnlyControls extends React.PureComponent {
 			<div>
 				<Toolbar className="toolbar-large">
 					<div className="toolbar-right">
+						<Link to={ `${this.props.match.url}export-dialog/` }>
+							<Button className="hidden-sm-up">
+								Export
+							</Button>
+						</Link>
 						<Popover
 							className="export-dialog-popover"
 							isOpen={ this.state.isExportDialogOpen }
@@ -69,13 +75,14 @@ class ReadOnlyControls extends React.PureComponent {
 							place="below"
 							body={
 								<ExportDialog
+									isReadOnly={ true }
 									onExported={ () => this.setState({ isExportDialogOpen: false }) }
 									getExportData={ this.props.getExportData }
 								/>
 							}
 						>
 							<Button 
-								className="btn btn-drop-down export-button"
+								className="btn btn-drop-down export-button hidden-xs-down"
 								onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
 							>
 								Export
@@ -120,4 +127,4 @@ class ReadOnlyControls extends React.PureComponent {
 	}
 }
 
-module.exports = ReadOnlyControls;
+module.exports = withRouter(ReadOnlyControls);

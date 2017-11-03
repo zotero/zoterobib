@@ -105,27 +105,31 @@ class ExportDialog extends React.Component {
 						}
 					})
 				}
-				<div className="hidden-sm-up">
-					{
-						this.state.permalink ? (
-							<div className="permalink-dialog">
-								<ClipboardButton
-									className="btn"
-									data-clipboard-text={ this.state.permalink }
-									onSuccess={ this.handleClipoardSuccess.bind(this, 'permalink') }
-								>
-									{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy' }
-								</ClipboardButton>
-							</div>
-						) : (
-							<Button onClick={ this.handleGetPermalink.bind(this) }>
-								{
-									this.state.isGettingPermalink ? 'Please wait...' : 'Get Permalink'
-								}
-							</Button>
-						)
-					}
-				</div>
+				{
+					!this.props.isReadOnly && (
+						<div className="hidden-sm-up">
+							{
+								this.state.permalink ? (
+									<div className="permalink-dialog">
+										<ClipboardButton
+											className="btn"
+											data-clipboard-text={ this.state.permalink }
+											onSuccess={ this.handleClipoardSuccess.bind(this, 'permalink') }
+										>
+											{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy' }
+										</ClipboardButton>
+									</div>
+								) : (
+									<Button onClick={ this.handleGetPermalink.bind(this) }>
+										{
+											this.state.isGettingPermalink ? 'Please wait...' : 'Get Permalink'
+										}
+									</Button>
+								)
+							}
+						</div>
+					)
+				}
 			</div>
 		);
 	}
@@ -140,6 +144,7 @@ class ExportDialog extends React.Component {
 		match: PropTypes.object,
 		onExported: PropTypes.func,
 		onSave: PropTypes.func,
+		isReadOnly: PropTypes.bool
 	}
 }
 

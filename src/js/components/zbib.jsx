@@ -101,6 +101,7 @@ class ZBib extends React.PureComponent {
 						</div>
 						<ExportDialog
 							className="hidden-sm-up"
+							isReadOnly={ this.props.isReadOnly }
 							onSave={ this.props.onSave }
 							getExportData={ this.props.getExportData }
 						/>
