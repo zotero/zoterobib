@@ -200,7 +200,7 @@ class Container extends React.Component {
 	}
 
 	getExportData(format, asFile = false) {
-		if(this.state.citeprocReady) {
+		if(this.citeproc) {
 			this.citeproc.setOutputFormat(format);
 			const bib = this.citeproc.makeBibliography();
 			this.citeproc.setOutputFormat('html');
@@ -218,7 +218,6 @@ class Container extends React.Component {
 				return fileContents;
 			}
 		}
-
 		return '';
 	}
 

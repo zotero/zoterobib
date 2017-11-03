@@ -21,7 +21,7 @@ class Controls extends React.PureComponent {
 		this.state = {
 			isExportDialogOpen: false,
 			isPermalinkDialogOpen: false,
-			clipboardConfirmations: false
+			clipboardConfirmation: false
 		};
 		this.handleDocumentClick = this.handleDocumentClick.bind(this);
 	}

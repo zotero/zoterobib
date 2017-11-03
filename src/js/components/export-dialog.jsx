@@ -139,7 +139,7 @@ class ExportDialog extends React.Component {
 		getExportData: PropTypes.func.isRequired,
 		match: PropTypes.object,
 		onExported: PropTypes.func,
-		onSave: PropTypes.func.isRequired,
+		onSave: PropTypes.func,
 	}
 }
 

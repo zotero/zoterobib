@@ -3,16 +3,36 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 
+const Popover = require('react-popover');
 const { Toolbar } = require('zotero-web-library/lib/component/ui/toolbars');
 const ReactModal = require('react-modal');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const ExportDialog = require('./export-dialog');
 
 class ReadOnlyControls extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			showModal: false
+			showModal: false,
+			isExportDialogOpen: false
 		};
+	}
+
+	componentDidMount() {
+		window.addEventListener(
+			'click',
+			this.handleDocumentClick.bind(this)
+		);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('click', this.handleDocumentClick);
+	}
+
+	handleDocumentClick(ev) {
+		if(!ev.target.closest('.export-button') && !ev.target.closest('.export-dialog-popover')) {
+			this.setState({ isExportDialogOpen: false });
+		}
 	}
 
 	handleOpenModal() {
@@ -41,6 +61,25 @@ class ReadOnlyControls extends React.PureComponent {
 			<div>
 				<Toolbar className="toolbar-large">
 					<div className="toolbar-right">
+						<Popover
+							className="export-dialog-popover"
+							isOpen={ this.state.isExportDialogOpen }
+							preferPlace="end"
+							place="below"
+							body={
+								<ExportDialog
+									onExported={ () => this.setState({ isExportDialogOpen: false }) }
+									getExportData={ this.props.getExportData }
+								/>
+							}
+						>
+							<Button 
+								className="btn btn-drop-down export-button"
+								onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
+							>
+								Export
+							</Button>
+						</Popover>
 						<Button onClick={ this.handleEdit.bind(this) }>
 							Edit Bibliography
 						</Button>
@@ -75,7 +114,8 @@ class ReadOnlyControls extends React.PureComponent {
 	static propTypes = {
 		localCitationsCount: PropTypes.number,
 		citations: PropTypes.object,
-		onOverride: PropTypes.func
+		onOverride: PropTypes.func,
+		getExportData: PropTypes.func,
 	}
 }
 

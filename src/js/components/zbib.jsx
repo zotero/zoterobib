@@ -74,6 +74,7 @@ class ZBib extends React.PureComponent {
 										localCitationsCount={ this.props.itemsCount }
 										citations={ this.props.citations }
 										onOverride={ this.props.onOverride }
+										getExportData={ this.props.getExportData }
 									/>
 								: <Controls
 										permalink={ this.props.permalink }
