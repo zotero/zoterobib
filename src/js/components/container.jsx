@@ -14,7 +14,7 @@ class Container extends React.Component {
 		isReadOnly: !!this.props.match.params.id,
 		isSaving: false,
 		isTranslating: false,
-		citationStyle: 'chicago-note-bibliography',
+		citationStyle: localStorage.getItem('zotero-bib-citations-style') || 'chicago-note-bibliography',
 		errorMessage: null,
 		permalink: null,
 		url: '',
@@ -30,6 +30,7 @@ class Container extends React.Component {
 					this.state.citationStyle,
 					this.state.isReadOnly ? this.bibRemote : this.bib
 				);
+				localStorage.setItem('zotero-bib-citations-style', this.state.citationStyle);
 				this.setState({ citations: this.citations });
 			} catch(e) {
 				this.setState({
