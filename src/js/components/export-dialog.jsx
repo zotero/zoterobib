@@ -13,17 +13,23 @@ class ExportDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			permalink: null,
 			isGettingPermalink: false,
 			clipboardConfirmations: {}
 		};
+	}
+
+	componentDidUpdate(props) {
+		if(this.props.permalink != props.permalink) {
+			this.setState({
+				isGettingPermalink: false
+			});
+		}
 	}
 
 	componentWillReceiveProps(props) {
 		// reset status on navigation
 		if(this.props.match.params.active != props.match.params.active) {
 			this.setState({
-				permalink: null,
 				isGettingPermalink: false,
 				clipboardConfirmations: {}
 			});
@@ -62,16 +68,11 @@ class ExportDialog extends React.Component {
 		this.props.onExported();
 	}
 
-	handleGetPermalink() {
+	async handleGetPermalink() {
 		this.setState({ 
 			isGettingPermalink: true
-		}, async () => {
-			const key = await this.props.onSave();
-			this.setState({
-				permalink: `${window.location.origin}/id/${key}/`,
-				isGettingPermalink: false
-			});
 		});
+		await this.props.onSave();
 	}
 
 	render() {
@@ -109,11 +110,11 @@ class ExportDialog extends React.Component {
 					!this.props.isReadOnly && (
 						<div className="hidden-sm-up">
 							{
-								this.state.permalink ? (
+								this.props.permalink ? (
 									<div className="permalink-dialog">
 										<ClipboardButton
 											className="btn"
-											data-clipboard-text={ this.state.permalink }
+											data-clipboard-text={ this.props.permalink }
 											onSuccess={ this.handleClipoardSuccess.bind(this, 'permalink') }
 										>
 											{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy' }
@@ -141,10 +142,11 @@ class ExportDialog extends React.Component {
 	static propTypes = {
 		className: PropTypes.string,
 		getExportData: PropTypes.func.isRequired,
+		isReadOnly: PropTypes.bool,
 		match: PropTypes.object,
 		onExported: PropTypes.func,
 		onSave: PropTypes.func,
-		isReadOnly: PropTypes.bool
+		permalink: PropTypes.string
 	}
 }
 
