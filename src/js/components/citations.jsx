@@ -23,7 +23,7 @@ class Citations extends React.PureComponent {
 									<div dangerouslySetInnerHTML={ { __html: this.props.citations[itemId] } } />
 								</div>
 								{
-									!this.props.readOnly && (
+									!this.props.isReadOnly && (
 										<Toolbar>
 											<div className="toolbar-right">
 												<ToolGroup>
@@ -54,37 +54,11 @@ class Citations extends React.PureComponent {
 	
 	static propTypes = {
 		citations: PropTypes.object,
+		isReadOnly: PropTypes.bool,
+		match: PropTypes.object,
 		onDeleteEntry: PropTypes.func.isRequired
 	}
 }
 
-// <div className="zotero-bib-citation-action">
-		// <Link to={ `/item/${itemId}` } >
-			// <button className="zotero-bib-citation-action-button edit">
-				// <svg
-					// className="zotero-bib-citation-action-icon"
-					// style={{ width: 24, height: 24 }}
-					// aria-labelledby="title"
-					// role="img">
-						// <title id="title">Edit</title>
-						// <use xlinkHref="/icons/cog.svg#cog"></use>
-				// </svg>
-			// </button>
-		// </Link>
-		// <button 
-			// onClick= { this.handleDeleteCitation.bind(this, itemId) }
-			// className="zotero-bib-citation-action-button delete"
-		// >
-			// <svg
-				// className="zotero-bib-citation-action-icon"
-				// style={{ width: 24, height: 24 }}
-				// aria-labelledby="title"
-				// role="img">
-					// <title id="title">Trash</title>
-					// <use xlinkHref="/icons/trash.svg#trash"></use>
-			// </svg>
-		// </button>
-	// </div>
-// </div>
 
 module.exports = withRouter(Citations);

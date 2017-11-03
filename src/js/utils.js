@@ -22,6 +22,19 @@ const getCSL = () => {
 	});
 };
 
+const getCiteproc = async (citationStyle, bib) => {
+	const sys = {
+		retrieveLocale: retrieveLocaleSync,
+		retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
+	};
+	const [ CSL, style ] = await Promise.all([
+		getCSL(),
+		retrieveStyle(citationStyle)
+	]);
+
+	return new CSL.Engine(sys, style);
+};
+
 const syncRequestAsText = url => {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', url, false);
@@ -97,12 +110,53 @@ const validateItem = async item => {
 };
 
 
+//@TODO: implement retry
+const fetchFromPermalink = async url => {
+	try {
+		const response = await fetch(url);
+		if(!response.ok) {
+			throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
+		}
+		return await response.json();
+	} catch(e) {
+		throw e;
+	}
+};
+
+//@TODO: implement retry
+const saveToPermalink = async (url, data) => {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+
+		if(!response.ok) {
+			throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
+		}
+		let { key } = await response.json();
+		if(!key) {
+			throw new Error('Error: Response did not contain a key');
+		}
+		return key;
+	} catch(e) {
+		throw e;
+	}
+};
+
+
 module.exports = {
+	fetchFromPermalink,
+	getCiteproc,
 	getCSL,
 	getItemTypeMeta,
 	retrieveLocaleSync,
 	retrieveStyle,
+	saveToPermalink,
 	syncRequestAsText,
 	validateItem,
-	validateUrl
+	validateUrl,
 };

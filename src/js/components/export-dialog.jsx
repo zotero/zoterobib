@@ -1,3 +1,5 @@
+'use strict';
+
 const React = require('react');
 const PropTypes = require('prop-types');
 const { saveAs } = require('file-saver');
@@ -133,7 +135,11 @@ class ExportDialog extends React.Component {
 	}
 	
 	static propTypes = {
-		onExported: PropTypes.func
+		className: PropTypes.string,
+		getExportData: PropTypes.func.isRequired,
+		match: PropTypes.object,
+		onExported: PropTypes.func,
+		onSave: PropTypes.func.isRequired,
 	}
 }
 

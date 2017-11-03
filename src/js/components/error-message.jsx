@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
 
 class ErrorMessage extends React.Component {
@@ -21,6 +22,12 @@ class ErrorMessage extends React.Component {
 				{ this.props.error }
 			</div>
 		);
+	}
+
+	static propTypes = {
+		onDismiss: PropTypes.func.isRequired,
+		error: PropTypes.string,
+		location: PropTypes.object
 	}
 }
 

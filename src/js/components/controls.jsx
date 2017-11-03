@@ -1,4 +1,7 @@
+'use strict';
+
 const React = require('react');
+const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
 const citationStyles = require('../constants/citation-styles');
 
@@ -166,11 +169,24 @@ class Controls extends React.PureComponent {
 				</Toolbar>
 				<UrlInput
 					url={ this.props.url }
-					busy={ this.props.isBusy }
+					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
 			</div>
 		);
+	}
+	
+	static propTypes = {
+		citations: PropTypes.object,
+		citationStyle: PropTypes.string,
+		getExportData: PropTypes.func.isRequired,
+		isTranslating: PropTypes.bool,
+		match: PropTypes.object,
+		onCitationStyleChanged: PropTypes.func.isRequired,
+		onSave: PropTypes.func.isRequired,
+		onTranslationRequest: PropTypes.func.isRequired,
+		permalink: PropTypes.string,
+		url: PropTypes.string,
 	}
 }
 

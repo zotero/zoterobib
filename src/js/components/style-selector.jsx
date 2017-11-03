@@ -1,9 +1,10 @@
 'use strict';
 
 const React = require('react');
+const PropTypes = require('prop-types');
 const cx = require('classnames');
 const Select = require('react-select');
-const { withRouter, Link } = require('react-router-dom');
+const { withRouter } = require('react-router-dom');
 
 class StyleSelector extends React.Component {
 	render() {
@@ -18,6 +19,13 @@ class StyleSelector extends React.Component {
 				/>
 			</div>
 		);
+	}
+
+	static propTypes = {
+		className: PropTypes.string,
+		citationStyle: PropTypes.string,
+		citationStyles: PropTypes.array,
+		onCitationStyleChanged: PropTypes.func
 	}
 }
 

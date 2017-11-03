@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const PropTypes = require('prop-types');
 const cx = require('classnames');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
 const { Toolbar } = require('zotero-web-library/lib/component/ui/toolbars');
@@ -135,6 +136,11 @@ class Editor extends React.Component {
 					onSave={ this.handleItemUpdate.bind(this) } />
 			</div>
 		);
+	}
+
+	static propTypes = {
+		onItemUpdate: PropTypes.func.isRequired,
+		className: PropTypes.string
 	}
 }
 

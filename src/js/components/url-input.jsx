@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
-const cx = require('classnames');
+const PropTypes = require('prop-types');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
 class UrlInput extends React.PureComponent {
 	constructor(props) {
@@ -16,7 +16,7 @@ class UrlInput extends React.PureComponent {
 		this.setState({
 			url: nextProps.url
 		}, () => {
-			if(this.props.busy && !nextProps.busy) {
+			if(this.props.isTranslating && !nextProps.isTranslating) {
 				this.inputField.focus();
 			}
 		});
@@ -29,7 +29,7 @@ class UrlInput extends React.PureComponent {
 	}
 
 	handleKeyboard(ev) {
-		if(ev.key === 'Enter' && this.state.url.length > 0 && !this.props.busy) {
+		if(ev.key === 'Enter' && this.state.url.length > 0 && !this.props.isTranslating) {
 			this.handleTranslateUrl();
 		}
 	}
@@ -51,16 +51,22 @@ class UrlInput extends React.PureComponent {
 					onKeyPress={ this.handleKeyboard.bind(this) }
 				/>
 				<button
-					disabled = { this.props.busy || this.state.url.length === 0 }
+					disabled = { this.props.isTranslating || this.state.url.length === 0 }
 					onClick={ this.handleTranslateUrl.bind(this) }>
 						{ 
-							this.props.busy ? (
-								<Icon type={ '16/spin' } width="16" height="16" />
+							this.props.isTranslating ? (
+								<Spinner />
 							) : 'Cite it'
 						}
 				</button>
 			</div>
 		);
+	}
+
+	static propTypes = {
+		isTranslating: PropTypes.bool,
+		onTranslationRequest: PropTypes.func.isRequired,
+		url: PropTypes.string,
 	}
 }
 
