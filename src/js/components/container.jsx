@@ -26,9 +26,10 @@ class Container extends React.Component {
 			|| (this.state.citationStyle !== state.citationStyle)
 		) {
 			try {
-				this.citeproc = await getCiteproc(
+				await this.prepareCiteproc(
 					this.state.citationStyle,
-					this.state.isReadOnly ? this.bibRemote : this.bib
+					this.state.isReadOnly ? this.bibRemote : this.bib,
+					this.state.isReadOnly
 				);
 				localStorage.setItem('zotero-bib-citations-style', this.state.citationStyle);
 				this.setState({ citations: this.citations });
@@ -70,10 +71,12 @@ class Container extends React.Component {
 
 		this.bib = new ZoteroBib({ ...this.props.config });
 
-		this.citeproc = await getCiteproc(
+		await this.prepareCiteproc(
 			citationStyle,
-			isReadOnly ? this.bibRemote : this.bib
+			isReadOnly ? this.bibRemote : this.bib,
+			isReadOnly
 		);
+		
 		
 		this.setState({ 
 			isReadOnly,
@@ -197,6 +200,12 @@ class Container extends React.Component {
 
 	handleClearErrorMessage() {
 		this.setState({ errorMessage: '' });
+	}
+
+	async prepareCiteproc(style, bib, isReadOnly) {
+		this.citeproc = await getCiteproc(style, bib);
+		// Make URLs and DOIs clickable on permalink pages
+		this.citeproc.opt.development_extensions.wrap_url_and_doi = isReadOnly;
 	}
 
 	getExportData(format, asFile = false) {
