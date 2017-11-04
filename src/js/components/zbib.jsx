@@ -77,6 +77,7 @@ class ZBib extends React.PureComponent {
 										getExportData={ this.props.getExportData }
 									/>
 								: <Controls
+										citations={ this.props.citations }
 										permalink={ this.props.permalink }
 										url={ this.props.url }
 										citationStyle={ this.props.citationStyle }

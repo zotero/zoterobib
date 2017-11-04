@@ -123,6 +123,7 @@ class Controls extends React.PureComponent {
 							}
 						>
 							<Button
+								disabled={ Object.keys(this.props.citations).length === 0 }
 								className="btn btn-drop-down permalink-button"
 								onClick={ this.handlePermalinkDialog.bind(this) }
 							>
@@ -142,6 +143,7 @@ class Controls extends React.PureComponent {
 							}
 						>
 							<Button 
+								disabled={ Object.keys(this.props.citations).length === 0 }
 								className="btn btn-drop-down export-button"
 								onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
 							>
@@ -158,14 +160,19 @@ class Controls extends React.PureComponent {
 									<Icon type={ '16/new' } width="16" height="16" />
 								</Button>
 							</Link>
-							<Link to={ `${this.props.match.url}export-dialog/` }>
-								<Button>
-									<Icon type={ '16/export' } width="16" height="16" />
-								</Button>
-							</Link>
 							<Link to={ `${this.props.match.url}style-selector/` }>
 								<Button>
 									<Icon type={ '16/cog' } width="16" height="16" />
+								</Button>
+							</Link>
+							<Link to={ Object.keys(this.props.citations).length === 0 ? '' : `${this.props.match.url}export-dialog/` }>
+								<Button>
+									<Icon 
+										color={ Object.keys(this.props.citations).length === 0 ? 'rgba(0, 0, 0, 0.15)' : null}
+										type={ '16/export' }
+										width="16"
+										height="16"
+									/>
 								</Button>
 							</Link>
 						</ToolGroup>
@@ -178,6 +185,10 @@ class Controls extends React.PureComponent {
 				/>
 			</div>
 		);
+	}
+
+	static defaultProps = {
+		citations: {}
 	}
 	
 	static propTypes = {
