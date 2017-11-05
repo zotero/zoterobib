@@ -5,6 +5,7 @@ const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
 const citationStyles = require('../constants/citation-styles');
 
+const ReactModal = require('react-modal');
 const Popover = require('react-popover');
 const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/toolbars');
 const UrlInput = require('./url-input');
@@ -75,6 +76,20 @@ class Controls extends React.PureComponent {
 			setTimeout(this.handlePermalinkDialogClose.bind(this), 500);
 		});
 	}
+
+	handleOpenDeleteModal() {
+		this.setState({ isDeleteModalOpen: true });
+	}
+
+	handleCloseDeleteModal() {
+		this.setState({ isDeleteModalOpen: false });
+	}
+
+	handleDeleteAllCitations() {
+		this.setState({ isDeleteModalOpen: false });
+		this.props.onDeleteCitations();
+	}
+
 
 	render() {
 		return (
@@ -150,6 +165,12 @@ class Controls extends React.PureComponent {
 								Export
 							</Button>
 						</Popover>
+						<Button
+							disabled={ Object.keys(this.props.citations).length === 0 } 
+							onClick={ this.handleOpenDeleteModal.bind(this) }
+						>
+							Delete All
+						</Button>
 					</div>
 				</Toolbar>
 				<Toolbar className="hidden-sm-up">
@@ -175,6 +196,17 @@ class Controls extends React.PureComponent {
 									/>
 								</Button>
 							</Link>
+							<Button
+								disabled={ Object.keys(this.props.citations).length === 0 } 
+								onClick={ this.handleOpenDeleteModal.bind(this) }
+							>
+								<Icon 
+									color={ Object.keys(this.props.citations).length === 0 ? 'rgba(0, 0, 0, 0.15)' : null}
+									type={ '16/trash' }
+									width="16"
+									height="16"
+								/>
+						</Button>
 						</ToolGroup>
 					</div>
 				</Toolbar>
@@ -183,6 +215,23 @@ class Controls extends React.PureComponent {
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
+				<ReactModal 
+					isOpen={ this.state.isDeleteModalOpen }
+					contentLabel="Delete all citations?"
+					className="modal"
+					overlayClassName="overlay"
+				>
+					<h1 className="title">
+						Delete all citations?
+					</h1>
+					<p>
+						Confirm deletion of { Object.keys(this.props.citations).length } entries in the editor.
+					</p>
+					<p className="buttons">
+						<Button onClick={ this.handleCloseDeleteModal.bind(this) }>Cancel</Button>
+						<Button onClick={ this.handleDeleteAllCitations.bind(this) }>Delete</Button>
+					</p>
+				</ReactModal>
 			</div>
 		);
 	}
@@ -200,6 +249,7 @@ class Controls extends React.PureComponent {
 		onCitationStyleChanged: PropTypes.func.isRequired,
 		onSave: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
+		onDeleteCitations: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 		url: PropTypes.string,
 	}

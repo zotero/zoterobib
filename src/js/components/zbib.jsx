@@ -87,6 +87,7 @@ class ZBib extends React.PureComponent {
 										isTranslating={ this.props.isTranslating }
 										onCitationStyleChanged={ this.props.onCitationStyleChanged }
 										onTranslationRequest={ this.props.onTranslationRequest }
+										onDeleteCitations={ this.props.onDeleteCitations }
 								/>
 							}
 							{
@@ -162,6 +163,7 @@ class ZBib extends React.PureComponent {
 		onOverride: PropTypes.func.isRequired,
 		onSave: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
+		onDeleteCitations: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 		url: PropTypes.string,
 	}
