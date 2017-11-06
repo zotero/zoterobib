@@ -1,0 +1,6 @@
+[submodule "third-party/citeproc-js"]
+	path = third-party/citeproc-js
+	url = https://github.com/Juris-M/citeproc-js.git
+[submodule "third-party/locales"]
+	path = third-party/locales
+	url = https://github.com/citation-style-language/locales.git

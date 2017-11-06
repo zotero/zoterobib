@@ -12,7 +12,7 @@ const getCSL = () => {
 	}
 
 	return new Promise((resolve, reject) => {
-		load('https://cdn.rawgit.com/Juris-M/citeproc-js/cb9bef87/citeproc.js', (err) => {
+		load('/static/js/citeproc.js', (err) => {
 			if (err) {
 				reject(err);
 			} else {
@@ -61,6 +61,7 @@ const retrieveStyle = async styleId => {
 	let cacheId = `style-${styleId}`;
 	let style = localStorage.getItem(cacheId);
 	if(!style) {
+		// let url = `https://www.zotero.org/styles/${styleId}`;
 		let url = `https://cdn.rawgit.com/citation-style-language/styles/8470b61e/${styleId}.csl`;
 		let response = await fetch(url);
 		style = await response.text();
@@ -70,7 +71,7 @@ const retrieveStyle = async styleId => {
 };
 
 const retrieveLocaleSync = lang => {
-	const url = `https://cdn.rawgit.com/citation-style-language/locales/b01a5e4d/locales-${lang}.xml`;
+	const url = `/static/locales/locales-${lang}.xml`;
 	const retval = syncRequestAsText(url);
 	return retval;
 };
