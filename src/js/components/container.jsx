@@ -210,10 +210,11 @@ class Container extends React.Component {
 
 	getExportData(format, asFile = false) {
 		if(this.citeproc) {
+			const separator = format === 'rtf' ? '\\line ' : '';
 			this.citeproc.setOutputFormat(format);
 			const bib = this.citeproc.makeBibliography();
 			this.citeproc.setOutputFormat('html');
-			const fileContents = `${bib[0].bibstart}${bib[1].join()}${bib[0].bibend}`;
+			const fileContents = `${bib[0].bibstart}${bib[1].join(separator)}${bib[0].bibend}`;
 
 			if(asFile) {
 				const fileName = `citations.${exportFormats[format].extension}`;
