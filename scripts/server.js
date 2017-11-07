@@ -24,6 +24,11 @@ const server = http.createServer((req, resp) => {
 		proxy.web(req, resp, {
 			target: `${translationServerUrl}`
 		});
+		proxy.on('error', () => {
+			resp.statusCode = 502;
+			resp.statusMessage = 'Translation Server not available';
+			resp.end();
+		});
 	} else {
 		serve(req, resp, fallback);
 	}

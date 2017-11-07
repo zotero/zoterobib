@@ -63,7 +63,7 @@ class ZBib extends React.PureComponent {
 				</header>
 				<div className="zotero-bib">
 					<ErrorMessage
-						error={ this.props.error }
+						error={ this.props.errorMessage }
 						onDismiss={ this.props.onClearError.bind(this) }
 					/>
 					<main className={ `${this.currentView}-active` }>

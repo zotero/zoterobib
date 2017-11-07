@@ -188,7 +188,7 @@ class Container extends React.Component {
 			}
 		} else {
 			this.setState({
-				errorMessage: 'Value entered doesn\'t appear to be a valid URL',
+				errorMessage: 'Value entered doesn\'t appear to be a valid URL, ISBN, DOI, or PMID',
 				isTranslating: false,
 			});
 		}
