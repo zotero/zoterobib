@@ -156,6 +156,7 @@ class Container extends React.Component {
 	async handleTranslateIdentifier(identifier) {
 		this.setState({
 			isTranslating: true,
+			url: identifier,
 			errorMessage: ''
 		});
 
