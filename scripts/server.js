@@ -20,7 +20,7 @@ const server = http.createServer((req, resp) => {
 		});
 	};
 
-	if(req.url.startsWith('/web')) {
+	if(req.url.startsWith('/web') || req.url.startsWith('/search')) {
 		proxy.web(req, resp, {
 			target: `${translationServerUrl}`
 		});

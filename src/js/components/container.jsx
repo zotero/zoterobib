@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl } = require('../utils');
+const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier } = require('../utils');
 const ZBib = require('./zbib');
 
 class Container extends React.Component {
@@ -153,17 +153,26 @@ class Container extends React.Component {
 		this.setState({ citations: this.citations, items: this.items });
 	}
 
-	async handleTranslateUrl(url) {
-		url = validateUrl(url);
+	async handleTranslateIdentifier(identifier) {
 		this.setState({
 			isTranslating: true,
-			errorMessage: '',
-			url: url || ''
+			errorMessage: ''
 		});
 
-		if(url) {
+		let isUrl = !isIdentifier(identifier);
+		if(identifier || isUrl) {
 			try {
-				await this.bib.translateUrl(url.toString());
+				if(isUrl) {
+					let url = validateUrl(identifier);
+					if(url) {
+						this.setState({
+							url: url
+						});
+					}
+					await this.bib.translateUrl(url);
+				} else {
+					await this.bib.translateIdentifier(identifier);
+				}
 				this.setState({
 					url: '',
 					isTranslating: false,
@@ -264,7 +273,7 @@ class Container extends React.Component {
 			onItemUpdate = { this.handleItemUpdate.bind(this) }
 			onOverride = { this.handleOverride.bind(this) }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
-			onTranslationRequest = { this.handleTranslateUrl.bind(this) }
+			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onClearError = { this.handleClearErrorMessage.bind(this) }
 			onError = { this.handleError.bind(this) }
 			getExportData = { this.getExportData.bind(this) }

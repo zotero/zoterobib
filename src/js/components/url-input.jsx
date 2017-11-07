@@ -30,11 +30,11 @@ class UrlInput extends React.PureComponent {
 
 	handleKeyboard(ev) {
 		if(ev.key === 'Enter' && this.state.url.length > 0 && !this.props.isTranslating) {
-			this.handleTranslateUrl();
+			this.handleTranslateIdentifier();
 		}
 	}
 
-	handleTranslateUrl() {
+	handleTranslateIdentifier() {
 		this.props.onTranslationRequest(this.state.url);
 	}
 
@@ -44,7 +44,7 @@ class UrlInput extends React.PureComponent {
 				<input
 					ref = { i => this.inputField = i }
 					autoFocus
-					placeholder="Cite a source by entering its url"
+					placeholder="Cite a source by entering its URL, ISBN, DOI, or PMID"
 					className="zotero-bib-form-url"
 					type="text" value={ this.state.url }
 					onChange={ this.handleUrlChange.bind(this) }
@@ -52,7 +52,7 @@ class UrlInput extends React.PureComponent {
 				/>
 				<button
 					disabled = { this.props.isTranslating || this.state.url.length === 0 }
-					onClick={ this.handleTranslateUrl.bind(this) }>
+					onClick={ this.handleTranslateIdentifier.bind(this) }>
 						{ 
 							this.props.isTranslating ? (
 								<Spinner />
