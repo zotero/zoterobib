@@ -95,7 +95,7 @@ const validateItem = async item => {
 
 	//remove item properties that should not appear on this item type
 	for (var prop in item) {
-		if(!([...itemTypeFields.map(f => f.field), 'creators', 'itemKey', 'itemType', 'itemVersion', 'tags'].includes(prop))) {
+		if(!([...itemTypeFields.map(f => f.field), 'creators', 'key', 'itemType', 'version', 'tags'].includes(prop))) {
 			delete item[prop];
 		}
 	}

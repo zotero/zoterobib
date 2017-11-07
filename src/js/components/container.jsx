@@ -120,7 +120,7 @@ class Container extends React.Component {
 	handleDeleteEntry(itemId) {
 		this.setState({ permalink: null });
 		this.bib.removeItem(
-			this.bib.itemsRaw.find(item => item.itemKey == itemId)
+			this.bib.itemsRaw.find(item => item.key == itemId)
 		);
 		this.setState({ citations: this.citations, items: this.items });
 	}
@@ -133,7 +133,7 @@ class Container extends React.Component {
 	}
 
 	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
-		const index = this.bib.items.findIndex(item => item.itemKey === itemKey);
+		const index = this.bib.items.findIndex(item => item.key === itemKey);
 
 		let updatedItem = {
 			...this.bib.items[index],
@@ -238,8 +238,8 @@ class Container extends React.Component {
 		}
 		this.citeproc.updateItems(
 			bib.itemsRaw
-				.filter(item => item.itemKey && !item.parentItem)
-				.map(item => item.itemKey)
+				.filter(item => item.key)
+				.map(item => item.key)
 		);
 		let bibliography = this.citeproc.makeBibliography();
 		return bibliography[0].entry_ids.reduce(
