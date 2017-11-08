@@ -95,7 +95,7 @@ class ReadOnlyControls extends React.PureComponent {
 				</Toolbar>
 				<ReactModal 
 					isOpen={ this.state.showModal }
-					contentLabel="Minimal Modal Example"
+					contentLabel="Override Bibliography?"
 					className="modal"
 					overlayClassName="overlay"
 				>
