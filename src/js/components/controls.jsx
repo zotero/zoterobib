@@ -90,12 +90,16 @@ class Controls extends React.PureComponent {
 		this.props.onDeleteCitations();
 	}
 
-
 	render() {
 		return (
 			<div>
 				<Toolbar className="hidden-xs-down toolbar-large">
 					<div className="toolbar-left">
+						<div className="logo">
+							<Link to="/">
+								ZBib
+							</Link>
+						</div>
 						<StyleSelector
 							citationStyle={ this.props.citationStyle }
 							citationStyles= { citationStyles }

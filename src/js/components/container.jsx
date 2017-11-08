@@ -10,8 +10,8 @@ const ZBib = require('./zbib');
 
 class Container extends React.Component {
 	state = {
-		isLoading: true,
-		isReadOnly: !!this.props.match.params.id,
+		isLoadingCitations: true,
+		isReadOnly: undefined,
 		isSaving: false,
 		isTranslating: false,
 		citationStyle: localStorage.getItem('zotero-bib-citations-style') || 'chicago-note-bibliography',
@@ -19,6 +19,12 @@ class Container extends React.Component {
 		permalink: null,
 		url: '',
 		citations: {},
+	}
+
+	async componentWillReceiveProps(props) {
+		if(this.props.match.params.id !== props.match.params.id) {
+			await this.handleIdChanged(props);
+		}
 	}
 
 	async componentDidUpdate(props, state) {
@@ -40,36 +46,46 @@ class Container extends React.Component {
 				});
 			} finally {
 				this.setState({
-					isLoading: false
+					isLoading: false,
+					isLoadingCitations: false
 				});
 			}
 		}
 	}
 
 	async componentDidMount() {
-		let isReadOnly = !!this.props.match.params.id;
+		await this.handleIdChanged(this.props);
+	}
+
+	async handleIdChanged(props) {
+		let isReadOnly = !!props.match.params.id;
 		let citationStyle = this.state.citationStyle;
 		let errorMessage = null;
 
-		if(this.props.match.params.id) {
+		this.setState({ 
+			isReadOnly: undefined,
+			isLoading: true
+		});
+
+		if(props.match.params.id) {
 			try {
-				const id = this.props.match.params.id;
-				const remoteData = await fetchFromPermalink(`${this.props.config.storeUrl}/${id}`);
+				const id = props.match.params.id;
+				const remoteData = await fetchFromPermalink(`${props.config.storeUrl}/${id}`);
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
 					this.bibRemote = new ZoteroBib({
-						...this.props.config,
+						...props.config,
 						initialItems: remoteData.items,
 						persist: false
 					});
 				}
 			} catch(e) {
-				this.props.history.push('/');
+				props.history.push('/');
 				errorMessage = 'Failed to load citations by id.';
 			}
 		}
 
-		this.bib = new ZoteroBib({ ...this.props.config });
+		this.bib = new ZoteroBib({ ...props.config });
 
 		await this.prepareCiteproc(
 			citationStyle,
@@ -77,12 +93,10 @@ class Container extends React.Component {
 			isReadOnly
 		);
 		
-		
 		this.setState({ 
 			isReadOnly,
 			citationStyle,
 			errorMessage,
-			citations: this.citations,
 			items: this.items,
 			isLoading: false,
 		});
@@ -127,7 +141,7 @@ class Container extends React.Component {
 
 	handleCitationStyleChanged(citationStyle) {
 		this.setState({
-			isLoading: true,
+			isLoadingCitations: true,
 			citationStyle
 		});
 	}

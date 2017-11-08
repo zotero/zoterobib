@@ -62,6 +62,13 @@ class ReadOnlyControls extends React.PureComponent {
 		return(
 			<div>
 				<Toolbar className="toolbar-large">
+					<div className="toolbar-left">
+						<div className="logo">
+							<Link to="/">
+								ZBib
+							</Link>
+						</div>
+					</div>
 					<div className="toolbar-right">
 						<Link to={ `${this.props.match.url}export-dialog/` }>
 							<Button className="hidden-sm-up">

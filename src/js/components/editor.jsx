@@ -123,11 +123,11 @@ class Editor extends React.Component {
 			<div className={ cx('editor', this.props.className ) }>
 				<Toolbar className="hidden-xs-down toolbar-large">
 					<div className="toolbar-left">
-						<Link to="/">
-							<Button>
-								Back
-							</Button>
-						</Link>
+						<div className="logo">
+							<Link to="/">
+								ZBib
+							</Link>
+						</div>
 					</div>
 				</Toolbar>
 				<ItemBox 

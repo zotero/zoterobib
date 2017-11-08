@@ -6,6 +6,16 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 	height: 100%;
 }
 
+.logo {
+	margin-right: $space-sm;
+	font-size: $font-size-h1;
+	line-height: 36px;
+
+	a {
+		text-decoration: none;
+	}
+}
+
 .toolbar-large {
 	height: auto;
 	margin: 1em 0;
@@ -25,6 +35,11 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 			margin-right: $space-sm;
 		}
 
+		@include bp-only(sm) {
+			font-size: $font-size-base;
+			padding: 2px 6px;
+		}
+
 		@include bp-up(md) {
 			min-width: 124px;
 			margin-right: $space-sm;
@@ -37,6 +52,13 @@ body, html, [data-widget=zotero-bib], .zotero-bib-wrap {
 	flex-direction: column;
 	flex: 1 1 auto;
 	height: 100%;
+
+	&.loading {
+		margin-top: 3em;
+		text-align: center;
+		display: flex;
+		align-items: center;
+	}
 
 	@include bp-up(sm) {
 		display: block;

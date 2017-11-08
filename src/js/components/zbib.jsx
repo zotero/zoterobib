@@ -53,7 +53,13 @@ class ZBib extends React.PureComponent {
 
 	render() {
 		return (
-			<div className="zotero-bib-wrap">
+			typeof this.props.isReadOnly === 'undefined' ?
+			<div className="zotero-bib-wrap zotero-bib-loading">
+				<div className="zotero-bib loading">
+					<Spinner />
+				</div>
+			</div>
+			: <div className="zotero-bib-wrap">
 				<header className="touch-header hidden-sm-up">
 					<TouchNavigation
 						root="Citations"
@@ -70,28 +76,28 @@ class ZBib extends React.PureComponent {
 						<div className="citations-tool scroll-container">
 							{
 								this.props.isReadOnly ?
-									<ReadOnlyControls
-										localCitationsCount={ this.props.itemsCount }
-										citations={ this.props.citations }
-										onOverride={ this.props.onOverride }
-										getExportData={ this.props.getExportData }
-									/>
-								: <Controls
-										citations={ this.props.citations }
-										permalink={ this.props.permalink }
-										url={ this.props.url }
-										citationStyle={ this.props.citationStyle }
-										getExportData={ this.props.getExportData }
-										isSaving={ this.props.isSaving }
-										onSave={ this.props.onSave }
-										isTranslating={ this.props.isTranslating }
-										onCitationStyleChanged={ this.props.onCitationStyleChanged }
-										onTranslationRequest={ this.props.onTranslationRequest }
-										onDeleteCitations={ this.props.onDeleteCitations }
-								/>
+								<ReadOnlyControls
+									localCitationsCount={ this.props.itemsCount }
+									citations={ this.props.citations }
+									onOverride={ this.props.onOverride }
+									getExportData={ this.props.getExportData }
+								/> :
+								<Controls
+									citations={ this.props.citations }
+									permalink={ this.props.permalink }
+									url={ this.props.url }
+									citationStyle={ this.props.citationStyle }
+									getExportData={ this.props.getExportData }
+									isSaving={ this.props.isSaving }
+									onSave={ this.props.onSave }
+									isTranslating={ this.props.isTranslating }
+									onCitationStyleChanged={ this.props.onCitationStyleChanged }
+									onTranslationRequest={ this.props.onTranslationRequest }
+									onDeleteCitations={ this.props.onDeleteCitations }
+								/> 
 							}
 							{
-								this.props.isLoading ? (
+								this.props.isLoadingCitations ? (
 									<div className="zotero-citations-loading hidden-xs-down">
 										<Spinner />
 									</div>
@@ -148,6 +154,7 @@ class ZBib extends React.PureComponent {
 		error: PropTypes.string,
 		getExportData: PropTypes.func.isRequired,
 		history: PropTypes.object,
+		isLoadingCitations: PropTypes.bool,
 		isLoading: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		isSaving: PropTypes.bool,
