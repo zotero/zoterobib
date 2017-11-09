@@ -21,6 +21,11 @@ class Container extends React.Component {
 		citations: {},
 	}
 
+	constructor(props) {
+		super(props);
+		this.handleCopy = this.handleCopy.bind(this);
+	}
+
 	async componentWillReceiveProps(props) {
 		if(this.props.match.params.id !== props.match.params.id) {
 			await this.handleIdChanged(props);
@@ -54,7 +59,23 @@ class Container extends React.Component {
 	}
 
 	async componentDidMount() {
+		document.addEventListener('copy', this.handleCopy);
 		await this.handleIdChanged(this.props);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('copy', this.handleCopy);
+	}
+
+	handleCopy(ev) {
+		if(this.copyDataInclude) {
+			const formattedMime = exportFormats[this.copyDataInclude].mime;
+			const formattedValue = this.getExportData(this.copyDataInclude);
+			ev.clipboardData.setData('text/plain', ev.target.value);
+			ev.clipboardData.setData(formattedMime, formattedValue);
+			ev.preventDefault();
+			delete this.copyDataInclude;
+		}
 	}
 
 	async handleIdChanged(props) {
@@ -234,6 +255,10 @@ class Container extends React.Component {
 
 	getExportData(format, asFile = false) {
 		if(this.citeproc) {
+			if(exportFormats[format].include) {
+				this.copyDataInclude = exportFormats[format].include;
+			}
+
 			const separator = format === 'rtf' ? '\\line ' : '';
 			this.citeproc.setOutputFormat(format);
 			const bib = this.citeproc.makeBibliography();

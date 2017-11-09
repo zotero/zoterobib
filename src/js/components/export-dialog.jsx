@@ -75,20 +75,24 @@ class ExportDialog extends React.Component {
 		await this.props.onSave();
 	}
 
+	handleGetText(format) {
+		return this.props.getExportData(format, false);
+	}
+
 	render() {
 		return (
 			<div className={ cx('export-dialog', this.props.className ) }>
 				{
-					Object.keys(exportFormats).map(format => {
+					['text', 'html', 'rtf'].map(format => {
 						if(exportFormats[format].isCopyable) {
 							return (
 								<ClipboardButton
 									className="btn"
-									data-clipboard-text={ this.props.getExportData(format, false) }
+									option-text={ this.handleGetText.bind(this, format) }
 									onSuccess={ this.handleClipoardSuccess.bind(this, format) }
 									key={ `export-copy-as-${format}` }
 								>
-									{ this.state.clipboardConfirmations[format] ? 'Copied!' : `Copy as ${exportFormats[format].label}` }
+									{ this.state.clipboardConfirmations[format] ? 'Copied!' : exportFormats[format].label }
 								</ClipboardButton>
 							);
 						}
@@ -99,7 +103,7 @@ class ExportDialog extends React.Component {
 									onClick={ this.handleDownloadFile.bind(this, format) }
 									key={ `export-download-as-${format}` } >
 									<Button>
-										Download { exportFormats[format].label }
+										{ exportFormats[format].label }
 									</Button>
 								</a>
 							);
