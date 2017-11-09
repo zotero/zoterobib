@@ -6,6 +6,9 @@
 }
 
 .export-dialog {
+	a {
+		text-decoration: none;
+	}
 	@include bp-down(xs) {
 		position: absolute;
 		left: 0;
