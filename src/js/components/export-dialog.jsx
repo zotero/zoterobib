@@ -83,7 +83,7 @@ class ExportDialog extends React.Component {
 		return (
 			<div className={ cx('export-dialog', this.props.className ) }>
 				{
-					['text', 'html', 'rtf'].map(format => {
+					['text', 'rtf', 'html'].map(format => {
 						if(exportFormats[format].isCopyable) {
 							return (
 								<ClipboardButton
