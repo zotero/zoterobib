@@ -146,7 +146,7 @@ class Controls extends React.PureComponent {
 								className="btn btn-drop-down permalink-button"
 								onClick={ this.handlePermalinkDialog.bind(this) }
 							>
-								Get Permalink
+								Link to This Version
 							</Button>
 						</Popover>
 						<Popover

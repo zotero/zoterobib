@@ -121,13 +121,13 @@ class ExportDialog extends React.Component {
 											data-clipboard-text={ this.props.permalink }
 											onSuccess={ this.handleClipoardSuccess.bind(this, 'permalink') }
 										>
-											{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy' }
+											{ this.state.clipboardConfirmations['permalink'] ? 'Copied!' : 'Copy Link to This Version' }
 										</ClipboardButton>
 									</div>
 								) : (
 									<Button onClick={ this.handleGetPermalink.bind(this) }>
 										{
-											this.state.isGettingPermalink ? 'Please wait...' : 'Get Permalink'
+											this.state.isGettingPermalink ? 'Please wait...' : 'Copy Link to This Version'
 										}
 									</Button>
 								)

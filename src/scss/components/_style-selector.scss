@@ -1,6 +1,11 @@
 
 .style-selector {
 	@include bp-up(sm) {
+		width: 250px;
+		margin-right: $space-sm;
+	}
+
+	@include bp-up(md) {
 		width: 300px;
 	}
 
