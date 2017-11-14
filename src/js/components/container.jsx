@@ -369,7 +369,7 @@ class Container extends React.Component {
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onError = { this.handleError.bind(this) }
 			getExportData = { this.getExportData.bind(this) }
-			itemsCount = { this.bib ? this.bib.items.length : null }
+			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
 			{ ...this.state }
 		/>;
 	}
