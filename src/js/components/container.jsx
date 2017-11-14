@@ -134,7 +134,7 @@ class Container extends React.Component {
 				citationStyle: this.state.citationStyle,
 				items: this.bib.itemsRaw
 			});
-			permalink = `${window.location.origin}/${key}/`;
+			permalink = `${window.location.origin}/${key}`;
 		} catch(e) {
 			this.props.history.push('/');
 			errorMessage = 'Failed to save citations.' + e;

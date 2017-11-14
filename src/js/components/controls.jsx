@@ -108,7 +108,7 @@ class Controls extends React.PureComponent {
 						/>
 					</div>
 					<div className="toolbar-right">
-						<Link to={ `${this.props.match.url}editor/` }>
+						<Link to={ '/editor' }>
 							<Button>
 								Manual Entry
 							</Button>
@@ -181,17 +181,17 @@ class Controls extends React.PureComponent {
 				<Toolbar className="hidden-sm-up">
 					<div className="toolbar-left">
 						<ToolGroup>
-							<Link to={ `${this.props.match.url}editor/` }>
+							<Link to={ '/editor' }>
 								<Button>
 									<Icon type={ '16/new' } width="16" height="16" />
 								</Button>
 							</Link>
-							<Link to={ `${this.props.match.url}style-selector/` }>
+							<Link to={ '/style-selector' }>
 								<Button>
 									<Icon type={ '16/cog' } width="16" height="16" />
 								</Button>
 							</Link>
-							<Link to={ Object.keys(this.props.citations).length === 0 ? '' : `${this.props.match.url}export-dialog/` }>
+							<Link to={ Object.keys(this.props.citations).length === 0 ? '' : '/export-dialog' }>
 								<Button>
 									<Icon 
 										color={ Object.keys(this.props.citations).length === 0 ? 'rgba(0, 0, 0, 0.15)' : null}

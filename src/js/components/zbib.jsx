@@ -48,7 +48,7 @@ class ZBib extends React.PureComponent {
 	}
 
 	handleNavigation(key) {
-		const baseUrl = this.props.match.params.id ? `/${this.props.match.params.id}/` : '/';
+		const baseUrl = this.props.match.params.id ? `/${this.props.match.params.id}` : '/';
 		this.props.history.push(key ? baseUrl + key : baseUrl);
 	}
 

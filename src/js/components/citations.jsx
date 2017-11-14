@@ -27,7 +27,7 @@ class Citations extends React.PureComponent {
 										<Toolbar>
 											<div className="toolbar-right">
 												<ToolGroup>
-													<Link to={ `${this.props.match.url}editor/${itemId}/` } >
+													<Link to={ `${this.props.match.url}editor/${itemId}` } >
 														<Button>
 															<Icon type={ '16/pencil' } width="16" height="16" />
 														</Button>
