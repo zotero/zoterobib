@@ -91,6 +91,7 @@ class Controls extends React.PureComponent {
 	}
 
 	render() {
+		const entriesCount = Object.keys(this.props.citations).length;
 		return (
 			<div>
 				<Toolbar className="hidden-xs-down toolbar-large">
@@ -229,7 +230,7 @@ class Controls extends React.PureComponent {
 						Delete all citations?
 					</h1>
 					<p>
-						Confirm deletion of { Object.keys(this.props.citations).length } entries in the editor.
+						Confirm deletion of { entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } in the editor.
 					</p>
 					<p className="buttons">
 						<Button onClick={ this.handleCloseDeleteModal.bind(this) }>Cancel</Button>
