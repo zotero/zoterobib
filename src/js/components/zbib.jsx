@@ -14,6 +14,7 @@ const Editor = require('./editor');
 const { CSSTransitionGroup } = require('react-transition-group');
 const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
+const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const citationStyles = require('../constants/citation-styles');
 
 function firstChild(props) {
@@ -140,12 +141,13 @@ class ZBib extends React.PureComponent {
 						</CSSTransitionGroup>
 					</main>
 				</div>
+				<MultipleChoiceDialog { ...this.props } />
 			</div>
 		);
 	}
 
 	static defaultProps = {
-		citations: {}
+		citations: {},
 	}
 	
 	static propTypes = {
@@ -154,23 +156,27 @@ class ZBib extends React.PureComponent {
 		error: PropTypes.string,
 		getExportData: PropTypes.func.isRequired,
 		history: PropTypes.object,
-		isLoadingCitations: PropTypes.bool,
 		isLoading: PropTypes.bool,
+		isLoadingCitations: PropTypes.bool,
+		isPickingItem: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		isSaving: PropTypes.bool,
 		isTranslating: PropTypes.bool,
 		items: PropTypes.array,
 		itemsCount: PropTypes.number,
 		match: PropTypes.object,
+		multipleChoiceItems: PropTypes.array,
 		onCitationStyleChanged: PropTypes.func.isRequired,
 		onClearError: PropTypes.func.isRequired,
+		onDeleteCitations: PropTypes.func.isRequired,
 		onError: PropTypes.func.isRequired,
 		onItemCreated: PropTypes.func.isRequired,
 		onItemUpdate: PropTypes.func.isRequired,
+		onMultipleChoiceCancel: PropTypes.func.isRequired,
+		onMultipleChoiceSelect: PropTypes.func.isRequired,
 		onOverride: PropTypes.func.isRequired,
 		onSave: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
-		onDeleteCitations: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 		url: PropTypes.string,
 	}

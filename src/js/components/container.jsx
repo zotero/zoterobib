@@ -11,6 +11,7 @@ const ZBib = require('./zbib');
 class Container extends React.Component {
 	state = {
 		isLoadingCitations: true,
+		isPickingItem: false,
 		isReadOnly: undefined,
 		isSaving: false,
 		isTranslating: false,
@@ -19,6 +20,7 @@ class Container extends React.Component {
 		permalink: null,
 		url: '',
 		citations: {},
+		multipleChoiceItems: [],
 	}
 
 	constructor(props) {
@@ -188,16 +190,17 @@ class Container extends React.Component {
 		this.setState({ citations: this.citations, items: this.items });
 	}
 
-	async handleTranslateIdentifier(identifier) {
+	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
 		this.setState({
 			isTranslating: true,
 			url: identifier,
 			errorMessage: ''
 		});
 
-		let isUrl = !isIdentifier(identifier);
+		let isUrl = !!multipleSelectedItems || !isIdentifier(identifier);
 		if(identifier || isUrl) {
 			try {
+				var translationResponse;
 				if(isUrl) {
 					let url = validateUrl(identifier);
 					if(url) {
@@ -205,16 +208,42 @@ class Container extends React.Component {
 							url: url
 						});
 					}
-					await this.bib.translateUrl(url);
+					if(multipleSelectedItems) {
+						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems);	
+					} else {
+						translationResponse = await this.bib.translateUrl(url);
+					}
 				} else {
-					await this.bib.translateIdentifier(identifier);
+					translationResponse = await this.bib.translateIdentifier(identifier);
 				}
-				this.setState({
-					url: '',
-					isTranslating: false,
-					citations: this.citations,
-					items: this.items
-				});
+
+				switch(translationResponse.result) {
+					case ZoteroBib.COMPLETE:
+						this.setState({
+							url: '',
+							isTranslating: false,
+							citations: this.citations,
+							items: this.items
+						});
+					break;
+					case ZoteroBib.MULTIPLE_ITEMS:
+						this.setState({
+							isTranslating: false,
+							isPickingItem: true,
+							multipleChoiceItems: Object.keys(translationResponse.items)
+							.map(key => ({
+								key,
+								value: translationResponse.items[key]
+							}))
+						});
+					break;
+					case ZoteroBib.FAILED:
+						this.setState({
+							errorMessage: 'An error occured when citing this source',
+							isTranslating: false,
+						});
+					break;
+				}
 			}
 			catch(e) {
 				this.setState({
@@ -245,6 +274,27 @@ class Container extends React.Component {
 
 	handleClearErrorMessage() {
 		this.setState({ errorMessage: '' });
+	}
+
+	handleMultipleChoiceCancel() {
+		this.setState({
+			isPickingItem: false,
+			multipleChoiceItems: []
+		});
+	}
+
+	async handleMultipleChoiceSelect(multipleSelectedItems) {
+		this.setState({
+			isPickingItem: false,
+			multipleChoiceItems: []
+		});
+		return await this.handleTranslateIdentifier(
+			this.state.url,
+			multipleSelectedItems.reduce((aggr, item) => {
+				aggr[item.key] = item.value;
+				return aggr;
+			}, {})
+		);
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
@@ -315,6 +365,8 @@ class Container extends React.Component {
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
 			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onClearError = { this.handleClearErrorMessage.bind(this) }
+			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
+			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onError = { this.handleError.bind(this) }
 			getExportData = { this.getExportData.bind(this) }
 			itemsCount = { this.bib ? this.bib.items.length : null }
