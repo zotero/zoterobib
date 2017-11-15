@@ -18,7 +18,7 @@ class MultipleChoiceDialog extends React.Component {
 				<h1 className="title">
 					Please select a citation from the list
 				</h1>
-				<div>
+				<div className="scroll-container">
 					<ul>
 						{
 							this.props.multipleChoiceItems.map(
@@ -37,11 +37,11 @@ class MultipleChoiceDialog extends React.Component {
 						}
 					</ul>
 				</div>
-				<p className="buttons">
+				<div className="buttons">
 					<Button onClick={ () => this.props.onMultipleChoiceCancel() }>
 						Cancel
 					</Button>
-				</p>
+				</div>
 			</ReactModal>
 		);
 	}
