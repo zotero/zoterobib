@@ -39,6 +39,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		border-radius: 0;
 
 		@include bp-up(md) {
 			min-width: 64px;
