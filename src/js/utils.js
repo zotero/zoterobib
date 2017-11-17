@@ -46,7 +46,7 @@ const isIdentifier = identifier => {
 	identifier = identifier.trim();
 	return (
 		// DOI
-		identifier.match(/^10\.[0-9]{4,}\/[^\s]*[^\s\.,]$/)
+		identifier.match(/^10(?:\.[0-9]{4,})?\/[^\s]*[^\s\.,]$/)
 		// ISBN
 		|| identifier.replace(/[\u002D\u00AD\u2010-\u2015\u2212]+/g, '')
 			.match(/^(?:\D|^)(97[89]\d{10}|\d{9}[\dX])(?!\d)$/)
