@@ -13,15 +13,17 @@ class ErrorMessage extends React.Component {
 	}
 
 	render() {
-		return (
-			<div className={ `error-message ${ this.props.error ? 'visible' : ''}` }>
+		return this.props.error ? (
+			<div className="message error">
 				<button 
 					className="dismiss"
 					onClick={ this.props.onDismiss }
 				>x</button>
-				{ this.props.error }
+				<span className="content">
+					{ this.props.error }
+				</span>
 			</div>
-		);
+		): null;
 	}
 
 	static propTypes = {

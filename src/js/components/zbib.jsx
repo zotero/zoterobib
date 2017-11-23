@@ -9,6 +9,7 @@ const ReadOnlyControls = require('./read-only-controls');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Citations = require('./citations');
 const ErrorMessage = require('./error-message');
+const UndoMessage = require('./undo-message');
 
 const Editor = require('./editor');
 const { CSSTransitionGroup } = require('react-transition-group');
@@ -72,6 +73,11 @@ class ZBib extends React.PureComponent {
 					<ErrorMessage
 						error={ this.props.errorMessage }
 						onDismiss={ this.props.onClearError.bind(this) }
+					/>
+					<UndoMessage
+						message={ this.props.lastDeletedItem ? 'Item deleted' : null }
+						onUndo={ this.props.onUndoDelete }
+						onDismiss={ this.props.onDismissUndo }
 					/>
 					<main className={ `${this.currentView}-active` }>
 						<div className="citations-tool scroll-container">

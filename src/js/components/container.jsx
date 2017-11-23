@@ -21,6 +21,7 @@ class Container extends React.Component {
 		url: '',
 		citations: {},
 		multipleChoiceItems: [],
+		lastDeletedItem: null
 	}
 
 	constructor(props) {
@@ -156,10 +157,29 @@ class Container extends React.Component {
 
 	handleDeleteEntry(itemId) {
 		this.setState({ permalink: null });
-		this.bib.removeItem(
-			this.bib.itemsRaw.find(item => item.key == itemId)
-		);
-		this.setState({ citations: this.citations, items: this.items });
+		const item = this.bib.itemsRaw.find(item => item.key == itemId);
+
+		if(this.bib.removeItem(item)) {
+			this.setState({ 
+				citations: this.citations,
+				items: this.items,
+				lastDeletedItem: { ...item }
+			});	
+		}
+	}
+
+	handleUndoDelete() {
+		if(this.state.lastDeletedItem) {
+			this.handleItemCreated(this.state.lastDeletedItem);
+			this.setState({ 
+				permalink: null,
+				lastDeletedItem: null
+			});
+		}
+	}
+
+	handleDismissUndo() {
+		this.setState({ lastDeletedItem: null });
 	}
 
 	handleCitationStyleChanged(citationStyle) {
@@ -367,6 +387,8 @@ class Container extends React.Component {
 			onClearError = { this.handleClearErrorMessage.bind(this) }
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
+			onUndoDelete = { this.handleUndoDelete.bind(this) }
+			onDismissUndo = { this.handleDismissUndo.bind(this) }
 			onError = { this.handleError.bind(this) }
 			getExportData = { this.getExportData.bind(this) }
 			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
