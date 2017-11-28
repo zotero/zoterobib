@@ -14,7 +14,7 @@ const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const ClipboardButton = require('react-clipboard.js');
+const ClipboardButton = require('react-clipboard.js').default;
 
 class Controls extends React.PureComponent {
 	constructor(props) {

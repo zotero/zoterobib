@@ -3,7 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
-const Select = require('react-select');
+const Select = require('react-select').default;
 const { withRouter } = require('react-router-dom');
 
 class StyleSelector extends React.Component {
