@@ -102,19 +102,19 @@ class ReadOnlyControls extends React.PureComponent {
 				</Toolbar>
 				<ReactModal 
 					isOpen={ this.state.showModal }
-					contentLabel="Override Bibliography?"
+					contentLabel="Clear Existing Bibliography?"
 					className="modal"
 					overlayClassName="overlay"
 				>
 					<h1 className="title">
-						Override existing bibliography?
+						Clear existing bibliography?
 					</h1>
 					<p>
 						There is an existing bibliography with { this.props.localCitationsCount } { this.props.localCitationsCount > 1 ? 'entries' : 'entry' } in the editor. If you continue, the existing bibliography will be replaced with this one.
 					</p>
 					<p className="buttons">
 						<Button onClick={ this.handleCloseModal.bind(this) }>Cancel</Button>
-						<Button onClick={ this.handleOverride.bind(this) }>Override</Button>
+						<Button onClick={ this.handleOverride.bind(this) }>Continue</Button>
 					</p>
 				</ReactModal>
 			</div>
