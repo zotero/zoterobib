@@ -47,7 +47,17 @@
 }
 
 .citation-wrap {
+	display: flex;
 	padding: 0 $default-padding-horizontal-touch;
+	justify-content: space-between;
+
+	.citations {
+		flex: 1 0 auto;
+	}
+
+	.toolbar {
+		flex: 0 0 72px;
+	}
 
 	@include bp-down(sm) {
 		padding: $item-touch-padding-vertical $item-touch-padding-horizontal;
