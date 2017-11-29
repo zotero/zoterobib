@@ -243,7 +243,8 @@ class Container extends React.Component {
 							url: '',
 							isTranslating: false,
 							citations: this.citations,
-							items: this.items
+							items: this.items,
+							permalink: null,
 						});
 					break;
 					case ZoteroBib.MULTIPLE_ITEMS:
