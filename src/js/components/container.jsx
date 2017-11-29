@@ -339,7 +339,7 @@ class Container extends React.Component {
 				bib = this.citeproc.makeBibliography();
 				const bibStyle = getBibliographyFormatParameters(bib);
 				separator = '\\\r\n';
-				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') : ''} \\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
+				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') + ' ' : ''}\\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
 				this.citeproc.setOutputFormat('html');
 			} else {
 				bib = this.citeproc.makeBibliography();
