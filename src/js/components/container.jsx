@@ -328,23 +328,22 @@ class Container extends React.Component {
 		var preamble = '',
 			separator = '',
 			bib;
-		
+
 		if(this.citeproc) {
 			if(exportFormats[format].include) {
 				this.copyDataInclude = exportFormats[format].include;
 			}
 
+			this.citeproc.setOutputFormat(format);
+			bib = this.citeproc.makeBibliography();
 			if(format === 'rtf') {				
-				this.citeproc.setOutputFormat(format);
-				bib = this.citeproc.makeBibliography();
 				const bibStyle = getBibliographyFormatParameters(bib);
 				separator = '\\\r\n';
 				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') + ' ' : ''}\\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
-				this.citeproc.setOutputFormat('html');
-			} else {
-				bib = this.citeproc.makeBibliography();
+				
 			}
 			
+			this.citeproc.setOutputFormat('html');
 			const fileContents = `${bib[0].bibstart}${preamble}${bib[1].join(separator)}${bib[0].bibend}`;
 
 			if(asFile) {
