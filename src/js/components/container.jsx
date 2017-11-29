@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier } = require('../utils');
+const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters } = require('../utils');
 const ZBib = require('./zbib');
 
 class Container extends React.Component {
@@ -325,16 +325,27 @@ class Container extends React.Component {
 	}
 
 	getExportData(format, asFile = false) {
+		var preamble = '',
+			separator = '',
+			bib;
+		
 		if(this.citeproc) {
 			if(exportFormats[format].include) {
 				this.copyDataInclude = exportFormats[format].include;
 			}
 
-			const separator = format === 'rtf' ? '\\line ' : '';
-			this.citeproc.setOutputFormat(format);
-			const bib = this.citeproc.makeBibliography();
-			this.citeproc.setOutputFormat('html');
-			const fileContents = `${bib[0].bibstart}${bib[1].join(separator)}${bib[0].bibend}`;
+			if(format === 'rtf') {				
+				this.citeproc.setOutputFormat(format);
+				bib = this.citeproc.makeBibliography();
+				const bibStyle = getBibliographyFormatParameters(bib);
+				separator = '\\\r\n';
+				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') : ''} \\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
+				this.citeproc.setOutputFormat('html');
+			} else {
+				bib = this.citeproc.makeBibliography();
+			}
+			
+			const fileContents = `${bib[0].bibstart}${preamble}${bib[1].join(separator)}${bib[0].bibend}`;
 
 			if(asFile) {
 				const fileName = `citations.${exportFormats[format].extension}`;
