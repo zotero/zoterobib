@@ -62,10 +62,13 @@ class ExportDialog extends React.Component {
 		});
 	}
 
-	handleDownloadFile(format) {
-		const file = this.props.getExportData(format, true);
-		saveAs(file);
-		this.props.onExported();
+	async handleDownloadFile(format) {
+		try {
+			const file = await this.props.getFileData(format);
+			saveAs(file);
+		} finally {
+			this.props.onExported();
+		}
 	}
 
 	async handleGetPermalink() {
@@ -76,14 +79,14 @@ class ExportDialog extends React.Component {
 	}
 
 	handleGetText(format) {
-		return this.props.getExportData(format, false);
+		return this.props.getCopyData(format);
 	}
 
 	render() {
 		return (
 			<div className={ cx('export-dialog', this.props.className ) }>
 				{
-					['text', 'rtf', 'html'].map(format => {
+					['text', 'rtf', 'ris', 'html'].map(format => {
 						if(exportFormats[format].isCopyable) {
 							return (
 								<ClipboardButton
@@ -145,7 +148,8 @@ class ExportDialog extends React.Component {
 	
 	static propTypes = {
 		className: PropTypes.string,
-		getExportData: PropTypes.func.isRequired,
+		getCopyData: PropTypes.func.isRequired,
+		getFileData: PropTypes.func.isRequired,
 		isReadOnly: PropTypes.bool,
 		match: PropTypes.object,
 		onExported: PropTypes.func,

@@ -38,7 +38,9 @@ class Editor extends React.Component {
 			item = {
 				'version': 0,
 				'itemType': 'book',
-				'title': '(No Title)'
+				'title': '(No Title)',
+				tags: [],
+				creators: []
 			};
 		} else {
 			item = props.items.find(item => item.key === props.match.params.item);

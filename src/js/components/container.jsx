@@ -324,41 +324,55 @@ class Container extends React.Component {
 		this.citeproc.opt.development_extensions.wrap_url_and_doi = isReadOnly;
 	}
 
-	getExportData(format, asFile = false) {
-		var preamble = '',
-			separator = '',
-			bib;
-
+	getExportData(format) {
+		var bibliography;
 		if(this.citeproc) {
+			this.citeproc.setOutputFormat(format);
+			bibliography = this.citeproc.makeBibliography();
+			// reset back to default
+			this.citeproc.setOutputFormat('html');
+		}
+		return bibliography;
+	}
+
+	getCopyData(format) {
+		const bibliography = this.getExportData(format);
+
+		if(bibliography) {
 			if(exportFormats[format].include) {
 				this.copyDataInclude = exportFormats[format].include;
 			}
+		}
+		return `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
+	}
 
-			this.citeproc.setOutputFormat(format);
-			bib = this.citeproc.makeBibliography();
-			if(format === 'rtf') {				
-				const bibStyle = getBibliographyFormatParameters(bib);
+	async getFileData(format) {
+		var fileContents, separator, bibStyle, preamble = '';
+		
+		if(format === 'ris') {
+			try {
+				fileContents = await this.bib.exportItems('ris');
+			} catch(e) {
+				this.handleError(e.message);
+				return;
+			}
+		} else {
+			const bibliography = this.getExportData(format);	
+			if(format === 'rtf') {
+				bibStyle = getBibliographyFormatParameters(bibliography);
 				separator = '\\\r\n';
 				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') + ' ' : ''}\\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
-				
 			}
-			
-			this.citeproc.setOutputFormat('html');
-			const fileContents = `${bib[0].bibstart}${preamble}${bib[1].join(separator)}${bib[0].bibend}`;
-
-			if(asFile) {
-				const fileName = `citations.${exportFormats[format].extension}`;
-				const file = new File(
-					[fileContents],
-					fileName,
-					{ type: exportFormats[format].mime }
-				);
-				return file;
-			} else {
-				return fileContents;
-			}
+			fileContents = `${bibliography[0].bibstart}${preamble}${bibliography[1].join(separator)}${bibliography[0].bibend}`;
 		}
-		return '';
+
+		const fileName = `citations.${exportFormats[format].extension}`;
+		const file = new File(
+			[fileContents],
+			fileName,
+			{ type: exportFormats[format].mime }
+		);
+		return file;
 	}
 
 	get citations() {
@@ -401,7 +415,8 @@ class Container extends React.Component {
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }
 			onError = { this.handleError.bind(this) }
-			getExportData = { this.getExportData.bind(this) }
+			getCopyData = { this.getCopyData.bind(this) }
+			getFileData = { this.getFileData.bind(this) }
 			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
 			{ ...this.state }
 		/>;

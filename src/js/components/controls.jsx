@@ -158,7 +158,8 @@ class Controls extends React.PureComponent {
 							body={
 								<ExportDialog
 									onExported={ () => this.setState({ isExportDialogOpen: false }) }
-									getExportData={ this.props.getExportData }
+									getCopyData = { this.props.getCopyData }
+									getFileData = { this.props.getFileData }
 								/>
 							}
 						>
@@ -248,7 +249,8 @@ class Controls extends React.PureComponent {
 	static propTypes = {
 		citations: PropTypes.object,
 		citationStyle: PropTypes.string,
-		getExportData: PropTypes.func.isRequired,
+		getCopyData: PropTypes.func.isRequired,
+		getFileData: PropTypes.func.isRequired,
 		isTranslating: PropTypes.bool,
 		match: PropTypes.object,
 		onCitationStyleChanged: PropTypes.func.isRequired,

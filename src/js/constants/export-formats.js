@@ -20,5 +20,12 @@ module.exports = {
 		label: 'Download RTF',
 		isDownloadable: true,
 		isCopyable: false
+	},
+	'ris': {
+		extension: 'ris',
+		mime: 'application/x-research-info-systems',
+		label: 'Download RIS',
+		isDownloadable: true,
+		isCopyable: false
 	}
 };

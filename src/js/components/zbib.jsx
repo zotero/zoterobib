@@ -87,14 +87,16 @@ class ZBib extends React.PureComponent {
 									localCitationsCount={ this.props.itemsCount }
 									citations={ this.props.citations }
 									onOverride={ this.props.onOverride }
-									getExportData={ this.props.getExportData }
+									getCopyData = { this.props.getCopyData }
+									getFileData = { this.props.getFileData }
 								/> :
 								<Controls
 									citations={ this.props.citations }
 									permalink={ this.props.permalink }
 									url={ this.props.url }
 									citationStyle={ this.props.citationStyle }
-									getExportData={ this.props.getExportData }
+									getCopyData = { this.props.getCopyData }
+									getFileData = { this.props.getFileData }
 									isSaving={ this.props.isSaving }
 									onSave={ this.props.onSave }
 									isTranslating={ this.props.isTranslating }
@@ -119,7 +121,8 @@ class ZBib extends React.PureComponent {
 							permalink={ this.props.permalink }
 							isReadOnly={ this.props.isReadOnly }
 							onSave={ this.props.onSave }
-							getExportData={ this.props.getExportData }
+							getCopyData = { this.props.getCopyData }
+							getFileData = { this.props.getFileData }
 						/>
 						<StyleSelector
 							className="hidden-sm-up"
@@ -160,7 +163,8 @@ class ZBib extends React.PureComponent {
 		citations: PropTypes.object,
 		citationStyle: PropTypes.string,
 		error: PropTypes.string,
-		getExportData: PropTypes.func.isRequired,
+		getCopyData: PropTypes.func.isRequired,
+		getFileData: PropTypes.func.isRequired,
 		history: PropTypes.object,
 		isLoading: PropTypes.bool,
 		isLoadingCitations: PropTypes.bool,

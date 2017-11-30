@@ -84,7 +84,8 @@ class ReadOnlyControls extends React.PureComponent {
 								<ExportDialog
 									isReadOnly={ true }
 									onExported={ () => this.setState({ isExportDialogOpen: false }) }
-									getExportData={ this.props.getExportData }
+									getCopyData = { this.props.getCopyData }
+									getFileData = { this.props.getFileData }
 								/>
 							}
 						>
@@ -130,7 +131,8 @@ class ReadOnlyControls extends React.PureComponent {
 		localCitationsCount: PropTypes.number,
 		citations: PropTypes.object,
 		onOverride: PropTypes.func,
-		getExportData: PropTypes.func,
+		getCopyData: PropTypes.func.isRequired,
+		getFileData: PropTypes.func.isRequired,
 	}
 }
 
