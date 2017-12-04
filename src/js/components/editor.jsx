@@ -73,13 +73,18 @@ class Editor extends React.Component {
 			label: ct.localized
 		}));
 
+		const hiddenFields = [
+			...hideFields.filter(f => f != 'abstractNote'),
+			'rights'
+		];
+
 		const fields = [
 			{ field: 'itemType', localized: 'Item Type' },
 			itemTypeFields.find(itf => itf.field === 'title'),
 			{ field: 'creators', localized: 'Creators' },
 			...itemTypeFields.filter(itf => itf.field !== 'title')
 		]
-			.filter(f => f && !hideFields.filter(f => f != 'abstractNote').includes(f.field))
+			.filter(f => f && !hiddenFields.includes(f.field))
 			.map(f => ({
 				options: f.field === 'itemType' ? itemTypes : null,
 				key: f.field,
