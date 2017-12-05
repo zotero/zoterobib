@@ -6,12 +6,30 @@
 	flex-direction: column;
 
 	.item {
-		margin: $space-sm 0;
 		display: flex;
 		justify-content: space-between;
+		padding: 0 $default-padding-horizontal-touch;
+		cursor: pointer;
+
+		&:nth-child(odd) {
+			background: $item-odd-bg;
+		}
+
+		&:hover {
+			color: $item-active-color;
+			background: $item-active-bg;
+		}
 
 		> span {
 			@include css-truncate;
+		}
+
+		@include bp-down(sm) {
+			padding: $item-touch-padding-vertical $item-touch-padding-horizontal;
+		}
+
+		@include touch-or-bp-up(md) {
+			padding: $item-touch-padding-vertical $item-touch-padding-horizontal;
 		}
 	}
 

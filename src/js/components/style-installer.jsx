@@ -96,9 +96,6 @@ class StyleInstaller extends React.Component {
 													onClick={ () => this.props.onStyleInstallerSelect(style) }
 												>
 													<span>{ style.title }</span>
-													<Button onClick={ () => this.props.onStyleInstallerSelect(style) }>
-														Install
-													</Button>
 												</li>
 											);
 										}
