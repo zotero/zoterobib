@@ -10,36 +10,48 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 
 class StyleInstaller extends React.Component {
 	state = {
+		filterInput: '',
 		filter: ''
 	}
 
 	componentWillUnmount() {
 		if(this.timeout) {
-			window.clearTimeout(this.timeout);
+			clearTimeout(this.timeout);
 			delete this.timeout;
 		}
 	}
 
 	handleFilterChange(ev) {
 		if(this.timeout) {
-			window.clearTimeout(this.timeout);
+			clearTimeout(this.timeout);
 		}
-		var filter = ev.target.value;
+		this.setState({
+			filterInput: ev.target.value
+		});
 		this.timeout = setTimeout(() => {
 			this.setState({
-				filter
+				filter: this.state.filterInput.toLowerCase()
 			});
 		}, 100);
 	}
 
+	handleInputKeydown(ev) {
+		if(ev.key === 'Escape') {
+			this.handleCancel();
+		}
+	}
+
 	handleCancel() {
-		window.clearTimeout(this.timeout);
+		clearTimeout(this.timeout);
 		delete this.timeout;
+		this.setState({
+			filterInput: '',
+			filter: ''
+		});
 		this.props.onStyleInstallerCancel();
 	}
 
 	render() {
-		var filter = this.state.filter.toLowerCase();
 		return [
 			<KeyHandler
 				key="key-handler"
@@ -60,7 +72,8 @@ class StyleInstaller extends React.Component {
 				<input
 					type="text"
 					placeholder="Citation Style Search"
-					value={ this.state.filter }
+					value={ this.state.filterInput }
+					onKeyDown={ this.handleInputKeydown.bind(this) }
 					onChange={ this.handleFilterChange.bind(this) }
 				/>
 				{
@@ -69,11 +82,11 @@ class StyleInstaller extends React.Component {
 					: (
 					<div className="scroll-container">
 						{
-							filter.length > 3 ? (
+							this.state.filter.length > 2 ? (
 							<ul>
 								{
 									this.props.stylesData.filter(
-										style => style.title.toLowerCase().includes(filter)
+										style => style.title.toLowerCase().includes(this.state.filter)
 									).map(
 										style => {
 											return (
@@ -82,7 +95,10 @@ class StyleInstaller extends React.Component {
 													key={ style.name }
 													onClick={ () => this.props.onStyleInstallerSelect(style) }
 												>
-													{ style.title }
+													<span>{ style.title }</span>
+													<Button onClick={ () => this.props.onStyleInstallerSelect(style) }>
+														Install
+													</Button>
 												</li>
 											);
 										}

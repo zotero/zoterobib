@@ -1,9 +1,33 @@
 .style-installer {
 	max-height: 90%;
+	height: 600px;
+	width: 640px;
 	display: flex;
 	flex-direction: column;
 
+	.item {
+		margin: $space-sm 0;
+		display: flex;
+		justify-content: space-between;
+
+		> span {
+			@include css-truncate;
+		}
+	}
+
 	.scroll-container {
+		margin-top: .5em;
 		overflow: auto;
+		flex: 1 1 100%;
+
+		> p {
+			text-align: center;
+			margin-top: 1.5em;
+		}
+	}
+
+	.buttons {
+		margin-top: 1em;
+		align-self: flex-end;
 	}
 }
