@@ -5,19 +5,23 @@ const PropTypes = require('prop-types');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters } = require('../utils');
+const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData } = require('../utils');
+const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 
 class Container extends React.Component {
 	state = {
 		isLoadingCitations: true,
 		isPickingItem: false,
+		isStylesDataLoading: false,
+		isInstallingStyle: false,
 		isReadOnly: undefined,
 		isSaving: false,
 		isTranslating: false,
 		citationStyle: localStorage.getItem('zotero-bib-citations-style') || 'chicago-note-bibliography',
 		errorMessage: null,
 		permalink: null,
+		stylesData: null,
 		url: '',
 		citations: {},
 		multipleChoiceItems: [],
@@ -98,6 +102,7 @@ class Container extends React.Component {
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
 					this.bibRemote = new ZoteroBib({
+						...defaults,
 						...props.config,
 						initialItems: remoteData.items,
 						persist: false
@@ -182,11 +187,30 @@ class Container extends React.Component {
 		this.setState({ lastDeletedItem: null });
 	}
 
-	handleCitationStyleChanged(citationStyle) {
-		this.setState({
-			isLoadingCitations: true,
-			citationStyle
-		});
+	async handleCitationStyleChanged(citationStyle) {
+		if(citationStyle === 'install') {
+			this.setState({
+				isStylesDataLoading: true,
+				isInstallingStyle: true
+			});
+			try {
+				const stylesData = await retrieveStylesData(this.props.config.stylesUrl, this.props.config.stylesCacheTime);
+				this.setState({
+					isStylesDataLoading: false,
+					stylesData
+				});
+			} catch(e) {
+				this.handleError(e.message);
+				this.setState({
+					isStylesDataLoading: false,
+				});
+			}
+		} else {
+			this.setState({
+				isLoadingCitations: true,
+				citationStyle
+			});
+		}
 	}
 
 	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
@@ -318,6 +342,16 @@ class Container extends React.Component {
 		);
 	}
 
+	handleStyleInstallerCancel() {
+		this.setState({
+			isInstallingStyle: false
+		});
+	}
+
+	handleStyleInstallerSelect(style) {
+		//@TODO: implement
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib);
 		// Make URLs and DOIs clickable on permalink pages
@@ -412,6 +446,8 @@ class Container extends React.Component {
 			onClearError = { this.handleClearErrorMessage.bind(this) }
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
+			onStyleInstallerCancel = { this.handleStyleInstallerCancel.bind(this) }
+			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }
 			onError = { this.handleError.bind(this) }

@@ -88,6 +88,28 @@ const retrieveLocaleSync = lang => {
 	return retval;
 };
 
+const retrieveStylesData = async (url, stylesCacheTime) => {
+	var stylesData = JSON.parse(localStorage.getItem('zotero-styles-data'));
+	var stylesDataTimestamp = localStorage.getItem('zotero-styles-data-timestamp');
+	if(!stylesData
+		|| !stylesDataTimestamp
+		|| Date.now() - stylesDataTimestamp > stylesCacheTime
+	) {
+		try {
+			const response = await fetch(url);
+			if(!response.ok) {
+				throw new Error();
+			}
+			stylesData = await response.json();
+			localStorage.setItem('zotero-styles-data', JSON.stringify(stylesData));
+			localStorage.setItem('zotero-styles-data-timestamp', Date.now());
+		} catch(e) {
+			throw new Error('Failed to load styles data, please check your connection');
+		}
+	}
+	return stylesData;
+};
+
 const getItemTypeMeta = async (itemType) => {
 	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
 		cachedApi.itemTypes().get(),
@@ -193,15 +215,16 @@ const getBibliographyFormatParameters = bib => {
 
 module.exports = {
 	fetchFromPermalink,
+	getBibliographyFormatParameters,
 	getCiteproc,
 	getCSL,
 	getItemTypeMeta,
 	isIdentifier,
 	retrieveLocaleSync,
 	retrieveStyle,
+	retrieveStylesData,
 	saveToPermalink,
 	syncRequestAsText,
 	validateItem,
 	validateUrl,
-	getBibliographyFormatParameters,
 };

@@ -17,6 +17,7 @@ const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const citationStyles = require('../constants/citation-styles');
+const StyleInstaller = require('./style-installer');
 
 function firstChild(props) {
 	const childrenArray = React.Children.toArray(props.children);
@@ -151,6 +152,7 @@ class ZBib extends React.PureComponent {
 					</main>
 				</div>
 				<MultipleChoiceDialog { ...this.props } />
+				<StyleInstaller { ...this.props } />
 			</div>
 		);
 	}

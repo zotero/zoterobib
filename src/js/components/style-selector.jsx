@@ -14,7 +14,13 @@ class StyleSelector extends React.Component {
 					clearable={ false }
 					className="zotero-bib-citation-style-selector"
 					value={ this.props.citationStyle }
-					options={ this.props.citationStyles }
+					options={ [
+						...this.props.citationStyles,
+						{
+							value: 'install',
+							label: 'Other Styles...'
+						}
+					] }
 					onChange={ ev => this.props.onCitationStyleChanged(ev.value) }
 				/>
 			</div>
