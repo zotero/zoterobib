@@ -29,6 +29,7 @@
     "start": "mkdir -p build/static && run-p \"build:html\" \"build:static\" \"serve -s {@}\" \"devel -s {@}\""
   },
   "dependencies": {
+    "array-equal": "^1.0.0",
     "babel-regenerator-runtime": "^6.5.0",
     "classnames": "^2.2.5",
     "es6-promise": "^4.1.1",

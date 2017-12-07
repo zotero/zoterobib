@@ -5,12 +5,19 @@ const PropTypes = require('prop-types');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
+const arrayEquals = require('array-equal');
 const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData } = require('../utils');
+const coreCitationStyles = require('../constants/core-citation-styles');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 
+
 class Container extends React.Component {
 	state = {
+		config: {
+			...defaults,
+			...this.props.config
+		},
 		isLoadingCitations: true,
 		isPickingItem: false,
 		isStylesDataLoading: false,
@@ -25,6 +32,15 @@ class Container extends React.Component {
 		url: '',
 		citations: {},
 		multipleChoiceItems: [],
+		citationStyles: [
+			...coreCitationStyles.map(cs => ({ 
+				...cs,
+				isDependent: 0,
+				parent: null,
+				isCore: true 
+			})),
+			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
+		],
 		lastDeletedItem: null
 	}
 
@@ -62,6 +78,13 @@ class Container extends React.Component {
 					isLoadingCitations: false
 				});
 			}
+		}
+		if(!arrayEquals(this.state.citationStyles, state.citationStyles)) {
+			//@TODO: store extra citation styles in local storage
+			localStorage.setItem(
+				'zotero-bib-extra-citation-styles',
+				JSON.stringify(this.state.citationStyles.filter(cs => !cs.isCore))
+			);
 		}
 	}
 
@@ -102,8 +125,7 @@ class Container extends React.Component {
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
 					this.bibRemote = new ZoteroBib({
-						...defaults,
-						...props.config,
+						...this.state.config,
 						initialItems: remoteData.items,
 						persist: false
 					});
@@ -114,7 +136,7 @@ class Container extends React.Component {
 			}
 		}
 
-		this.bib = new ZoteroBib({ ...props.config });
+		this.bib = new ZoteroBib({ ...this.state.config });
 
 		await this.prepareCiteproc(
 			citationStyle,
@@ -136,7 +158,7 @@ class Container extends React.Component {
 		let errorMessage = null;
 		this.setState({ isSaving: true });
 		try {
-			const key = await saveToPermalink(this.props.config.storeUrl, {
+			const key = await saveToPermalink(this.state.config.storeUrl, {
 				citationStyle: this.state.citationStyle,
 				items: this.bib.itemsRaw
 			});
@@ -194,7 +216,7 @@ class Container extends React.Component {
 				isInstallingStyle: true
 			});
 			try {
-				const stylesData = await retrieveStylesData(this.props.config.stylesUrl, this.props.config.stylesCacheTime);
+				const stylesData = await retrieveStylesData(this.state.config.stylesUrl, this.props.config.stylesCacheTime);
 				this.setState({
 					isStylesDataLoading: false,
 					stylesData
@@ -349,11 +371,22 @@ class Container extends React.Component {
 	}
 
 	handleStyleInstallerSelect(style) {
-		//@TODO: implement
+		this.setState({
+			citationStyles: [
+				...this.state.citationStyles,
+				{
+					name: style.name,
+					title: style.title,
+					isDependent: style.dependent,
+					isCore: false
+				}
+			]
+		});
+		this.handleCitationStyleChanged(style.name);
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
-		this.citeproc = await getCiteproc(style, bib);
+		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
 		this.citeproc.opt.development_extensions.wrap_url_and_doi = isReadOnly;
 	}

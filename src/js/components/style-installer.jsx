@@ -41,6 +41,11 @@ class StyleInstaller extends React.Component {
 		}
 	}
 
+	handleSelect(style) {
+		this.handleCancel();
+		this.props.onStyleInstallerSelect(style);
+	}
+
 	handleCancel() {
 		clearTimeout(this.timeout);
 		delete this.timeout;
@@ -93,7 +98,7 @@ class StyleInstaller extends React.Component {
 												<li 
 													className="item" 
 													key={ style.name }
-													onClick={ () => this.props.onStyleInstallerSelect(style) }
+													onClick={ () => this.handleSelect(style) }
 												>
 													<span>{ style.title }</span>
 												</li>

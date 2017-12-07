@@ -22,11 +22,12 @@ const getCSL = () => {
 	});
 };
 
-const getCiteproc = async (citationStyle, bib) => {
+const getCiteproc = async (citationStyle, bib, citationStyles) => {
 	const sys = {
 		retrieveLocale: retrieveLocaleSync,
 		retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
 	};
+
 	const [ CSL, style ] = await Promise.all([
 		getCSL(),
 		retrieveStyle(citationStyle)
@@ -69,16 +70,27 @@ const validateUrl = url => {
 		}
 };
 
+const getParentStyle = async styleXml => {
+	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w\.\-\/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
+	if(matches) {
+		// try to extract style id, fallback using url as id
+		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w\-]*)/i);
+		return await retrieveStyle(idMatches ? idMatches[1] : matches[1]);
+	}
+	return styleXml;
+};
 
-const retrieveStyle = async styleId => {
-	let cacheId = `style-${styleId}`;
+const retrieveStyle = async styleIdOrUrl => {
+	let cacheId = `style-${styleIdOrUrl}`;
 	let style = localStorage.getItem(cacheId);
 	if(!style) {
-		let url = `https://www.zotero.org/styles/${styleId}`;
+		let url = styleIdOrUrl.match(/https?:\/\/[\w\.\-\/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
 		let response = await fetch(url);
 		style = await response.text();
 		localStorage.setItem(cacheId, style);
 	}
+	// return parent style for dependent citation styles
+	style = await getParentStyle(style);
 	return style;
 };
 

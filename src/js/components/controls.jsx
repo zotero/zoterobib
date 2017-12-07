@@ -3,7 +3,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
-const citationStyles = require('../constants/citation-styles');
 
 const ReactModal = require('react-modal');
 const Popover = require('react-popover');
@@ -103,7 +102,7 @@ class Controls extends React.PureComponent {
 						</div>
 						<StyleSelector
 							citationStyle={ this.props.citationStyle }
-							citationStyles= { citationStyles }
+							citationStyles= { this.props.citationStyles }
 							onCitationStyleChanged={ this.props.onCitationStyleChanged }
 						/>
 					</div>

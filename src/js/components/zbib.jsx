@@ -16,7 +16,6 @@ const { CSSTransitionGroup } = require('react-transition-group');
 const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
-const citationStyles = require('../constants/citation-styles');
 const StyleInstaller = require('./style-installer');
 
 function firstChild(props) {
@@ -96,6 +95,7 @@ class ZBib extends React.PureComponent {
 									permalink={ this.props.permalink }
 									url={ this.props.url }
 									citationStyle={ this.props.citationStyle }
+									citationStyles={ this.props.citationStyles }
 									getCopyData = { this.props.getCopyData }
 									getFileData = { this.props.getFileData }
 									isSaving={ this.props.isSaving }
@@ -128,7 +128,7 @@ class ZBib extends React.PureComponent {
 						<StyleSelector
 							className="hidden-sm-up"
 							citationStyle={ this.props.citationStyle }
-							citationStyles= { citationStyles }
+							citationStyles= { this.props.citationStyles }
 							onCitationStyleChanged={ this.props.onCitationStyleChanged }
 						/>
 						<CSSTransitionGroup
