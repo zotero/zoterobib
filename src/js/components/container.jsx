@@ -126,6 +126,15 @@ class Container extends React.Component {
 				const remoteData = await fetchFromPermalink(`${props.config.storeUrl}/${id}`);
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
+					var citationStyleMeta = this.state.citationStyles.find(cs => cs.name === citationStyle);
+					if(!citationStyleMeta) {
+						const stylesData = await retrieveStylesData(this.state.config.stylesUrl, this.props.config.stylesCacheTime);
+						citationStyleMeta = stylesData.find(sd => sd.name === citationStyle);
+						this.setState({
+							citationStyles: this.getExpandedCitationStyles(citationStyleMeta)
+						});
+					}
+
 					this.bibRemote = new ZoteroBib({
 						...this.state.config,
 						initialItems: remoteData.items,
@@ -372,25 +381,31 @@ class Container extends React.Component {
 		});
 	}
 
-	handleStyleInstallerSelect(style) {
-		const citationStyles = [
-			...this.state.citationStyles,
-			{
-				name: style.name,
-				title: style.title,
-				isDependent: style.dependent,
-				isCore: false
-			}
-		];
-		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
-		this.setState({ citationStyles });
-		this.handleCitationStyleChanged(style.name);
+	handleStyleInstallerSelect(styleMeta) {
+		this.setState({ 
+			citationStyles: this.getExpandedCitationStyles(styleMeta)
+		});
+		this.handleCitationStyleChanged(styleMeta.name);
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
 		this.citeproc.opt.development_extensions.wrap_url_and_doi = isReadOnly;
+	}
+
+	getExpandedCitationStyles(styleMeta) {
+		const citationStyles = [
+			...this.state.citationStyles,
+			{
+				name: styleMeta.name,
+				title: styleMeta.title,
+				isDependent: styleMeta.dependent,
+				isCore: false
+			}
+		];
+		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+		return citationStyles;
 	}
 
 	getExportData(format) {
