@@ -15,7 +15,8 @@
 			background: $item-odd-bg;
 		}
 
-		&:hover {
+		&:hover,
+		&.selected {
 			color: $item-active-color;
 			background: $item-active-bg;
 		}

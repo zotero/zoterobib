@@ -7,17 +7,34 @@ const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const cx = require('classnames');
+const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed');
 
 class StyleInstaller extends React.Component {
 	state = {
+		selectedIndex: null,
 		filterInput: '',
-		filter: ''
+		filter: '',
+		items: [],
 	}
 
 	componentWillUnmount() {
 		if(this.timeout) {
 			clearTimeout(this.timeout);
 			delete this.timeout;
+		}
+	}
+
+	componentDidUpdate(props, state) {
+		if(this.state.selectedIndex !== state.selectedIndex 
+			&& this.state.selectedIndex !== null) {
+			const styleName = this.state.items[this.state.selectedIndex].name;
+			if(styleName) {
+				const itemEl = this.listEl.querySelector(`[data-name="${styleName}"]`);
+				if(itemEl) {
+					scrollIntoViewIfNeeded(itemEl);
+				}
+			}
 		}
 	}
 
@@ -30,7 +47,12 @@ class StyleInstaller extends React.Component {
 		});
 		this.timeout = setTimeout(() => {
 			this.setState({
-				filter: this.state.filterInput.toLowerCase()
+				selectedIndex: null,
+				items: this.props.stylesData.filter(
+					style => style.title.toLowerCase().includes(
+						this.state.filterInput.toLowerCase()
+					)
+				)
 			});
 		}, 100);
 	}
@@ -38,6 +60,23 @@ class StyleInstaller extends React.Component {
 	handleInputKeydown(ev) {
 		if(ev.key === 'Escape') {
 			this.handleCancel();
+			ev.preventDefault();
+		}
+		if(ev.key === 'ArrowDown') {
+			this.setState({
+				selectedIndex: this.state.selectedIndex === null ? 0 : Math.min(this.state.selectedIndex + 1, this.state.items.length)
+			});
+			ev.preventDefault();
+		}
+		if(ev.key === 'ArrowUp') {
+			this.setState({
+				selectedIndex: Math.max(this.state.selectedIndex - 1, 0)
+			});
+			ev.preventDefault();
+		}
+		if(ev.key === 'Enter') {
+			this.handleSelect(this.state.items[this.state.selectedIndex]);
+			ev.preventDefault();
 		}
 	}
 
@@ -85,16 +124,17 @@ class StyleInstaller extends React.Component {
 				<div className="scroll-container">
 					{
 						this.props.isStylesDataLoading ? <Spinner /> : (
-							this.state.filter.length > 2 ? (
-							<ul>
+							this.state.filterInput.length > 2 ? (
+							<ul ref={ listEl => this.listEl = listEl }>
 								{
-									this.props.stylesData.filter(
-										style => style.title.toLowerCase().includes(this.state.filter)
-									).map(
+									this.state.items.map(
 										style => {
 											return (
 												<li 
-													className="item" 
+													className={ cx('item', {
+														selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
+													}) }
+													data-name={ style.name }
 													key={ style.name }
 													onClick={ () => this.handleSelect(style) }
 												>

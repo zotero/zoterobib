@@ -11,7 +11,6 @@ const coreCitationStyles = require('../constants/core-citation-styles');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 
-
 class Container extends React.Component {
 	state = {
 		config: {
