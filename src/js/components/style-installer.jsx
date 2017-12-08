@@ -75,18 +75,16 @@ class StyleInstaller extends React.Component {
 					You can use dialog below to search for and install new citation styles
 				</h1>
 				<input
+					autoFocus
 					type="text"
 					placeholder="Citation Style Search"
 					value={ this.state.filterInput }
 					onKeyDown={ this.handleInputKeydown.bind(this) }
 					onChange={ this.handleFilterChange.bind(this) }
 				/>
-				{
-					this.props.isStylesDataLoading ? 
-						<Spinner />
-					: (
-					<div className="scroll-container">
-						{
+				<div className="scroll-container">
+					{
+						this.props.isStylesDataLoading ? <Spinner /> : (
 							this.state.filter.length > 2 ? (
 							<ul>
 								{
@@ -110,10 +108,9 @@ class StyleInstaller extends React.Component {
 							) : (
 								<p>Please enter at least three characters to start searching.</p>
 							)
-						}
-					</div>
-					)
-				}
+						)
+					}
+				</div>
 				<div className="buttons">
 					<Button onClick={ this.handleCancel.bind(this) }>
 						Cancel
