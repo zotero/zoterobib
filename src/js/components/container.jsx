@@ -32,15 +32,7 @@ class Container extends React.Component {
 		url: '',
 		citations: {},
 		multipleChoiceItems: [],
-		citationStyles: [
-			...coreCitationStyles.map(cs => ({ 
-				...cs,
-				isDependent: 0,
-				parent: null,
-				isCore: true 
-			})),
-			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
-		],
+		citationStyles: [],
 		lastDeletedItem: null
 	}
 
@@ -89,6 +81,17 @@ class Container extends React.Component {
 	}
 
 	async componentDidMount() {
+		const citationStyles = [
+			...coreCitationStyles.map(cs => ({ 
+				...cs,
+				isDependent: 0,
+				parent: null,
+				isCore: true 
+			})),
+			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
+		];
+		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+		this.setState({ citationStyles });
 		document.addEventListener('copy', this.handleCopy);
 		await this.handleIdChanged(this.props);
 	}
@@ -371,17 +374,17 @@ class Container extends React.Component {
 	}
 
 	handleStyleInstallerSelect(style) {
-		this.setState({
-			citationStyles: [
-				...this.state.citationStyles,
-				{
-					name: style.name,
-					title: style.title,
-					isDependent: style.dependent,
-					isCore: false
-				}
-			]
-		});
+		const citationStyles = [
+			...this.state.citationStyles,
+			{
+				name: style.name,
+				title: style.title,
+				isDependent: style.dependent,
+				isCore: false
+			}
+		];
+		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+		this.setState({ citationStyles });
 		this.handleCitationStyleChanged(style.name);
 	}
 
