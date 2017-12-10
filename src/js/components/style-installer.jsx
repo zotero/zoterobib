@@ -27,9 +27,10 @@ class StyleInstaller extends React.Component {
 
 	componentDidUpdate(props, state) {
 		if(this.state.selectedIndex !== state.selectedIndex 
-			&& this.state.selectedIndex !== null) {
+			&& this.state.selectedIndex !== null
+			&& this.state.items[this.state.selectedIndex]) {
 			const styleName = this.state.items[this.state.selectedIndex].name;
-			if(styleName) {
+			if(styleName && this.listEl) {
 				const itemEl = this.listEl.querySelector(`[data-name="${styleName}"]`);
 				if(itemEl) {
 					scrollIntoViewIfNeeded(itemEl);
@@ -57,26 +58,36 @@ class StyleInstaller extends React.Component {
 		}, 100);
 	}
 
+	handleEscapeKey(ev) {
+		this.handleCancel();
+		ev.preventDefault();
+	}
+
+	handleArrowDownKey(ev) {
+		this.setState({
+			selectedIndex: this.state.selectedIndex === null ? 0 : Math.min(this.state.selectedIndex + 1, this.state.items.length)
+		});
+		ev.preventDefault();
+	}
+
+	handleArrowUpKey(ev) {
+		this.setState({
+			selectedIndex: Math.max(this.state.selectedIndex - 1, 0)
+		});
+		ev.preventDefault();
+	}
+
+	handleEnterKey(ev) {
+		this.handleSelect(this.state.items[this.state.selectedIndex]);
+		ev.preventDefault();
+	}
+
 	handleInputKeydown(ev) {
-		if(ev.key === 'Escape') {
-			this.handleCancel();
-			ev.preventDefault();
-		}
-		if(ev.key === 'ArrowDown') {
-			this.setState({
-				selectedIndex: this.state.selectedIndex === null ? 0 : Math.min(this.state.selectedIndex + 1, this.state.items.length)
-			});
-			ev.preventDefault();
-		}
-		if(ev.key === 'ArrowUp') {
-			this.setState({
-				selectedIndex: Math.max(this.state.selectedIndex - 1, 0)
-			});
-			ev.preventDefault();
-		}
-		if(ev.key === 'Enter') {
-			this.handleSelect(this.state.items[this.state.selectedIndex]);
-			ev.preventDefault();
+		switch(ev.key) {
+			case 'Escape': this.handleEscapeKey(ev); break;
+			case 'ArrowDown': this.handleArrowDownKey(ev); break;
+			case 'ArrowUp': this.handleArrowUpKey(ev); break;
+			case 'Enter': this.handleEnterKey(ev); break;
 		}
 	}
 
@@ -98,10 +109,28 @@ class StyleInstaller extends React.Component {
 	render() {
 		return [
 			<KeyHandler
-				key="key-handler"
+				key="key-handler-escape"
 				keyEventName={ KEYDOWN }
 				keyValue="Escape"
-				onKeyHandle={ this.handleCancel.bind(this) }
+				onKeyHandle={ this.handleEscapeKey.bind(this) }
+			/>,
+			<KeyHandler
+				key="key-handler-arrow-down"
+				keyEventName={ KEYDOWN }
+				keyValue="ArrowDown"
+				onKeyHandle={ this.handleArrowDownKey.bind(this) }
+			/>,
+			<KeyHandler
+				key="key-handler-arrow-up"
+				keyEventName={ KEYDOWN }
+				keyValue="ArrowUp"
+				onKeyHandle={ this.handleArrowUpKey.bind(this) }
+			/>,
+			<KeyHandler
+				key="key-handler-enter"
+				keyEventName={ KEYDOWN }
+				keyValue="Enter"
+				onKeyHandle={ this.handleEnterKey.bind(this) }
 			/>,
 			<ReactModal 
 				key="react-modal"
