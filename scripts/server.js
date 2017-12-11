@@ -12,7 +12,7 @@ const port = argv['p'] || 8001;
 const serve = serveStatic(path.join(__dirname, '..', 'build'), {'index': ['index.html']});
 const proxy = httpProxy.createProxyServer();
 
-const server = http.createServer((req, resp) => {
+const handler = (req, resp) => {
 	const fallback = () => {
 		fs.readFile(path.join(__dirname, '..', 'build', 'index.html'), (err, buf) => {
 			resp.setHeader('Content-Type', 'text/html');
@@ -22,7 +22,9 @@ const server = http.createServer((req, resp) => {
 
 	if(req.url.startsWith('/web') || req.url.startsWith('/search') || req.url.startsWith('/export')) {
 		proxy.web(req, resp, {
-			target: `${translationServerUrl}`
+			changeOrigin: true,
+			target: `${translationServerUrl}`,
+			secure: false
 		});
 		proxy.on('error', () => {
 			resp.statusCode = 502;
@@ -32,6 +34,6 @@ const server = http.createServer((req, resp) => {
 	} else {
 		serve(req, resp, fallback);
 	}
-});
+};
 
-server.listen(port);
+http.createServer(handler).listen(port);
