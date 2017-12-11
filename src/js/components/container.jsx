@@ -76,6 +76,9 @@ class Container extends React.Component {
 				'zotero-bib-extra-citation-styles',
 				JSON.stringify(this.state.citationStyles.filter(cs => !cs.isCore))
 			);
+			const stylesRemoved = state.citationStyles.filter(cs => !this.state.citationStyles.includes(cs));
+			// actually remove style data from local storage
+			stylesRemoved.forEach(s => localStorage.removeItem(`style-${s.name}`));
 		}
 	}
 
@@ -221,6 +224,9 @@ class Container extends React.Component {
 	}
 
 	async handleCitationStyleChanged(citationStyle) {
+		if(citationStyle === this.state.citationStyle) {
+			return;
+		}
 		if(citationStyle === 'install') {
 			this.setState({
 				isStylesDataLoading: true,
@@ -382,10 +388,20 @@ class Container extends React.Component {
 	}
 
 	handleStyleInstallerSelect(styleMeta) {
+		this.handleStyleInstallerInstall(styleMeta);
+		this.handleCitationStyleChanged(styleMeta.name);
+	}
+
+	handleStyleInstallerInstall(styleMeta) {
 		this.setState({ 
 			citationStyles: this.getExpandedCitationStyles(styleMeta)
 		});
-		this.handleCitationStyleChanged(styleMeta.name);
+	}
+
+	handleStyleInstallerDelete(styleMeta) {
+		this.setState({
+			citationStyles: this.state.citationStyles.filter(cs => cs.name !== styleMeta.name )
+		});
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
@@ -395,6 +411,10 @@ class Container extends React.Component {
 	}
 
 	getExpandedCitationStyles(styleMeta) {
+		if(this.state.citationStyles.find(cs => cs.name === styleMeta.name)) {
+			return this.state.citationStyles;
+		}
+
 		const citationStyles = [
 			...this.state.citationStyles,
 			{
@@ -404,6 +424,7 @@ class Container extends React.Component {
 				isCore: false
 			}
 		];
+
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 		return citationStyles;
 	}
@@ -498,6 +519,8 @@ class Container extends React.Component {
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onStyleInstallerCancel = { this.handleStyleInstallerCancel.bind(this) }
 			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
+			onStyleInstallerInstall = { this.handleStyleInstallerInstall.bind(this) }
+			onStyleInstallerDelete = { this.handleStyleInstallerDelete.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }
 			onError = { this.handleError.bind(this) }

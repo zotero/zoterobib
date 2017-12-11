@@ -96,6 +96,14 @@ class StyleInstaller extends React.Component {
 		this.props.onStyleInstallerSelect(style);
 	}
 
+	handleInstall(style) {
+		this.props.onStyleInstallerInstall(style);
+	}
+
+	handleDelete(style) {
+		this.props.onStyleInstallerDelete(style);
+	}
+
 	handleCancel() {
 		clearTimeout(this.timeout);
 		delete this.timeout;
@@ -158,6 +166,8 @@ class StyleInstaller extends React.Component {
 								{
 									this.state.items.map(
 										style => {
+											const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
+											const isSelected = style.name === this.props.citationStyle;
 											return (
 												<li 
 													className={ cx('item', {
@@ -168,6 +178,17 @@ class StyleInstaller extends React.Component {
 													onClick={ () => this.handleSelect(style) }
 												>
 													<span>{ style.title }</span>
+													{
+														isInstalled && !isSelected ? (
+															<Button className="btn-danger" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
+																Remove
+															</Button>
+														) : !isSelected && (
+															<Button className="btn-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
+																Install
+															</Button>
+														)
+													}
 												</li>
 											);
 										}
@@ -190,10 +211,14 @@ class StyleInstaller extends React.Component {
 	}
 
 	static propTypes = {
+		citationStyle: PropTypes.string,
+		citationStyles: PropTypes.array,
 		isInstallingStyle: PropTypes.bool,
 		isStylesDataLoading: PropTypes.bool,
-		onStyleInstallerSelect: PropTypes.func.isRequired,
 		onStyleInstallerCancel: PropTypes.func.isRequired,
+		onStyleInstallerDelete: PropTypes.func.isRequired,
+		onStyleInstallerInstall: PropTypes.func.isRequired,
+		onStyleInstallerSelect: PropTypes.func.isRequired,
 		stylesData: PropTypes.array,
 	}
 }
