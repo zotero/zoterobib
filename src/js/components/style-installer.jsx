@@ -152,11 +152,12 @@ class StyleInstaller extends React.Component {
 				</h1>
 				<input
 					autoFocus
-					type="text"
-					placeholder="Citation Style Search"
-					value={ this.state.filterInput }
-					onKeyDown={ this.handleInputKeydown.bind(this) }
+					className="filter-input"
 					onChange={ this.handleFilterChange.bind(this) }
+					onKeyDown={ this.handleInputKeydown.bind(this) }
+					placeholder="Citation Style Search"
+					type="text"
+					value={ this.state.filterInput }
 				/>
 				<div className="scroll-container">
 					{

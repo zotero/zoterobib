@@ -5,6 +5,10 @@
 	display: flex;
 	flex-direction: column;
 
+	.filter-input {
+		padding: 4px 2px;
+	}
+
 	.item {
 		display: flex;
 		justify-content: space-between;
