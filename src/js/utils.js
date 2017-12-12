@@ -22,18 +22,18 @@ const getCSL = () => {
 	});
 };
 
-const getCiteproc = async (citationStyle, bib, citationStyles) => {
-	const sys = {
-		retrieveLocale: retrieveLocaleSync,
-		retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
-	};
+const getCiteproc = async (citationStyle, bib) => {
+	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
 
 	const [ CSL, style ] = await Promise.all([
 		getCSL(),
 		retrieveStyle(citationStyle)
 	]);
 
-	return new CSL.Engine(sys, style);
+	return new CSL.Engine({
+		retrieveLocale: retrieveLocaleSync,
+		retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
+	}, style, lang);
 };
 
 const syncRequestAsText = url => {
