@@ -120,22 +120,21 @@ class Controls extends React.PureComponent {
 							body={
 									this.props.permalink ? (
 										<div className="permalink-dialog">
-											<input 
-												value={ this.props.permalink } 
-												onClick={ ev => ev.target.select() }
-												readOnly
-											/>
 											<ClipboardButton
-												className="btn"
+												className="btn btn-primary"
 												data-clipboard-text={ this.props.permalink }
 												onSuccess={ this.handleClipoardSuccess.bind(this) }
 											>
-												{ this.state.clipboardConfirmation ? 'Copied!' : 'Copy' }
+												{ this.state.clipboardConfirmation ? 'Copied!' : 'Copy URL' }
 											</ClipboardButton>
+											<Button>
+												<a href={ this.props.permalink }>
+													View
+												</a>
+											</Button>
 										</div>
 									) : (
 										<div className="permalink-dialog">
-											Please Wait...
 											<Spinner />
 										</div>
 									)

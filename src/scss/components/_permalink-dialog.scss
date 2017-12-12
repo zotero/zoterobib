@@ -11,7 +11,7 @@
 	}
 
 	.Popover & {
-		width: 420px;
+		width: 240px;
 		padding: 1em;
 		background-color: $shade-0;
 		border: 1px solid $text-color;
@@ -20,13 +20,12 @@
 		.btn {
 			display: block;
 			margin: .5em 0;
-			width: 100%;
+			width: 50%;
 		}
 	}
 
 	@include bp-up(sm) {
 		display: flex;
-		flex-direction: column;
 		text-align: center;
 	}
 }
