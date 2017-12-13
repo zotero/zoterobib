@@ -1,16 +1,19 @@
-# Zotero Bib React Component
+# Zotero Bib
 
 Overview
 --------
-This is a react component that is renders and manages GUI for zotero-bib.
+This repo contains Zotero Bib tool, including React components, stylesheets and entry-point website.
 
 Prerequisites
 ------------
 
 1. Node JS with npm
-1. Running translation-server
+1. Basic command-line tools including rsync
+1. Existing translation-server
+1. Existing bib-server
+1. Existing styles-repo
 
-Local Demo
+Local Development version
 ----------
 
 Getting The Library
@@ -23,12 +26,15 @@ Getting The Library
 
 1. `npm start`
 
-This will serve demo on http://127.0.0.1:8001.
+This will serve demo on http://127.0.0.1:8001. 
 
-By default the **translations server is expected to be listening on localhost:1969**. If your server is located elsewhere you need to provide the path, e.g. the last step above would look like this:
+You might need to provide configuration options (see below) in order to get storage and translation to work. 
+
+By default, the development server **proxies translations server requests to localhost:1969**. If your server is located elsewhere you need to provide the url, e.g. the last step above would look like this:
 
 1. `npm start --zotero-bib-web:translation_server="http://localhost:1234"`
 
+This will proxy requests from the browser to the specified translation server.
 
 Using in Production
 -------------------
@@ -37,19 +43,27 @@ To obtain production-ready files use the following npm command:
 
 `npm run build`
 
-By default current host is assumed to proxy request to the translation server, i.e. if serving at http://example.com/index.html, request to the translation server will use the following url: http://example.com/web.
+Configuration
+-------------
 
-If instead you would like client (i.e. browser) talk directly to the translation server (that should be then configured for CORS), it's possible with the following configuration:
+It's possible to provide configuration parameters for the build (both in development and production) using configuration files and/or environment variables. The easiest way is to copy `config/default.json` to `config/local.json` and place variables there (this file is git ignored and should not be committed). Alternatively environment variables listed in `config/custom-environment-variables.json` can be used. For more details how to provide configurations, see [config npm package](https://github.com/lorenwest/node-config).
 
-    ZoteroBibComponent.init(
-            document.getElementById('bib-component'),
-            { translationServerUrl: 'http://some-url:1234' }
-        );
+Configuration options
+--------------
 
-Or if using within another react app:
+The following configuration options are accepted:
 
-    <ZoteroBibComponent config={ { translationServerUrl: 'http://some-url:1234' } }
+**storeUrl**
+Specifies url for the *bib-server* api where bibliographies are stored. 
 
-It's also possible to specify an additional prefix for where translation server request should be send using `translationServerPrefix` configuration option. E.g. setting `translationServerPrefix` to `foo/` while serving bib-web on http:://example.com will assume translation server endpoint is **http:://example.com/foo/web**. `translationServerPrefix` and `translationServerUrl` can be used together.
+**stylesUrl**
+Specifies url for the *styles-repo* website. When left empty, default will be used which is https://www.zotero.org/styles-files/styles.json
 
+**translationServerPrefix**
+Specifies an additional prefix for where translation server request should be send. Useful in cases where `translationServerUrl` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
 
+**translationServerUrl**
+Specifies url for the *translation-server*. By default current host is assumed to proxy request to the translation server.
+
+**stylesCacheTime**
+Specifies how many ms before styles data from stylesUrl is considered outdated and should be re-downloaded.

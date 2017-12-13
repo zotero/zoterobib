@@ -14,7 +14,11 @@
 		ZoteroBibComponent.init(
 			document.querySelector('[data-widget=zotero-bib]'),
 			{
-				storeUrl: 'http://localhost:8080/'
+				{{#each indexConfig}}
+					{{#if this}}
+						{{@key}}: '{{this}}'
+					{{/if}}
+				{{/each}}
 			}
 		);
 	</script>
