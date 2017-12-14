@@ -86,10 +86,10 @@ const retrieveStyle = async styleIdOrUrl => {
 	if(!style) {
 		let url = styleIdOrUrl.match(/https?:\/\/[\w\.\-\/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
 		try {
+			let response = await fetch(url);
 			if(!response.ok) {
 				throw new Error();
 			}
-			let response = await fetch(url);
 			style = await response.text();
 			localStorage.setItem(cacheId, style);
 		} catch(e) {
