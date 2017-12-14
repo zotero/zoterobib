@@ -242,6 +242,7 @@ class Container extends React.Component {
 				this.handleError(e.message);
 				this.setState({
 					isStylesDataLoading: false,
+					isInstallingStyle: false
 				});
 			}
 		} else {

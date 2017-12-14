@@ -85,9 +85,19 @@ const retrieveStyle = async styleIdOrUrl => {
 	let style = localStorage.getItem(cacheId);
 	if(!style) {
 		let url = styleIdOrUrl.match(/https?:\/\/[\w\.\-\/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
-		let response = await fetch(url);
-		style = await response.text();
-		localStorage.setItem(cacheId, style);
+		try {
+			if(!response.ok) {
+				throw new Error();
+			}
+			let response = await fetch(url);
+			style = await response.text();
+			localStorage.setItem(cacheId, style);
+		} catch(e) {
+			if(!style) {
+				throw new Error('Failed to load style, please check your connection');
+			}
+		}
+
 	}
 	// return parent style for dependent citation styles
 	style = await getParentStyle(style);
@@ -116,7 +126,9 @@ const retrieveStylesData = async (url, stylesCacheTime) => {
 			localStorage.setItem('zotero-styles-data', JSON.stringify(stylesData));
 			localStorage.setItem('zotero-styles-data-timestamp', Date.now());
 		} catch(e) {
-			throw new Error('Failed to load styles data, please check your connection');
+			if(!stylesData) {
+				throw new Error('Failed to load styles data, please check your connection');
+			}
 		}
 	}
 	return stylesData;
