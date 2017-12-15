@@ -24,6 +24,7 @@ class Container extends React.Component {
 		isReadOnly: undefined,
 		isSaving: false,
 		isTranslating: false,
+		isConfirmingStyleSwitch: false,
 		citationStyle: localStorage.getItem('zotero-bib-citation-style') || 'chicago-note-bibliography',
 		errorMessage: null,
 		permalink: null,
@@ -67,6 +68,17 @@ class Container extends React.Component {
 				this.setState({
 					isLoading: false,
 					isLoadingCitations: false
+				});
+			}
+		}
+		if(!this.state.isReadOnly &&
+			this.state.citationStyle !== state.citationStyle &&
+			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
+		) {
+			if(this.state.citationStyle === 'apa') {
+				this.setState({
+					citationStyle: state.citationStyle,
+					isConfirmingStyleSwitch: true
 				});
 			}
 		}
@@ -405,6 +417,19 @@ class Container extends React.Component {
 		});
 	}
 
+	handleStyleSwitchConfirm() {
+		this.setState({
+			citationStyle: 'apa',
+			isConfirmingStyleSwitch: false
+		});
+	}
+	
+	handleStyleSwitchCancel() {
+		this.setState({
+			isConfirmingStyleSwitch: false
+		});
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
@@ -525,6 +550,8 @@ class Container extends React.Component {
 			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
 			onStyleInstallerInstall = { this.handleStyleInstallerInstall.bind(this) }
 			onStyleInstallerDelete = { this.handleStyleInstallerDelete.bind(this) }
+			onStyleSwitchConfirm = { this.handleStyleSwitchConfirm.bind(this) }
+			onStyleSwitchCancel = { this.handleStyleSwitchCancel.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }
 			onError = { this.handleError.bind(this) }

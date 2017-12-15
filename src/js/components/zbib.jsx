@@ -10,6 +10,7 @@ const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Citations = require('./citations');
 const ErrorMessage = require('./error-message');
 const UndoMessage = require('./undo-message');
+const Confirmation = require('./confirmation');
 
 const Editor = require('./editor');
 const { CSSTransitionGroup } = require('react-transition-group');
@@ -153,6 +154,14 @@ class ZBib extends React.PureComponent {
 				</div>
 				<MultipleChoiceDialog { ...this.props } />
 				<StyleInstaller { ...this.props } />
+				<Confirmation
+					isOpen={ this.props.isConfirmingStyleSwitch }
+					onConfirm={ this.props.onStyleSwitchConfirm }
+					onCancel={ this.props.onStyleSwitchCancel }
+					confirmLabel="Continue"
+					>
+						Title of existing and new items will be automatically converted to sentence case to match selected citation style. Are you sure to continue?
+				</Confirmation>
 			</div>
 		);
 	}
@@ -168,6 +177,7 @@ class ZBib extends React.PureComponent {
 		getCopyData: PropTypes.func.isRequired,
 		getFileData: PropTypes.func.isRequired,
 		history: PropTypes.object,
+		isConfirmingStyleSwitch: PropTypes.bool,
 		isLoading: PropTypes.bool,
 		isLoadingCitations: PropTypes.bool,
 		isPickingItem: PropTypes.bool,
@@ -188,6 +198,8 @@ class ZBib extends React.PureComponent {
 		onMultipleChoiceSelect: PropTypes.func.isRequired,
 		onOverride: PropTypes.func.isRequired,
 		onSave: PropTypes.func.isRequired,
+		onStyleSwitchCancel: PropTypes.func.isRequired,
+		onStyleSwitchConfirm: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 		url: PropTypes.string,
