@@ -94,7 +94,7 @@ const retrieveStyle = async styleIdOrUrl => {
 			localStorage.setItem(cacheId, style);
 		} catch(e) {
 			if(!style) {
-				throw new Error('Failed to load style, please check your connection');
+				throw new Error('Failed to load style');
 			}
 		}
 
@@ -127,7 +127,7 @@ const retrieveStylesData = async (url, stylesCacheTime) => {
 			localStorage.setItem('zotero-styles-data-timestamp', Date.now());
 		} catch(e) {
 			if(!stylesData) {
-				throw new Error('Failed to load styles data, please check your connection');
+				throw new Error('Failed to load styles data');
 			}
 		}
 	}
