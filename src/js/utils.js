@@ -4,7 +4,7 @@ const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
 const load = require('load-script');
-
+const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 
 const getCSL = () => {
 	if('CSL' in window) {
@@ -237,6 +237,26 @@ const getBibliographyFormatParameters = bib => {
 		return bibStyle;
 };
 
+const whitelist = ['seriesTitle', 'shortTitle', 'title', 'publicationTitle'];
+const processSentenceCaseAPAField = val => {
+	var newVal = val.toLowerCase().replace(/\s*:/, ':');
+	return newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
+		return x.replace(/\s+/m, ' ').toUpperCase();
+	});
+};
+
+const processSentenceCaseAPAItems = items => {
+	items.forEach(i => {
+		Object.keys(i).forEach(k => {
+			if(typeof(i[k]) === 'string' && whitelist.includes(k)) {
+				i[k] = processSentenceCaseAPAField(i[k]);
+			}
+		});
+	});
+
+	return items;
+};
+
 module.exports = {
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
@@ -244,6 +264,8 @@ module.exports = {
 	getCSL,
 	getItemTypeMeta,
 	isIdentifier,
+	processSentenceCaseAPAField,
+	processSentenceCaseAPAItems,
 	retrieveLocaleSync,
 	retrieveStyle,
 	retrieveStylesData,

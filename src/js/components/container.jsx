@@ -6,7 +6,7 @@ const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData } = require('../utils');
+const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData, processSentenceCaseAPAItems } = require('../utils');
 const coreCitationStyles = require('../constants/core-citation-styles');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
@@ -486,11 +486,14 @@ class Container extends React.Component {
 		if(!bib) {
 			return {};
 		}
-		this.citeproc.updateItems(
-			bib.itemsRaw
+		const items = bib.itemsRaw
 				.filter(item => item.key)
-				.map(item => item.key)
-		);
+				.map(item => item.key);
+
+		if(this.state.citationStyle === 'apa') {
+			processSentenceCaseAPAItems(bib.itemsRaw);
+		}
+		this.citeproc.updateItems(items);
 		let bibliography = this.citeproc.makeBibliography();
 		return bibliography[0].entry_ids.reduce(
 			(obj, key, id) => ({
