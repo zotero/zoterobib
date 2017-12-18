@@ -117,7 +117,8 @@ class Container extends React.Component {
 	handleCopy(ev) {
 		if(this.copyDataInclude) {
 			const formattedMime = exportFormats[this.copyDataInclude].mime;
-			const formattedValue = this.getExportData(this.copyDataInclude);
+			const bibliography = this.getExportData(this.copyDataInclude);
+			const formattedValue = `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
 			ev.clipboardData.setData('text/plain', ev.target.value);
 			ev.clipboardData.setData(formattedMime, formattedValue);
 			ev.preventDefault();
