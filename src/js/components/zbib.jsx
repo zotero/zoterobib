@@ -158,9 +158,20 @@ class ZBib extends React.PureComponent {
 					isOpen={ this.props.isConfirmingStyleSwitch }
 					onConfirm={ this.props.onStyleSwitchConfirm }
 					onCancel={ this.props.onStyleSwitchCancel }
+					title="Converting Titles to Sentence Case"
 					confirmLabel="Continue"
 					>
-						Title of existing and new items will be automatically converted to sentence case to match selected citation style. Are you sure to continue?
+						<p>The selected citation style requires titles to be in sentence case rather
+						than title case (e.g., “Circadian mood variations in Twitter content” rather
+						than “Circadian Mood Variations in Twitter Content”). ZBib partially
+						automates this for you by converting the titles of entries to sentence case.
+						You will need to manually adjust your entries to capitalize proper nouns
+						(e.g., “Twitter” in the above example) and, if the style requires it, the
+						first word after the colon in subtitles.</p>
+						
+						<p>If you later switch to a citation style that requires title case, ZBib
+						can automatically generate title-cased titles without changing your stored
+						entries.</p>
 				</Confirmation>
 			</div>
 		);
