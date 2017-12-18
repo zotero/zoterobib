@@ -237,7 +237,28 @@ const getBibliographyFormatParameters = bib => {
 		return bibStyle;
 };
 
-const whitelist = ['seriesTitle', 'shortTitle', 'title', 'publicationTitle'];
+const whitelist = [
+	// 'title'
+	'title',
+	'caseName',
+	'nameOfAct',
+	'subject',
+
+	// 'publicationTitle'
+	'publicationTitle',
+	'bookTitle',
+	'proceedingsTitle',
+	'websiteTitle',
+	'blogTitle',
+	'forumTitle',
+	'programTitle',
+	'programTitle',
+	'encyclopediaTitle',
+	'dictionaryTitle',
+
+	'seriesTitle',
+	'shortTitle'
+];
 const processSentenceCaseAPAField = val => {
 	var newVal = val.toLowerCase().replace(/\s*:/, ':');
 	return newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
