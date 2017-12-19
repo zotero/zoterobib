@@ -1,5 +1,11 @@
 
 .editor {
+
+	.buttons {
+		margin: 1em $space-sm;
+		text-align: right;
+	}
+
 	@include bp-up(sm) {
 		width: 100%;
 		display: none;

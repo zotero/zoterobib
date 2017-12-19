@@ -141,6 +141,13 @@ class Editor extends React.Component {
 					{ ...this.state }
 					isEditing={ true }
 					onSave={ this.handleItemUpdate.bind(this) } />
+				<div className="buttons">
+					<Link to="/">
+						<Button className="btn-primary">
+							Save
+						</Button>
+					</Link>
+				</div>
 			</div>
 		);
 	}
