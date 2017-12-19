@@ -105,9 +105,21 @@ const retrieveStyle = async styleIdOrUrl => {
 };
 
 const retrieveLocaleSync = lang => {
-	const url = `/static/locales/locales-${lang}.xml`;
-	const retval = syncRequestAsText(url);
-	return retval;
+	const cacheId = `zotero-style-locales-${lang}`;
+	var locales = localStorage.getItem(cacheId);
+
+	if(!locales) {
+		const url = `/static/locales/locales-${lang}.xml`;
+		try {
+			locales = syncRequestAsText(url);
+			localStorage.setItem(cacheId, locales);
+		} catch(e) {
+			if(!locales) {
+				throw new Error('Failed to load locales');
+			}
+		}
+	}
+	return locales;
 };
 
 const retrieveStylesData = async (url, stylesCacheTime) => {
