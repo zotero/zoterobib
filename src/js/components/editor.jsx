@@ -55,7 +55,7 @@ class Editor extends React.Component {
 		try {
 			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 		} catch(e) {
-			this.props.onError('Failed to obtain meta data. Please check your connection and try again.');
+			this.props.onError('Failed to obtain metadata. Please check your connection and try again.');
 			this.setState({
 				isLoading: false
 			});

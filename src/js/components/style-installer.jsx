@@ -148,7 +148,7 @@ class StyleInstaller extends React.Component {
 				overlayClassName="overlay"
 			>
 				<h1 className="title">
-					You can use dialog below to search for and install new citation styles
+					Install Citation Styles
 				</h1>
 				<input
 					autoFocus

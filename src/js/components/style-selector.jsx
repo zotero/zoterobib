@@ -21,7 +21,7 @@ class StyleSelector extends React.Component {
 						})),
 						{
 							value: 'install',
-							label: 'Other Styles...'
+							label: 'Other Styles…'
 						}
 					] }
 					onChange={ ev => this.props.onCitationStyleChanged(ev.value) }

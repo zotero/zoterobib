@@ -159,7 +159,7 @@ class Container extends React.Component {
 				}
 			} catch(e) {
 				props.history.push('/');
-				errorMessage = 'Failed to load citations by id.';
+				errorMessage = 'Failed to load citations by id';
 			}
 		}
 
@@ -278,7 +278,7 @@ class Container extends React.Component {
 			await validateItem(updatedItem);
 		} catch(e) {
 			this.setState({
-				errorMessage: 'Failed to obtain meta data. Please check your connection and try again.'
+				errorMessage: 'Failed to obtain metadata. Please check your connection and try again.'
 			});
 			return;
 		}
@@ -337,7 +337,7 @@ class Container extends React.Component {
 					break;
 					case ZoteroBib.FAILED:
 						this.setState({
-							errorMessage: 'An error occured when citing this source',
+							errorMessage: 'An error occured while citing this source',
 							isTranslating: false,
 						});
 					break;
@@ -345,7 +345,7 @@ class Container extends React.Component {
 			}
 			catch(e) {
 				this.setState({
-					errorMessage: 'An error occured when citing this source',
+					errorMessage: 'An error occured while citing this source',
 					isTranslating: false,
 				});
 			}

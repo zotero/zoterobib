@@ -20,7 +20,7 @@ class MultipleChoiceDialog extends React.Component {
 			<ReactModal 
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
-				contentLabel="Please select a citation from the list"
+				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal"
 				overlayClassName="overlay"
 			>

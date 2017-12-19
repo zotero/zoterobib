@@ -130,7 +130,7 @@ class ExportDialog extends React.Component {
 								) : (
 									<Button onClick={ this.handleGetPermalink.bind(this) }>
 										{
-											this.state.isGettingPermalink ? 'Please wait...' : 'Copy Link to This Version'
+											this.state.isGettingPermalink ? 'Please wait…' : 'Copy Link to This Version'
 										}
 									</Button>
 								)

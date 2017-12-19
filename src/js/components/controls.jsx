@@ -221,15 +221,15 @@ class Controls extends React.PureComponent {
 				/>
 				<ReactModal 
 					isOpen={ this.state.isDeleteModalOpen }
-					contentLabel="Delete all citations?"
+					contentLabel="Delete all entries?"
 					className="modal"
 					overlayClassName="overlay"
 				>
 					<h1 className="title">
-						Delete all citations?
+						Delete all entries?
 					</h1>
 					<p>
-						Confirm deletion of { entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } in the editor.
+						{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be removed.
 					</p>
 					<p className="buttons">
 						<Button onClick={ this.handleCloseDeleteModal.bind(this) }>Cancel</Button>
