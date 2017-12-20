@@ -266,12 +266,12 @@ class Container extends React.Component {
 		}
 	}
 
-	async handleItemUpdate(itemKey, fieldKey, fieldValue) {
+	async handleItemUpdate(itemKey, patch) {
 		const index = this.bib.items.findIndex(item => item.key === itemKey);
 
 		let updatedItem = {
 			...this.bib.items[index],
-			[fieldKey]: fieldValue
+			...patch
 		};
 
 		try {

@@ -9,7 +9,8 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const { withRouter, Link } = require('react-router-dom');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { getItemTypeMeta } = require('../utils');
-
+const { baseMappings } = require('zotero-web-library/lib/constants/item');
+const { reverseMap } = require('zotero-web-library/lib/utils');
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -78,11 +79,13 @@ class Editor extends React.Component {
 			'rights'
 		];
 
+		const titleField = item.itemType in baseMappings && baseMappings[item.itemType]['title'] || 'title';
+
 		const fields = [
 			{ field: 'itemType', localized: 'Item Type' },
-			itemTypeFields.find(itf => itf.field === 'title'),
+			itemTypeFields.find(itf => itf.field === titleField),
 			{ field: 'creators', localized: 'Creators' },
-			...itemTypeFields.filter(itf => itf.field !== 'title')
+			...itemTypeFields.filter(itf => itf.field !== titleField)
 		]
 			.filter(f => f && !hiddenFields.includes(f.field))
 			.map(f => ({
@@ -102,14 +105,14 @@ class Editor extends React.Component {
 		});
 	}
 
-	async handleItemUpdate(key, newValue) {
+	async handleItemUpdate(fieldKey, newValue) {
 		if(!('key' in this.state.item)) {
 			this.state.item.key = Math.random().toString(36).substr(2, 8).toUpperCase();
 			this.props.onItemCreated(this.state.item);
 			this.props.history.replace(`/editor/${this.state.item.key}/`);
 		}
 
-		let fieldIndex = this.state.fields.findIndex(field => field.key == key);
+		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);
 		this.setState({
 			fields: [
 				...this.state.fields.slice(0, fieldIndex),
@@ -121,7 +124,38 @@ class Editor extends React.Component {
 				...this.state.fields.slice(fieldIndex + 1)
 			]
 		}, () => {
-			this.props.onItemUpdate(this.state.item.key, key, newValue);
+			var patch = {
+				[fieldKey]: newValue
+			};
+			// @TODO: deduplicate from web-library
+			// when changing itemType, map fields to base types and back to item-specific types
+			if(fieldKey === 'itemType') {
+				const baseValues = {};			
+				if(this.state.item.itemType in baseMappings) {
+					const namedToBaseMap = reverseMap(baseMappings[this.state.item.itemType]);
+					Object.keys(this.state.item).forEach(fieldName => {
+						if(fieldName in namedToBaseMap) {
+							if(this.state.item[fieldName].toString().length > 0) {
+								baseValues[namedToBaseMap[fieldName]] = this.state.item[fieldName];
+							}
+						}
+					});
+				}
+
+				patch = { ...patch, ...baseValues };
+
+				if(newValue in baseMappings) {
+					const namedToBaseMap = baseMappings[newValue];
+					const itemWithBaseValues = { ...this.state.item, ...baseValues };
+					Object.keys(itemWithBaseValues).forEach(fieldName => {
+						if(fieldName in namedToBaseMap) {
+							patch[namedToBaseMap[fieldName]] = itemWithBaseValues[fieldName];
+							patch[fieldName] = '';
+						}
+					});
+				}
+			}
+			this.props.onItemUpdate(this.state.item.key, patch);
 		});
 	}
 	

@@ -4,7 +4,7 @@ const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
 const load = require('load-script');
-const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
+const { hideFields, noEditFields, baseMappings } = require('zotero-web-library/lib/constants/item');
 
 const getCSL = () => {
 	if('CSL' in window) {
@@ -250,27 +250,17 @@ const getBibliographyFormatParameters = bib => {
 };
 
 const whitelist = [
-	// 'title'
+	...(Object.keys(baseMappings).reduce((agg, itemType) => {
+		'title' in baseMappings[itemType] && agg.push(baseMappings[itemType]['title']);
+		'publicationTitle' in baseMappings[itemType] && agg.push(baseMappings[itemType]['publicationTitle']);
+		return agg;
+	}, [])),
 	'title',
-	'caseName',
-	'nameOfAct',
-	'subject',
-
-	// 'publicationTitle'
 	'publicationTitle',
-	'bookTitle',
-	'proceedingsTitle',
-	'websiteTitle',
-	'blogTitle',
-	'forumTitle',
-	'programTitle',
-	'programTitle',
-	'encyclopediaTitle',
-	'dictionaryTitle',
-
 	'seriesTitle',
-	'shortTitle'
+	'shortTitle',
 ];
+
 const processSentenceCaseAPAField = val => {
 	var newVal = val.toLowerCase().replace(/\s*:/, ':');
 	return newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
