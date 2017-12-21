@@ -46,16 +46,18 @@ class StyleInstaller extends React.Component {
 		this.setState({
 			filterInput: ev.target.value
 		});
+
 		this.timeout = setTimeout(() => {
+			const filter = this.state.filterInput.toLowerCase();
 			this.setState({
 				selectedIndex: null,
 				items: this.props.stylesData.filter(
-					style => style.title.toLowerCase().includes(
-						this.state.filterInput.toLowerCase()
-					)
+					style => style.name.toLowerCase().includes(filter)
+					|| style.title.toLowerCase().includes(filter)
+					|| (style.titleShort && style.titleShort.toLowerCase().includes(filter))
 				)
 			});
-		}, 100);
+		}, 250);
 	}
 
 	handleEscapeKey(ev) {
