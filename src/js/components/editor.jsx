@@ -178,7 +178,7 @@ class Editor extends React.Component {
 				<div className="buttons">
 					<Link to="/">
 						<Button className="btn-primary">
-							Save
+							Back
 						</Button>
 					</Link>
 				</div>
