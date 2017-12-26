@@ -7,7 +7,7 @@ const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
 const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData, processSentenceCaseAPAItems } = require('../utils');
-const coreCitationStyles = require('../constants/core-citation-styles');
+const coreCitationStyles = require('../../../data/core-citation-styles.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 
@@ -25,7 +25,7 @@ class Container extends React.Component {
 		isSaving: false,
 		isTranslating: false,
 		isConfirmingStyleSwitch: false,
-		citationStyle: localStorage.getItem('zotero-bib-citation-style') || 'chicago-note-bibliography',
+		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
 		errorMessage: null,
 		permalink: null,
 		stylesData: null,

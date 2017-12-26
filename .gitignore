@@ -4,5 +4,5 @@ tmp
 lib
 .DS_Store
 build
-/demo
+data
 config/local*.json
