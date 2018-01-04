@@ -4,6 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
 const Select = require('react-select').default;
+const { citationStylesCount } = require('../../../data/citation-styles-data.json');
 const { withRouter } = require('react-router-dom');
 
 class StyleSelector extends React.Component {
@@ -21,7 +22,7 @@ class StyleSelector extends React.Component {
 						})),
 						{
 							value: 'install',
-							label: 'Other Styles…'
+							label: `${Math.floor(citationStylesCount / 100) * 100}+ other styles available…`
 						}
 					] }
 					onChange={ ev => this.props.onCitationStyleChanged(ev.value) }

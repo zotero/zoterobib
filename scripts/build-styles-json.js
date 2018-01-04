@@ -15,7 +15,7 @@ const defaultStyle = 'modern-language-association';
 
 (async () => {
 	const stylesJsonPath = path.join(__dirname, '..', 'data', 'styles.json');
-	const coreStylesPath = path.join(__dirname, '..', 'data', 'core-citation-styles.json');
+	const coreStylesPath = path.join(__dirname, '..', 'data', 'citation-styles-data.json');
 	var stylesMeta;
 	try {
 		stylesMeta = await fs.readJson(stylesJsonPath);
@@ -28,7 +28,7 @@ const defaultStyle = 'modern-language-association';
 		stylesMeta = await (await fetch(appDefaults.stylesUrl)).json();
 		await fs.outputJson(stylesJsonPath, stylesMeta);
 	}
-	const output = styles.map(style => {
+	const coreCitationStyles = styles.map(style => {
 		const styleMeta = stylesMeta.find(sm => sm.name === style);
 		if(!styleMeta) {
 			console.warn(`Could not find name for style ${style}`);
@@ -40,5 +40,10 @@ const defaultStyle = 'modern-language-association';
 			title: styleMeta.title,
 		};
 	}).filter(Boolean);
+	const citationStylesCount = stylesMeta.length;
+	const output = {
+		coreCitationStyles,
+		citationStylesCount
+	};
 	await fs.outputJson(coreStylesPath, output);
 })();
