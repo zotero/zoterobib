@@ -6,3 +6,4 @@ lib
 build
 data
 config/local*.json
+.npmrc
