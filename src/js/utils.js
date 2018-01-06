@@ -261,11 +261,14 @@ const whitelist = [
 	'shortTitle',
 ];
 
+// adapted from
+// https://github.com/zotero/zotero/blob/d5dd5c5100a0656eba217033cf3f294c9aed01f2/chrome/content/zotero/bindings/itembox.xml#L2031
 const processSentenceCaseAPAField = val => {
 	var newVal = val.toLowerCase().replace(/\s*:/, ':');
-	return newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
+	newVal = newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
 		return x.replace(/\s+/m, ' ').toUpperCase();
 	});
+	return newVal;
 };
 
 const processSentenceCaseAPAItems = items => {

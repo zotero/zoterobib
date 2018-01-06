@@ -51,6 +51,14 @@ class Container extends React.Component {
 		if((this.state.isReadOnly !== state.isReadOnly)
 			|| (this.state.citationStyle !== state.citationStyle)
 		) {
+			if(this.state.citationStyle === 'apa' &&
+				this.state.isConfirmingStyleSwitch != state.isConfirmingStyleSwitch
+			) {
+				let processedItems = processSentenceCaseAPAItems(this.bib.itemsRaw);
+				for (let [index, item] of processedItems.entries()) {
+					this.bib.updateItem(index, item);
+				}
+			}
 			try {
 				await this.prepareCiteproc(
 					this.state.citationStyle,
@@ -82,6 +90,7 @@ class Container extends React.Component {
 				});
 			}
 		}
+
 		if(!arrayEquals(this.state.citationStyles, state.citationStyles)) {
 			//@TODO: store extra citation styles in local storage
 			localStorage.setItem(
@@ -515,10 +524,6 @@ class Container extends React.Component {
 		const items = bib.itemsRaw
 				.filter(item => item.key)
 				.map(item => item.key);
-
-		if(this.state.citationStyle === 'apa') {
-			processSentenceCaseAPAItems(bib.itemsRaw);
-		}
 		this.citeproc.updateItems(items);
 		let bibliography = this.citeproc.makeBibliography();
 		return bibliography[0].entry_ids.reduce(
