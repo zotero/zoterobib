@@ -315,7 +315,7 @@ class Container extends React.Component {
 						});
 					}
 					if(multipleSelectedItems) {
-						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems);	
+						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, false);	
 					} else {
 						translationResponse = await this.bib.translateUrl(url, false);
 					}
