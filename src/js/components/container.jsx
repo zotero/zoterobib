@@ -317,14 +317,20 @@ class Container extends React.Component {
 					if(multipleSelectedItems) {
 						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems);	
 					} else {
-						translationResponse = await this.bib.translateUrl(url);
+						translationResponse = await this.bib.translateUrl(url, false);
 					}
 				} else {
-					translationResponse = await this.bib.translateIdentifier(identifier);
+					translationResponse = await this.bib.translateIdentifier(identifier, false);
 				}
 
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
+						if(this.state.citationStyle === 'apa') {
+							this.bib.addItem(processSentenceCaseAPAItems(translationResponse.items)[0]);
+						} else {
+							this.bib.addItem(translationResponse.items[0]);
+						}
+
 						this.setState({
 							url: '',
 							isTranslating: false,
