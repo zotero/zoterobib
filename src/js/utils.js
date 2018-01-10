@@ -252,11 +252,9 @@ const getBibliographyFormatParameters = bib => {
 const whitelist = [
 	...(Object.keys(baseMappings).reduce((agg, itemType) => {
 		'title' in baseMappings[itemType] && agg.push(baseMappings[itemType]['title']);
-		'publicationTitle' in baseMappings[itemType] && agg.push(baseMappings[itemType]['publicationTitle']);
 		return agg;
 	}, [])),
 	'title',
-	'publicationTitle',
 	'seriesTitle',
 	'shortTitle',
 ];
