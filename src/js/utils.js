@@ -255,7 +255,6 @@ const whitelist = [
 		return agg;
 	}, [])),
 	'title',
-	'seriesTitle',
 	'shortTitle',
 ];
 
