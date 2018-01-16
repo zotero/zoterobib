@@ -92,21 +92,28 @@ class Controls extends React.PureComponent {
 	render() {
 		const entriesCount = Object.keys(this.props.citations).length;
 		return (
-			<div>
+			<div className="cite-container">
+				<h1 className="brand">
+					<Link to="/">
+						ZBib
+					</Link>
+				</h1>
+				<p className="subhead">by Zotero</p>
+
+				<UrlInput
+					url={ this.props.url }
+					isTranslating={ this.props.isTranslating }
+					onTranslationRequest={ this.props.onTranslationRequest }
+				/>
+
+				<Link to={ '/editor' }>
+					<Button>
+						Manual Entry
+					</Button>
+				</Link>
+
 				<Toolbar className="hidden-xs-down toolbar-large">
-					<div className="toolbar-left">
-						<div className="logo">
-							<Link to="/">
-								ZBib
-							</Link>
-						</div>
-					</div>
 					<div className="toolbar-right">
-						<Link to={ '/editor' }>
-							<Button>
-								Manual Entry
-							</Button>
-						</Link>
 						<Popover
 							className="permalink-dialog-popover"
 							isOpen={ this.state.isPermalinkDialogOpen }
@@ -172,11 +179,7 @@ class Controls extends React.PureComponent {
 						</Button>
 					</div>
 				</Toolbar>
-				<UrlInput
-					url={ this.props.url }
-					isTranslating={ this.props.isTranslating }
-					onTranslationRequest={ this.props.onTranslationRequest }
-				/>
+
 				<ReactModal
 					isOpen={ this.state.isDeleteModalOpen }
 					contentLabel="Delete all entries?"

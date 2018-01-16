@@ -72,7 +72,7 @@ class ZBib extends React.PureComponent {
 							onDismiss={ this.props.onDismissUndo }
 						/>
 
-						<section className="section">
+						<section className="section section-cite">
 							<div className="container">
 								<div className="citations-tool">
 									{
