@@ -100,11 +100,6 @@ class Controls extends React.PureComponent {
 								ZBib
 							</Link>
 						</div>
-						<StyleSelector
-							citationStyle={ this.props.citationStyle }
-							citationStyles= { this.props.citationStyles }
-							onCitationStyleChanged={ this.props.onCitationStyleChanged }
-						/>
 					</div>
 					<div className="toolbar-right">
 						<Link to={ '/editor' }>
