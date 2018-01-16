@@ -18,7 +18,7 @@ Local Development version
 
 Getting The Library
 
-1. `git clone git@github.com:zotero/bib-web.git`
+1. `git clone --recursive git@github.com:zotero/bib-web.git`
 
 1. `cd bib-web`
 
