@@ -25,7 +25,7 @@ class Editor extends React.Component {
 	}
 
 	async componentWillReceiveProps(nextProps) {
-		if(this.props.location === nextProps.location 
+		if(this.props.location === nextProps.location
 			&& this.props.items === nextProps.items) {
 			return;
 		}
@@ -52,7 +52,7 @@ class Editor extends React.Component {
 				return;
 			}
 		}
-		
+
 		try {
 			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 		} catch(e) {
@@ -130,7 +130,7 @@ class Editor extends React.Component {
 			// @TODO: deduplicate from web-library
 			// when changing itemType, map fields to base types and back to item-specific types
 			if(fieldKey === 'itemType') {
-				const baseValues = {};			
+				const baseValues = {};
 				if(this.state.item.itemType in baseMappings) {
 					const namedToBaseMap = reverseMap(baseMappings[this.state.item.itemType]);
 					Object.keys(this.state.item).forEach(fieldName => {
@@ -158,7 +158,7 @@ class Editor extends React.Component {
 			this.props.onItemUpdate(this.state.item.key, patch);
 		});
 	}
-	
+
 	render() {
 		return (
 			<div className={ cx('editor', this.props.className ) }>
@@ -171,7 +171,7 @@ class Editor extends React.Component {
 						</div>
 					</div>
 				</Toolbar>
-				<ItemBox 
+				<ItemBox
 					{ ...this.state }
 					isEditing={ true }
 					onSave={ this.handleItemUpdate.bind(this) } />

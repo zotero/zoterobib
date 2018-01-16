@@ -1,22 +1,47 @@
-@import "react-select";
+//
+// ZBib
+//
 
-@import "web-library/zotero-web-library";
-@import "variables";
-@import "base";
-@import "csl";
+//
+// Abstracts
+//
 
-@import "components/button";
-@import "components/url-input";
-@import "components/touch-header";
-@import "components/citations";
-@import "components/style-selector";
-@import "components/export-dialog";
-@import "components/editor";
-@import "components/message";
-@import "components/modal";
-@import "components/permalink-dialog";
-@import "components/multiple-choice-dialog";
-@import "components/style-installer";
+@import "abstracts/variables";
+
+
+//
+// Base
+//
+
+@import "base/reset";
+@import "base/type";
+
+//
+// Layout
+//
+
+@import "layout/grid";
+@import "layout/sections";
+
+//@import "react-select";
+//
+//@import "web-library/zotero-web-library";
+//@import "variables";
+//@import "base";
+//@import "csl";
+//
+//@import "components/button";
+//@import "components/url-input";
+//@import "components/touch-header";
+//@import "components/citations";
+//@import "components/style-selector";
+//@import "components/export-dialog";
+//@import "components/editor";
+//@import "components/message";
+//@import "components/modal";
+//@import "components/permalink-dialog";
+//@import "components/multiple-choice-dialog";
+//@import "components/style-installer";
 
 //styling for third party components
-@import "components/popover";
+//@import "components/popover";

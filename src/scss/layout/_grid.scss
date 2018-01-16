@@ -1,0 +1,9 @@
+//
+// Grid
+//
+
+.container {
+	max-width: $container-width;
+	margin: auto;
+	padding: 0 ($grid-gutter-width / 2);
+}
