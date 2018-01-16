@@ -104,7 +104,7 @@ class ZBib extends React.PureComponent {
 							</div>
 						</section>
 
-						<section className="section bibliography">
+						<section className="section section-bibliography">
 							<div className="container">
 								<h2>Bibliography</h2>
 								<StyleSelector
@@ -126,7 +126,7 @@ class ZBib extends React.PureComponent {
 							</div>
 						</section>
 
-						<section className="section export">
+						<section className="section section-export">
 							<div className="container">
 								<h2>Export</h2>
 								<ExportDialog
@@ -139,9 +139,9 @@ class ZBib extends React.PureComponent {
 								/>
 							</div>
 						</section>
-						<section className="section share">
+						<section className="section section-link">
 							<div className="container">
-								<h2>Share this version</h2>
+								<h2>Link to this version</h2>
 							</div>
 						</section>
 
