@@ -17,6 +17,7 @@ const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const StyleInstaller = require('./style-installer');
+const LinkTools = require('./link-tools');
 
 function firstChild(props) {
 	const childrenArray = React.Children.toArray(props.children);
@@ -72,37 +73,6 @@ class ZBib extends React.PureComponent {
 							onDismiss={ this.props.onDismissUndo }
 						/>
 
-						<section className="section section-cite">
-							<div className="container">
-								<div className="citations-tool">
-									{
-										this.props.isReadOnly ?
-										<ReadOnlyControls
-											localCitationsCount={ this.props.itemsCount }
-											citations={ this.props.citations }
-											onOverride={ this.props.onOverride }
-											getCopyData = { this.props.getCopyData }
-											getFileData = { this.props.getFileData }
-										/> :
-										<Controls
-											citations={ this.props.citations }
-											permalink={ this.props.permalink }
-											url={ this.props.url }
-											citationStyle={ this.props.citationStyle }
-											citationStyles={ this.props.citationStyles }
-											getCopyData = { this.props.getCopyData }
-											getFileData = { this.props.getFileData }
-											isSaving={ this.props.isSaving }
-											onSave={ this.props.onSave }
-											isTranslating={ this.props.isTranslating }
-											onCitationStyleChanged={ this.props.onCitationStyleChanged }
-											onTranslationRequest={ this.props.onTranslationRequest }
-											onDeleteCitations={ this.props.onDeleteCitations }
-										/>
-									}
-								</div>
-							</div>
-						</section>
 
 						<section className="section section-bibliography">
 							<div className="container">
@@ -114,15 +84,15 @@ class ZBib extends React.PureComponent {
 									onCitationStyleChanged={ this.props.onCitationStyleChanged }
 								/>
 								{
-			 						this.props.isLoadingCitations ? (
-			 							<div className="zotero-citations-loading hidden-xs-down">
-			 								<Spinner />
-			 							</div>
-			 						) : <Citations
-			 							onDeleteEntry={ this.onDeleteEntry }
-			 							{ ...this.props }
-			 						/>
-			 					}
+									this.props.isLoadingCitations ? (
+										<div className="zotero-citations-loading hidden-xs-down">
+											<Spinner />
+										</div>
+									) : <Citations
+										onDeleteEntry={ this.onDeleteEntry }
+										{ ...this.props }
+									/>
+								}
 							</div>
 						</section>
 
@@ -142,6 +112,7 @@ class ZBib extends React.PureComponent {
 						<section className="section section-link">
 							<div className="container">
 								<h2>Link to this version</h2>
+								<LinkTools { ...this.props } />
 							</div>
 						</section>
 
