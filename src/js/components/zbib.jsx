@@ -13,7 +13,6 @@ const UndoMessage = require('./undo-message');
 const Confirmation = require('./confirmation');
 
 const Editor = require('./editor');
-const { CSSTransitionGroup } = require('react-transition-group');
 const StyleSelector = require('./style-selector');
 const ExportDialog = require('./export-dialog');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
@@ -56,131 +55,127 @@ class ZBib extends React.PureComponent {
 
 	render() {
 		return (
-			typeof this.props.isReadOnly === 'undefined' ?
-			<div className="zotero-bib-wrap zotero-bib-loading">
-				<div className="zotero-bib loading">
-					<Spinner />
-				</div>
-			</div>
-			: <div className="zotero-bib-wrap">
-				<header className="touch-header hidden-sm-up">
-					<TouchNavigation
-						root="Citations"
-						path={ this.currentPath }
-						onNavigation={ this.handleNavigation.bind(this) }
-					/>
-				</header>
-				<div className="zotero-bib">
-					<ErrorMessage
-						error={ this.props.errorMessage }
-						onDismiss={ this.props.onClearError.bind(this) }
-					/>
-					<UndoMessage
-						message={ this.props.lastDeletedItem ? 'Item deleted' : null }
-						onUndo={ this.props.onUndoDelete }
-						onDismiss={ this.props.onDismissUndo }
-					/>
-					<main className={ `${this.currentView}-active` }>
-						<div className="citations-tool scroll-container">
-							{
-								this.props.isReadOnly ?
-								<ReadOnlyControls
-									localCitationsCount={ this.props.itemsCount }
-									citations={ this.props.citations }
-									onOverride={ this.props.onOverride }
-									getCopyData = { this.props.getCopyData }
-									getFileData = { this.props.getFileData }
-								/> :
-								<Controls
-									citations={ this.props.citations }
-									permalink={ this.props.permalink }
-									url={ this.props.url }
-									citationStyle={ this.props.citationStyle }
-									citationStyles={ this.props.citationStyles }
-									getCopyData = { this.props.getCopyData }
-									getFileData = { this.props.getFileData }
-									isSaving={ this.props.isSaving }
-									onSave={ this.props.onSave }
-									isTranslating={ this.props.isTranslating }
-									onCitationStyleChanged={ this.props.onCitationStyleChanged }
-									onTranslationRequest={ this.props.onTranslationRequest }
-									onDeleteCitations={ this.props.onDeleteCitations }
-								/> 
-							}
-							{
-								this.props.isLoadingCitations ? (
-									<div className="zotero-citations-loading hidden-xs-down">
-										<Spinner />
-									</div>
-								) : <Citations
-									onDeleteEntry={ this.onDeleteEntry }
-									{ ...this.props }
-								/>
-							}
+			typeof this.props.isReadOnly === 'undefined'
+				?	<div className="zotero-bib-wrap zotero-bib-loading">
+						<div className="zotero-bib loading">
+							<Spinner />
 						</div>
-						<ExportDialog
-							className="hidden-sm-up"
-							permalink={ this.props.permalink }
-							isReadOnly={ this.props.isReadOnly }
-							onSave={ this.props.onSave }
-							getCopyData = { this.props.getCopyData }
-							getFileData = { this.props.getFileData }
+					</div>
+				:	<div className="zotero-bib-wrap">
+						<ErrorMessage
+							error={ this.props.errorMessage }
+							onDismiss={ this.props.onClearError.bind(this) }
 						/>
-						<StyleSelector
-							className="hidden-sm-up"
-							citationStyle={ this.props.citationStyle }
-							citationStyles= { this.props.citationStyles }
-							onCitationStyleChanged={ this.props.onCitationStyleChanged }
+						<UndoMessage
+							message={ this.props.lastDeletedItem ? 'Item deleted' : null }
+							onUndo={ this.props.onUndoDelete }
+							onDismiss={ this.props.onDismissUndo }
 						/>
-						<CSSTransitionGroup
-							component={ firstChild }
-							transitionName="slide"
-							transitionEnterTimeout={600}
-							transitionLeaveTimeout={600}
-						>
-							{ this.currentView == 'editor' &&
-								<Route path={ `${this.props.match.url}/:item?` }>
-									<Editor
-										items={ this.props.items }
-										onItemCreated={ this.props.onItemCreated }
-										onItemUpdate={ this.props.onItemUpdate }
-										onError={ this.props.onError }
-										{ ...this.props }
-									/>
-								</Route>
-							}
-						</CSSTransitionGroup>
-					</main>
-				</div>
-				<MultipleChoiceDialog { ...this.props } />
-				<StyleInstaller { ...this.props } />
-				<Confirmation
-					isOpen={ this.props.isConfirmingStyleSwitch }
-					onConfirm={ this.props.onStyleSwitchConfirm }
-					onCancel={ this.props.onStyleSwitchCancel }
-					title="Converting Titles to Sentence Case"
-					confirmLabel="Continue"
-					>
-						<p>The selected citation style requires titles to be in sentence case rather
-						than title case (e.g., “Circadian mood variations in Twitter content” rather
-						than “Circadian Mood Variations in Twitter Content”). ZBib partially
-						automates this for you by converting the titles of entries to sentence case.
-						You will need to manually adjust your entries to capitalize proper nouns
-						(e.g., “Twitter” in the above example) and, if the style requires it, the
-						first word after the colon in subtitles.</p>
-						
-						<p>If you later switch to a citation style that requires title case, ZBib
-						can automatically generate title-cased titles without changing your stored
-						entries.</p>
-				</Confirmation>
-			</div>
+
+						<section className="section">
+							<div className="container">
+								<div className="citations-tool">
+									{
+										this.props.isReadOnly ?
+										<ReadOnlyControls
+											localCitationsCount={ this.props.itemsCount }
+											citations={ this.props.citations }
+											onOverride={ this.props.onOverride }
+											getCopyData = { this.props.getCopyData }
+											getFileData = { this.props.getFileData }
+										/> :
+										<Controls
+											citations={ this.props.citations }
+											permalink={ this.props.permalink }
+											url={ this.props.url }
+											citationStyle={ this.props.citationStyle }
+											citationStyles={ this.props.citationStyles }
+											getCopyData = { this.props.getCopyData }
+											getFileData = { this.props.getFileData }
+											isSaving={ this.props.isSaving }
+											onSave={ this.props.onSave }
+											isTranslating={ this.props.isTranslating }
+											onCitationStyleChanged={ this.props.onCitationStyleChanged }
+											onTranslationRequest={ this.props.onTranslationRequest }
+											onDeleteCitations={ this.props.onDeleteCitations }
+										/>
+									}
+								</div>
+							</div>
+						</section>
+
+						<section className="section bibliography">
+							<div className="container">
+								<h2>Bibliography</h2>
+								<StyleSelector
+									className="hidden-sm-up"
+									citationStyle={ this.props.citationStyle }
+									citationStyles= { this.props.citationStyles }
+									onCitationStyleChanged={ this.props.onCitationStyleChanged }
+								/>
+								{
+			 						this.props.isLoadingCitations ? (
+			 							<div className="zotero-citations-loading hidden-xs-down">
+			 								<Spinner />
+			 							</div>
+			 						) : <Citations
+			 							onDeleteEntry={ this.onDeleteEntry }
+			 							{ ...this.props }
+			 						/>
+			 					}
+							</div>
+						</section>
+
+						<section className="section export">
+							<div className="container">
+								<h2>Export</h2>
+								<ExportDialog
+									className="hidden-sm-up"
+									permalink={ this.props.permalink }
+									isReadOnly={ this.props.isReadOnly }
+									onSave={ this.props.onSave }
+									getCopyData = { this.props.getCopyData }
+									getFileData = { this.props.getFileData }
+								/>
+							</div>
+						</section>
+						<section className="section share">
+							<div className="container">
+								<h2>Share this version</h2>
+							</div>
+						</section>
+
+						<MultipleChoiceDialog { ...this.props } />
+						<StyleInstaller { ...this.props } />
+						<Confirmation
+							isOpen={ this.props.isConfirmingStyleSwitch }
+							onConfirm={ this.props.onStyleSwitchConfirm }
+							onCancel={ this.props.onStyleSwitchCancel }
+							title="Converting Titles to Sentence Case"
+								confirmLabel="Continue"
+							>
+								<p>The selected citation style requires titles to be in sentence case rather
+								than title case (e.g., “Circadian mood variations in Twitter content” rather
+								than “Circadian Mood Variations in Twitter Content”). ZBib partially
+								automates this for you by converting the titles of entries to sentence case.
+								You will need to manually adjust your entries to capitalize proper nouns
+								(e.g., “Twitter” in the above example) and, if the style requires it, the
+								first word after the colon in subtitles.</p>
+
+								<p>If you later switch to a citation style that requires title case, ZBib
+								can automatically generate title-cased titles without changing your stored
+								entries.</p>
+						</Confirmation>
+
+					</div>
+
 		);
 	}
 
 	static defaultProps = {
 		citations: {},
 	}
-	
+
 	static propTypes = {
 		citations: PropTypes.object,
 		citationStyle: PropTypes.string,

@@ -1,0 +1,52 @@
+//
+// Variables
+//
+
+
+//
+// Colors
+//
+
+$red: #e52e3d;
+$blue: #2970ff;
+
+$primary: $red;
+$secondary: $blue;
+
+$shade-0: #fff;
+$shade-1: #f6f6f6;
+$shade-2: #ebebeb;
+
+
+//
+// Type
+//
+
+$font-family-sans-serif: system-ui;
+$font-family-base: $font-family-sans-serif;
+
+$font-size-base: 16px;
+$line-height-base: 1.5;
+
+
+//
+// Space
+//
+
+$space-min:  4px;
+$space-xs:   8px;
+$space-sm:   12px;
+$space-md:   16px;
+$space-lg:   24px;
+$space-xl:   32px;
+$space-xxl:  48px;
+$space-xxxl: 64px;
+$space-max:  96px;
+
+
+//
+// Grid
+//
+
+$grid-gutter-width: $space-xl;
+$container-width:   768px + $grid-gutter-width;
