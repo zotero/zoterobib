@@ -7,3 +7,8 @@ body {
 	font-size: $font-size-base;
 	line-height: $line-height-base;
 }
+
+h1,
+h2 {
+	font-weight: $headings-font-weight;
+}
