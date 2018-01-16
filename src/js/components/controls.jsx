@@ -48,7 +48,7 @@ class Controls extends React.PureComponent {
 	}
 
 	handlePermalinkDialog() {
-		this.setState({ 
+		this.setState({
 			isPermalinkDialogOpen: !this.state.isPermalinkDialogOpen
 		}, async () => {
 			if(!this.props.permalink) {
@@ -112,7 +112,7 @@ class Controls extends React.PureComponent {
 								Manual Entry
 							</Button>
 						</Link>
-						<Popover 
+						<Popover
 							className="permalink-dialog-popover"
 							isOpen={ this.state.isPermalinkDialogOpen }
 							preferPlace="end"
@@ -161,7 +161,7 @@ class Controls extends React.PureComponent {
 								/>
 							}
 						>
-							<Button 
+							<Button
 								disabled={ Object.keys(this.props.citations).length === 0 }
 								className="btn btn-drop-down export-button"
 								onClick={ () => this.setState({ isExportDialogOpen: !this.state.isExportDialogOpen }) }
@@ -170,48 +170,11 @@ class Controls extends React.PureComponent {
 							</Button>
 						</Popover>
 						<Button
-							disabled={ Object.keys(this.props.citations).length === 0 } 
+							disabled={ Object.keys(this.props.citations).length === 0 }
 							onClick={ this.handleOpenDeleteModal.bind(this) }
 						>
 							Delete All
 						</Button>
-					</div>
-				</Toolbar>
-				<Toolbar className="hidden-sm-up">
-					<div className="toolbar-left">
-						<ToolGroup>
-							<Link to={ '/editor' }>
-								<Button>
-									<Icon type={ '16/new' } width="16" height="16" />
-								</Button>
-							</Link>
-							<Link to={ '/style-selector' }>
-								<Button>
-									<Icon type={ '16/cog' } width="16" height="16" />
-								</Button>
-							</Link>
-							<Link to={ Object.keys(this.props.citations).length === 0 ? '' : '/export-dialog' }>
-								<Button>
-									<Icon 
-										color={ Object.keys(this.props.citations).length === 0 ? 'rgba(0, 0, 0, 0.15)' : null}
-										type={ '16/export' }
-										width="16"
-										height="16"
-									/>
-								</Button>
-							</Link>
-							<Button
-								disabled={ Object.keys(this.props.citations).length === 0 } 
-								onClick={ this.handleOpenDeleteModal.bind(this) }
-							>
-								<Icon 
-									color={ Object.keys(this.props.citations).length === 0 ? 'rgba(0, 0, 0, 0.15)' : null}
-									type={ '16/trash' }
-									width="16"
-									height="16"
-								/>
-						</Button>
-						</ToolGroup>
 					</div>
 				</Toolbar>
 				<UrlInput
@@ -219,7 +182,7 @@ class Controls extends React.PureComponent {
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
-				<ReactModal 
+				<ReactModal
 					isOpen={ this.state.isDeleteModalOpen }
 					contentLabel="Delete all entries?"
 					className="modal"
@@ -243,7 +206,7 @@ class Controls extends React.PureComponent {
 	static defaultProps = {
 		citations: {}
 	}
-	
+
 	static propTypes = {
 		citations: PropTypes.object,
 		citationStyle: PropTypes.string,
