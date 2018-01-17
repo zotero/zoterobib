@@ -14,10 +14,10 @@ const Confirmation = require('./confirmation');
 
 const Editor = require('./editor');
 const StyleSelector = require('./style-selector');
-const ExportDialog = require('./export-dialog');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const StyleInstaller = require('./style-installer');
-const LinkTools = require('./link-tools');
+const PermalinkTools = require('./permalink-tools');
+const ExportTools = require('./export-tools');
 
 function firstChild(props) {
 	const childrenArray = React.Children.toArray(props.children);
@@ -99,20 +99,13 @@ class ZBib extends React.PureComponent {
 						<section className="section section-export">
 							<div className="container">
 								<h2>Export</h2>
-								<ExportDialog
-									className="hidden-sm-up"
-									permalink={ this.props.permalink }
-									isReadOnly={ this.props.isReadOnly }
-									onSave={ this.props.onSave }
-									getCopyData = { this.props.getCopyData }
-									getFileData = { this.props.getFileData }
-								/>
+								<ExportTools { ...this.props } />
 							</div>
 						</section>
 						<section className="section section-link">
 							<div className="container">
 								<h2>Link to this version</h2>
-								<LinkTools { ...this.props } />
+								<PermalinkTools { ...this.props } />
 							</div>
 						</section>
 
