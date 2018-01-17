@@ -4,13 +4,14 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const { Route, withRouter } = require('react-router-dom');
 const TouchNavigation = require('zotero-web-library/lib/component/touch-navigation');
-const Controls = require('./controls');
-const ReadOnlyControls = require('./read-only-controls');
+// const Controls = require('./controls');
+// const ReadOnlyControls = require('./read-only-controls');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Citations = require('./citations');
 const ErrorMessage = require('./error-message');
 const UndoMessage = require('./undo-message');
 const Confirmation = require('./confirmation');
+
 
 const Editor = require('./editor');
 const StyleSelector = require('./style-selector');
@@ -18,6 +19,7 @@ const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const StyleInstaller = require('./style-installer');
 const PermalinkTools = require('./permalink-tools');
 const ExportTools = require('./export-tools');
+const DeleteAllButton = require('./delete-all-button');
 
 function firstChild(props) {
 	const childrenArray = React.Children.toArray(props.children);
@@ -73,7 +75,6 @@ class ZBib extends React.PureComponent {
 							onDismiss={ this.props.onDismissUndo }
 						/>
 
-
 						<section className="section section-bibliography">
 							<div className="container">
 								<h2>Bibliography</h2>
@@ -92,6 +93,9 @@ class ZBib extends React.PureComponent {
 										onDeleteEntry={ this.onDeleteEntry }
 										{ ...this.props }
 									/>
+								}
+								{
+									!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
 								}
 							</div>
 						</section>
@@ -130,7 +134,6 @@ class ZBib extends React.PureComponent {
 								can automatically generate title-cased titles without changing your stored
 								entries.</p>
 						</Confirmation>
-
 					</div>
 
 		);
