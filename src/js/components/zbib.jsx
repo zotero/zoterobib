@@ -2,29 +2,19 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const { Route, withRouter } = require('react-router-dom');
-const TouchNavigation = require('zotero-web-library/lib/component/touch-navigation');
-// const Controls = require('./controls');
-// const ReadOnlyControls = require('./read-only-controls');
+const { withRouter } = require('react-router-dom');
+
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Citations = require('./citations');
 const ErrorMessage = require('./error-message');
 const UndoMessage = require('./undo-message');
 const Confirmation = require('./confirmation');
-
-
-const Editor = require('./editor');
 const StyleSelector = require('./style-selector');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const StyleInstaller = require('./style-installer');
 const PermalinkTools = require('./permalink-tools');
 const ExportTools = require('./export-tools');
 const DeleteAllButton = require('./delete-all-button');
-
-function firstChild(props) {
-	const childrenArray = React.Children.toArray(props.children);
-	return childrenArray[0] || null;
-}
 
 class ZBib extends React.PureComponent {
 	get currentPath() {
