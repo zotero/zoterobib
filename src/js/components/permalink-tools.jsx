@@ -7,7 +7,7 @@ const ClipboardButton = require('react-clipboard.js').default;
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
-class LinkTools extends React.Component {
+class PermalinkTools extends React.Component {
 	state = {
 		isSavingPermalink: false,
 		isRecentlyCopied: false
@@ -52,7 +52,7 @@ class LinkTools extends React.Component {
 		}
 
 		return this.props.permalink ? (
-			<div className="permalink-dialog">
+			<div className="permalink-tools">
 				<ClipboardButton
 					className="btn btn-primary"
 					data-clipboard-text={ this.props.permalink }
@@ -89,4 +89,4 @@ class LinkTools extends React.Component {
 }
 
 
-module.exports = LinkTools;
+module.exports = PermalinkTools;
