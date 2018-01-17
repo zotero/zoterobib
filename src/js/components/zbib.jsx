@@ -12,6 +12,7 @@ const Confirmation = require('./confirmation');
 const StyleSelector = require('./style-selector');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const StyleInstaller = require('./style-installer');
+const CiteTools = require('./cite-tools');
 const PermalinkTools = require('./permalink-tools');
 const ExportTools = require('./export-tools');
 const DeleteAllButton = require('./delete-all-button');
@@ -64,6 +65,13 @@ class ZBib extends React.PureComponent {
 							onUndo={ this.props.onUndoDelete }
 							onDismiss={ this.props.onDismissUndo }
 						/>
+
+
+						<section className="section section-cite">
+							<div className="container">
+								<CiteTools { ...this.props } />
+							</div>
+						</section>
 
 						<section className="section section-bibliography">
 							<div className="container">
