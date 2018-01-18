@@ -34,6 +34,9 @@ $line-height-base: 1.5;
 
 $headings-font-weight: 300;
 
+$link-transition: 0.15s ease;
+
+
 //
 // Space
 //
@@ -55,3 +58,10 @@ $space-max:  96px;
 
 $grid-gutter-width: $space-xl;
 $container-width:   768px + $grid-gutter-width;
+
+
+//
+// Sections
+//
+
+$section-padding-md: $space-xxxl + $space-xs;

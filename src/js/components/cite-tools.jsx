@@ -10,14 +10,7 @@ const UrlInput = require('./url-input');
 class CiteTools extends React.PureComponent {
 	render() {
 		return (
-			<div className="cite-container">
-				<h1 className="brand">
-					<Link to="/">
-						ZBib
-					</Link>
-				</h1>
-				<p className="subhead">by Zotero</p>
-
+			<div className="cite-tools">
 				<UrlInput
 					url={ this.props.url }
 					isTranslating={ this.props.isTranslating }
