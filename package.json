@@ -23,14 +23,17 @@
     "build:html": "node scripts/build-html.js",
     "build:styles-json": "node scripts/build-styles-json.js",
     "build:static": "mkdir -p build/static && rsync -vazL src/static/* build/static/",
-    "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:static -s' 'devel:stylelint -s'",
+    "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:static -s' 'devel:stylelint -s' 'devel:eslint -s'",
     "devel:js": "watchify -s ZoteroBibComponent --extension=.jsx src/js/main.js -d -v -t [babelify] -p mapstraction -o build/static/bib-component.js",
     "devel:scss": "node-sass src/scss/bib.scss --recursive --source-map true --output build/static && node-sass src/scss/bib.scss --watch --recursive --source-map true --output build/static",
     "devel:html": "nodemon -q -w src/html -w config --ext '.' --exec 'npm run build:html'",
     "devel:static": "nodemon -q -w src/static --ext '.' --exec 'npm run build:static'",
     "devel:stylelint": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run stylelint'",
+    "devel:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
     "start": "mkdir -p build/static && run-p \"build:html\" \"build:styles-json\" \"build:static\" \"serve -s {@}\" \"devel -s {@}\"",
-    "stylelint": "stylelint src/scss/**/*.scss || true"
+    "stylelint": "stylelint src/scss/**/*.scss || true",
+    "eslint": "npm-run eslint src/js/**/*.js? || true",
+    "lint": "run-p stylelint eslint" 
   },
   "dependencies": {
     "array-equal": "^1.0.0",
@@ -57,6 +60,7 @@
     "zotero-web-library": "^0.9.28-alpha"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.1",
     "babel-minify": "^0.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
@@ -70,6 +74,8 @@
     "babelify": "^8.0.0",
     "browserify": "^14.5.0",
     "config": "^1.28.1",
+    "eslint": "^4.15.0",
+    "eslint-plugin-react": "^7.5.1",
     "fs-extra": "^5.0.0",
     "handlebars": "^4.0.11",
     "http-proxy": "^1.16.2",
