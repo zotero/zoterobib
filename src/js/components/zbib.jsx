@@ -4,49 +4,21 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
 
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Citations = require('./citations');
-const ErrorMessage = require('./error-message');
-const UndoMessage = require('./undo-message');
-const Confirmation = require('./confirmation');
-const StyleSelector = require('./style-selector');
-const MultipleChoiceDialog = require('./multiple-choice-dialog');
-const StyleInstaller = require('./style-installer');
 const CiteTools = require('./cite-tools');
-const PermalinkTools = require('./permalink-tools');
-const ExportTools = require('./export-tools');
+const Confirmation = require('./confirmation');
 const DeleteAllButton = require('./delete-all-button');
+const Editor = require('./editor');
+const ErrorMessage = require('./error-message');
+const ExportTools = require('./export-tools');
+const MultipleChoiceDialog = require('./multiple-choice-dialog');
+const PermalinkTools = require('./permalink-tools');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const StyleInstaller = require('./style-installer');
+const StyleSelector = require('./style-selector');
+const UndoMessage = require('./undo-message');
 
 class ZBib extends React.PureComponent {
-	get currentPath() {
-		const viewPathMap = {
-			'style-selector': [{
-				key: 'style-selector',
-				label: 'Select Citation Style'
-			}],
-			'export-dialog': [{
-				key: 'export',
-				label: 'Export'
-			}],
-			'editor': [{
-				key: 'editor',
-				label: 'Editor'
-			}]
-		};
-
-		return this.currentView in viewPathMap ? viewPathMap[this.currentView] : [];
-	}
-
-	get currentView() {
-		let currentView = this.props.match.params.active ? this.props.match.params.active : 'citations';
-		return currentView;
-	}
-
-	handleNavigation(key) {
-		const baseUrl = this.props.match.params.id ? `/${this.props.match.params.id}` : '/';
-		this.props.history.push(key ? baseUrl + key : baseUrl);
-	}
-
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -107,21 +79,13 @@ class ZBib extends React.PureComponent {
 						<section className="section section-bibliography">
 							<div className="container">
 								<h2>Bibliography</h2>
-								<StyleSelector
-									className="hidden-sm-up"
-									citationStyle={ this.props.citationStyle }
-									citationStyles= { this.props.citationStyles }
-									onCitationStyleChanged={ this.props.onCitationStyleChanged }
-								/>
+								<StyleSelector { ...this.props } />
 								{
 									this.props.isLoadingCitations ? (
 										<div className="zotero-citations-loading hidden-xs-down">
 											<Spinner />
 										</div>
-									) : <Citations
-										onDeleteEntry={ this.onDeleteEntry }
-										{ ...this.props }
-									/>
+									) : <Citations { ...this.props } />
 								}
 								{
 									!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
@@ -141,9 +105,6 @@ class ZBib extends React.PureComponent {
 								<PermalinkTools { ...this.props } />
 							</div>
 						</section>
-
-						<MultipleChoiceDialog { ...this.props } />
-						<StyleInstaller { ...this.props } />
 						<Confirmation
 							isOpen={ this.props.isConfirmingStyleSwitch }
 							onConfirm={ this.props.onStyleSwitchConfirm }
@@ -163,6 +124,9 @@ class ZBib extends React.PureComponent {
 								can automatically generate title-cased titles without changing your stored
 								entries.</p>
 						</Confirmation>
+						<MultipleChoiceDialog { ...this.props } />
+						<StyleInstaller { ...this.props } />
+						<Editor { ...this.props } />
 					</div>
 
 		);
