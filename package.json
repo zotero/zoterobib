@@ -30,7 +30,7 @@
     "devel:static": "nodemon -q -w src/static --ext '.' --exec 'npm run build:static'",
     "start": "mkdir -p build/static && run-p \"build:html\" \"build:styles-json\" \"build:static\" \"serve -s {@}\" \"devel -s {@}\"",
     "stylelint": "stylelint src/scss/**/*.scss || true",
-    "eslint": "eslint src/js/**/*.js? || true",
+    "eslint": "eslint \"src/js/**/*.+(js|jsx)\" || true",
     "lint": "run-p stylelint eslint",
     "watch:stylelint": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run stylelint'",
     "watch:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
