@@ -2,9 +2,9 @@
 
 require('isomorphic-fetch');
 const React = require('react');
+const PropTypes = require('prop-types');
 const ReactDOM = require('react-dom');
 const { BrowserRouter, Route, Switch } = require('react-router-dom');
-const { Redirect } = require('react-router');
 const Container = require('./components/container');
 
 //@TODO fix naming convention (bib vs this.bib)
@@ -13,10 +13,10 @@ class ZoteroBibComponent extends React.Component {
 		return (
 			<BrowserRouter>
 				<Switch>
-					<Route path="/:id([0-9a-fA-f]{32})/:active(export-dialog)?">
+					<Route path="/:id([0-9a-fA-f]{32})">
 						<Container config = { this.props.config } />
 					</Route>
-					<Route path="/:active(style-selector|export-dialog|editor)?">
+					<Route path="/:active(editor)?">
 						<Container config = { this.props.config } />
 					</Route>
 				</Switch>
@@ -26,6 +26,10 @@ class ZoteroBibComponent extends React.Component {
 
 	static init(domEl, config={}) {
 		ReactDOM.render(<ZoteroBibComponent config={ config } />, domEl);
+	}
+
+	static propTypes = {
+		config: PropTypes.object
 	}
 }
 
