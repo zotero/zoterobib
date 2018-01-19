@@ -109,7 +109,7 @@ class Editor extends React.Component {
 		if(!('key' in this.state.item)) {
 			this.state.item.key = Math.random().toString(36).substr(2, 8).toUpperCase();
 			this.props.onItemCreated(this.state.item);
-			this.props.history.replace(`/editor/${this.state.item.key}/`);
+			this.props.title.replace(`/editor/${this.state.item.key}/`);
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);
@@ -187,8 +187,13 @@ class Editor extends React.Component {
 	}
 
 	static propTypes = {
+		className: PropTypes.string,
+		title: PropTypes.object,
+		items: PropTypes.array,
+		location: PropTypes.object,
+		onError: PropTypes.func.isRequired,
+		onItemCreated: PropTypes.func.isRequired,
 		onItemUpdate: PropTypes.func.isRequired,
-		className: PropTypes.string
 	}
 }
 
