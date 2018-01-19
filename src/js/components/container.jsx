@@ -17,23 +17,25 @@ class Container extends React.Component {
 			...defaults,
 			...this.props.config
 		},
+		citations: {},
+		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
+		citationStyles: [],
+		editorItem: null,
+		errorMessage: null,
+		isConfirmingStyleSwitch: false,
+		isEditorOpen: false,
+		isInstallingStyle: false,
 		isLoadingCitations: true,
 		isPickingItem: false,
-		isStylesDataLoading: false,
-		isInstallingStyle: false,
 		isReadOnly: undefined,
 		isSaving: false,
+		isStylesDataLoading: false,
 		isTranslating: false,
-		isConfirmingStyleSwitch: false,
-		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
-		errorMessage: null,
+		lastDeletedItem: null,
+		multipleChoiceItems: [],
 		permalink: null,
 		stylesData: null,
 		url: '',
-		citations: {},
-		multipleChoiceItems: [],
-		citationStyles: [],
-		lastDeletedItem: null
 	}
 
 	constructor(props) {
@@ -105,11 +107,11 @@ class Container extends React.Component {
 
 	async componentDidMount() {
 		const citationStyles = [
-			...coreCitationStyles.map(cs => ({ 
+			...coreCitationStyles.map(cs => ({
 				...cs,
 				isDependent: 0,
 				parent: null,
-				isCore: true 
+				isCore: true
 			})),
 			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
 		];
@@ -140,7 +142,7 @@ class Container extends React.Component {
 		let citationStyle = this.state.citationStyle;
 		let errorMessage = null;
 
-		this.setState({ 
+		this.setState({
 			isReadOnly: undefined,
 			isLoading: true
 		});
@@ -179,14 +181,16 @@ class Container extends React.Component {
 			isReadOnly ? this.bibRemote : this.bib,
 			isReadOnly
 		);
-		
-		this.setState({ 
+
+
+		this.setState({
 			isReadOnly,
 			citationStyle,
 			errorMessage,
 			items: this.items,
 			isLoading: false,
 		});
+
 	}
 
 	async handleSave() {
@@ -215,7 +219,25 @@ class Container extends React.Component {
 	handleItemCreated(item) {
 		this.setState({ permalink: null });
 		this.bib.addItem(item);
-		this.setState({ citations: this.citations, items: this.items });
+		this.setState({
+			citations: this.citations,
+			items: this.items,
+			editorItem: item.key
+		});
+	}
+
+	handleOpenEditor(itemId = null) {
+		this.setState({
+			isEditorOpen: true,
+			editorItem: itemId
+		});
+	}
+
+	handleCloseEditor() {
+		this.setState({
+			isEditorOpen: false,
+			editorItem: null
+		});
 	}
 
 	handleDeleteEntry(itemId) {
@@ -223,18 +245,18 @@ class Container extends React.Component {
 		const item = this.bib.itemsRaw.find(item => item.key == itemId);
 
 		if(this.bib.removeItem(item)) {
-			this.setState({ 
+			this.setState({
 				citations: this.citations,
 				items: this.items,
 				lastDeletedItem: { ...item }
-			});	
+			});
 		}
 	}
 
 	handleUndoDelete() {
 		if(this.state.lastDeletedItem) {
 			this.handleItemCreated(this.state.lastDeletedItem);
-			this.setState({ 
+			this.setState({
 				permalink: null,
 				lastDeletedItem: null
 			});
@@ -315,7 +337,7 @@ class Container extends React.Component {
 						});
 					}
 					if(multipleSelectedItems) {
-						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, false);	
+						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, false);
 					} else {
 						translationResponse = await this.bib.translateUrl(url, false);
 					}
@@ -422,7 +444,7 @@ class Container extends React.Component {
 	}
 
 	handleStyleInstallerInstall(styleMeta) {
-		this.setState({ 
+		this.setState({
 			citationStyles: this.getExpandedCitationStyles(styleMeta)
 		});
 	}
@@ -439,7 +461,7 @@ class Container extends React.Component {
 			isConfirmingStyleSwitch: false
 		});
 	}
-	
+
 	handleStyleSwitchCancel() {
 		this.setState({
 			isConfirmingStyleSwitch: false
@@ -495,7 +517,7 @@ class Container extends React.Component {
 
 	async getFileData(format) {
 		var fileContents, separator, bibStyle, preamble = '';
-		
+
 		if(format === 'ris') {
 			try {
 				fileContents = await this.bib.exportItems('ris');
@@ -504,7 +526,7 @@ class Container extends React.Component {
 				return;
 			}
 		} else {
-			const bibliography = this.getExportData(format);	
+			const bibliography = this.getExportData(format);
 			if(format === 'rtf') {
 				bibStyle = getBibliographyFormatParameters(bibliography);
 				separator = '\\\r\n';
@@ -546,30 +568,32 @@ class Container extends React.Component {
 	}
 
 	render() {
-		return <ZBib 
-			onSave = { this.handleSave.bind(this) }
-			onDeleteCitations = { this.handleDeleteCitations.bind(this) }
-			onItemCreated = { this.handleItemCreated.bind(this) }
-			onDeleteEntry = { this.handleDeleteEntry.bind(this) }
-			onItemUpdate = { this.handleItemUpdate.bind(this) }
-			onOverride = { this.handleOverride.bind(this) }
-			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
-			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
-			onClearError = { this.handleClearErrorMessage.bind(this) }
-			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
-			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
-			onStyleInstallerCancel = { this.handleStyleInstallerCancel.bind(this) }
-			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
-			onStyleInstallerInstall = { this.handleStyleInstallerInstall.bind(this) }
-			onStyleInstallerDelete = { this.handleStyleInstallerDelete.bind(this) }
-			onStyleSwitchConfirm = { this.handleStyleSwitchConfirm.bind(this) }
-			onStyleSwitchCancel = { this.handleStyleSwitchCancel.bind(this) }
-			onUndoDelete = { this.handleUndoDelete.bind(this) }
-			onDismissUndo = { this.handleDismissUndo.bind(this) }
-			onError = { this.handleError.bind(this) }
+		return <ZBib
 			getCopyData = { this.getCopyData.bind(this) }
 			getFileData = { this.getFileData.bind(this) }
 			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
+			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
+			onClearError = { this.handleClearErrorMessage.bind(this) }
+			onDeleteCitations = { this.handleDeleteCitations.bind(this) }
+			onDeleteEntry = { this.handleDeleteEntry.bind(this) }
+			onDismissUndo = { this.handleDismissUndo.bind(this) }
+			onEditorClose = { this.handleCloseEditor.bind(this) }
+			onEditorOpen = { this.handleOpenEditor.bind(this) }
+			onError = { this.handleError.bind(this) }
+			onItemCreated = { this.handleItemCreated.bind(this) }
+			onItemUpdate = { this.handleItemUpdate.bind(this) }
+			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
+			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
+			onOverride = { this.handleOverride.bind(this) }
+			onSave = { this.handleSave.bind(this) }
+			onStyleInstallerCancel = { this.handleStyleInstallerCancel.bind(this) }
+			onStyleInstallerDelete = { this.handleStyleInstallerDelete.bind(this) }
+			onStyleInstallerInstall = { this.handleStyleInstallerInstall.bind(this) }
+			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
+			onStyleSwitchCancel = { this.handleStyleSwitchCancel.bind(this) }
+			onStyleSwitchConfirm = { this.handleStyleSwitchConfirm.bind(this) }
+			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
+			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			{ ...this.state }
 		/>;
 	}

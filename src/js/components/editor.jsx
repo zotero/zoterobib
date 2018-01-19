@@ -3,13 +3,13 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
-const ItemBox = require('zotero-web-library/lib/component/item/box');
-const { Toolbar } = require('zotero-web-library/lib/component/ui/toolbars');
+
 const Button = require('zotero-web-library/lib/component/ui/button');
-const { withRouter, Link } = require('react-router-dom');
-const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
-const { getItemTypeMeta } = require('../utils');
+const ItemBox = require('zotero-web-library/lib/component/item/box');
+const ReactModal = require('react-modal');
 const { baseMappings } = require('zotero-web-library/lib/constants/item');
+const { getItemTypeMeta } = require('../utils');
+const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { reverseMap } = require('zotero-web-library/lib/utils');
 
 class Editor extends React.Component {
@@ -25,7 +25,8 @@ class Editor extends React.Component {
 	}
 
 	async componentWillReceiveProps(nextProps) {
-		if(this.props.location === nextProps.location
+		if(this.props.isEditorOpen === nextProps.isEditorOpen
+			&& this.props.editorItem === nextProps.editorItem
 			&& this.props.items === nextProps.items) {
 			return;
 		}
@@ -35,7 +36,11 @@ class Editor extends React.Component {
 
 	async prepareState(props) {
 		var item;
-		if('item' in props.match.params && typeof props.match.params.item === 'undefined') {
+		if(!props.isEditorOpen) {
+			return;
+		}
+
+		if(!props.editorItem) {
 			item = {
 				'version': 0,
 				'itemType': 'book',
@@ -44,7 +49,7 @@ class Editor extends React.Component {
 				creators: []
 			};
 		} else {
-			item = props.items.find(item => item.key === props.match.params.item);
+			item = props.items.find(item => item.key === props.editorItem);
 			if(!item) {
 				this.setState({
 					isLoading: true
@@ -62,7 +67,6 @@ class Editor extends React.Component {
 			});
 			return;
 		}
-
 
 		itemTypes = itemTypes.map(it => ({
 			value: it.itemType,
@@ -109,7 +113,6 @@ class Editor extends React.Component {
 		if(!('key' in this.state.item)) {
 			this.state.item.key = Math.random().toString(36).substr(2, 8).toUpperCase();
 			this.props.onItemCreated(this.state.item);
-			this.props.title.replace(`/editor/${this.state.item.key}/`);
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);
@@ -161,40 +164,38 @@ class Editor extends React.Component {
 
 	render() {
 		return (
-			<div className={ cx('editor', this.props.className ) }>
-				<Toolbar className="hidden-xs-down toolbar-large">
-					<div className="toolbar-left">
-						<div className="logo">
-							<Link to="/">
-								ZBib
-							</Link>
-						</div>
-					</div>
-				</Toolbar>
-				<ItemBox
-					{ ...this.state }
-					isEditing={ true }
-					onSave={ this.handleItemUpdate.bind(this) } />
-				<div className="buttons">
-					<Link to="/">
-						<Button className="btn-primary">
-							Back
-						</Button>
-					</Link>
+			<ReactModal
+				key="react-modal"
+				isOpen={ this.props.isEditorOpen }
+				contentLabel="Item Editor"
+				className="editor-container modal"
+				overlayClassName="overlay"
+			>
+				<Button onClick={ () => this.props.onEditorClose() }>
+					X
+				</Button>
+				<div className={ cx('editor', this.props.className ) }>
+					<ItemBox
+						{ ...this.state }
+						isEditing={ true }
+						onSave={ this.handleItemUpdate.bind(this) } />
 				</div>
-			</div>
+			</ReactModal>
 		);
 	}
 
 	static propTypes = {
 		className: PropTypes.string,
-		title: PropTypes.object,
+		editorItem: PropTypes.string,
+		isEditorOpen: PropTypes.bool,
 		items: PropTypes.array,
 		location: PropTypes.object,
+		onEditorClose: PropTypes.func.isRequired,
 		onError: PropTypes.func.isRequired,
 		onItemCreated: PropTypes.func.isRequired,
 		onItemUpdate: PropTypes.func.isRequired,
+		title: PropTypes.object,
 	}
 }
 
-module.exports = withRouter(Editor);
+module.exports = Editor;

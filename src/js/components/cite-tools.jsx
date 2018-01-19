@@ -2,7 +2,6 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const { Link } = require('react-router-dom');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const UrlInput = require('./url-input');
@@ -16,18 +15,16 @@ class CiteTools extends React.PureComponent {
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
-
-				<Link to={ '/editor' }>
-					<Button>
-						Manual Entry
-					</Button>
-				</Link>
+				<Button onClick={ () => { this.props.onEditorOpen(); } }>
+					Manual Entry
+				</Button>
 			</div>
 		);
 	}
 
 	static propTypes = {
 		isTranslating: PropTypes.bool,
+		onEditorOpen: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
 		url: PropTypes.string,
 	}
