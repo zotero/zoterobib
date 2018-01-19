@@ -6,3 +6,12 @@ body {
 	color: $shade-5;
 	background-color: $shade-0;
 }
+
+:focus {
+	outline: none;
+	outline-offset: $outline-offset;
+
+	.keyboard-user & {
+		outline: $outline-width solid $outline-color;
+	}
+}
