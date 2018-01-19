@@ -57,7 +57,7 @@ class ZBib extends React.PureComponent {
 					</div>
 				:	<div className="zotero-bib-wrap">
 						<ErrorMessage
-							error={ this.props.errorMessage }
+							message={ this.props.errorMessage }
 							onDismiss={ this.props.onClearError.bind(this) }
 						/>
 						<UndoMessage
@@ -175,7 +175,9 @@ class ZBib extends React.PureComponent {
 	static propTypes = {
 		citations: PropTypes.object,
 		citationStyle: PropTypes.string,
+		citationStyles: PropTypes.array,
 		error: PropTypes.string,
+		errorMessage: PropTypes.string,
 		getCopyData: PropTypes.func.isRequired,
 		getFileData: PropTypes.func.isRequired,
 		history: PropTypes.object,
@@ -188,11 +190,13 @@ class ZBib extends React.PureComponent {
 		isTranslating: PropTypes.bool,
 		items: PropTypes.array,
 		itemsCount: PropTypes.number,
+		lastDeletedItem: PropTypes.object,
 		match: PropTypes.object,
 		multipleChoiceItems: PropTypes.array,
 		onCitationStyleChanged: PropTypes.func.isRequired,
 		onClearError: PropTypes.func.isRequired,
 		onDeleteCitations: PropTypes.func.isRequired,
+		onDismissUndo: PropTypes.func.isRequired,
 		onError: PropTypes.func.isRequired,
 		onItemCreated: PropTypes.func.isRequired,
 		onItemUpdate: PropTypes.func.isRequired,
@@ -203,6 +207,7 @@ class ZBib extends React.PureComponent {
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
+		onUndoDelete: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 		url: PropTypes.string,
 	}
