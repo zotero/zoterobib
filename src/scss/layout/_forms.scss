@@ -1,0 +1,28 @@
+//
+// Forms
+//
+
+.form-control {
+	display: block;
+	width: 100%;
+	border: 1px solid $shade-3;
+	line-height: $input-line-height;
+	font-size: inherit;
+	font-family: inherit;
+	color: inherit;
+	// todo: padding
+
+	&:focus {
+		border: 1px solid $secondary;
+		box-shadow: 0 0 0 2px $secondary;
+	}
+}
+
+.form-control-lg {
+	padding: $input-padding-y-lg $input-padding-x-lg;
+	border-radius: $input-border-radius-lg;
+}
+
+::placeholder {
+	color: $placeholder-color;
+}

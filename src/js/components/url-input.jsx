@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+//const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
 class UrlInput extends React.PureComponent {
 	constructor(props) {
@@ -40,25 +40,25 @@ class UrlInput extends React.PureComponent {
 
 	render() {
 		return (
-			<div className="url-input-wrap">
+			<div className="id-input-container">
 				<input
 					ref = { i => this.inputField = i }
 					autoFocus
-					placeholder="Cite a source by entering its URL, ISBN, DOI, or PMID"
-					className="zotero-bib-form-url"
+					placeholder="Enter URL, ISBN, DOI, or PMID"
+					className="form-control form-control-lg id-input"
 					type="text" value={ this.state.url }
 					onChange={ this.handleUrlChange.bind(this) }
 					onKeyPress={ this.handleKeyboard.bind(this) }
 				/>
-				<button
+				{/*<button
 					disabled = { this.props.isTranslating || this.state.url.length === 0 }
 					onClick={ this.handleTranslateIdentifier.bind(this) }>
-						{ 
+						{
 							this.props.isTranslating ? (
 								<Spinner />
 							) : 'Cite it'
 						}
-				</button>
+				</button>*/}
 			</div>
 		);
 	}
