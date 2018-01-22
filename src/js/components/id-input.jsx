@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-//const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
 class IdInput extends React.PureComponent {
 	constructor(props) {
@@ -50,15 +50,11 @@ class IdInput extends React.PureComponent {
 					onChange={ this.handleUrlChange.bind(this) }
 					onKeyPress={ this.handleKeyboard.bind(this) }
 				/>
-				{/*<button
-					disabled = { this.props.isTranslating || this.state.url.length === 0 }
-					onClick={ this.handleTranslateIdentifier.bind(this) }>
-						{
-							this.props.isTranslating ? (
-								<Spinner />
-							) : 'Cite it'
-						}
-				</button>*/}
+				{
+					this.props.isTranslating ? (
+						<Spinner />
+					) : null
+				}
 			</div>
 		);
 	}
