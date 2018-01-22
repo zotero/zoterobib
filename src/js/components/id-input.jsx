@@ -4,7 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 //const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
-class UrlInput extends React.PureComponent {
+class IdInput extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -70,4 +70,4 @@ class UrlInput extends React.PureComponent {
 	}
 }
 
-module.exports = UrlInput;
+module.exports = IdInput;
