@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
+const cx = require('classnames');
 
 const Citations = require('./citations');
 const CiteTools = require('./cite-tools');
@@ -17,6 +18,7 @@ const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const StyleInstaller = require('./style-installer');
 const StyleSelector = require('./style-selector');
 const UndoMessage = require('./undo-message');
+const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
 
 class ZBib extends React.PureComponent {
 	render() {
@@ -27,7 +29,11 @@ class ZBib extends React.PureComponent {
 							<Spinner />
 						</div>
 					</div>
-				:	<div className="zotero-bib-wrap">
+				:	<div className={ cx('zotero-bib-wrap', {
+						'keyboard-user': this.props.isKeyboardUser,
+						'mouse-user': this.props.isMouseUser,
+						'touch-user': this.props.isTouchUser,
+					}) }>
 						<ErrorMessage
 							message={ this.props.errorMessage }
 							onDismiss={ this.props.onClearError.bind(this) }
@@ -146,11 +152,14 @@ class ZBib extends React.PureComponent {
 		getFileData: PropTypes.func.isRequired,
 		history: PropTypes.object,
 		isConfirmingStyleSwitch: PropTypes.bool,
+		isKeyboardUser: PropTypes.bool,
 		isLoading: PropTypes.bool,
 		isLoadingCitations: PropTypes.bool,
+		isMouseUser: PropTypes.bool,
 		isPickingItem: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		isSaving: PropTypes.bool,
+		isTouchUser: PropTypes.bool,
 		isTranslating: PropTypes.bool,
 		items: PropTypes.array,
 		itemsCount: PropTypes.number,
@@ -177,4 +186,4 @@ class ZBib extends React.PureComponent {
 	}
 }
 
-module.exports = withRouter(ZBib);
+module.exports = withRouter(UserTypeDetector(ZBib));
