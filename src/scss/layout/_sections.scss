@@ -8,5 +8,9 @@
 }
 
 .section-md {
-	padding: $section-padding-md 0;
+	padding: $space-xxl 0;
+
+	@media (min-width: $bp-md) {
+		padding: $section-padding-md 0;
+	}
 }

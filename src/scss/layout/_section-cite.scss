@@ -4,7 +4,11 @@
 
 .section-cite {
 	border-top: none;
-	padding-top: $section-padding-md - 4px;
+	padding-top: $space-xxl - 4px;
+
+	@media (min-width: $bp-md) {
+		padding-top: $section-padding-md - 4px;
+	}
 }
 
 .brand,
