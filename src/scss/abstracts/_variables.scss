@@ -1,5 +1,7 @@
 // stylelint-disable
 
+// Variables should follow the `$component-state-property-size` formula
+
 //
 // Variables
 //
@@ -72,6 +74,7 @@ $border-radius-lg: 6px;
 
 $border-width: 1px;
 
+
 //
 // Sections
 //
@@ -80,8 +83,36 @@ $section-padding-md: $space-xxxl + $space-xs;
 
 
 //
+// Buttons & forms
+//
+
+$input-btn-focus-width: 2px;
+
+
+//
 // Buttons
 //
+
+$btn-border-width: $border-width;
+
+$btn-line-height: $line-height-base;
+
+$btn-padding-x-sm: $space-sm;
+$btn-padding-y-sm: 3px;
+
+$btn-primary-bg:     $primary;
+$btn-primary-border: $primary;
+
+$btn-secondary-color: $secondary;
+
+$btn-outline-secondary-color:       $secondary;
+$btn-outline-secondary-bg:          $secondary;
+$btn-outline-secondary-border:      $secondary;
+$btn-outline-secondary-hover-color: $shade-0;
+
+$btn-border-radius: $border-radius-sm;
+
+$btn-transition: 0.15s ease;
 
 
 //
@@ -98,6 +129,8 @@ $input-border-radius-lg: $border-radius-sm;
 $placeholder-color: $shade-4;
 
 $input-border-width: $border-width;
+
+$input-transition: 0.15s ease;
 
 
 //
