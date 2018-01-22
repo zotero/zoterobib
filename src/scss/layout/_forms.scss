@@ -5,7 +5,7 @@
 .form-control {
 	display: block;
 	width: 100%;
-	border: 1px solid $shade-3;
+	border: $input-border-width solid $shade-3;
 	line-height: $input-line-height;
 	font-size: inherit;
 	font-family: inherit;
@@ -13,7 +13,7 @@
 	// todo: padding
 
 	&:focus {
-		border: 1px solid $secondary;
+		border: $input-border-width solid $secondary;
 		box-shadow: 0 0 0 2px $secondary;
 	}
 }

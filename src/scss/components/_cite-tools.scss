@@ -2,6 +2,21 @@
 // Cite tools
 //
 
-.id-input {
-	margin-bottom: $space-xl;
+.cite-tools {
+	.id-input-container {
+		position: relative;
+	}
+
+	.id-input {
+		margin-bottom: $space-xl;
+		padding-right: $input-padding-x-lg + $space-lg + 1px;
+	}
+
+	.icon-spin {
+		position: absolute;
+		top: $space-sm;
+		right: $space-md + $input-border-width;
+		width: $space-lg !important; // todo
+		height: $space-lg !important; // todo
+	}
 }
