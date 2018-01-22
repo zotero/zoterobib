@@ -11,10 +11,12 @@
 	font-family: inherit;
 	color: inherit;
 	// todo: padding
+	transition: border $input-transition, box-shadow $input-transition;
 
 	&:focus {
 		border: $input-border-width solid $secondary;
 		box-shadow: 0 0 0 2px $secondary;
+		outline: none;
 	}
 }
 

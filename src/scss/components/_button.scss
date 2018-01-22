@@ -1,0 +1,49 @@
+//
+// Button
+//
+
+.btn {
+	display: inline-block;
+	vertical-align: middle;
+	border: $btn-border-width solid transparent;
+	font-size: $font-size-base;
+	line-height: $btn-line-height;
+	user-select: none;
+	white-space: nowrap;
+	text-align: center;
+	font-weight: 400;
+	border-radius: $btn-border-radius;
+	transition:
+		color $btn-transition,
+		background-color $btn-transition,
+		box-shadow $btn-transition;
+
+	&:not(:disabled):not(.disabled) {
+		cursor: pointer;
+	}
+}
+
+.btn-primary {
+	background-color: $btn-primary-bg;
+	border-color: $btn-primary-border;
+}
+
+.btn-outline-secondary {
+	color: $btn-outline-secondary-color;
+	background-color: transparent;
+	border-color: $btn-outline-secondary-border;
+	padding: $btn-padding-y-sm $btn-padding-x-sm;
+
+	&:hover {
+		color: $btn-outline-secondary-hover-color;
+		background-color: $btn-outline-secondary-bg;
+	}
+
+	&:focus {
+		outline: none;
+
+		.keyboard-user & {
+			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
+		}
+	}
+}

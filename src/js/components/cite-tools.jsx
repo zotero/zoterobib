@@ -15,7 +15,9 @@ class CiteTools extends React.PureComponent {
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
-				<Button onClick={ () => { this.props.onEditorOpen(); } }>
+				<Button onClick={ () => { this.props.onEditorOpen(); } }
+					className="btn-sm btn-outline-secondary"
+				>
 					Manual Entry
 				</Button>
 			</div>
