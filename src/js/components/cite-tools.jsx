@@ -4,13 +4,13 @@ const React = require('react');
 const PropTypes = require('prop-types');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
-const UrlInput = require('./url-input');
+const IdInput = require('./id-input');
 
 class CiteTools extends React.PureComponent {
 	render() {
 		return (
 			<div className="cite-tools">
-				<UrlInput
+				<IdInput
 					url={ this.props.url }
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
