@@ -1,0 +1,48 @@
+//
+// Bibliography
+//
+
+.bibliography {
+	margin: $space-lg (-$grid-gutter-width / 2);
+	padding: 0;
+	list-style: none;
+	
+	@media (min-width: $bp-md) {
+		margin: $space-lg 0;
+	}
+	
+	.citation {
+		display: flex;
+		align-items: center;
+		padding: ($space-lg - 7px) ($space-md - 5px) ($space-lg - 7px) $space-md; // Tweak once Avenir is available
+		border-top: 1px solid $shade-2;
+		cursor: pointer;
+
+		&:last-child {
+			border-bottom: 1px solid $shade-2;
+		}
+
+		&:hover {
+			background-color: $shade-1;
+		}
+
+		&:focus {
+			.keyboard-user & {
+				outline-offset: -3px;
+				
+				& + .citation {
+					border-top-color: transparent;
+				}
+			}
+		}
+
+		.csl-entry-container {
+			flex: 1 1 0;
+			margin-right: ($space-md - 5px);
+		}
+
+		.btn-icon {
+			flex: 0 0 auto;
+		}
+	}
+}

@@ -5,7 +5,7 @@ const PropTypes = require('prop-types');
 const { withRouter, Link } = require('react-router-dom');
 const cx = require('classnames');
 
-const Citations = require('./citations');
+const Bibliography = require('./bibliography');
 const CiteTools = require('./cite-tools');
 const Confirmation = require('./confirmation');
 const DeleteAllButton = require('./delete-all-button');
@@ -91,7 +91,7 @@ class ZBib extends React.PureComponent {
 										<div className="zotero-citations-loading hidden-xs-down">
 											<Spinner />
 										</div>
-									) : <Citations { ...this.props } />
+									) : <Bibliography { ...this.props } />
 								}
 								{
 									!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
