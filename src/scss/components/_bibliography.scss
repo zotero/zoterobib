@@ -6,11 +6,11 @@
 	margin: $space-lg (-$grid-gutter-width / 2);
 	padding: 0;
 	list-style: none;
-	
+
 	@media (min-width: $bp-md) {
 		margin: $space-lg 0;
 	}
-	
+
 	.citation {
 		display: flex;
 		align-items: center;
@@ -29,7 +29,7 @@
 		&:focus {
 			.keyboard-user & {
 				outline-offset: -3px;
-				
+
 				& + .citation {
 					border-top-color: transparent;
 				}
@@ -46,3 +46,4 @@
 		}
 	}
 }
+
