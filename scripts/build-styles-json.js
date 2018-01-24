@@ -46,4 +46,5 @@ const defaultStyle = 'modern-language-association';
 		citationStylesCount
 	};
 	await fs.outputJson(coreStylesPath, output);
+	console.log('citation-styles-data.json has been generated');
 })();
