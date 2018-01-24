@@ -6,6 +6,7 @@
     ],
     "declaration-empty-line-before": null,
     "block-closing-brace-newline-after": null,
-    "indentation": "tab"
+    "indentation": "tab",
+    "no-descending-specificity": null
   }
 }

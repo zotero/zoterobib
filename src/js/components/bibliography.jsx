@@ -3,7 +3,6 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
-const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/toolbars');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
