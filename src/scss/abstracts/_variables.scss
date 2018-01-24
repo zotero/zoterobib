@@ -23,7 +23,8 @@ $shade-2: #ebebeb;
 $shade-3: #ddd;
 $shade-4: #ccc;
 $shade-4: #bbb;
-$shade-5: #222;
+$shade-5: #777;
+$shade-6: #222;
 
 
 //
@@ -112,6 +113,8 @@ $btn-outline-secondary-bg:          $secondary;
 $btn-outline-secondary-border:      $secondary;
 $btn-outline-secondary-hover-color: $shade-0;
 
+$btn-icon-bg: transparent;
+
 $btn-border-radius: $border-radius-sm;
 
 $btn-transition: 0.15s ease;
@@ -139,7 +142,7 @@ $input-transition: 0.15s ease;
 // Outline
 //
 
-$outline-color:  #000; // todo
+$outline-color:  $secondary;
 $outline-width:  3px;
 $outline-offset: 2px;
 

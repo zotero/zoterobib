@@ -7,7 +7,7 @@ const { Toolbar, ToolGroup } = require('zotero-web-library/lib/component/ui/tool
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
-class Citations extends React.PureComponent {
+class Bibliography extends React.PureComponent {
 	handleEditCitation(itemId) {
 		this.props.onEditorOpen(itemId);
 	}
@@ -18,35 +18,29 @@ class Citations extends React.PureComponent {
 
 	render() {
 		return (
-			<div className="citations">
+			<ul className="bibliography">
 				{
 					Object.keys(this.props.citations).map(itemId => {
 						return (
-							<div className="citation-wrap" key={ itemId }>
-								<div className="citation">
-									<div dangerouslySetInnerHTML={ { __html: this.props.citations[itemId] } } />
-								</div>
+							<li className="citation" key={ itemId }
+								onClick={ () => this.handleEditCitation(itemId) }
+								tabIndex={0}
+							>
+								<div className="csl-entry-container"
+									dangerouslySetInnerHTML={ { __html: this.props.citations[itemId] } }
+								/>
 								{
 									!this.props.isReadOnly && (
-										<Toolbar>
-											<div className="toolbar-right">
-												<ToolGroup>
-													<Button onClick={ () => this.handleEditCitation(itemId) }>
-														<Icon type={ '16/pencil' } width="16" height="16" />
-													</Button>
-													<Button onClick={ () => this.handleDeleteCitation(itemId) }>
-														<Icon type={ '16/trash' } width="16" height="16" />
-													</Button>
-												</ToolGroup>
-											</div>
-										</Toolbar>
+										<Button onClick={ () => this.handleDeleteCitation(itemId) }>
+											<Icon type={ '16/trash' } width="16" height="16" />
+											</Button>
 									)
 								}
-							</div>
+							</li>
 						);
 					})
 				}
-			</div>
+			</ul>
 		);
 	}
 
@@ -64,4 +58,4 @@ class Citations extends React.PureComponent {
 }
 
 
-module.exports = withRouter(Citations);
+module.exports = withRouter(Bibliography);

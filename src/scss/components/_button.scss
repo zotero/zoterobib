@@ -21,6 +21,10 @@
 	&:not(:disabled):not(.disabled) {
 		cursor: pointer;
 	}
+
+	&:focus {
+		outline: none;
+	}
 }
 
 .btn-primary {
@@ -40,10 +44,31 @@
 	}
 
 	&:focus {
-		outline: none;
-
 		.keyboard-user & {
 			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
 		}
+	}
+}
+
+.btn-icon {
+	padding: $space-min;
+	line-height: 1;
+	background-color: $btn-icon-bg;
+
+	&:focus {
+		.keyboard-user & {
+			border-color: $btn-outline-secondary-border;
+			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
+		}
+	}
+
+	&:active {
+		.icon {
+			color: $shade-6;
+		}
+	}
+
+	.icon {
+		display: block;
 	}
 }

@@ -2,6 +2,10 @@
 // Icon
 //
 
+.icon {
+	color: $shade-5;
+}
+
 .icon-spin {
 	@keyframes spin {
 		0% {
