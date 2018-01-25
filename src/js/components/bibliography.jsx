@@ -3,10 +3,17 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
+const KeyHandler = require('react-key-handler').default;
+const { KEYDOWN } = require('react-key-handler');
+
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class Bibliography extends React.PureComponent {
+	state = {
+		focusedItem: null
+	}
+
 	handleEditCitation(itemId) {
 		this.props.onEditorOpen(itemId);
 	}
@@ -15,13 +22,42 @@ class Bibliography extends React.PureComponent {
 		this.props.onDeleteEntry(itemId);
 	}
 
+	handleFocus(itemId) {
+		this.setState({
+			focusedItem: itemId
+		});
+	}
+
+	handleKeyboard(ev) {
+		if(this.state.focusedItem) {
+			this.props.onEditorOpen(this.state.focusedItem);
+			ev.preventDefault();
+		}
+	}
+
 	render() {
-		return (
-			<ul className="bibliography">
+		let keyHandlers = [
+			<KeyHandler
+				key="key-handler-enter"
+				keyEventName={ KEYDOWN }
+				keyValue="Enter"
+				onKeyHandle={ this.handleKeyboard.bind(this) }
+			/>,
+			<KeyHandler
+				key="key-handler-space"
+				keyEventName={ KEYDOWN }
+				keyValue=" "
+				onKeyHandle={ this.handleKeyboard.bind(this) }
+			/>,
+		];
+		return [
+			...keyHandlers,
+			<ul key="bibliography" className="bibliography">
 				{
 					Object.keys(this.props.citations).map(itemId => {
 						return (
 							<li className="citation" key={ itemId }
+								onFocus={ this.handleFocus.bind(this, itemId) }
 								onClick={ () => this.handleEditCitation(itemId) }
 								tabIndex={0}
 							>
@@ -40,7 +76,7 @@ class Bibliography extends React.PureComponent {
 					})
 				}
 			</ul>
-		);
+		];
 	}
 
 	static defaultProps = {

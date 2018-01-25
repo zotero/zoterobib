@@ -26,7 +26,7 @@ class StyleInstaller extends React.Component {
 	}
 
 	componentDidUpdate(props, state) {
-		if(this.state.selectedIndex !== state.selectedIndex 
+		if(this.state.selectedIndex !== state.selectedIndex
 			&& this.state.selectedIndex !== null
 			&& this.state.items[this.state.selectedIndex]) {
 			const styleName = this.state.items[this.state.selectedIndex].name;
@@ -117,7 +117,7 @@ class StyleInstaller extends React.Component {
 	}
 
 	render() {
-		return [
+		let keyHandlers = [
 			<KeyHandler
 				key="key-handler-escape"
 				keyEventName={ KEYDOWN }
@@ -142,7 +142,10 @@ class StyleInstaller extends React.Component {
 				keyValue="Enter"
 				onKeyHandle={ this.handleEnterKey.bind(this) }
 			/>,
-			<ReactModal 
+		];
+		return [
+			...(this.props.isInstallingStyle ? keyHandlers : []),
+			<ReactModal
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
@@ -172,7 +175,7 @@ class StyleInstaller extends React.Component {
 											const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
 											const isSelected = style.name === this.props.citationStyle;
 											return (
-												<li 
+												<li
 													className={ cx('item', {
 														selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
 													}) }
