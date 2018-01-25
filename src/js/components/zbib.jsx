@@ -82,7 +82,7 @@ class ZBib extends React.PureComponent {
 							</div>
 						</section>
 
-						<section className="section section-bibliography">
+						<section className="section section-md section-bibliography">
 							<div className="container">
 								<h2>Bibliography</h2>
 								<StyleSelector { ...this.props } />
