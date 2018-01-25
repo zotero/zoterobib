@@ -10,12 +10,13 @@
     "port": "8001",
     "translation_server": "http://localhost:1969"
   },
+  "browserslist": "last 2 versions",
   "scripts": {
     "serve": "node scripts/server.js -p $npm_package_config_port -t $npm_package_config_translation_server",
     "prebuild": "npm run clean -s && mkdir -p build/static/",
     "clean": "rimraf build",
     "clean:data": "rimraf data",
-    "build": "npm run build:styles-json && run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:static -s'",
+    "build": "npm run build:styles-json && run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:static -s' && npm run build:postprocess",
     "browserify": "NODE_ENV=browser browserify -s ZoteroBibComponent --extension=.jsx src/js/main.js -t [babelify] -o build/static/bib-component.js",
     "minify": "minify build/static/bib-component.js --mangle --simplify --builtIns --mergeVars --removeConsole --removeDebugger -o build/static/bib-component.js",
     "build:js": "run-s browserify minify",
@@ -23,6 +24,7 @@
     "build:html": "node scripts/build-html.js",
     "build:styles-json": "node scripts/build-styles-json.js",
     "build:static": "mkdir -p build/static && rsync -vazL src/static/* build/static/",
+    "build:postprocess": "postcss build/static/bib.css --use autoprefixer --no-map -r",
     "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:static -s'",
     "devel:js": "watchify -s ZoteroBibComponent --extension=.jsx src/js/main.js -d -v -t [babelify] -p mapstraction -o build/static/bib-component.js",
     "devel:scss": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run devbuild:scss'",
@@ -62,6 +64,7 @@
     "zotero-web-library": "^0.9.30-alpha"
   },
   "devDependencies": {
+    "autoprefixer": "^7.2.5",
     "babel-eslint": "^8.2.1",
     "babel-minify": "^0.2.0",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -87,6 +90,7 @@
     "node-sass": "^4.7.2",
     "nodemon": "^1.12.1",
     "npm-run-all": "^4.1.2",
+    "postcss-cli": "^4.1.1",
     "rimraf": "^2.6.2",
     "serve-static": "^1.13.1",
     "stylelint": "^8.4.0",
