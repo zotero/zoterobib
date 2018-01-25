@@ -29,6 +29,7 @@ class DeleteAllButton extends React.Component {
 		return [
 			<Button
 				key="delete-all-button"
+				className="btn-sm btn-outline-primary"
 				disabled={ Object.keys(this.props.citations).length === 0 }
 				onClick={ this.handleDeleteAll.bind(this) }
 			>

@@ -27,16 +27,31 @@
 	}
 }
 
-.btn-primary {
-	background-color: $btn-primary-bg;
-	border-color: $btn-primary-border;
+.btn-sm {
+	padding: $btn-padding-y-sm $btn-padding-x-sm;
+}
+
+.btn-outline-primary {
+	color: $btn-outline-primary-color;
+	background-color: transparent;
+	border-color: $btn-outline-primary-border;
+
+	&:hover {
+		color: $btn-outline-primary-hover-color;
+		background-color: $btn-outline-primary-bg;
+	}
+
+	&:focus {
+		.keyboard-user & {
+			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-primary-border;
+		}
+	}
 }
 
 .btn-outline-secondary {
 	color: $btn-outline-secondary-color;
 	background-color: transparent;
 	border-color: $btn-outline-secondary-border;
-	padding: $btn-padding-y-sm $btn-padding-x-sm;
 
 	&:hover {
 		color: $btn-outline-secondary-hover-color;

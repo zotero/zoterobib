@@ -6,6 +6,7 @@
 	margin: $space-lg (-$grid-gutter-width / 2);
 	padding: 0;
 	list-style: none;
+	text-align: left;
 
 	@media (min-width: $bp-md) {
 		margin: $space-lg 0;
@@ -46,4 +47,3 @@
 		}
 	}
 }
-
