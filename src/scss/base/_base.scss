@@ -2,6 +2,10 @@
 // Base
 //
 
+* {
+	box-sizing: border-box;
+}
+
 body {
 	color: $shade-6;
 	background-color: $shade-0;

@@ -39,6 +39,8 @@ $line-height-base: 1.5;
 
 $headings-font-weight: 300;
 
+$link-color: $secondary;
+
 $link-transition: 0.15s ease;
 
 
@@ -90,7 +92,7 @@ $section-padding-md: $space-xxxl + $space-xs;
 //
 
 $input-btn-focus-width: 2px;
-
+$input-btn-border-radius: $border-radius-sm;
 
 //
 // Buttons
@@ -134,14 +136,24 @@ $input-line-height: $line-height-base;
 $input-padding-x-lg: $space-md;
 $input-padding-y-lg: 11px;
 
+$input-border-radius: $input-btn-border-radius;
 $input-border-radius-lg: $border-radius-sm;
 
+$input-border-color: $shade-3;
 $placeholder-color: $shade-4;
 
 $input-border-width: $border-width;
 
 $input-transition: 0.15s ease;
 
+
+//
+// Select
+//
+
+$select-menu-bg:            $shade-0;
+$select-menu-border-radius: $border-radius-sm;
+$select-option-hover-bg:    $shade-1;
 
 //
 // Outline
@@ -157,3 +169,11 @@ $outline-offset: 2px;
 //
 
 $spinner-color: $secondary;
+
+//
+// Style selector
+//
+
+$style-selector-bg: $secondary;
+$style-selector-hover-bg: lighten($secondary, 4%);
+$style-selector-color: $shade-0;
