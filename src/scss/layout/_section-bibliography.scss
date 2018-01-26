@@ -4,4 +4,39 @@
 
 .section-bibliography {
 	text-align: center;
+
+	.style-selector {
+		text-align: left;
+
+		.Select {
+			.Select-control {
+				border-color: transparent;
+				background: $style-selector-bg;
+				color: $style-selector-color;
+				padding: $input-padding-y-lg $input-padding-x-lg;
+				border-radius: $input-border-radius-lg;
+				transition: background-color $input-transition, border $input-transition, box-shadow $input-transition;
+
+				&:hover {
+					background: $style-selector-hover-bg;
+				}
+			}
+
+			&.is-focused {
+				.Select-control {
+					&:hover {
+						box-shadow: 0 0 0 2px $style-selector-hover-bg;
+					}
+				}
+			}
+
+			.Select-menu-outer {
+				padding: $space-xs 0;
+			}
+
+			.Select-option {
+				padding: $space-min $input-padding-x-lg;
+			}
+		}
+	}
 }

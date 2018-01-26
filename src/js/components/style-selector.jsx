@@ -13,7 +13,7 @@ class StyleSelector extends React.Component {
 			<div className={ cx('style-selector', this.props.className ) }>
 				<Select
 					clearable={ false }
-					className="zotero-bib-citation-style-selector"
+					searchable={ false}
 					value={ this.props.citationStyle }
 					options={ [
 						...this.props.citationStyles.map(cs => ({
@@ -22,7 +22,7 @@ class StyleSelector extends React.Component {
 						})),
 						{
 							value: 'install',
-							label: `${Math.floor(citationStylesCount / 100) * 100}+ other styles available…`
+							label: `${Math.floor(citationStylesCount / 100) * 100}+ other styles available …`
 						}
 					] }
 					onChange={ ev => this.props.onCitationStyleChanged(ev.value) }

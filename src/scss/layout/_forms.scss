@@ -5,12 +5,13 @@
 .form-control {
 	display: block;
 	width: 100%;
-	border: $input-border-width solid $shade-3;
+	border: $input-border-width solid $input-border-color;
 	line-height: $input-line-height;
 	font-size: inherit;
 	font-family: inherit;
 	color: inherit;
 	// todo: padding
+	border-radius: $input-border-radius;
 	transition: border $input-transition, box-shadow $input-transition;
 
 	&:focus {

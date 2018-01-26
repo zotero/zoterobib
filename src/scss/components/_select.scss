@@ -1,0 +1,65 @@
+//
+// Select
+//
+
+.Select {
+	position: relative;
+
+	.Select-control {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		border: $input-border-width solid $shade-3;
+		border-radius: $input-border-radius;
+		transition: border $input-transition, box-shadow $input-transition;
+	}
+
+	.Select-multi-value-wrapper {
+		flex: 1 1 0;
+	}
+
+	.Select-input {
+		position: absolute;
+	}
+
+	.Select-arrow-zone {
+		flex: 0 0 auto;
+	}
+
+	.Select-arrow {
+		display: block;
+		width: $space-md;
+		height: $space-md;
+		background: image-url("bg-icons/16/chevron-11-down.svg");
+	}
+
+	&.is-focused {
+		.Select-control {
+			border: $input-border-width solid $secondary;
+			box-shadow: 0 0 0 2px $secondary;
+			outline: none;
+		}
+	}
+
+	.Select-menu-outer {
+		position: absolute;
+		left: 0;
+		top: calc(100% + #{$space-min});
+		width: 100%;
+		background-color: $select-menu-bg;
+		border: 1px solid $input-border-color;
+		border-radius: $select-menu-border-radius;
+		// todo: padding
+	}
+
+	.Select-option {
+		&:last-child {
+			color: $link-color;
+		}
+
+		&:hover {
+			background: $select-option-hover-bg;
+			cursor: pointer;
+		}
+	}
+}
