@@ -120,7 +120,8 @@ $btn-outline-secondary-bg:          $secondary;
 $btn-outline-secondary-border:      $secondary;
 $btn-outline-secondary-hover-color: $shade-0;
 
-$btn-icon-bg: transparent;
+$btn-icon-bg:      transparent;
+$btn-icon-padding: 7px; // btn-sm size
 
 $btn-border-radius: $border-radius-sm;
 
