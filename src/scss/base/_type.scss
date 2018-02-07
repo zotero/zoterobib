@@ -11,4 +11,22 @@ body {
 h1,
 h2 {
 	font-weight: $headings-font-weight;
+	line-height: $headings-line-height;
+}
+
+h1,
+.h1 {
+	font-size: $h1-font-size;
+}
+
+h2,
+.h2 {
+	margin-top: 0;
+	font-size: $h2-font-size-mobile;
+	margin-bottom: ($space-xl - 7px);
+
+	@media (min-width: $bp-md) {
+		font-size: $h2-font-size;
+		margin-bottom: ($space-xxl - 9px);
+	}
 }

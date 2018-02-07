@@ -4,6 +4,11 @@
 
 .section-bibliography {
 	text-align: center;
+	padding-top: $section-padding-mobile - 9px;
+
+	@media (min-width: $bp-md) {
+		padding-top: $section-padding - 11px;
+	}
 
 	.style-selector {
 		text-align: left;

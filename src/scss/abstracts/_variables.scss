@@ -37,6 +37,13 @@ $font-family-base: $font-family-sans-serif;
 $font-size-base: 16px;
 $line-height-base: 1.5;
 
+$h1-font-size: 60px;
+$h2-font-size: 40px;
+
+$h2-font-size-mobile: 32px;
+
+$headings-line-height: 1.1;
+
 $headings-font-weight: 300;
 
 $link-color: $secondary;
@@ -84,8 +91,8 @@ $border-width: 1px;
 // Sections
 //
 
-$section-padding-md: $space-xxxl + $space-xs;
-
+$section-padding:        $space-xxxl + $space-xs;
+$section-padding-mobile: $space-xxl;
 
 //
 // Buttons & forms

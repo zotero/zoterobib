@@ -3,14 +3,10 @@
 //
 
 .section {
-	padding: 72px 0;
+	padding: $section-padding-mobile 0;
 	border-top: 1px solid $shade-2;
-}
-
-.section-md {
-	padding: $space-xxl 0;
 
 	@media (min-width: $bp-md) {
-		padding: $section-padding-md 0;
+		padding: $section-padding 0;
 	}
 }
