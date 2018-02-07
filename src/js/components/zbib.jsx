@@ -89,25 +89,23 @@ class ZBib extends React.PureComponent {
 
 						<section className="section section-md section-bibliography">
 							<div className="container">
-								<Editable
-									name="title"
-									processing={ false }
-									value={ this.props.title || 'Untitled' }
-									editOnClick = { true }
-									onSave={ newTitle => this.props.onTitleChanged(newTitle) }
-								>
-									{
-										this.props.isReadOnly ? (
-											<h1>
-												{ this.props.title || 'Untitled' }
-											</h1>
-										) : (
-											<h2>
-												{ this.props.title || 'Untitled' }
-											</h2>
-										)
-									}
-								</Editable>
+								{
+									this.props.isReadOnly ? (
+										<h1>
+											{ this.props.title || 'Untitled' }
+										</h1>
+									) : (
+										<h2>
+											<Editable
+												name="title"
+												processing={ false }
+												value={ this.props.title || 'Untitled' }
+												editOnClick = { true }
+												onSave={ newTitle => this.props.onTitleChanged(newTitle) }
+											/>
+										</h2>
+									)
+								}
 								<StyleSelector { ...this.props } />
 								{
 									this.props.isLoadingCitations ? (
