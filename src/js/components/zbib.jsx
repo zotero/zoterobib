@@ -18,6 +18,7 @@ const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const StyleInstaller = require('./style-installer');
 const StyleSelector = require('./style-selector');
 const UndoMessage = require('./undo-message');
+const Editable = require('zotero-web-library/lib/component/editable');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
 
 class ZBib extends React.PureComponent {
@@ -85,6 +86,13 @@ class ZBib extends React.PureComponent {
 						<section className="section section-md section-bibliography">
 							<div className="container">
 								<h2>Bibliography</h2>
+								<Editable
+									name="title"
+									processing={ false }
+									value={ this.props.title || 'Untitled' }
+									editOnClick = { true }
+									onSave={ newTitle => this.props.onTitleChanged(newTitle) }
+								/>
 								<StyleSelector { ...this.props } />
 								{
 									this.props.isLoadingCitations ? (
@@ -179,9 +187,11 @@ class ZBib extends React.PureComponent {
 		onSave: PropTypes.func.isRequired,
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
+		onTitleChanged: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
 		onUndoDelete: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
+		title: PropTypes.string,
 		url: PropTypes.string,
 	}
 }

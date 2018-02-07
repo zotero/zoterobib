@@ -194,7 +194,6 @@ class Editor extends React.Component {
 		onError: PropTypes.func.isRequired,
 		onItemCreated: PropTypes.func.isRequired,
 		onItemUpdate: PropTypes.func.isRequired,
-		title: PropTypes.object,
 	}
 }
 

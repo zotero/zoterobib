@@ -35,6 +35,7 @@ class Container extends React.Component {
 		multipleChoiceItems: [],
 		permalink: null,
 		stylesData: null,
+		title: localStorage.getItem('zotero-bib-title') || null,
 		url: '',
 	}
 
@@ -90,6 +91,11 @@ class Container extends React.Component {
 				});
 			}
 		}
+
+		if(!this.state.isReadOnly && this.state.title !== state.title) {
+			localStorage.setItem('zotero-bib-title', this.state.title);
+		}
+
 		if(!this.state.isReadOnly &&
 			this.state.citationStyle !== state.citationStyle &&
 			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
@@ -149,7 +155,9 @@ class Container extends React.Component {
 	async handleIdChanged(props) {
 		let isReadOnly = !!props.match.params.id;
 		let citationStyle = this.state.citationStyle;
+		let title = this.state.title;
 		let errorMessage = null;
+
 
 		this.setState({
 			isReadOnly: undefined,
@@ -162,6 +170,7 @@ class Container extends React.Component {
 				const remoteData = await fetchFromPermalink(`${props.config.storeUrl}/${id}`);
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
+					title = 'title' in remoteData && remoteData.title || null;
 					var citationStyleMeta = this.state.citationStyles.find(cs => cs.name === citationStyle);
 					if(!citationStyleMeta) {
 						const stylesData = await retrieveStylesData(this.state.config.stylesUrl, this.props.config.stylesCacheTime);
@@ -191,11 +200,11 @@ class Container extends React.Component {
 			isReadOnly
 		);
 
-
 		this.setState({
 			isReadOnly,
 			citationStyle,
 			errorMessage,
+			title,
 			items: this.items,
 			isLoading: false,
 		});
@@ -208,6 +217,7 @@ class Container extends React.Component {
 		this.setState({ isSaving: true });
 		try {
 			const key = await saveToPermalink(this.state.config.storeUrl, {
+				title: this.state.title,
 				citationStyle: this.state.citationStyle,
 				items: this.bib.itemsRaw
 			});
@@ -477,6 +487,13 @@ class Container extends React.Component {
 		});
 	}
 
+	handleTitleChange(title) {
+		this.setState({
+			permalink: null,
+			title
+		});
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
@@ -601,6 +618,7 @@ class Container extends React.Component {
 			onStyleInstallerSelect = { this.handleStyleInstallerSelect.bind(this) }
 			onStyleSwitchCancel = { this.handleStyleSwitchCancel.bind(this) }
 			onStyleSwitchConfirm = { this.handleStyleSwitchConfirm.bind(this) }
+			onTitleChanged = { this.handleTitleChange.bind(this) }
 			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
 			{ ...this.state }
