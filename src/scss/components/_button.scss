@@ -16,6 +16,7 @@
 	transition:
 		color $btn-transition,
 		background-color $btn-transition,
+		border-color $btn-transition,
 		box-shadow $btn-transition;
 
 	&:not(:disabled):not(.disabled) {
@@ -46,6 +47,12 @@
 			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-primary-border;
 		}
 	}
+
+	&:active {
+		color: $btn-outline-primary-hover-color;
+		background-color: darken($btn-outline-primary-bg, 8%);
+		border-color: darken($btn-outline-primary-border, 8%);
+	}
 }
 
 .btn-outline-secondary {
@@ -62,6 +69,12 @@
 		.keyboard-user & {
 			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
 		}
+	}
+
+	&:active {
+		color: $btn-outline-secondary-hover-color;
+		background-color: darken($btn-outline-secondary-bg, 8%);
+		border-color: darken($btn-outline-secondary-border, 8%);
 	}
 }
 
