@@ -4,10 +4,46 @@
 
 .section-bibliography {
 	text-align: center;
-	padding-top: $section-padding-mobile - 9px;
+	padding-top: $section-padding-mobile - 16px;
 
 	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 11px;
+		padding-top: $section-padding - 21px;
+	}
+
+	h2 {
+		transition: background-color $input-transition;
+		border-radius: $border-radius-sm;
+		margin-bottom: $space-xl - 13px;
+
+		@media (min-width: $bp-md) {
+			margin-bottom: $space-xxl - 19px;
+		}
+
+		&:hover {
+			background-color: $shade-1;
+			transition: background-color 0.15s 0.15s ease;
+		}
+
+		.editable-value {
+			line-height: $headings-line-height;
+			padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2) 0;
+
+			@media (min-width: $bp-md) {
+				padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2) 0;
+			}
+		}
+
+		.editable-control {
+			border: 1px solid $input-focus-color;
+			box-shadow: 0 0 0 2px $secondary;
+			line-height: inherit;
+			margin: 0;
+			padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
+
+			@media (min-width: $bp-md) {
+				padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
+			}
+		}
 	}
 
 	.style-selector {
@@ -20,7 +56,10 @@
 				color: $style-selector-color;
 				padding: $input-padding-y-lg $input-padding-x-lg;
 				border-radius: $input-border-radius-lg;
-				transition: background-color $input-transition, border $input-transition, box-shadow $input-transition;
+				transition:
+					background-color $input-transition,
+					border $input-transition,
+					box-shadow $input-transition;
 
 				&:hover {
 					background: $style-selector-hover-bg;
