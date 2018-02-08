@@ -93,7 +93,11 @@ class Container extends React.Component {
 		}
 
 		if(!this.state.isReadOnly && this.state.title !== state.title) {
-			localStorage.setItem('zotero-bib-title', this.state.title);
+			if(this.state.title) {
+				localStorage.setItem('zotero-bib-title', this.state.title);
+			} else {
+				localStorage.removeItem('zotero-bib-title');
+			}
 		}
 
 		if(!this.state.isReadOnly &&
@@ -230,9 +234,13 @@ class Container extends React.Component {
 	}
 
 	handleDeleteCitations() {
-		this.setState({ permalink: null });
 		this.bib.clearItems();
-		this.setState({ citations: this.citations, items: this.items });
+		this.setState({
+			citations: this.citations,
+			items: this.items,
+			permalink: null,
+			title: null
+		});
 	}
 
 	handleItemCreated(item) {

@@ -30,7 +30,6 @@ class DeleteAllButton extends React.Component {
 			<Button
 				key="delete-all-button"
 				className="btn-sm btn-outline-primary"
-				disabled={ Object.keys(this.props.citations).length === 0 }
 				onClick={ this.handleDeleteAll.bind(this) }
 			>
 				Delete All
@@ -40,11 +39,17 @@ class DeleteAllButton extends React.Component {
 				isOpen={ this.state.isConfirmingDeleteAll }
 				onConfirm={ this.handleConfirmDeleteAll.bind(this) }
 				onCancel={ this.handleCancelDeleteAll.bind(this) }
-				title="Delete all entries?"
+				title="Clear Bibliography?"
 				confirmLabel="Delete"
 				>
 					<p>
-						{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be removed.
+						{ entriesCount > 0 && (
+							<span>
+								{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be removed.
+							</span>
+						)
+						}
+						Bibliography title will be reset.
 					</p>
 			</Confirmation>
 		];
