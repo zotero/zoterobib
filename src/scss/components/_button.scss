@@ -79,7 +79,12 @@
 }
 
 .btn-icon {
-	padding: $btn-icon-padding;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: $btn-icon-size;
+	height: $btn-icon-size;
+	padding: 0;
 	line-height: 1;
 	background-color: $btn-icon-bg;
 
@@ -94,9 +99,5 @@
 		.icon {
 			color: $shade-6;
 		}
-	}
-
-	.icon {
-		display: block;
 	}
 }

@@ -20,6 +20,8 @@ const StyleSelector = require('./style-selector');
 const UndoMessage = require('./undo-message');
 const Editable = require('zotero-web-library/lib/component/editable');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Button = require('zotero-web-library/lib/component/ui/button');
 
 class ZBib extends React.PureComponent {
 	render() {
@@ -103,6 +105,9 @@ class ZBib extends React.PureComponent {
 												editOnClick = { true }
 												onSave={ newTitle => this.props.onTitleChanged(newTitle) }
 											/>
+											<Button>
+												<Icon type={ '28/pencil' } width="28" height="28" />
+											</Button>
 										</h2>
 									)
 								}
