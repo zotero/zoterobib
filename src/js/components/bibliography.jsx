@@ -8,6 +8,8 @@ const { KEYDOWN } = require('react-key-handler');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
+const formatBib = require('../cite');
+const { parseTagAndAttrsFromNode } =require('../utils') ;
 
 class Bibliography extends React.PureComponent {
 	state = {
@@ -36,6 +38,15 @@ class Bibliography extends React.PureComponent {
 	}
 
 	render() {
+		if(this.props.bibliography.length === 0) {
+			return null;
+		}
+
+		let html = formatBib(this.props.bibliography);
+		let div = document.createElement('div');
+		div.innerHTML = html;
+		let { Tag, attrs } = parseTagAndAttrsFromNode(div.firstChild);
+
 		let keyHandlers = [
 			<KeyHandler
 				key="key-handler-enter"
@@ -52,39 +63,38 @@ class Bibliography extends React.PureComponent {
 		];
 		return [
 			...keyHandlers,
-			<ul key="bibliography" className="bibliography">
+			<Tag key="bibliography" { ...attrs }>
 				{
-					Object.keys(this.props.citations).map(itemId => {
+					Array.from(div.firstChild.children).map((child, i) => {
+						let itemId = this.props.bibliography[0]['entry_ids'][i];
+						let { Tag, attrs } = parseTagAndAttrsFromNode(child);
 						return (
-							<li className="citation" key={ itemId }
-								onFocus={ this.handleFocus.bind(this, itemId) }
-								onClick={ () => this.handleEditCitation(itemId) }
-								tabIndex={0}
-							>
-								<div className="csl-entry-container"
-									dangerouslySetInnerHTML={ { __html: this.props.citations[itemId] } }
+							<div className="csl-entry-container" key={ itemId }>
+								<Tag
+									dangerouslySetInnerHTML={ { __html: child.innerHTML } }
+									{ ...attrs }
 								/>
 								{
 									!this.props.isReadOnly && (
 										<Button onClick={ () => this.handleDeleteCitation(itemId) }>
 											<Icon type={ '16/remove' } width="16" height="16" />
-											</Button>
+										</Button>
 									)
 								}
-							</li>
+							</div>
 						);
 					})
 				}
-			</ul>
+			</Tag>
 		];
 	}
 
 	static defaultProps = {
-		citations: {}
+		bibliography: []
 	}
 
 	static propTypes = {
-		citations: PropTypes.object,
+		bibliography: PropTypes.array,
 		isReadOnly: PropTypes.bool,
 		match: PropTypes.object,
 		onDeleteEntry: PropTypes.func.isRequired,

@@ -280,6 +280,23 @@ const processSentenceCaseAPAItems = items => {
 	return items;
 };
 
+const parseTagAndAttrsFromNode = node => {
+	let Tag = node.tagName.toLowerCase();
+	let attrs = {
+		className: node.getAttribute('class') || '',
+		style: (node.getAttribute('style') || '')
+			.split(';')
+			.map(x => x.split(':')
+				.map(y => y.trim())
+			).reduce((aggr, val) => {
+				aggr[val[0].replace(/-([a-z])/g, g => g[1].toUpperCase())] = val[1];
+				return aggr;
+			}, {})
+	};
+
+	return { Tag, attrs };
+};
+
 module.exports = {
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
@@ -287,6 +304,7 @@ module.exports = {
 	getCSL,
 	getItemTypeMeta,
 	isIdentifier,
+	parseTagAndAttrsFromNode,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
 	retrieveLocaleSync,
