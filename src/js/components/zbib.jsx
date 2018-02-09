@@ -24,6 +24,10 @@ const Icon = require('zotero-web-library/lib/component/ui/icon');
 const Button = require('zotero-web-library/lib/component/ui/button');
 
 class ZBib extends React.PureComponent {
+	handleEditInput() {
+		this.editable.edit();
+	}
+
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -99,13 +103,14 @@ class ZBib extends React.PureComponent {
 									) : (
 										<h2>
 											<Editable
+												ref={ editable => this.editable = editable }
 												name="title"
 												processing={ false }
 												value={ this.props.title || 'Untitled' }
 												editOnClick = { true }
 												onSave={ newTitle => this.props.onTitleChanged(newTitle) }
 											/>
-											<Button>
+											<Button onClick={ this.handleEditInput.bind(this) }>
 												<Icon type={ '28/pencil' } width="28" height="28" />
 											</Button>
 										</h2>
