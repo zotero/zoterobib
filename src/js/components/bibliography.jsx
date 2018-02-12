@@ -63,29 +63,33 @@ class Bibliography extends React.PureComponent {
 		];
 		return [
 			...keyHandlers,
-			<Tag key="bibliography" { ...attrs }>
-				{
-					Array.from(div.firstChild.children).map((child, i) => {
-						let itemId = this.props.bibliography[0]['entry_ids'][i];
-						let { Tag, attrs } = parseTagAndAttrsFromNode(child);
-						return (
-							<div className="csl-entry-container" key={ itemId }>
-								<Tag
-									dangerouslySetInnerHTML={ { __html: child.innerHTML } }
-									{ ...attrs }
-								/>
-								{
-									!this.props.isReadOnly && (
-										<Button onClick={ () => this.handleDeleteCitation(itemId) }>
-											<Icon type={ '16/remove' } width="16" height="16" />
-										</Button>
-									)
-								}
-							</div>
-						);
-					})
-				}
-			</Tag>
+			<div className="bibliography" key="bibliography">
+				<Tag { ...attrs }>
+					{
+						Array.from(div.firstChild.children).map((child, i) => {
+							let itemId = this.props.bibliography[0]['entry_ids'][i];
+							let { Tag, attrs } = parseTagAndAttrsFromNode(child);
+							return (
+								<div className="citation" key={ itemId }>
+									<div className="csl-entry-container">
+										<Tag
+											dangerouslySetInnerHTML={ { __html: child.innerHTML } }
+											{ ...attrs }
+										/>
+									</div>
+									{
+										!this.props.isReadOnly && (
+											<Button onClick={ () => this.handleDeleteCitation(itemId) }>
+												<Icon type={ '16/remove' } width="16" height="16" />
+											</Button>
+										)
+									}
+								</div>
+							);
+						})
+					}
+				</Tag>
+			</div>
 		];
 	}
 
