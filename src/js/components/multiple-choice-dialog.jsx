@@ -12,19 +12,19 @@ class MultipleChoiceDialog extends React.Component {
 	render() {
 		return [
 			<KeyHandler
-				key="key-handler" 
+				key="key-handler"
 				keyEventName={ KEYDOWN }
 				keyValue="Escape"
 				onKeyHandle={ () => this.props.onMultipleChoiceCancel() }
 			/>,
-			<ReactModal 
+			<ReactModal
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal"
-				overlayClassName="overlay"
+				overlayClassName="modal-backdrop"
 			>
-				
+
 				<h1 className="title">
 					Please select a citation from the list
 				</h1>
@@ -34,8 +34,8 @@ class MultipleChoiceDialog extends React.Component {
 							this.props.multipleChoiceItems.map(
 								item => {
 									return (
-										<li 
-											className="item" 
+										<li
+											className="item"
 											key={ item.key }
 											onClick={ () => this.props.onMultipleChoiceSelect([item]) }
 										>
@@ -59,7 +59,7 @@ class MultipleChoiceDialog extends React.Component {
 	static defaultProps = {
 		multipleChoiceItems: []
 	}
-	
+
 	static propTypes = {
 		isPickingItem: PropTypes.bool,
 		multipleChoiceItems: PropTypes.array,

@@ -9,9 +9,17 @@ body {
 }
 
 h1,
-h2 {
+h2,
+h3,
+h4 {
 	font-weight: $headings-font-weight;
 	line-height: $headings-line-height;
+}
+
+h1,
+.h1,
+h2,
+.h2 {
 	letter-spacing: -0.025em;
 }
 
@@ -30,4 +38,11 @@ h2,
 		font-size: $h2-font-size;
 		margin-bottom: ($space-xxl - 9px);
 	}
+}
+
+h4,
+.h4 {
+	font-size: $h4-font-size;
+	margin: 0;
+	// todo: letter-spacing
 }

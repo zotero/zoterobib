@@ -80,7 +80,7 @@ class Bibliography extends React.PureComponent {
 									{
 										!this.props.isReadOnly && (
 											<Button onClick={ () => this.handleDeleteCitation(itemId) }>
-												<Icon type={ '16/remove' } width="16" height="16" />
+												<Icon type={ '16/remove-sm' } width="16" height="16" />
 											</Button>
 										)
 									}
