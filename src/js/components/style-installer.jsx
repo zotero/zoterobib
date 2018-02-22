@@ -150,7 +150,7 @@ class StyleInstaller extends React.Component {
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
 				className="style-installer modal"
-				overlayClassName="overlay"
+				overlayClassName="modal-backdrop"
 			>
 				<h1 className="title">
 					Install Citation Styles

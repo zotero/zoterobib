@@ -11,8 +11,10 @@
 // Colors
 //
 
-$red: #e52e3d;
-$blue: #2970ff;
+$red:          #e52e3d;
+$blue:         #2970ff;
+$blue-dark:    #333c66;
+$blue-darkest: #292b33;
 
 $primary: $red;
 $secondary: $blue;
@@ -39,6 +41,8 @@ $line-height-base: 1.5;
 
 $h1-font-size: 60px;
 $h2-font-size: 40px;
+$h3-font-size: 32px;
+$h4-font-size: 24px;
 
 $h2-font-size-mobile: 32px;
 
@@ -73,6 +77,7 @@ $space-max:  96px;
 $grid-gutter-width: $space-xl;
 $container-width:   768px + $grid-gutter-width;
 
+$bp-sm: 568px;
 $bp-md: 768px;
 
 
@@ -188,3 +193,14 @@ $spinner-color: $secondary;
 $style-selector-bg: $secondary;
 $style-selector-hover-bg: lighten($secondary, 4%);
 $style-selector-color: $shade-0;
+
+
+//
+// React-modal
+//
+
+$modal-backdrop-bg: rgba($blue-darkest, 0.6);
+$modal-header-padding: $space-xl;
+$modal-inner-padding: $space-xl;
+$modal-header-color: $shade-0;
+$modal-header-bg: $blue-dark;

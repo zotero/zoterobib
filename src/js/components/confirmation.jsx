@@ -21,12 +21,12 @@ class Confirmation extends React.Component {
 				keyValue="Escape"
 				onKeyHandle={ () => this.props.onCancel() }
 			/>,
-			<ReactModal 
+			<ReactModal
 				key="react-modal"
 				isOpen={ this.props.isOpen }
 				contentLabel={ this.props.title }
 				className="modal"
-				overlayClassName="overlay"
+				overlayClassName="modal-backdrop"
 			>
 				<h1 className="title">
 					{ this.props.title }
@@ -36,7 +36,7 @@ class Confirmation extends React.Component {
 					<Button onClick={ () => this.props.onCancel() }>
 						{ this.props.cancelLabel }
 					</Button>
-					<Button 
+					<Button
 						className="btn-primary"
 						onClick={ () => this.props.onConfirm() }>
 						{ this.props.confirmLabel }
@@ -58,7 +58,7 @@ class Confirmation extends React.Component {
 		onConfirm: PropTypes.func.isRequired,
 		title: PropTypes.string,
 	}
-	
+
 	static defaultProps = {
 		cancelLabel: 'Cancel',
 		confirmLabel: 'Confirm',

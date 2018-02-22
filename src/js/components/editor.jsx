@@ -5,6 +5,7 @@ const PropTypes = require('prop-types');
 const cx = require('classnames');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
 const ReactModal = require('react-modal');
 const { baseMappings } = require('zotero-web-library/lib/constants/item');
@@ -169,16 +170,24 @@ class Editor extends React.Component {
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
 				className="editor-container modal"
-				overlayClassName="overlay"
+				overlayClassName="modal-backdrop"
 			>
-				<Button onClick={ () => this.props.onEditorClose() }>
-					X
-				</Button>
-				<div className={ cx('editor', this.props.className ) }>
-					<ItemBox
-						{ ...this.state }
-						isEditing={ true }
-						onSave={ this.handleItemUpdate.bind(this) } />
+				<div className="modal-header">
+					<h4 className="modal-title text-truncate">Title</h4>
+					<Button
+						className="close btn-icon"
+						onClick={ () => this.props.onEditorClose() }
+					>
+						<Icon type={ '24/remove' } width="24" height="24" />
+					</Button>
+				</div>
+				<div className="modal-body">
+					<div className={ cx('editor', this.props.className ) }>
+						<ItemBox
+							{ ...this.state }
+							isEditing={ true }
+							onSave={ this.handleItemUpdate.bind(this) } />
+					</div>
 				</div>
 			</ReactModal>
 		);

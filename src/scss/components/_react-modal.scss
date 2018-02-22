@@ -1,0 +1,57 @@
+//
+// React-modal
+//
+
+.ReactModal__Body--open {
+	overflow: hidden;
+}
+
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: $modal-backdrop-bg;
+	overflow-y: auto;
+}
+
+.modal {
+	width: wauto;
+	max-width: 800px;
+	margin: $space-xs;
+	background: #fff;
+
+	@media (min-width: $bp-sm) {
+		margin: $space-xl auto;
+	}
+}
+
+.modal-header {
+	display: flex;
+	align-items: center;
+	padding: $modal-header-padding;
+	color: $modal-header-color;
+	background-color: $modal-header-bg;
+
+	.close {
+		flex: 0 0 auto;
+		margin: -$modal-header-padding;
+		margin-left: auto;
+		width: 3 * $modal-header-padding;
+		height: 3 * $modal-header-padding;
+
+		.icon {
+			color: $modal-header-color;
+		}
+	}
+}
+
+.modal-title {
+	flex: 1 1 auto;
+	line-height: $line-height-base;
+}
+
+.modal-body {
+	padding: $modal-inner-padding;
+}
