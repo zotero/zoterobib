@@ -7,6 +7,7 @@ const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 const cx = require('classnames');
 const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed');
 
@@ -149,68 +150,73 @@ class StyleInstaller extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
-				className="style-installer modal"
+				className="style-installer modal modal-lg"
 				overlayClassName="modal-backdrop"
 			>
-				<h1 className="title">
-					Install Citation Styles
-				</h1>
-				<input
-					autoFocus
-					className="filter-input"
-					onChange={ this.handleFilterChange.bind(this) }
-					onKeyDown={ this.handleInputKeydown.bind(this) }
-					placeholder="Citation Style Search"
-					type="text"
-					value={ this.state.filterInput }
-				/>
-				<div className="scroll-container">
-					{
-						this.props.isStylesDataLoading ? <Spinner /> : (
-							this.state.filterInput.length > 2 ? (
-							<ul ref={ listEl => this.listEl = listEl }>
-								{
-									this.state.items.map(
-										style => {
-											const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
-											const isSelected = style.name === this.props.citationStyle;
-											return (
-												<li
-													className={ cx('item', {
-														selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
-													}) }
-													data-name={ style.name }
-													key={ style.name }
-													onClick={ () => this.handleSelect(style) }
-												>
-													<span>{ style.title }</span>
-													{
-														isInstalled && !isSelected ? (
-															<Button className="btn-danger" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
-																Remove
-															</Button>
-														) : !isSelected && (
-															<Button className="btn-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
-																Install
-															</Button>
-														)
-													}
-												</li>
-											);
-										}
-									)
-								}
-							</ul>
-							) : (
-								<p>Please enter at least three characters to start searching.</p>
-							)
-						)
-					}
-				</div>
-				<div className="buttons">
-					<Button onClick={ this.handleCancel.bind(this) }>
-						Cancel
+				<div className="modal-header">
+					<h4 className="modal-title">
+						Install Citation Styles
+					</h4>
+					<Button
+						className="close btn-icon"
+						onClick={ this.handleCancel.bind(this) }
+					>
+						<Icon type={ '24/remove' } width="24" height="24" />
 					</Button>
+				</div>
+				<div className="modal-body">
+					<input
+						autoFocus
+						className="filter-input"
+						onChange={ this.handleFilterChange.bind(this) }
+						onKeyDown={ this.handleInputKeydown.bind(this) }
+						placeholder="Citation Style Search"
+						type="text"
+						value={ this.state.filterInput }
+					/>
+					<div className="scroll-container">
+						{
+							this.props.isStylesDataLoading ? <Spinner /> : (
+								this.state.filterInput.length > 2 ? (
+								<ul ref={ listEl => this.listEl = listEl }>
+									{
+										this.state.items.map(
+											style => {
+												const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
+												const isSelected = style.name === this.props.citationStyle;
+												return (
+													<li
+														className={ cx('item', {
+															selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
+														}) }
+														data-name={ style.name }
+														key={ style.name }
+														onClick={ () => this.handleSelect(style) }
+													>
+														<span>{ style.title }</span>
+														{
+															isInstalled && !isSelected ? (
+																<Button className="btn-danger" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
+																	Remove
+																</Button>
+															) : !isSelected && (
+																<Button className="btn-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
+																	Install
+																</Button>
+															)
+														}
+													</li>
+												);
+											}
+										)
+									}
+								</ul>
+								) : (
+									<p>Please enter at least three characters to start searching.</p>
+								)
+							)
+						}
+					</div>
 				</div>
 			</ReactModal>
 		];

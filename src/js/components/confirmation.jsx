@@ -28,19 +28,25 @@ class Confirmation extends React.Component {
 				className="modal"
 				overlayClassName="modal-backdrop"
 			>
-				<h1 className="title">
-					{ this.props.title }
-				</h1>
-				{ this.props.children }
-				<div className="buttons">
-					<Button onClick={ () => this.props.onCancel() }>
-						{ this.props.cancelLabel }
-					</Button>
-					<Button
-						className="btn-primary"
-						onClick={ () => this.props.onConfirm() }>
-						{ this.props.confirmLabel }
-					</Button>
+				<div className="modal-header">
+					<h4 className="modal-title">
+						{ this.props.title }
+					</h4>
+				</div>
+				<div className="modal-body">
+					{ this.props.children }
+				</div>
+				<div className="modal-footer">
+					<div className="buttons">
+						<Button onClick={ () => this.props.onCancel() }>
+							{ this.props.cancelLabel }
+						</Button>
+						<Button
+							className="btn-primary"
+							onClick={ () => this.props.onConfirm() }>
+							{ this.props.confirmLabel }
+						</Button>
+					</div>
 				</div>
 			</ReactModal>
 		];

@@ -169,7 +169,7 @@ class Editor extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
-				className="editor-container modal"
+				className="editor-container modal modal-lg"
 				overlayClassName="modal-backdrop"
 			>
 				<div className="modal-header">
