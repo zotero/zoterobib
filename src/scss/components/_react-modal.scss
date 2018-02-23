@@ -17,14 +17,18 @@
 }
 
 .modal {
-	width: wauto;
-	max-width: 800px;
+	width: auto;
+	max-width: $modal-md;
 	margin: $space-xs;
 	background: #fff;
 
 	@media (min-width: $bp-sm) {
 		margin: $space-xl auto;
 	}
+}
+
+.modal-lg {
+	max-width: $modal-lg;
 }
 
 .modal-header {
@@ -52,6 +56,13 @@
 	line-height: $line-height-base;
 }
 
-.modal-body {
+.modal-body,
+.modal-footer {
 	padding: $modal-inner-padding;
+}
+
+.modal-footer {
+	display: flex;
+	justify-content: flex-end;
+	border-top: $modal-footer-border-width solid $modal-footer-border-color;
 }
