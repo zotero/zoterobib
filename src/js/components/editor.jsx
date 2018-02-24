@@ -171,6 +171,8 @@ class Editor extends React.Component {
 				contentLabel="Item Editor"
 				className="editor-container modal modal-lg"
 				overlayClassName="modal-backdrop"
+				onRequestClose={ () => this.props.onEditorClose() }
+				appElement={ document.querySelector('main') }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">Title</h4>

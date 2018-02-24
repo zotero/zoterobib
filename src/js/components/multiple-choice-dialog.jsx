@@ -23,6 +23,8 @@ class MultipleChoiceDialog extends React.Component {
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal"
 				overlayClassName="modal-backdrop"
+				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
+				appElement={ document.querySelector('main') }
 			>
 
 				<h1 className="title">
