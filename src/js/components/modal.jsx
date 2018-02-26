@@ -3,7 +3,9 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 
-var withScrollbarMeasure = ComposedComponent => class extends React.PureComponent {
+const ReactModal = require('react-modal');
+
+class Modal extends React.PureComponent {
 	componentWillReceiveProps(props) {
 		if(props.isOpen != this.props.isOpen && props.isOpen === true) {
 			this.setScrollbar();
@@ -38,13 +40,22 @@ var withScrollbarMeasure = ComposedComponent => class extends React.PureComponen
 		document.body.style.paddingRight = `${this.previousPadding}px`;
 	}
 
+	handleModalOpen() {
+		this.contentRef && this.contentRef.focus({ preventScroll: true });
+	}
+
 	render() {
-		return <ComposedComponent {...this.props } { ...this.state } />;
+		return <ReactModal
+			{ ...this.props }
+			shouldFocusAfterRender={ false }
+			onAfterOpen={ this.handleModalOpen.bind(this) }
+			contentRef={ contentRef => { this.contentRef = contentRef; } }
+		/>;
 	}
 
 	static propTypes = {
 		isOpen: PropTypes.bool,
 	}
-};
+}
 
-module.exports = withScrollbarMeasure;
+module.exports = Modal;
