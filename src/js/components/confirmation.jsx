@@ -6,6 +6,9 @@ const ReactModal = require('react-modal');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
+
+const Modal = withScrollbarMeasure(ReactModal);
 
 class Confirmation extends React.Component {
 	handleEscapeKey(ev) {
@@ -21,7 +24,7 @@ class Confirmation extends React.Component {
 				keyValue="Escape"
 				onKeyHandle={ () => this.props.onCancel() }
 			/>,
-			<ReactModal
+			<Modal
 				key="react-modal"
 				isOpen={ this.props.isOpen }
 				contentLabel={ this.props.title }
@@ -50,7 +53,7 @@ class Confirmation extends React.Component {
 						</Button>
 					</div>
 				</div>
-			</ReactModal>
+			</Modal>
 		];
 	}
 

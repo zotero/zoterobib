@@ -10,6 +10,9 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const cx = require('classnames');
 const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed');
+const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
+
+const Modal = withScrollbarMeasure(ReactModal);
 
 class StyleInstaller extends React.Component {
 	state = {
@@ -146,7 +149,7 @@ class StyleInstaller extends React.Component {
 		];
 		return [
 			...(this.props.isInstallingStyle ? keyHandlers : []),
-			<ReactModal
+			<Modal
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
@@ -220,7 +223,7 @@ class StyleInstaller extends React.Component {
 						}
 					</div>
 				</div>
-			</ReactModal>
+			</Modal>
 		];
 	}
 
