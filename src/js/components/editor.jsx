@@ -176,6 +176,7 @@ class Editor extends React.Component {
 				overlayClassName="modal-backdrop"
 				onRequestClose={ () => this.props.onEditorClose() }
 				appElement={ document.querySelector('main') }
+				shouldFocusAfterRender={ false }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">Title</h4>

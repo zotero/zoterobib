@@ -157,6 +157,7 @@ class StyleInstaller extends React.Component {
 				overlayClassName="modal-backdrop"
 				onRequestClose={ this.handleCancel.bind(this) }
 				appElement={ document.querySelector('main') }
+				shouldFocusAfterRender={ false }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title">
