@@ -7,6 +7,9 @@ const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
+const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
+
+const Modal = withScrollbarMeasure(ReactModal);
 
 class MultipleChoiceDialog extends React.Component {
 	render() {
@@ -17,7 +20,7 @@ class MultipleChoiceDialog extends React.Component {
 				keyValue="Escape"
 				onKeyHandle={ () => this.props.onMultipleChoiceCancel() }
 			/>,
-			<ReactModal
+			<Modal
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
@@ -54,7 +57,7 @@ class MultipleChoiceDialog extends React.Component {
 						Cancel
 					</Button>
 				</div>
-			</ReactModal>
+			</Modal>
 		];
 	}
 

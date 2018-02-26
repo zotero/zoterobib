@@ -12,6 +12,9 @@ const { baseMappings } = require('zotero-web-library/lib/constants/item');
 const { getItemTypeMeta } = require('../utils');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { reverseMap } = require('zotero-web-library/lib/utils');
+const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
+
+const Modal = withScrollbarMeasure(ReactModal);
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -165,7 +168,7 @@ class Editor extends React.Component {
 
 	render() {
 		return (
-			<ReactModal
+			<Modal
 				key="react-modal"
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
@@ -191,7 +194,7 @@ class Editor extends React.Component {
 							onSave={ this.handleItemUpdate.bind(this) } />
 					</div>
 				</div>
-			</ReactModal>
+			</Modal>
 		);
 	}
 
