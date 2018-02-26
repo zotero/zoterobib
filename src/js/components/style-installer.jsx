@@ -2,7 +2,6 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const ReactModal = require('react-modal');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
@@ -10,9 +9,7 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const cx = require('classnames');
 const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed');
-const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
-
-const Modal = withScrollbarMeasure(ReactModal);
+const Modal = require('./modal');
 
 class StyleInstaller extends React.Component {
 	state = {

@@ -7,14 +7,11 @@ const cx = require('classnames');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
-const ReactModal = require('react-modal');
 const { baseMappings } = require('zotero-web-library/lib/constants/item');
 const { getItemTypeMeta } = require('../utils');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
 const { reverseMap } = require('zotero-web-library/lib/utils');
-const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
-
-const Modal = withScrollbarMeasure(ReactModal);
+const Modal = require('./modal');
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -176,7 +173,6 @@ class Editor extends React.Component {
 				overlayClassName="modal-backdrop"
 				onRequestClose={ () => this.props.onEditorClose() }
 				appElement={ document.querySelector('main') }
-				shouldFocusAfterRender={ false }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">Title</h4>

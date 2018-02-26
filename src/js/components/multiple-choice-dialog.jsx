@@ -2,14 +2,10 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const ReactModal = require('react-modal');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
-
 const Button = require('zotero-web-library/lib/component/ui/button');
-const withScrollbarMeasure = require('../enhancers/with-scrollbar-measure');
-
-const Modal = withScrollbarMeasure(ReactModal);
+const Modal = require('./modal');
 
 class MultipleChoiceDialog extends React.Component {
 	render() {
