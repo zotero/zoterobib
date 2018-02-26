@@ -163,6 +163,15 @@ class Editor extends React.Component {
 		});
 	}
 
+	get itemTitle() {
+		let item = this.state.item;
+		if(item) {
+			let field = item.itemType in baseMappings && baseMappings[item.itemType]['title'] || 'title';
+			return item[field];
+		}
+		return '';
+	}
+
 	render() {
 		return (
 			<Modal
@@ -175,7 +184,9 @@ class Editor extends React.Component {
 				appElement={ document.querySelector('main') }
 			>
 				<div className="modal-header">
-					<h4 className="modal-title text-truncate">Title</h4>
+					<h4 className="modal-title text-truncate">
+					{ this.itemTitle }
+					</h4>
 					<Button
 						className="close btn-icon"
 						onClick={ () => this.props.onEditorClose() }
