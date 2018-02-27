@@ -24,7 +24,6 @@ class MultipleChoiceDialog extends React.Component {
 				overlayClassName="modal-backdrop"
 				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
 				appElement={ document.querySelector('main') }
-				shouldFocusAfterRender={ false }
 			>
 
 				<h1 className="title">
