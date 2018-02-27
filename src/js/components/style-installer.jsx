@@ -151,9 +151,7 @@ class StyleInstaller extends React.Component {
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
 				className="style-installer modal modal-lg"
-				overlayClassName="modal-backdrop"
 				onRequestClose={ this.handleCancel.bind(this) }
-				appElement={ document.querySelector('main') }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title">
