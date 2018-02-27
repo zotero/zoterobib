@@ -25,10 +25,7 @@ class Confirmation extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isOpen }
 				contentLabel={ this.props.title }
-				className="modal"
-				overlayClassName="modal-backdrop"
 				onRequestClose={ () => this.props.onCancel() }
-				appElement={ document.querySelector('main') }
 			>
 				<div className="modal-header">
 					<h4 className="modal-title">
