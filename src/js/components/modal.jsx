@@ -41,13 +41,16 @@ class Modal extends React.PureComponent {
 	}
 
 	handleModalOpen() {
-		this.contentRef && this.contentRef.focus({ preventScroll: true });
+		// remove maxHeight hack that prevents scroll on focus
+		this.contentRef.style.maxHeight = null;
 	}
 
 	render() {
 		return <ReactModal
 			{ ...this.props }
-			shouldFocusAfterRender={ false }
+			role="dialog"
+			// prevent scroll on focus by setting max height
+			style={{ content: { maxHeight: '90%' } }}
 			onAfterOpen={ this.handleModalOpen.bind(this) }
 			contentRef={ contentRef => { this.contentRef = contentRef; } }
 		/>;
