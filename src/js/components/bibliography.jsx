@@ -45,7 +45,6 @@ class Bibliography extends React.PureComponent {
 		let html = formatBib(this.props.bibliography);
 		let div = document.createElement('div');
 		div.innerHTML = html;
-		let { Tag, attrs } = parseTagAndAttrsFromNode(div.firstChild);
 
 		let keyHandlers = [
 			<KeyHandler
@@ -63,14 +62,13 @@ class Bibliography extends React.PureComponent {
 		];
 		return [
 			...keyHandlers,
-			<div className="bibliography" key="bibliography">
-				<Tag { ...attrs }>
+			<ul className="bibliography" key="bibliography">
 					{
 						Array.from(div.firstChild.children).map((child, i) => {
 							let itemId = this.props.bibliography[0]['entry_ids'][i];
 							let { Tag, attrs } = parseTagAndAttrsFromNode(child);
 							return (
-								<div className="citation" key={ itemId }>
+								<li className="citation" key={ itemId }>
 									<div className="csl-entry-container">
 										<Tag
 											dangerouslySetInnerHTML={ { __html: child.innerHTML } }
@@ -84,12 +82,11 @@ class Bibliography extends React.PureComponent {
 											</Button>
 										)
 									}
-								</div>
+								</li>
 							);
 						})
 					}
-				</Tag>
-			</div>
+			</ul>
 		];
 	}
 
