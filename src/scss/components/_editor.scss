@@ -1,0 +1,18 @@
+//
+// Editor
+//
+
+.editor {
+	.metadata {
+		display: flex;
+	}
+
+	.key {
+		flex: 0 0 33%;
+	}
+
+	.value {
+		flex: 1 1 0;
+		display: flex;
+	}
+}
