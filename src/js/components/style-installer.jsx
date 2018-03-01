@@ -167,56 +167,56 @@ class StyleInstaller extends React.Component {
 				<div className="modal-body">
 					<input
 						autoFocus
-						className="filter-input"
+						className="form-control form-control-lg"
 						onChange={ this.handleFilterChange.bind(this) }
 						onKeyDown={ this.handleInputKeydown.bind(this) }
 						placeholder="Citation Style Search"
 						type="text"
 						value={ this.state.filterInput }
 					/>
-					<div className="scroll-container">
-						{
-							this.props.isStylesDataLoading ? <Spinner /> : (
-								this.state.filterInput.length > 2 ? (
-								<ul ref={ listEl => this.listEl = listEl }>
-									{
-										this.state.items.map(
-											style => {
-												const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
-												const isSelected = style.name === this.props.citationStyle;
-												return (
-													<li
-														className={ cx('item', {
-															selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
-														}) }
-														data-name={ style.name }
-														key={ style.name }
-														onClick={ () => this.handleSelect(style) }
-													>
-														<span>{ style.title }</span>
-														{
-															isInstalled && !isSelected ? (
-																<Button className="btn-danger" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
-																	Remove
-																</Button>
-															) : !isSelected && (
-																<Button className="btn-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
-																	Install
-																</Button>
-															)
-														}
-													</li>
-												);
-											}
-										)
-									}
-								</ul>
-								) : (
-									<p>Please enter at least three characters to start searching.</p>
-								)
+					{
+						this.props.isStylesDataLoading ? <Spinner /> : (
+							this.state.filterInput.length > 2 ? (
+							<ul
+								className="style-list"
+								ref={ listEl => this.listEl = listEl }>
+								{
+									this.state.items.map(
+										style => {
+											const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
+											const isSelected = style.name === this.props.citationStyle;
+											return (
+												<li
+													className={ cx('style', {
+														selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
+													}) }
+													data-name={ style.name }
+													key={ style.name }
+													onClick={ () => this.handleSelect(style) }
+												>
+													<span>{ style.title }</span>
+													{
+														isInstalled && !isSelected ? (
+															<Button className="btn btn-sm btn-outline-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
+																Remove
+															</Button>
+														) : !isSelected && (
+															<Button className="btn btn-sm btn-outline-secondary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
+																Install
+															</Button>
+														)
+													}
+												</li>
+											);
+										}
+									)
+								}
+							</ul>
+							) : (
+								<p>Please enter at least three characters to start searching.</p>
 							)
-						}
-					</div>
+						)
+					}
 				</div>
 			</Modal>
 		];
