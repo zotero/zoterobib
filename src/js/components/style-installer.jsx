@@ -155,7 +155,7 @@ class StyleInstaller extends React.Component {
 			>
 				<div className="modal-header">
 					<h4 className="modal-title">
-						Install Citation Styles
+						Add Citation Styles
 					</h4>
 					<Button
 						className="close btn-icon"
