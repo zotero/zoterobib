@@ -30,6 +30,7 @@
 		@media (min-width: $bp-sm) {
 			flex-direction: row;
 			justify-content: space-between;
+			align-items: center;
 			padding: $space-sm;
 		}
 	}
