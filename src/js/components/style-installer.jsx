@@ -154,7 +154,7 @@ class StyleInstaller extends React.Component {
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
 				<div className="modal-header">
-					<h4 className="modal-title">
+					<h4 className="modal-title text-truncate">
 						Add Citation Styles
 					</h4>
 					<Button
@@ -194,7 +194,9 @@ class StyleInstaller extends React.Component {
 													key={ style.name }
 													onClick={ () => this.handleSelect(style) }
 												>
-													<span>{ style.title }</span>
+													<div className="style-title">
+														{ style.title }
+													</div>
 													{
 														isInstalled && !isSelected ? (
 															<Button className="btn btn-sm btn-outline-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>

@@ -18,28 +18,33 @@
 
 .modal {
 	width: auto;
-	max-width: $modal-md;
 	margin: $space-xs;
 	background: #fff;
 
-	&.modal-lg {
-		max-width: $modal-lg;
-	}
-
 	@media (min-width: $bp-sm) {
+		max-width: $modal-md;
 		margin: $space-xl auto;
+
+		&.modal-lg {
+			width: $modal-lg;
+			max-width: calc(100% - 64px);
+		}
 	}
 }
 
 .modal-header {
 	display: flex;
 	align-items: center;
-	padding: $modal-header-padding-md;
+	padding: $space-md;
 	color: $modal-header-color;
 	background-color: $modal-header-bg;
 
-	.modal-lg & {
-		padding: $modal-header-padding-lg;
+	@media (min-width: $bp-sm) {
+		padding: $modal-header-padding-md;
+
+		.modal-lg & {
+			padding: $modal-header-padding-lg;
+		}
 	}
 
 	.close {
@@ -70,10 +75,14 @@
 
 .modal-body,
 .modal-footer {
-	padding: $modal-inner-padding-md;
+	padding: $space-md;
 
-	.modal-lg & {
-		padding: $modal-inner-padding-lg;
+	@media (min-width: $bp-sm) {
+		padding: $modal-inner-padding-md;
+
+		.modal-lg & {
+			padding: $modal-inner-padding-lg;
+		}
 	}
 }
 
