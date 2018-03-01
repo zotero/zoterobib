@@ -20,7 +20,8 @@ class Bibliography extends React.PureComponent {
 		this.props.onEditorOpen(itemId);
 	}
 
-	handleDeleteCitation(itemId) {
+	handleDeleteCitation(itemId, ev) {
+		ev.stopPropagation();
 		this.props.onDeleteEntry(itemId);
 	}
 
@@ -31,7 +32,7 @@ class Bibliography extends React.PureComponent {
 	}
 
 	handleKeyboard(ev) {
-		if(this.state.focusedItem) {
+		if(document.activeElement.className == 'citation' && this.state.focusedItem) {
 			this.props.onEditorOpen(this.state.focusedItem);
 			ev.preventDefault();
 		}
@@ -82,7 +83,7 @@ class Bibliography extends React.PureComponent {
 									</div>
 									{
 										!this.props.isReadOnly && (
-											<Button onClick={ () => this.handleDeleteCitation(itemId) }>
+											<Button onClick={ this.handleDeleteCitation.bind(this, itemId) }>
 												<Icon type={ '16/remove-sm' } width="16" height="16" />
 											</Button>
 										)
