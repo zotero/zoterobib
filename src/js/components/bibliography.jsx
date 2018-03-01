@@ -65,10 +65,15 @@ class Bibliography extends React.PureComponent {
 			<ul className="bibliography" key="bibliography">
 					{
 						Array.from(div.firstChild.children).map((child, i) => {
-							let itemId = this.props.bibliography[0]['entry_ids'][i];
+							let [ itemId ] = this.props.bibliography[0]['entry_ids'][i];
 							let { Tag, attrs } = parseTagAndAttrsFromNode(child);
 							return (
-								<li className="citation" key={ itemId }>
+								<li key={ itemId }
+									className="citation"
+									onFocus={ this.handleFocus.bind(this, itemId) }
+									onClick={ () => this.handleEditCitation(itemId) }
+									tabIndex={ 0 }
+								>
 									<div className="csl-entry-container">
 										<Tag
 											dangerouslySetInnerHTML={ { __html: child.innerHTML } }
