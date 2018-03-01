@@ -6,6 +6,7 @@ const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Modal = require('./modal');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class MultipleChoiceDialog extends React.Component {
 	render() {
@@ -20,24 +21,33 @@ class MultipleChoiceDialog extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
-				className="multiple-choice-dialog modal"
+				className="multiple-choice-dialog modal modal-lg"
 				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
 			>
-
-				<h1 className="title">
-					Please select a citation from the list
-				</h1>
-				<div className="scroll-container">
-					<ul>
+				<div className="modal-header">
+					<h4 className="modal-title text-truncate">
+						Please select a citation from the list
+					</h4>
+					<Button
+						className="close btn-icon"
+						onClick={ () => this.props.onMultipleChoiceCancel() }
+					>
+						<Icon type={ '24/remove' } width="24" height="24" />
+					</Button>
+				</div>
+				<div className="modal-body">
+					<ul className="results">
 						{
 							this.props.multipleChoiceItems.map(
 								item => {
 									return (
 										<li
-											className="item"
+											className="result"
 											key={ item.key }
 											onClick={ () => this.props.onMultipleChoiceSelect([item]) }
 										>
+											<span className="badge badge-light">Book</span>
+											{' '}
 											{ item.value }
 										</li>
 									);
@@ -45,11 +55,6 @@ class MultipleChoiceDialog extends React.Component {
 							)
 						}
 					</ul>
-				</div>
-				<div className="buttons">
-					<Button onClick={ () => this.props.onMultipleChoiceCancel() }>
-						Cancel
-					</Button>
 				</div>
 			</Modal>
 		];

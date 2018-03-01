@@ -1,0 +1,21 @@
+//
+// Multiple choice dialog
+//
+
+.multiple-choice-dialog {
+	.results {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.result {
+		border-top: 1px solid $result-border-color;
+		padding: $result-padding;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $result-hover-bg;
+		}
+	}
+}

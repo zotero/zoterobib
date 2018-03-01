@@ -1,0 +1,20 @@
+//
+// Badge
+//
+
+.badge {
+	display: inline-block;
+	font-size: $badge-font-size;
+	line-height: 1;
+	padding: $badge-padding-y $badge-padding-x;
+	border-radius: $border-radius-sm;
+
+	&:empty {
+		display: none;
+	}
+}
+
+.badge-light {
+	border: 1px solid $badge-light-border-color;
+	background-color: $badge-light-bg;
+}
