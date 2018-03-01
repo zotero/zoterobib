@@ -74,6 +74,6 @@
 	}
 
 	&:focus {
-		box-shadow: none; // Override generic focus styles
+		outline: none; // Override generic focus styles
 	}
 }
