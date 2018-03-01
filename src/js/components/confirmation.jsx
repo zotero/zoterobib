@@ -37,11 +37,13 @@ class Confirmation extends React.Component {
 				</div>
 				<div className="modal-footer">
 					<div className="buttons">
-						<Button onClick={ () => this.props.onCancel() }>
+						<Button
+							className="btn-outline-secondary"
+							onClick={ () => this.props.onCancel() }>
 							{ this.props.cancelLabel }
 						</Button>
 						<Button
-							className="btn-primary"
+							className="btn-secondary"
 							onClick={ () => this.props.onConfirm() }>
 							{ this.props.confirmLabel }
 						</Button>

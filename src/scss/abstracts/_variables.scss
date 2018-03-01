@@ -114,28 +114,24 @@ $btn-border-width: $border-width;
 
 $btn-line-height: $line-height-base;
 
+
+$btn-padding-x: $space-sm;
+$btn-padding-y: 7px;
 $btn-padding-x-sm: $space-sm;
 $btn-padding-y-sm: 3px;
 
-$btn-primary-bg:     $primary;
-$btn-primary-border: $primary;
-
+$btn-primary-color:   $primary;
 $btn-secondary-color: $secondary;
 
-$btn-outline-primary-color:      $primary;
-$btn-outline-primary-bg:         $primary;
-$btn-outline-primary-border:      $primary;
-$btn-outline-primary-hover-color: $shade-0;
-
-$btn-outline-secondary-color:       $secondary;
-$btn-outline-secondary-bg:          $secondary;
-$btn-outline-secondary-border:      $secondary;
-$btn-outline-secondary-hover-color: $shade-0;
+$btn-outline-primary-color:   $primary;
+$btn-outline-secondary-color: $secondary;
 
 $btn-icon-bg:   transparent;
 $btn-icon-size: $space-xl; // btn-sm size
 
 $btn-border-radius: $border-radius-sm;
+
+$btn-box-shadow-color: rgba(0, 0, 0, 0.2);
 
 $btn-transition: 0.15s ease;
 
@@ -200,11 +196,13 @@ $style-selector-color: $shade-0;
 //
 
 $modal-backdrop-bg: rgba($blue-darkest, 0.6);
-$modal-header-padding: $space-xl;
-$modal-inner-padding: $space-xl;
 $modal-header-color: $shade-0;
 $modal-header-bg: $blue-dark;
 $modal-footer-border-width: 1px;
 $modal-footer-border-color: $shade-2;
 $modal-md: 500px;
 $modal-lg: 800px;
+$modal-header-padding-md: $space-lg;
+$modal-inner-padding-md: $space-lg;
+$modal-header-padding-lg: $space-xl;
+$modal-inner-padding-lg: $space-xl;

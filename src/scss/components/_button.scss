@@ -13,6 +13,7 @@
 	text-align: center;
 	font-weight: 400;
 	border-radius: $btn-border-radius;
+	padding: $btn-padding-y $btn-padding-x;
 	transition:
 		color $btn-transition,
 		background-color $btn-transition,
@@ -32,50 +33,20 @@
 	padding: $btn-padding-y-sm $btn-padding-x-sm;
 }
 
+.btn-primary {
+	@include button-variant($btn-primary-color);
+}
+
+.btn-secondary {
+	@include button-variant($btn-secondary-color);
+}
+
 .btn-outline-primary {
-	color: $btn-outline-primary-color;
-	background-color: transparent;
-	border-color: $btn-outline-primary-border;
-
-	&:hover {
-		color: $btn-outline-primary-hover-color;
-		background-color: $btn-outline-primary-bg;
-	}
-
-	&:focus {
-		.keyboard-user & {
-			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-primary-border;
-		}
-	}
-
-	&:active {
-		color: $btn-outline-primary-hover-color;
-		background-color: darken($btn-outline-primary-bg, 8%);
-		border-color: darken($btn-outline-primary-border, 8%);
-	}
+	@include button-variant($btn-outline-primary-color, "outline");
 }
 
 .btn-outline-secondary {
-	color: $btn-outline-secondary-color;
-	background-color: transparent;
-	border-color: $btn-outline-secondary-border;
-
-	&:hover {
-		color: $btn-outline-secondary-hover-color;
-		background-color: $btn-outline-secondary-bg;
-	}
-
-	&:focus {
-		.keyboard-user & {
-			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
-		}
-	}
-
-	&:active {
-		color: $btn-outline-secondary-hover-color;
-		background-color: darken($btn-outline-secondary-bg, 8%);
-		border-color: darken($btn-outline-secondary-border, 8%);
-	}
+	@include button-variant($btn-outline-secondary-color, "outline");
 }
 
 .btn-icon {
@@ -90,8 +61,8 @@
 
 	&:focus {
 		.keyboard-user & {
-			border-color: $btn-outline-secondary-border;
-			box-shadow: 0 0 0 $input-btn-focus-width $btn-outline-secondary-border;
+			border-color: $btn-secondary-color;
+			box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
 		}
 	}
 
