@@ -1,0 +1,38 @@
+//
+// Button
+//
+
+@mixin button-variant($btn-color, $outline: null) {
+	color: if($outline, $btn-color, $shade-0);
+	background-color: if($outline, transparent, $btn-color);
+	border-color: if($outline, $btn-color, transparent);
+
+	&:hover {
+		color: $shade-0;
+		background-color: $btn-color;
+		box-shadow: 0 2px 4px $btn-box-shadow-color;
+	}
+
+	&:active {
+		color: $shade-0;
+		background-color: darken($btn-color, 8%);
+		border-color: if($outline, darken($btn-color, 8%), transparent);
+		box-shadow: none;
+	}
+
+	&:focus {
+		.keyboard-user & {
+			box-shadow: 0 0 0 $input-btn-focus-width $btn-color;
+
+			&:hover {
+				box-shadow:
+					0 0 0 $input-btn-focus-width $btn-color,
+					0px 4px 4px $btn-box-shadow-color;
+			}
+
+			&:active {
+				box-shadow: 0 0 0 $input-btn-focus-width darken($btn-color, 8%);
+			}
+		}
+	}
+}

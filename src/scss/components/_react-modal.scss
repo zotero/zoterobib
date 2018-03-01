@@ -22,28 +22,38 @@
 	margin: $space-xs;
 	background: #fff;
 
+	&.modal-lg {
+		max-width: $modal-lg;
+	}
+
 	@media (min-width: $bp-sm) {
 		margin: $space-xl auto;
 	}
 }
 
-.modal-lg {
-	max-width: $modal-lg;
-}
-
 .modal-header {
 	display: flex;
 	align-items: center;
-	padding: $modal-header-padding;
+	padding: $modal-header-padding-md;
 	color: $modal-header-color;
 	background-color: $modal-header-bg;
 
+	.modal-lg & {
+		padding: $modal-header-padding-lg;
+	}
+
 	.close {
 		flex: 0 0 auto;
-		margin: -$modal-header-padding;
+		margin: -$modal-header-padding-md;
 		margin-left: auto;
-		width: 3 * $modal-header-padding;
-		height: 3 * $modal-header-padding;
+		width: 3 * $modal-header-padding-md;
+		height: 3 * $modal-header-padding-md;
+
+		.modal-lg & {
+			margin: -$modal-header-padding-lg;
+			width: 3 * $modal-header-padding-lg;
+			height: 3 * $modal-header-padding-lg;
+		}
 
 		.icon {
 			color: $modal-header-color;
@@ -58,13 +68,27 @@
 
 .modal-body,
 .modal-footer {
-	padding: $modal-inner-padding;
+	padding: $modal-inner-padding-md;
+
+	.modal-lg & {
+		padding: $modal-inner-padding-lg;
+	}
 }
 
 .modal-footer {
 	display: flex;
 	justify-content: flex-end;
 	border-top: $modal-footer-border-width solid $modal-footer-border-color;
+
+	.btn {
+		&:not(:first-child) {
+			margin-left: $space-sm / 2;
+		}
+
+		&:not(:last-child) {
+			margin-right: $space-sm / 2;
+		}
+	}
 }
 
 .modal-scrollbar-measure {
