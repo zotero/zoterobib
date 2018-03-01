@@ -40,6 +40,8 @@
 		.csl-entry-container {
 			flex: 1 1 0;
 			margin-right: ($space-md - 5px);
+			min-width: 0; // Enable word-wrap for long URLs
+			word-wrap: break-word;
 		}
 
 		.btn-icon {
