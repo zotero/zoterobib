@@ -8,7 +8,6 @@ const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const cx = require('classnames');
-const scrollIntoViewIfNeeded = require('scroll-into-view-if-needed');
 const Modal = require('./modal');
 
 class StyleInstaller extends React.Component {
@@ -23,20 +22,6 @@ class StyleInstaller extends React.Component {
 		if(this.timeout) {
 			clearTimeout(this.timeout);
 			delete this.timeout;
-		}
-	}
-
-	componentDidUpdate(props, state) {
-		if(this.state.selectedIndex !== state.selectedIndex
-			&& this.state.selectedIndex !== null
-			&& this.state.items[this.state.selectedIndex]) {
-			const styleName = this.state.items[this.state.selectedIndex].name;
-			if(styleName && this.listEl) {
-				const itemEl = this.listEl.querySelector(`[data-name="${styleName}"]`);
-				if(itemEl) {
-					scrollIntoViewIfNeeded(itemEl);
-				}
-			}
 		}
 	}
 
@@ -81,7 +66,7 @@ class StyleInstaller extends React.Component {
 	}
 
 	handleEnterKey(ev) {
-		this.handleSelect(this.state.items[this.state.selectedIndex]);
+		this.handleInstall(this.state.items[this.state.selectedIndex], ev);
 		ev.preventDefault();
 	}
 
@@ -94,16 +79,13 @@ class StyleInstaller extends React.Component {
 		}
 	}
 
-	handleSelect(style) {
-		this.handleCancel();
-		this.props.onStyleInstallerSelect(style);
-	}
-
-	handleInstall(style) {
+	handleInstall(style, ev) {
+		ev.stopPropagation();
 		this.props.onStyleInstallerInstall(style);
 	}
 
-	handleDelete(style) {
+	handleDelete(style, ev) {
+		ev.stopPropagation();
 		this.props.onStyleInstallerDelete(style);
 	}
 
@@ -115,6 +97,37 @@ class StyleInstaller extends React.Component {
 			filter: ''
 		});
 		this.props.onStyleInstallerCancel();
+	}
+
+	renderStyleItem(style) {
+		const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
+		const isActive = style.name === this.props.citationStyle;
+		const isSelected = this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false;
+		return (
+			<li
+				className={ cx('style', { selected: isSelected }) }
+				key={ style.name }
+			>
+				<div className="style-title">
+					{ style.title }
+				</div>
+				{
+					isInstalled && !isActive ? (
+						<Button
+							className="btn btn-sm btn-outline-primary"
+							onClick={ this.handleDelete.bind(this, style) }>
+							Remove
+						</Button>
+					) : !isActive && (
+						<Button
+							className="btn btn-sm btn-outline-secondary"
+							onClick={ this.handleInstall.bind(this, style) }>
+							Install
+						</Button>
+					)
+				}
+			</li>
+		);
 	}
 
 	render() {
@@ -177,41 +190,9 @@ class StyleInstaller extends React.Component {
 					{
 						this.props.isStylesDataLoading ? <Spinner /> : (
 							this.state.filterInput.length > 2 ? (
-							<ul
-								className="style-list"
-								ref={ listEl => this.listEl = listEl }>
+							<ul className="style-list">
 								{
-									this.state.items.map(
-										style => {
-											const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
-											const isSelected = style.name === this.props.citationStyle;
-											return (
-												<li
-													className={ cx('style', {
-														selected: this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false
-													}) }
-													data-name={ style.name }
-													key={ style.name }
-													onClick={ () => this.handleSelect(style) }
-												>
-													<div className="style-title">
-														{ style.title }
-													</div>
-													{
-														isInstalled && !isSelected ? (
-															<Button className="btn btn-sm btn-outline-primary" onClick={ (ev) => { ev.stopPropagation(); this.handleDelete(style); } }>
-																Remove
-															</Button>
-														) : !isSelected && (
-															<Button className="btn btn-sm btn-outline-secondary" onClick={ (ev) => { ev.stopPropagation(); this.handleInstall(style); } }>
-																Install
-															</Button>
-														)
-													}
-												</li>
-											);
-										}
-									)
+									this.state.items.map(this.renderStyleItem.bind(this))
 								}
 							</ul>
 							) : (
