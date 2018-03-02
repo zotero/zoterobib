@@ -35,29 +35,26 @@
 .modal-header {
 	display: flex;
 	align-items: center;
-	padding: $space-md;
+	padding: $modal-header-padding-mobile;
 	color: $modal-header-color;
 	background-color: $modal-header-bg;
 
 	@media (min-width: $bp-sm) {
 		padding: $modal-header-padding-md;
-
-		.modal-lg & {
-			padding: $modal-header-padding-lg;
-		}
 	}
 
 	.close {
 		flex: 0 0 auto;
-		margin: -$modal-header-padding-md;
+		margin: -$modal-header-padding-mobile;
 		margin-left: auto;
-		width: 3 * $modal-header-padding-md;
-		height: 3 * $modal-header-padding-md;
+		width: $space-xxxl;
+		height: $space-xxxl;
 
-		.modal-lg & {
-			margin: -$modal-header-padding-lg;
-			width: 3 * $modal-header-padding-lg;
-			height: 3 * $modal-header-padding-lg;
+		@media (min-width: $bp-sm) {
+			margin: -$modal-header-padding-md;
+			margin-left: auto;
+			width: $space-xl + 2 * $space-lg;
+			height: $space-xl + 2 * $space-lg;
 		}
 
 		.icon {
@@ -68,21 +65,17 @@
 
 .modal-title {
 	flex: 1 1 auto;
-	line-height: $line-height-base;
+	line-height: $modal-title-line-height;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
 .modal-body,
 .modal-footer {
-	padding: $space-md;
+	padding: $modal-inner-padding-mobile;
 
 	@media (min-width: $bp-sm) {
 		padding: $modal-inner-padding-md;
-
-		.modal-lg & {
-			padding: $modal-inner-padding-lg;
-		}
 	}
 }
 
@@ -98,6 +91,28 @@
 
 		&:not(:last-child) {
 			margin-right: $space-sm / 2;
+		}
+	}
+}
+
+.modal-lg {
+	.modal-header {
+		@media (min-width: $bp-sm) {
+			padding: $modal-header-padding-lg;
+
+			.close {
+				margin: -$modal-header-padding-lg;
+				margin-left: auto;
+				width: 3 * $modal-header-padding-lg;
+				height: 3 * $modal-header-padding-lg;
+			}
+		}
+	}
+
+	.modal-body,
+	.modal-footer {
+		@media (min-width: $bp-sm) {
+			padding: $modal-inner-padding-lg;
 		}
 	}
 }
