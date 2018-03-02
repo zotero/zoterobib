@@ -193,21 +193,19 @@ class StyleInstaller extends React.Component {
 						className="form-control form-control-lg"
 						onChange={ this.handleFilterChange.bind(this) }
 						onKeyDown={ this.handleInputKeydown.bind(this) }
-						placeholder="Citation Style Search"
+						placeholder="Enter three characters or more to search"
 						type="text"
 						value={ this.state.filterInput }
 					/>
 					{
 						this.props.isStylesDataLoading ? <Spinner /> : (
-							this.state.filterInput.length > 2 ? (
 							<ul className="style-list">
 								{
-									this.state.items.map(this.renderStyleItem.bind(this))
+									this.state.filterInput.length > 2 ?
+									this.state.items.map(this.renderStyleItem.bind(this)) :
+										this.props.citationStyles.map(this.renderStyleItem.bind(this))
 								}
 							</ul>
-							) : (
-								<p>Please enter at least three characters to start searching.</p>
-							)
 						)
 					}
 				</div>
