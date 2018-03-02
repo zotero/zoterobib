@@ -100,7 +100,9 @@ class StyleInstaller extends React.Component {
 	}
 
 	renderStyleItem(style) {
-		const isInstalled = this.props.citationStyles.find(cs => cs.name === style.name);
+		const styleData = this.props.citationStyles.find(cs => cs.name === style.name);
+		const isInstalled = typeof styleData !== 'undefined';
+		const isCore = isInstalled && styleData.isCore || false;
 		const isActive = style.name === this.props.citationStyle;
 		const isSelected = this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false;
 		return (
@@ -112,13 +114,21 @@ class StyleInstaller extends React.Component {
 					{ style.title }
 				</div>
 				{
-					isInstalled && !isActive ? (
+					isActive ? (
+						<Button className="btn btn-sm" disabled>
+							Active
+						</Button>
+					) : isCore ? (
+						<Button className="btn btn-sm" disabled>
+							Default
+						</Button>
+					) : isInstalled ? (
 						<Button
 							className="btn btn-sm btn-outline-primary"
 							onClick={ this.handleDelete.bind(this, style) }>
 							Remove
 						</Button>
-					) : !isActive && (
+					) : (
 						<Button
 							className="btn btn-sm btn-outline-secondary"
 							onClick={ this.handleInstall.bind(this, style) }>
