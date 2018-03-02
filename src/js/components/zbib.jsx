@@ -31,12 +31,10 @@ class ZBib extends React.PureComponent {
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
-				?	<div className="zotero-bib-wrap zotero-bib-loading">
-						<div className="zotero-bib loading">
-							<Spinner />
-						</div>
+				?	<div className="zotero-bib-container loading">
+						<Spinner />
 					</div>
-				:	<div className={ cx('zotero-bib-wrap', {
+				:	<div className={ cx('zotero-bib-container', {
 						'keyboard-user': this.props.isKeyboardUser,
 						'mouse-user': this.props.isMouseUser,
 						'touch-user': this.props.isTouchUser,

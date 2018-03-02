@@ -99,12 +99,14 @@ $border-width: 1px;
 $section-padding:        $space-xxxl + $space-xs;
 $section-padding-mobile: $space-xxl;
 
+
 //
 // Buttons & forms
 //
 
 $input-btn-focus-width: 2px;
 $input-btn-border-radius: $border-radius-sm;
+
 
 //
 // Buttons
@@ -190,6 +192,14 @@ $badge-padding-x: $space-xs;
 $badge-padding-y: $space-min - 2px;
 $badge-light-border-color: $shade-3;
 $badge-light-bg: $shade-0;
+
+
+//
+// Zotero bib
+//
+
+$zotero-bib-spinner-size: $space-xl;
+
 
 //
 // Style selector

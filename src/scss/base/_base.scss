@@ -19,3 +19,23 @@ body {
 		outline: $outline-width solid $outline-color;
 	}
 }
+
+html,
+body,
+main,
+.zotero-bib-container {
+	height: 100%; // Stretch for spinner
+}
+
+.zotero-bib-container {
+	&.loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.icon-spin {
+			width: $zotero-bib-spinner-size;
+			height: $zotero-bib-spinner-size;
+		}
+	}
+}
