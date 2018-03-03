@@ -124,7 +124,7 @@ class ZBib extends React.PureComponent {
 										) : <Bibliography { ...this.props } />
 									}
 									{
-										!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
+										!this.props.isReadOnly && Object.keys(this.props.citations).length > 0 && <DeleteAllButton { ...this.props } />
 									}
 								</div>
 							</section>
