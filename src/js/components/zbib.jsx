@@ -95,45 +95,39 @@ class ZBib extends React.PureComponent {
 							<section className="section section-bibliography">
 								<div className="container">
 									{
-										Object.keys(this.props.citations).length < 1 ? (
-											<div>Illustration</div>
+									Object.keys(this.props.citations).length === 0 ? (
+										<div>Illustration</div>
+									) : this.props.isReadOnly ? (
+											<h1>
+												{ this.props.title || 'Untitled' }
+											</h1>
 										) : (
-											<div>
-												{
-													this.props.isReadOnly ? (
-														<h1>
-															{ this.props.title || 'Untitled' }
-														</h1>
-													) : (
-														Object.keys(this.props.citations).length > 0 &&
-														<h2>
-															<Editable
-																ref={ editable => this.editable = editable }
-																name="title"
-																processing={ false }
-																value={ this.props.title || 'Untitled' }
-																editOnClick = { true }
-																onSave={ newTitle => this.props.onTitleChanged(newTitle) }
-															/>
-															<Button onClick={ this.handleEditInput.bind(this) }>
-																<Icon type={ '28/pencil' } width="28" height="28" />
-															</Button>
-														</h2>
-													)
-												}
-												<StyleSelector { ...this.props } />
-												{
-													this.props.isLoadingCitations ? (
-														<div className="zotero-citations-loading hidden-xs-down">
-															<Spinner />
-														</div>
-													) : <Bibliography { ...this.props } />
-												}
-												{
-													!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
-												}
-											</div>
+											Object.keys(this.props.citations).length > 0 &&
+											<h2>
+												<Editable
+													ref={ editable => this.editable = editable }
+													name="title"
+													processing={ false }
+													value={ this.props.title || 'Untitled' }
+													editOnClick = { true }
+													onSave={ newTitle => this.props.onTitleChanged(newTitle) }
+												/>
+												<Button onClick={ this.handleEditInput.bind(this) }>
+													<Icon type={ '28/pencil' } width="28" height="28" />
+												</Button>
+											</h2>
 										)
+									}
+									<StyleSelector { ...this.props } />
+									{
+										this.props.isLoadingCitations ? (
+											<div className="zotero-citations-loading hidden-xs-down">
+												<Spinner />
+											</div>
+										) : <Bibliography { ...this.props } />
+									}
+									{
+										!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
 									}
 								</div>
 							</section>
