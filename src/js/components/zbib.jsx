@@ -33,8 +33,9 @@ class ZBib extends React.PureComponent {
 		if (Object.keys(this.props.citations).length === 0) {
 			return (
 				<React.Fragment>
-					<h2 className="bibliography-title">Heading</h2>
-					<p className="lead">Text</p>
+					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
+					<h2 className="bibliography-title">Your bibliography is empty.</h2>
+					<p className="lead">To add your sources simply enter an URL, ISBN, DOI, or PMID in the search box above. Of course you can add them manually too.</p>
 				</React.Fragment>
 			);
 		} else {
