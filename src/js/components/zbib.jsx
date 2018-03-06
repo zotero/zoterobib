@@ -28,6 +28,54 @@ class ZBib extends React.PureComponent {
 		this.editable.edit();
 	}
 
+	renderBibliography() {
+		if (Object.keys(this.props.citations).length === 0) {
+			return (
+				<React.Fragment>
+					<h2 className="bibliography-title">Heading</h2>
+					<p className="lead">Text</p>
+				</React.Fragment>
+			);
+		} else {
+			return (
+				<React.Fragment>
+					{
+						this.props.isReadOnly ? (
+							<h1>
+								{ this.props.title || 'Untitled' }
+							</h1>
+						) : (
+							<h2>
+								<Editable
+									ref={ editable => this.editable = editable }
+									name="title"
+									processing={ false }
+									value={ this.props.title || 'Untitled' }
+									editOnClick = { true }
+									onSave={ newTitle => this.props.onTitleChanged(newTitle) }
+								/>
+								<Button onClick={ this.handleEditInput.bind(this) }>
+									<Icon type={ '28/pencil' } width="28" height="28" />
+								</Button>
+							</h2>
+						)
+					}
+					<StyleSelector { ...this.props } />
+					{
+						this.props.isLoadingCitations ? (
+							<div className="zotero-citations-loading hidden-xs-down">
+								<Spinner />
+							</div>
+						) : <Bibliography { ...this.props } />
+					}
+					{
+						!this.props.isReadOnly && Object.keys(this.props.citations).length > 0 && <DeleteAllButton { ...this.props } />
+					}
+				</React.Fragment>
+			);
+		}
+	}
+
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -94,42 +142,7 @@ class ZBib extends React.PureComponent {
 
 							<section className="section section-bibliography">
 								<div className="container">
-									{
-										Object.keys(this.props.citations).length === 0 ? [
-											<h2 key="title">
-												Illustration
-											</h2>,
-											<span key="image">Image goes here</span>
-										] : ([
-												this.props.isReadOnly ? (
-													<h1 key="title">
-														{ this.props.title || 'Untitled' }
-													</h1>
-												) : (
-													Object.keys(this.props.citations).length > 0 &&
-													<h2 key="title">
-														<Editable
-															ref={ editable => this.editable = editable }
-															name="title"
-															processing={ false }
-															value={ this.props.title || 'Untitled' }
-															editOnClick = { true }
-															onSave={ newTitle => this.props.onTitleChanged(newTitle) }
-														/>
-														<Button onClick={ this.handleEditInput.bind(this) }>
-															<Icon type={ '28/pencil' } width="28" height="28" />
-														</Button>
-													</h2>
-												),
-												<StyleSelector key="style-selector" { ...this.props } />,
-												this.props.isLoadingCitations ? (
-													<div key="bibliography" className="zotero-citations-loading hidden-xs-down">
-														<Spinner />
-													</div>
-												) : <Bibliography key="bibliography" { ...this.props } />,
-												!this.props.isReadOnly && <DeleteAllButton key="delete-button" { ...this.props } />
-											])
-									}
+									{ this.renderBibliography() }
 								</div>
 							</section>
 
