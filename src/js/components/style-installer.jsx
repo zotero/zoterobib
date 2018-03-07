@@ -173,41 +173,43 @@ class StyleInstaller extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
-				className="style-installer modal modal-lg"
+				className="style-installer modal modal-lg modal-centered"
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
-				<div className="modal-header">
-					<h4 className="modal-title text-truncate">
-						Add Citation Styles
-					</h4>
-					<Button
-						className="close btn-icon"
-						onClick={ this.handleCancel.bind(this) }
-					>
-						<Icon type={ '24/remove' } width="24" height="24" />
-					</Button>
-				</div>
-				<div className="modal-body">
-					<input
-						autoFocus
-						className="form-control form-control-lg"
-						onChange={ this.handleFilterChange.bind(this) }
-						onKeyDown={ this.handleInputKeydown.bind(this) }
-						placeholder="Enter three characters or more to search"
-						type="text"
-						value={ this.state.filterInput }
-					/>
-					{
-						this.props.isStylesDataLoading ? <Spinner /> : (
-							<ul className="style-list">
-								{
-									this.state.filterInput.length > 2 ?
-									this.state.items.map(this.renderStyleItem.bind(this)) :
-										this.props.citationStyles.map(this.renderStyleItem.bind(this))
-								}
-							</ul>
-						)
-					}
+				<div className="modal-content">
+					<div className="modal-header">
+						<h4 className="modal-title text-truncate">
+							Add Citation Styles
+						</h4>
+						<Button
+							className="close btn-icon"
+							onClick={ this.handleCancel.bind(this) }
+						>
+							<Icon type={ '24/remove' } width="24" height="24" />
+						</Button>
+					</div>
+					<div className="modal-body">
+						<input
+							autoFocus
+							className="form-control form-control-lg"
+							onChange={ this.handleFilterChange.bind(this) }
+							onKeyDown={ this.handleInputKeydown.bind(this) }
+							placeholder="Enter three characters or more to search"
+							type="text"
+							value={ this.state.filterInput }
+						/>
+						{
+							this.props.isStylesDataLoading ? <Spinner /> : (
+								<ul className="style-list">
+									{
+										this.state.filterInput.length > 2 ?
+										this.state.items.map(this.renderStyleItem.bind(this)) :
+											this.props.citationStyles.map(this.renderStyleItem.bind(this))
+									}
+								</ul>
+							)
+						}
+					</div>
 				</div>
 			</Modal>
 		];

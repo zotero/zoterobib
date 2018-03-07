@@ -178,26 +178,28 @@ class Editor extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
-				className="editor-container modal modal-lg"
+				className="editor-container modal modal-lg modal-centered"
 				onRequestClose={ () => this.props.onEditorClose() }
 			>
-				<div className="modal-header">
-					<h4 className="modal-title text-truncate">
-					{ this.itemTitle }
-					</h4>
-					<Button
-						className="close btn-icon"
-						onClick={ () => this.props.onEditorClose() }
-					>
-						<Icon type={ '24/remove' } width="24" height="24" />
-					</Button>
-				</div>
-				<div className="modal-body">
-					<div className={ cx('editor', this.props.className ) }>
-						<ItemBox
-							{ ...this.state }
-							isEditing={ true }
-							onSave={ this.handleItemUpdate.bind(this) } />
+				<div className="modal-content">
+					<div className="modal-header">
+						<h4 className="modal-title text-truncate">
+						{ this.itemTitle }
+						</h4>
+						<Button
+							className="close btn-icon"
+							onClick={ () => this.props.onEditorClose() }
+						>
+							<Icon type={ '24/remove' } width="24" height="24" />
+						</Button>
+					</div>
+					<div className="modal-body">
+						<div className={ cx('editor', this.props.className ) }>
+							<ItemBox
+								{ ...this.state }
+								isEditing={ true }
+								onSave={ this.handleItemUpdate.bind(this) } />
+						</div>
 					</div>
 				</div>
 			</Modal>

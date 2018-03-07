@@ -54,6 +54,7 @@ $h3-font-size: 32px;
 $h4-font-size: 24px;
 
 $h2-font-size-mobile: 32px;
+$h4-font-size-mobile: 20px;
 
 $headings-line-height: 1.1;
 $headings-font-weight: 300;
@@ -166,11 +167,13 @@ $input-border-width: $border-width;
 
 $input-transition: 0.15s ease;
 
+
 //
 // Icon
 //
 
 $icon-color: $shade-6;
+
 
 //
 // Select
@@ -236,6 +239,7 @@ $style-border-color: $shade-2;
 //
 
 $modal-backdrop-bg: rgba($blue-darkest, 0.6);
+$modal-content-bg: $shade-0;
 $modal-header-color: $shade-0;
 $modal-header-bg: $blue-dark;
 $modal-title-line-height: $space-xl;

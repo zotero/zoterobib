@@ -42,9 +42,13 @@ h2,
 
 h4,
 .h4 {
-	font-size: $h4-font-size;
+	font-size: $h4-font-size-mobile;
 	margin: 0;
 	// todo: letter-spacing
+
+	@media (min-width: $bp-md) {
+		font-size: $h4-font-size;
+	}
 }
 
 .lead {

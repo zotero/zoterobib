@@ -21,39 +21,41 @@ class MultipleChoiceDialog extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
-				className="multiple-choice-dialog modal modal-lg"
+				className="multiple-choice-dialog modal modal-lg modal-centered"
 				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
 			>
-				<div className="modal-header">
-					<h4 className="modal-title text-truncate">
-						Please select a citation from the list
-					</h4>
-					<Button
-						className="close btn-icon"
-						onClick={ () => this.props.onMultipleChoiceCancel() }
-					>
-						<Icon type={ '24/remove' } width="24" height="24" />
-					</Button>
-				</div>
-				<div className="modal-body">
-					<ul className="results">
-						{
-							this.props.multipleChoiceItems.map(
-								item => {
-									return (
-										<li
-											className="result"
-											key={ item.key }
-											onClick={ () => this.props.onMultipleChoiceSelect([item]) }
-										>
-											<span className="badge badge-light"></span>
-											{ item.value }
-										</li>
-									);
-								}
-							)
-						}
-					</ul>
+				<div className="modal-content">
+					<div className="modal-header">
+						<h4 className="modal-title text-truncate">
+							Please select a citation from the list
+						</h4>
+						<Button
+							className="close btn-icon"
+							onClick={ () => this.props.onMultipleChoiceCancel() }
+						>
+							<Icon type={ '24/remove' } width="24" height="24" />
+						</Button>
+					</div>
+					<div className="modal-body">
+						<ul className="results">
+							{
+								this.props.multipleChoiceItems.map(
+									item => {
+										return (
+											<li
+												className="result"
+												key={ item.key }
+												onClick={ () => this.props.onMultipleChoiceSelect([item]) }
+											>
+												<span className="badge badge-light"></span>
+												{ item.value }
+											</li>
+										);
+									}
+								)
+							}
+						</ul>
+					</div>
 				</div>
 			</Modal>
 		];

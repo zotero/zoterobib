@@ -19,7 +19,6 @@
 .modal {
 	width: auto;
 	margin: $space-xs;
-	background: #fff;
 
 	@media (min-width: $bp-sm) {
 		max-width: $modal-md;
@@ -30,6 +29,11 @@
 			max-width: calc(100% - 64px);
 		}
 	}
+}
+
+.modal-content {
+	width: 100%;
+	background: $modal-content-bg;
 }
 
 .modal-header {
@@ -114,6 +118,16 @@
 		@media (min-width: $bp-sm) {
 			padding: $modal-inner-padding-lg;
 		}
+	}
+}
+
+.modal-centered {
+	display: flex;
+	align-items: center;
+	min-height: calc(100% - #{2 * $space-xs});
+
+	@media (min-width: $bp-sm) {
+		min-height: calc(100% - #{2 * $space-xl});
 	}
 }
 

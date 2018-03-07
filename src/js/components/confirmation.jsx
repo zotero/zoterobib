@@ -23,30 +23,33 @@ class Confirmation extends React.Component {
 			/>,
 			<Modal
 				key="react-modal"
+				className="modal modal-centered"
 				isOpen={ this.props.isOpen }
 				contentLabel={ this.props.title }
 				onRequestClose={ () => this.props.onCancel() }
 			>
-				<div className="modal-header">
-					<h4 className="modal-title">
-						{ this.props.title }
-					</h4>
-				</div>
-				<div className="modal-body">
-					{ this.props.children }
-				</div>
-				<div className="modal-footer">
-					<div className="buttons">
-						<Button
-							className="btn-outline-secondary"
-							onClick={ () => this.props.onCancel() }>
-							{ this.props.cancelLabel }
-						</Button>
-						<Button
-							className="btn-secondary"
-							onClick={ () => this.props.onConfirm() }>
-							{ this.props.confirmLabel }
-						</Button>
+				<div className="modal-content">
+					<div className="modal-header">
+						<h4 className="modal-title text-truncate">
+							{ this.props.title }
+						</h4>
+					</div>
+					<div className="modal-body">
+						{ this.props.children }
+					</div>
+					<div className="modal-footer">
+						<div className="buttons">
+							<Button
+								className="btn-outline-secondary"
+								onClick={ () => this.props.onCancel() }>
+								{ this.props.cancelLabel }
+							</Button>
+							<Button
+								className="btn-secondary"
+								onClick={ () => this.props.onConfirm() }>
+								{ this.props.confirmLabel }
+							</Button>
+						</div>
 					</div>
 				</div>
 			</Modal>
