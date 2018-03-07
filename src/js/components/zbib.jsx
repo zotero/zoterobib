@@ -6,78 +6,20 @@ const { withRouter } = require('react-router-dom');
 const cx = require('classnames');
 
 const Brand = require('./brand');
-const Bibliography = require('./bibliography');
+const BibliographySection = require('./bibliographySection');
 const CiteTools = require('./cite-tools');
-const Confirmation = require('./confirmation');
-const DeleteAllButton = require('./delete-all-button');
-const Editor = require('./editor');
 const ErrorMessage = require('./error-message');
 const ExportTools = require('./export-tools');
-const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const PermalinkTools = require('./permalink-tools');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const StyleInstaller = require('./style-installer');
-const StyleSelector = require('./style-selector');
 const UndoMessage = require('./undo-message');
-const Editable = require('zotero-web-library/lib/component/editable');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const MultipleChoiceDialog = require('./multiple-choice-dialog');
+const Confirmation = require('./confirmation');
+const Editor = require('./editor');
+const StyleInstaller = require('./style-installer');
 
 class ZBib extends React.PureComponent {
-	handleEditInput() {
-		this.editable.edit();
-	}
-
-	renderBibliography() {
-		if (Object.keys(this.props.citations).length === 0) {
-			return (
-				<React.Fragment>
-					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
-					<h2 className="bibliography-title">Your bibliography is empty.</h2>
-					<p className="lead">To add your sources simply enter an URL, ISBN, DOI, or PMID in the search box above. Of course you can add them manually too.</p>
-				</React.Fragment>
-			);
-		} else {
-			return (
-				<React.Fragment>
-					{
-						this.props.isReadOnly ? (
-							<h1>
-								{ this.props.title || 'Untitled' }
-							</h1>
-						) : (
-							<h2>
-								<Editable
-									ref={ editable => this.editable = editable }
-									name="title"
-									processing={ false }
-									value={ this.props.title || 'Untitled' }
-									editOnClick = { true }
-									onSave={ newTitle => this.props.onTitleChanged(newTitle) }
-								/>
-								<Button onClick={ this.handleEditInput.bind(this) }>
-									<Icon type={ '28/pencil' } width="28" height="28" />
-								</Button>
-							</h2>
-						)
-					}
-					<StyleSelector { ...this.props } />
-					{
-						this.props.isLoadingCitations ? (
-							<div className="zotero-citations-loading hidden-xs-down">
-								<Spinner />
-							</div>
-						) : <Bibliography { ...this.props } />
-					}
-					{
-						!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
-					}
-				</React.Fragment>
-			);
-		}
-	}
-
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -111,11 +53,7 @@ class ZBib extends React.PureComponent {
 								)
 							}
 
-							<section className="section section-bibliography">
-								<div className="container">
-									{ this.renderBibliography() }
-								</div>
-							</section>
+							<BibliographySection { ...this.props} />
 
 							{
 								!this.props.isReadOnly && (
@@ -127,6 +65,7 @@ class ZBib extends React.PureComponent {
 									</section>
 								)
 							}
+
 							{
 								!this.props.isReadOnly && (
 									<section className="section section-link">
@@ -165,53 +104,19 @@ class ZBib extends React.PureComponent {
 		);
 	}
 
-	static defaultProps = {
-		citations: {},
-	}
-
 	static propTypes = {
-		citations: PropTypes.object,
-		citationStyle: PropTypes.string,
-		citationStyles: PropTypes.array,
-		error: PropTypes.string,
-		errorMessage: PropTypes.string,
-		getCopyData: PropTypes.func.isRequired,
-		getFileData: PropTypes.func.isRequired,
-		history: PropTypes.object,
-		isConfirmingStyleSwitch: PropTypes.bool,
-		isKeyboardUser: PropTypes.bool,
-		isLoading: PropTypes.bool,
-		isLoadingCitations: PropTypes.bool,
-		isMouseUser: PropTypes.bool,
-		isPickingItem: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
-		isSaving: PropTypes.bool,
+		isKeyboardUser: PropTypes.bool,
+		isMouseUser: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
-		isTranslating: PropTypes.bool,
-		items: PropTypes.array,
-		itemsCount: PropTypes.number,
-		lastDeletedItem: PropTypes.object,
-		match: PropTypes.object,
-		multipleChoiceItems: PropTypes.array,
-		onCitationStyleChanged: PropTypes.func.isRequired,
+		errorMessage: PropTypes.string,
 		onClearError: PropTypes.func.isRequired,
-		onDeleteCitations: PropTypes.func.isRequired,
+		lastDeletedItem: PropTypes.object,
+		onUndoDelete: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,
-		onError: PropTypes.func.isRequired,
-		onItemCreated: PropTypes.func.isRequired,
-		onItemUpdate: PropTypes.func.isRequired,
-		onMultipleChoiceCancel: PropTypes.func.isRequired,
-		onMultipleChoiceSelect: PropTypes.func.isRequired,
-		onOverride: PropTypes.func.isRequired,
-		onSave: PropTypes.func.isRequired,
+		isConfirmingStyleSwitch: PropTypes.bool,
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
-		onTitleChanged: PropTypes.func.isRequired,
-		onTranslationRequest: PropTypes.func.isRequired,
-		onUndoDelete: PropTypes.func.isRequired,
-		permalink: PropTypes.string,
-		title: PropTypes.string,
-		url: PropTypes.string,
 	}
 }
 
