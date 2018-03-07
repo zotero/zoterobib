@@ -32,15 +32,17 @@ class ZBib extends React.PureComponent {
 						'touch-user': this.props.isTouchUser,
 					}) }>
 						<div className="zotero-bib-inner">
-							<ErrorMessage
-								message={ this.props.errorMessage }
-								onDismiss={ this.props.onClearError.bind(this) }
-							/>
-							<UndoMessage
-								message={ this.props.lastDeletedItem ? 'Item deleted' : null }
-								onUndo={ this.props.onUndoDelete }
-								onDismiss={ this.props.onDismissUndo }
-							/>
+							<div className="messages">
+								<ErrorMessage
+									message={ this.props.errorMessage }
+									onDismiss={ this.props.onClearError.bind(this) }
+								/>
+								<UndoMessage
+									message={ this.props.lastDeletedItem ? 'Item deleted' : null }
+									onUndo={ this.props.onUndoDelete }
+									onDismiss={ this.props.onDismissUndo }
+								/>
+							</div>
 
 							{
 								!this.props.isReadOnly && (

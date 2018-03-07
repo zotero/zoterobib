@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class ErrorMessage extends React.Component {
 	componentWillReceiveProps(nextProps) {
@@ -15,13 +16,16 @@ class ErrorMessage extends React.Component {
 	render() {
 		return this.props.message ? (
 			<div className="message error">
-				<button
-					className="dismiss"
-					onClick={ this.props.onDismiss }
-				>x</button>
-				<span className="content">
+				<div className="content">
 					{ this.props.message }
-				</span>
+				</div>
+				<button
+					className="btn btn-icon close"
+					aria-label="Close"
+					onClick={ this.props.onDismiss }
+				>
+					<Icon type={ '24/remove' } width="24" height="24" />
+				</button>
 			</div>
 		): null;
 	}

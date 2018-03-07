@@ -16,8 +16,10 @@ $blue:         #2970ff;
 $blue-dark:    #333c66;
 $blue-darkest: #292b33;
 
-$primary: $red;
+$primary:   $red;
 $secondary: $blue;
+$error:     $primary;
+$warning:   #c6ba1a; // todo
 
 $shade-0: #fff;
 $shade-1: #f6f6f6;
@@ -102,6 +104,13 @@ $border-radius-sm: 3px;
 $border-radius-lg: 6px;
 
 $border-width: 1px;
+
+
+//
+// Z-index master list
+//
+
+$zindex-messages: 1000;
 
 
 //
@@ -271,3 +280,14 @@ $result-hover-bg:     $secondary;
 
 $editor-min-height: 320px;
 $editor-spinner-size: $space-lg;
+
+
+//
+// Message
+//
+
+$message-font-size:        $space-lg;
+$message-font-size-mobile: 18px;
+$message-color:            $shade-0;
+$message-error-bg:         $error;
+$message-warning-bg:       $warning;

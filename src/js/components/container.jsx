@@ -414,7 +414,7 @@ class Container extends React.Component {
 					break;
 					case ZoteroBib.FAILED:
 						this.setState({
-							errorMessage: 'An error occured while citing this source',
+							errorMessage: 'An error occured while citing this source.',
 							isTranslating: false,
 						});
 					break;
@@ -422,7 +422,7 @@ class Container extends React.Component {
 			}
 			catch(e) {
 				this.setState({
-					errorMessage: 'An error occured while citing this source',
+					errorMessage: 'An error occured while citing this source.',
 					isTranslating: false,
 				});
 			}

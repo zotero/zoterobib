@@ -1,0 +1,61 @@
+//
+// Error message
+//
+
+.message {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	color: $message-color;
+	padding: $space-xl ($grid-gutter-width / 2);
+	text-align: center;
+	font-size: $message-font-size-mobile;
+	font-weight: 300;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+
+	@media (min-width: $bp-md) {
+		flex-direction: row;
+		font-size: $message-font-size;
+		padding: ($space-xxl - 10px) ($grid-gutter-width / 2) ($space-xxl - 10px) 92px;
+
+		&::before {
+			content: ""; // Center/right justification hack
+		}
+	}
+
+	.content {
+		margin-bottom: -8px;
+
+		@media (min-width: $bp-md) {
+			margin-bottom: 0;
+		}
+	}
+
+	.close {
+		order: -1;
+		width: $space-xxl;
+		height: $space-xxl;
+		margin-top: -20px;
+
+		@media (min-width: $bp-md) {
+			order: 0;
+			width: $space-xxxl;
+			height: $space-xxl;
+			margin: (-$space-xl / 2) $space-sm (-$space-xl / 2) 0;
+		}
+
+		.icon {
+			color: $message-color;
+		}
+	}
+
+	&.error {
+		background: $message-error-bg;
+	}
+
+	&.warning {
+		background: $message-warning-bg;
+	}
+}
