@@ -10,12 +10,39 @@
 	}
 
 	.result {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 		border-top: 1px solid $result-border-color;
 		padding: $result-padding;
 		cursor: pointer;
 
+		@media (min-width: $bp-sm) {
+			flex-direction: row;
+
+			.badge {
+				margin-bottom: 7px; // Like line-height
+			}
+		}
+
+		.badge {
+			flex: 0 0 auto;
+			margin-bottom: 7px;
+			background: transparent;
+
+			@media (min-width: $bp-sm) {
+				margin: $space-min $space-min 0 0;
+			}
+		}
+
 		&:hover {
+			color: $result-hover-color;
 			background-color: $result-hover-bg;
+			border-top-color: $result-hover-bg;
+
+			& + .result {
+				border-top-color: $result-hover-bg;
+			}
 		}
 	}
 }
