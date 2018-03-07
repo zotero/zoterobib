@@ -46,3 +46,14 @@ h4,
 	margin: 0;
 	// todo: letter-spacing
 }
+
+.lead {
+	font-size: $lead-font-size-mobile;
+	font-weight: $lead-font-weight;
+	margin-top: 0;
+	// todo: letter-spacing
+
+	@media (min-width: $bp-md) {
+		font-size: $lead-font-size;
+	}
+}

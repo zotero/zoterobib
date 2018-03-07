@@ -21,8 +21,8 @@ class BibliographySection extends React.PureComponent {
 			return (
 				<React.Fragment>
 					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
-					<h2 className="bibliography-title">Your bibliography is empty.</h2>
-					<p className="lead">To add your sources simply enter an URL, ISBN, DOI, or PMID in the search box above. Of course you can add them manually too.</p>
+					<h2 className="empty-title">Your bibliography is empty.</h2>
+					<p className="lead empty-lead">To add your sources simply enter an URL, ISBN, DOI, or PMID in the search box above. Of course you can add them manually too.</p>
 				</React.Fragment>
 			);
 		} else {
@@ -34,7 +34,7 @@ class BibliographySection extends React.PureComponent {
 								{ this.props.title || 'Untitled' }
 							</h1>
 						) : (
-							<h2>
+							<h2 className="bibliography-title">
 								<Editable
 									ref={ editable => this.editable = editable }
 									name="title"

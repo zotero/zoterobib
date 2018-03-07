@@ -10,7 +10,34 @@
 		padding-top: $section-padding - 21px;
 	}
 
-	h2 {
+	.empty-bibliography {
+		width: 160px;
+		height: auto;
+		margin-bottom: $space-xxl - 20px;
+
+		@media (min-width: $bp-md) {
+			width: auto;
+			margin-bottom: $space-xxxl + $space-xs - 23px;
+		}
+	}
+
+	.empty-title {
+		margin-bottom: $lead-font-size-mobile / 2;
+
+		@media (min-width: $bp-md) {
+			margin-bottom: $lead-font-size / 2;
+		}
+	}
+
+	.empty-lead {
+		margin-bottom: -8px;
+
+		@media (min-width: $bp-md) {
+			margin-bottom: -10px;
+		}
+	}
+
+	.bibliography-title {
 		display: flex;
 		align-items: center;
 		transition: background-color $input-transition;
