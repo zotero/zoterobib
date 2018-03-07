@@ -182,7 +182,7 @@ class StyleInstaller extends React.Component {
 							Add Citation Styles
 						</h4>
 						<Button
-							className="close btn-icon"
+							className="close"
 							onClick={ this.handleCancel.bind(this) }
 						>
 							<Icon type={ '24/remove' } width="24" height="24" />

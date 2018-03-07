@@ -30,7 +30,7 @@ class MultipleChoiceDialog extends React.Component {
 							Please select a citation from the list
 						</h4>
 						<Button
-							className="close btn-icon"
+							className="close"
 							onClick={ () => this.props.onMultipleChoiceCancel() }
 						>
 							<Icon type={ '24/remove' } width="24" height="24" />

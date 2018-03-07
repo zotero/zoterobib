@@ -187,7 +187,7 @@ class Editor extends React.Component {
 						{ this.itemTitle }
 						</h4>
 						<Button
-							className="close btn-icon"
+							className="close"
 							onClick={ () => this.props.onEditorClose() }
 						>
 							<Icon type={ '24/remove' } width="24" height="24" />
