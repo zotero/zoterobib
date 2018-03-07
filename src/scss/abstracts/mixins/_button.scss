@@ -7,7 +7,7 @@
 	background-color: if($outline, transparent, $btn-color);
 	border-color: if($outline, $btn-color, transparent);
 
-	&:hover {
+	&:hover:not(:disabled):not(.disabled) {
 		color: $shade-0;
 		background-color: $btn-color;
 		box-shadow: 0 2px 4px $btn-box-shadow-color;

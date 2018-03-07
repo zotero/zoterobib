@@ -115,11 +115,11 @@ class StyleInstaller extends React.Component {
 				</div>
 				{
 					isActive ? (
-						<Button className="btn btn-sm" disabled>
+						<Button className="btn btn-sm btn-outline-light" disabled>
 							Active
 						</Button>
 					) : isCore ? (
-						<Button className="btn btn-sm" disabled>
+						<Button className="btn btn-sm btn-outline-light" disabled>
 							Default
 						</Button>
 					) : isInstalled ? (

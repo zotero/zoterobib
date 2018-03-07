@@ -25,8 +25,17 @@ $shade-2: #ebebeb;
 $shade-3: #ddd;
 $shade-4: #ccc;
 $shade-4: #bbb;
-$shade-5: #777;
-$shade-6: #222;
+$shade-5: #999;
+$shade-6: #777;
+$shade-7: #222;
+
+
+//
+// Body
+//
+
+$body-color: $shade-7;
+$body-bg:    $shade-0;
 
 
 //
@@ -125,9 +134,7 @@ $btn-padding-y-sm: 3px;
 
 $btn-primary-color:   $primary;
 $btn-secondary-color: $secondary;
-
-$btn-outline-primary-color:   $primary;
-$btn-outline-secondary-color: $secondary;
+$btn-light-color:     $shade-5;
 
 $btn-icon-bg:   transparent;
 $btn-icon-size: $space-xl; // btn-sm size
@@ -159,6 +166,11 @@ $input-border-width: $border-width;
 
 $input-transition: 0.15s ease;
 
+//
+// Icon
+//
+
+$icon-color: $shade-6;
 
 //
 // Select

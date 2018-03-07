@@ -27,6 +27,10 @@
 	&:focus {
 		outline: none;
 	}
+
+	&[disabled] {
+		opacity: 0.5;
+	}
 }
 
 .btn-sm {
@@ -41,12 +45,20 @@
 	@include button-variant($btn-secondary-color);
 }
 
+.btn-light {
+	@include button-variant($btn-light-color);
+}
+
 .btn-outline-primary {
-	@include button-variant($btn-outline-primary-color, "outline");
+	@include button-variant($btn-primary-color, "outline");
 }
 
 .btn-outline-secondary {
-	@include button-variant($btn-outline-secondary-color, "outline");
+	@include button-variant($btn-secondary-color, "outline");
+}
+
+.btn-outline-light {
+	@include button-variant($btn-light-color, "outline");
 }
 
 .btn-icon {
@@ -68,7 +80,7 @@
 
 	&:active {
 		.icon {
-			color: $shade-6;
+			color: $shade-7;
 		}
 	}
 }
