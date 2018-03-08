@@ -30,6 +30,8 @@ class ZBib extends React.PureComponent {
 						'keyboard-user': this.props.isKeyboardUser,
 						'mouse-user': this.props.isMouseUser,
 						'touch-user': this.props.isTouchUser,
+						'read-only': this.props.isReadOnly,
+						'write': !this.props.isReadOnly,
 					}) }>
 						<div className="zotero-bib-inner">
 							<div className="messages">
@@ -58,14 +60,12 @@ class ZBib extends React.PureComponent {
 							<BibliographySection { ...this.props} />
 
 							{
-								!this.props.isReadOnly && (
-									<section className="section section-export">
-										<div className="container">
-											<h2>Export</h2>
-											<ExportTools { ...this.props } />
-										</div>
-									</section>
-								)
+								<section className="section section-export">
+									<div className="container">
+										<h2>Export</h2>
+										<ExportTools { ...this.props } />
+									</div>
+								</section>
 							}
 
 							{
@@ -74,6 +74,16 @@ class ZBib extends React.PureComponent {
 										<div className="container">
 											<h2>Link to this version</h2>
 											<PermalinkTools { ...this.props } />
+										</div>
+									</section>
+								)
+							}
+
+							{
+								this.props.isReadOnly && (
+									<section className="section section-brand">
+										<div className="container">
+											<Brand />
 										</div>
 									</section>
 								)

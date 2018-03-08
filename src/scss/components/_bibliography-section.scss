@@ -10,6 +10,10 @@
 		padding-top: $section-padding - 21px;
 	}
 
+	.read-only & {
+		border-top: none;
+	}
+
 	.empty-bibliography {
 		width: 160px;
 		height: auto;
@@ -37,61 +41,63 @@
 		}
 	}
 
-	.bibliography-title {
-		display: flex;
-		align-items: center;
-		transition: background-color $input-transition;
-		border-radius: $border-radius-sm;
-		margin-bottom: $space-xl - 13px;
-
-		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 19px;
-
-			&:hover {
-				background-color: $shade-1;
-				transition: background-color 0.15s 0.15s ease;
-			}
-		}
-
-		.editable-value {
-			line-height: $headings-line-height;
-			padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
-			text-align: left;
-			border: 1px solid transparent; // Keep text stable
-			word-wrap: break-word;
-			min-width: 0; // Fix word-wrap
+	.write & {
+		.bibliography-title {
+			display: flex;
+			align-items: center;
+			transition: background-color $input-transition;
+			border-radius: $border-radius-sm;
+			margin-bottom: $space-xl - 13px;
 
 			@media (min-width: $bp-md) {
-				padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
-				text-align: inherit;
+				margin-bottom: $space-xxl - 19px;
+
+				&:hover {
+					background-color: $shade-1;
+					transition: background-color 0.15s 0.15s ease;
+				}
 			}
-		}
 
-		.editable-control {
-			border: 1px solid $input-focus-color;
-			box-shadow: 0 0 0 2px $secondary;
-			line-height: inherit;
-			margin: 0;
-			padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
-			text-align: left;
+			.editable-value {
+				line-height: $headings-line-height;
+				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
+				text-align: left;
+				border: 1px solid transparent; // Keep text stable
+				word-wrap: break-word;
+				min-width: 0; // Fix word-wrap
 
-			@media (min-width: $bp-md) {
-				padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
-				text-align: inherit;
+				@media (min-width: $bp-md) {
+					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
+					text-align: inherit;
+				}
 			}
-		}
 
-		.btn-icon {
-			flex: 0 0 auto;
-			margin-left: $space-sm;
+			.editable-control {
+				border: 1px solid $input-focus-color;
+				box-shadow: 0 0 0 2px $secondary;
+				line-height: inherit;
+				margin: 0;
+				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
+				text-align: left;
 
-			@media (min-width: $bp-md) {
+				@media (min-width: $bp-md) {
+					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
+					text-align: inherit;
+				}
+			}
+
+			.btn-icon {
+				flex: 0 0 auto;
+				margin-left: $space-sm;
+
+				@media (min-width: $bp-md) {
+					display: none;
+				}
+			}
+
+			.editing + .btn-icon {
 				display: none;
 			}
-		}
-
-		.editing + .btn-icon {
-			display: none;
 		}
 	}
 

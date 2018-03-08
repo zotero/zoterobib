@@ -4,4 +4,10 @@
 
 .section-export {
 	text-align: center;
+
+	.read-only & {
+		h2 {
+			display: none;
+		}
+	}
 }

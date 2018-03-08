@@ -30,7 +30,7 @@ class BibliographySection extends React.PureComponent {
 				<React.Fragment>
 					{
 						this.props.isReadOnly ? (
-							<h1>
+							<h1 className="h2 bibliography-title">
 								{ this.props.title || 'Untitled' }
 							</h1>
 						) : (
@@ -72,6 +72,14 @@ class BibliographySection extends React.PureComponent {
 			<section className="section section-bibliography">
 				<div className="container">
 					{ this.renderBibliography() }
+					{
+						this.props.isReadOnly && (
+							<Button
+								className="btn-sm btn-outline-secondary">
+								Edit Bibliography
+							</Button>
+						)
+					}
 				</div>
 			</section>
 		);
