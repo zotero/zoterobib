@@ -16,9 +16,9 @@ class ErrorMessage extends React.Component {
 	render() {
 		return this.props.message ? (
 			<div className="message error">
-				<div className="content">
+				<p className="text">
 					{ this.props.message }
-				</div>
+				</p>
 				<button
 					className="btn btn-icon close"
 					aria-label="Close"

@@ -20,7 +20,7 @@
 		border-color $btn-transition,
 		box-shadow $btn-transition;
 
-	&:not(:disabled):not(.disabled) {
+	&:not(:disabled) {
 		cursor: pointer;
 	}
 
@@ -50,15 +50,23 @@
 }
 
 .btn-outline-primary {
-	@include button-variant($btn-primary-color, "outline");
+	@include button-variant($btn-primary-color, $outline: true);
 }
 
 .btn-outline-secondary {
-	@include button-variant($btn-secondary-color, "outline");
+	@include button-variant($btn-secondary-color, $outline: true);
 }
 
 .btn-outline-light {
-	@include button-variant($btn-light-color, "outline");
+	@include button-variant($btn-light-color, $outline: true);
+}
+
+.btn-outline-inverse-error {
+	@include button-variant($btn-error-color, $outline: true, $inverse: true);
+}
+
+.btn-outline-inverse-warning {
+	@include button-variant($btn-warning-color, $outline: true, $inverse: true);
 }
 
 .btn-icon {

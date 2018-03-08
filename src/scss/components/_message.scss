@@ -25,10 +25,17 @@
 		}
 	}
 
-	.content {
+	.text {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0;
+		margin-top: 3px;
 		margin-bottom: -8px;
 
 		@media (min-width: $bp-md) {
+			display: block;
+			margin-top: 0;
 			margin-bottom: 0;
 		}
 	}
@@ -37,7 +44,7 @@
 		order: -1;
 		width: $space-xxl;
 		height: $space-xxl;
-		margin-top: -20px;
+		margin-top: -16px;
 
 		@media (min-width: $bp-md) {
 			order: 0;
@@ -48,6 +55,15 @@
 
 		.icon {
 			color: $message-color;
+		}
+	}
+
+	.btn:not(.btn-icon) {
+		margin-top: $space-xl - 8px;
+		margin-bottom: 8px;
+
+		@media (min-width: $bp-md) {
+			margin: -1em 0;
 		}
 	}
 

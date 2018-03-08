@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 
@@ -15,7 +16,7 @@ class UndoMessage extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if('location' in nextProps && 
+		if('location' in nextProps &&
 			nextProps.location.pathname !== this.props.location.pathname) {
 			this.props.onDismiss();
 		}
@@ -41,14 +42,23 @@ class UndoMessage extends React.Component {
 	render() {
 		return this.props.message ? (
 			<div className="message warning">
-				<button 
-					className="dismiss"
-					onClick={ this.handleDismiss.bind(this) }
-				>x</button>
-				<span className="content">
+
+				<p className="text">
 					{ this.props.message }
-				</span>
-				<Button onClick={ this.handleUndo.bind(this) }>Undo</Button>
+					{' '}
+					<Button
+						className="btn-outline-inverse-warning"
+						onClick={ this.handleUndo.bind(this) }
+					>
+						Undo
+					</Button>
+				</p>
+				<button
+					className="btn btn-icon close"
+					onClick={ this.handleDismiss.bind(this) }
+				>
+					<Icon type={ '24/remove' } width="24" height="24" />
+				</button>
 			</div>
 		) : null;
 	}

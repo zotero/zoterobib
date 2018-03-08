@@ -2,12 +2,15 @@
 // Button
 //
 
-@mixin button-variant($btn-color, $outline: null) {
+@mixin button-variant($color, $outline: null, $inverse: null) {
+	$btn-color: if($inverse, $shade-0, $color);
+	$shade-0: if($inverse, $color, $shade-0);
+
 	color: if($outline, $btn-color, $shade-0);
 	background-color: if($outline, transparent, $btn-color);
 	border-color: if($outline, $btn-color, transparent);
 
-	&:hover:not(:disabled):not(.disabled) {
+	&:hover {
 		color: $shade-0;
 		background-color: $btn-color;
 		box-shadow: 0 2px 4px $btn-box-shadow-color;
@@ -17,6 +20,13 @@
 		color: $shade-0;
 		background-color: darken($btn-color, 8%);
 		border-color: if($outline, darken($btn-color, 8%), transparent);
+		box-shadow: none;
+	}
+
+	&:disabled {
+		color: if($outline, $btn-color, $shade-0);
+		background-color: if($outline, transparent, $btn-color);
+		border-color: if($outline, $btn-color, transparent);
 		box-shadow: none;
 	}
 

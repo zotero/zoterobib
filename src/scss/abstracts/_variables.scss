@@ -145,6 +145,8 @@ $btn-padding-y-sm: 3px;
 $btn-primary-color:   $primary;
 $btn-secondary-color: $secondary;
 $btn-light-color:     $shade-5;
+$btn-error-color:     $error;
+$btn-warning-color:   $warning;
 
 $btn-icon-bg:   transparent;
 $btn-icon-size: $space-xl; // btn-sm size
@@ -287,7 +289,7 @@ $editor-spinner-size: $space-lg;
 //
 
 $message-font-size:        $space-lg;
-$message-font-size-mobile: 18px;
+$message-font-size-mobile: 20px;
 $message-color:            $shade-0;
 $message-error-bg:         $error;
 $message-warning-bg:       $warning;
