@@ -6,11 +6,6 @@
 	box-sizing: border-box;
 }
 
-body {
-	color: $body-color;
-	background-color: $body-bg;
-}
-
 :focus {
 	outline: none;
 	outline-offset: $outline-offset;
@@ -20,11 +15,21 @@ body {
 	}
 }
 
+::selection {
+	color: $shade-0;
+	background-color: $secondary;
+}
+
 html,
 body,
 main,
 .zotero-bib-container {
 	height: 100%; // Stretch for spinner
+}
+
+body {
+	color: $body-color;
+	background-color: $body-bg;
 }
 
 .zotero-bib-container {
