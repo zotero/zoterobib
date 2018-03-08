@@ -49,7 +49,9 @@ class BibliographySection extends React.PureComponent {
 							</h2>
 						)
 					}
-					<StyleSelector { ...this.props } />
+					{
+						!this.props.isReadOnly && <StyleSelector { ...this.props } />
+					}
 					{
 						this.props.isLoadingCitations ? (
 							<div className="zotero-citations-loading hidden-xs-down">
