@@ -39,7 +39,7 @@
 @import "components/style-installer";
 @import "components/multiple-choice-dialog";
 @import "components/message";
-
+@import "components/permalink-tools";
 
 //
 // Layout
@@ -50,5 +50,6 @@
 @import "layout/sections";
 @import "layout/section-cite";
 @import "layout/section-export";
+@import "layout/section-link";
 @import "layout/badge";
 @import "layout/messages";

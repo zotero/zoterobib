@@ -50,6 +50,8 @@ $font-family-base: $font-family-sans-serif;
 $font-size-base: 16px;
 $line-height-base: 1.5;
 
+$font-size-lg: 24px;
+
 $h1-font-size: 60px;
 $h2-font-size: 40px;
 $h3-font-size: 32px;
@@ -139,6 +141,8 @@ $btn-line-height: $line-height-base;
 
 $btn-padding-x: $space-sm;
 $btn-padding-y: 7px;
+$btn-padding-x-lg: $space-md;
+$btn-padding-y-lg: 4px;
 $btn-padding-x-sm: $space-sm;
 $btn-padding-y-sm: 3px;
 
@@ -293,3 +297,10 @@ $message-font-size-mobile: 20px;
 $message-color:            $shade-0;
 $message-error-bg:         $error;
 $message-warning-bg:       $warning;
+
+
+//
+// Permalink tools
+//
+
+$permalink-spinner-size: $space-xl;

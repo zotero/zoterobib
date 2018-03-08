@@ -33,8 +33,24 @@
 	}
 }
 
+a.btn {
+	text-decoration: none;
+}
+
+.btn-lg {
+	font-size: $font-size-lg;
+	font-weight: 300;
+	padding: $btn-padding-y-lg $btn-padding-x-lg;
+	border-width: 2px;
+}
+
 .btn-sm {
 	padding: $btn-padding-y-sm $btn-padding-x-sm;
+}
+
+.btn-block {
+	display: block;
+	width: 100%;
 }
 
 .btn-primary {

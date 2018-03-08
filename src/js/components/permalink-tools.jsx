@@ -48,31 +48,35 @@ class PermalinkTools extends React.Component {
 
 	render() {
 		if(this.state.isSavingPermalink) {
-			return <Spinner />;
+			return (
+				<div className="permalink-tools loading">
+					<Spinner />
+				</div>
+			);
 		}
 
 		return this.props.permalink ? (
 			<div className="permalink-tools">
 				<ClipboardButton
-					className="btn btn-primary"
+					className="btn btn-lg btn-block btn-secondary"
 					data-clipboard-text={ this.props.permalink }
 					onSuccess={ this.handleClipoardSuccess.bind(this) }
 				>
 					{ this.state.isRecentlyCopied ? 'Copied!' : 'Copy URL' }
 				</ClipboardButton>
-				<Button>
-					<a href={ this.props.permalink }>
-						View
-					</a>
-				</Button>
+				<a
+					className="btn btn-lg btn-block btn-secondary"
+					href={ this.props.permalink }>
+					View
+				</a>
 			</div>
 			) : (
 			<Button
 				disabled={ Object.keys(this.props.citations).length === 0 }
-				className="btn btn-drop-down permalink-button"
+				className="btn-lg btn-outline-secondary"
 				onClick={ this.handleCreateLink.bind(this) }
 			>
-				Link to This Version
+				Create
 			</Button>
 		);
 	}
