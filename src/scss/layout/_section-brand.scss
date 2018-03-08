@@ -1,16 +1,13 @@
 //
-// Section cite
+// Section brand
 //
 
-.section-cite {
-	border-top: none;
+.section-brand {
 	padding-top: $section-padding-mobile - 4px;
+	padding-bottom: $section-padding-mobile - 3px;
 
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 4px;
-	}
-
-	.brand-subhead {
-		margin-bottom: 45px;
+		padding-bottom: $section-padding - 3px;
 	}
 }

@@ -1,0 +1,45 @@
+//
+// Brand
+//
+
+.brand,
+.brand-subhead {
+	margin: auto;
+
+	a {
+		display: block;
+		height: 100%;
+		position: relative;
+		text-indent: -9999px;
+
+		svg {
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	}
+}
+
+.brand {
+	width: 100px;
+	height: 46px;
+}
+
+.brand-subhead {
+	width: 54px;
+	height: 14px;
+
+	a {
+		left: 2px;
+
+		path {
+			transition: fill $link-transition;
+		}
+
+		&:hover {
+			path {
+				fill: $primary;
+			}
+		}
+	}
+}
