@@ -58,6 +58,10 @@
 				}
 			}
 
+			.input-group {
+				flex: 1 1 auto;
+			}
+
 			.editable-value {
 				line-height: $headings-line-height;
 				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;

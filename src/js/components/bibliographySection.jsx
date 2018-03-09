@@ -12,8 +12,27 @@ const DeleteAllButton = require('./delete-all-button');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 
 class BibliographySection extends React.PureComponent {
-	handleEditInput() {
-		this.editable.edit();
+	state = {
+		isEditingTitle: false
+	}
+
+	handleTitleEdit() {
+		this.setState({
+			isEditingTitle: true
+		});
+	}
+
+	handleTitleCommit(newValue) {
+		this.props.onTitleChanged(newValue);
+		this.setState({
+			isEditingTitle: false
+		});
+	}
+
+	handleTitleCancel() {
+		this.setState({
+			isEditingTitle: false
+		});
 	}
 
 	renderBibliography() {
@@ -34,16 +53,21 @@ class BibliographySection extends React.PureComponent {
 								{ this.props.title || 'Untitled' }
 							</h1>
 						) : (
-							<h2 className="bibliography-title">
+							<h2 onClick={ this.handleTitleEdit.bind(this) }
+								onFocus={ this.handleTitleEdit.bind(this) }
+								tabIndex={ this.state.isEditingTitle ? null : 0 }
+								className="bibliography-title"
+							>
 								<Editable
-									ref={ editable => this.editable = editable }
-									name="title"
-									processing={ false }
-									value={ this.props.title || 'Untitled' }
-									editOnClick = { true }
-									onSave={ newTitle => this.props.onTitleChanged(newTitle) }
+									placeholder="Untitled"
+									value={ this.props.title || '' }
+									isActive={ this.state.isEditingTitle }
+									onCommit={ this.handleTitleCommit.bind(this) }
+									onCancel={ this.handleTitleCancel.bind(this) }
+									autoFocus
+									selectOnFocus
 								/>
-								<Button onClick={ this.handleEditInput.bind(this) }>
+								<Button>
 									<Icon type={ '28/pencil' } width="28" height="28" />
 								</Button>
 							</h2>

@@ -197,7 +197,7 @@ class Editor extends React.Component {
 						<div className={ cx('editor', this.props.className ) }>
 							<ItemBox
 								{ ...this.state }
-								isEditing={ true }
+								isForm={ true }
 								onSave={ this.handleItemUpdate.bind(this) } />
 						</div>
 					</div>
