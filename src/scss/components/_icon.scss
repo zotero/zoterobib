@@ -4,8 +4,6 @@
 
 .icon {
 	color: $icon-color;
-	width: $icon-spin-size;
-	height: $icon-spin-size;
 }
 
 .icon-spin {
@@ -20,6 +18,8 @@
 	}
 
 	display: block; // todo
+	width: $icon-spin-size;
+	height: $icon-spin-size;
 	color: $spinner-color;
 	animation: spin 1.2s linear infinite;
 }
