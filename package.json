@@ -97,6 +97,7 @@
     "stylelint-config-standard": "^18.0.0",
     "stylelint-scss": "^2.2.0",
     "uglifyify": "^4.0.5",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "webworkify": "^1.5.0"
   }
 }

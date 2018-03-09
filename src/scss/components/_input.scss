@@ -1,0 +1,11 @@
+.input-group {
+	flex: 1 1 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	.icon-spin {
+		flex: 0 0 auto;
+		margin-left: $space-xs;
+	}
+}

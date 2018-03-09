@@ -7,43 +7,80 @@ const { KEYDOWN } = require('react-key-handler');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Input = require('zotero-web-library/lib/component/input');
 const cx = require('classnames');
 const Modal = require('./modal');
 
+var SearchWorker = require('webworkify')(require('../search-worker.js'));
+
 class StyleInstaller extends React.Component {
 	state = {
+		isReady: false,
+		isSearching: false,
 		selectedIndex: null,
 		filterInput: '',
 		filter: '',
 		items: [],
 	}
 
+	handleWorkerMessage = (event) => {
+		const [messageKind, payload] = event.data;
+		switch(messageKind) {
+			case 'READY':
+				this.setState({
+					isReady: true
+				});
+			break;
+			case 'FILTER_COMPLETE':
+				this.setState({
+					isSearching: false,
+					items: payload
+				});
+			break;
+		}
+	}
+
+	componentDidMount() {
+		SearchWorker.addEventListener('message', this.handleWorkerMessage);
+	}
+
 	componentWillUnmount() {
+		SearchWorker.removeEventListener('message', this.handleWorkerMessage);
 		if(this.timeout) {
 			clearTimeout(this.timeout);
 			delete this.timeout;
 		}
 	}
 
-	handleFilterChange(ev) {
+	componentWillReceiveProps({ isStylesDataLoading, stylesData }) {
+		if(!isStylesDataLoading && this.props.isStylesDataLoading != isStylesDataLoading) {
+			SearchWorker.postMessage(['LOAD', stylesData]);
+		}
+	}
+
+	componentDidUpdate(_, { isSearching }) {
+		if(this.state.isSearching && this.state.isSearching !== isSearching) {
+			const filter = this.state.filterInput.toLowerCase();
+			SearchWorker.postMessage(['FILTER', filter]);
+		}
+	}
+
+	handleFilterChange(newValue) {
 		if(this.timeout) {
 			clearTimeout(this.timeout);
 		}
 		this.setState({
-			filterInput: ev.target.value
+			filterInput: newValue
 		});
 
-		this.timeout = setTimeout(() => {
-			const filter = this.state.filterInput.toLowerCase();
-			this.setState({
-				selectedIndex: null,
-				items: this.props.stylesData.filter(
-					style => style.name.toLowerCase().includes(filter)
-					|| style.title.toLowerCase().includes(filter)
-					|| (style.titleShort && style.titleShort.toLowerCase().includes(filter))
-				)
-			});
-		}, 250);
+		if(newValue.length > 2) {
+			this.timeout = setTimeout(() => {
+				this.setState({
+					isSearching: true,
+					selectedIndex: null
+				});
+			}, 250);
+		}
 	}
 
 	handleEscapeKey(ev) {
@@ -189,7 +226,7 @@ class StyleInstaller extends React.Component {
 						</Button>
 					</div>
 					<div className="modal-body">
-						<input
+						<Input
 							autoFocus
 							className="form-control form-control-lg"
 							onChange={ this.handleFilterChange.bind(this) }
@@ -197,17 +234,19 @@ class StyleInstaller extends React.Component {
 							placeholder="Enter three characters or more to search"
 							type="text"
 							value={ this.state.filterInput }
+							isBusy={ this.state.isSearching }
 						/>
 						{
-							this.props.isStylesDataLoading ? <Spinner /> : (
+							this.state.isReady ? (
 								<ul className="style-list">
 									{
 										this.state.filterInput.length > 2 ?
+											// this.state.items.length :
 										this.state.items.map(this.renderStyleItem.bind(this)) :
 											this.props.citationStyles.map(this.renderStyleItem.bind(this))
 									}
 								</ul>
-							)
+							) : <Spinner />
 						}
 					</div>
 				</div>
