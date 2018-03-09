@@ -5,20 +5,7 @@
 .cite-tools {
 	text-align: center;
 
-	.id-input-container {
-		position: relative;
-	}
-
 	.id-input {
 		margin-bottom: $space-xl;
-		padding-right: $input-padding-x-lg + $space-lg + 1px;
-	}
-
-	.icon-spin {
-		position: absolute;
-		top: $space-sm;
-		right: $space-md + $input-border-width;
-		width: $space-lg;
-		height: $space-lg;
 	}
 }

@@ -56,4 +56,19 @@
 	input {
 		padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 	}
+
+	.input-group {
+		.icon-spin {
+			width: $space-md;
+			height: $space-md;
+			top: $space-xs;
+			right: $input-btn-padding-x-sm + $input-border-width;
+		}
+
+		&.busy {
+			input {
+				padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+			}
+		}
+	}
 }

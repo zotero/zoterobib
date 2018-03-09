@@ -32,6 +32,27 @@ label {
 	color: $label-color;
 }
 
+.input-group {
+	position: relative;
+
+	.icon-spin {
+		position: absolute;
+	}
+
+	.form-control-lg + .icon-spin {
+		width: $space-lg;
+		height: $space-lg;
+		top: $space-sm;
+		right: $space-md + $input-border-width;
+	}
+
+	&.busy {
+		.form-control-lg {
+			padding-right: $input-padding-x-lg + $space-lg + 1px;
+		}
+	}
+}
+
 ::placeholder {
 	color: $placeholder-color;
 }
