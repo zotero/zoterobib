@@ -205,7 +205,7 @@ class Editor extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
-				className="editor-container modal modal-lg modal-centered"
+				className={ cx('editor-container modal modal-lg modal-centered', { loading: this.state.isLoading })}
 				onRequestClose={ () => this.props.onEditorClose() }
 			>
 				{ this.state.isLoading ? <Spinner /> : this.renderModalContent() }

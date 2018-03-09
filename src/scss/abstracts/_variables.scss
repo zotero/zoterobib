@@ -191,7 +191,7 @@ $input-transition: 0.15s ease;
 //
 
 $icon-color: $shade-6;
-
+$icon-spin-size: $space-xl;
 
 //
 // Select
@@ -256,21 +256,22 @@ $style-border-color: $shade-2;
 // React-modal
 //
 
-$modal-backdrop-bg: rgba($blue-darkest, 0.6);
-$modal-content-bg: $shade-0;
-$modal-header-color: $shade-0;
-$modal-header-bg: $blue-dark;
-$modal-title-line-height: $space-xl;
-$modal-footer-border-width: 1px;
-$modal-footer-border-color: $shade-2;
-$modal-md: 500px;
-$modal-lg: 800px;
+$modal-backdrop-bg:           rgba($blue-darkest, 0.6);
+$modal-content-bg:            $shade-0;
+$modal-header-color:          $shade-0;
+$modal-header-bg:             $blue-dark;
+$modal-title-line-height:     $space-xl;
+$modal-footer-border-width:   1px;
+$modal-footer-border-color:   $shade-2;
+$modal-md:                    500px;
+$modal-lg:                    800px;
 $modal-header-padding-mobile: $space-md;
-$modal-inner-padding-mobile: $space-md;
-$modal-header-padding-md: $space-lg;
-$modal-inner-padding-md: $space-lg;
-$modal-header-padding-lg: $space-xl;
-$modal-inner-padding-lg: $space-xl;
+$modal-inner-padding-mobile:  $space-md;
+$modal-header-padding-md:     $space-lg;
+$modal-inner-padding-md:      $space-lg;
+$modal-header-padding-lg:     $space-xl;
+$modal-inner-padding-lg:      $space-xl;
+$modal-icon-spin-color:       $shade-0;
 
 
 //
@@ -281,14 +282,6 @@ $result-border-color: $shade-2;
 $result-padding:      $space-md;
 $result-hover-color:  $shade-0;
 $result-hover-bg:     $secondary;
-
-
-//
-// Editor
-//
-
-$editor-min-height: 320px;
-$editor-spinner-size: $space-lg;
 
 
 //

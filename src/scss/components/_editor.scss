@@ -4,7 +4,6 @@
 
 .editor {
 	position: relative;
-	min-height: $editor-min-height; // For the spinner
 
 	.metadata {
 		display: flex;
@@ -17,15 +16,5 @@
 	.value {
 		flex: 1 1 0;
 		display: flex;
-	}
-
-	.icon-spin {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		margin-left: -$editor-spinner-size / 2;
-		margin-top: -$editor-spinner-size / 2;
-		width: $editor-spinner-size;
-		height: $editor-spinner-size;
 	}
 }

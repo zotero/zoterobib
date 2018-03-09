@@ -29,6 +29,18 @@
 			max-width: calc(100% - 64px);
 		}
 	}
+
+	&.loading {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.icon-spin {
+			width: $icon-spin-size;
+			height: $icon-spin-size;
+			color: $modal-icon-spin-color;
+		}
+	}
 }
 
 .modal-content {
