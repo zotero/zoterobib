@@ -7,6 +7,7 @@ const cx = require('classnames');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const { baseMappings } = require('zotero-web-library/lib/constants/item');
 const { getItemTypeMeta } = require('../utils');
 const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
@@ -172,6 +173,32 @@ class Editor extends React.Component {
 		return '';
 	}
 
+	renderModalContent() {
+		return (
+			<div className="modal-content">
+				<div className="modal-header">
+					<h4 className="modal-title text-truncate">
+					{ this.itemTitle }
+					</h4>
+					<Button
+						className="close"
+						onClick={ () => this.props.onEditorClose() }
+					>
+						<Icon type={ '24/remove' } width="24" height="24" />
+					</Button>
+				</div>
+				<div className="modal-body">
+					<div className={ cx('editor', this.props.className ) }>
+						<ItemBox
+							{ ...this.state }
+							isForm={ true }
+							onSave={ this.handleItemUpdate.bind(this) } />
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	render() {
 		return (
 			<Modal
@@ -181,27 +208,7 @@ class Editor extends React.Component {
 				className="editor-container modal modal-lg modal-centered"
 				onRequestClose={ () => this.props.onEditorClose() }
 			>
-				<div className="modal-content">
-					<div className="modal-header">
-						<h4 className="modal-title text-truncate">
-						{ this.itemTitle }
-						</h4>
-						<Button
-							className="close"
-							onClick={ () => this.props.onEditorClose() }
-						>
-							<Icon type={ '24/remove' } width="24" height="24" />
-						</Button>
-					</div>
-					<div className="modal-body">
-						<div className={ cx('editor', this.props.className ) }>
-							<ItemBox
-								{ ...this.state }
-								isForm={ true }
-								onSave={ this.handleItemUpdate.bind(this) } />
-						</div>
-					</div>
-				</div>
+				{ this.state.isLoading ? <Spinner /> : this.renderModalContent() }
 			</Modal>
 		);
 	}
