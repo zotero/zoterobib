@@ -15,6 +15,7 @@
 
 	.key {
 		flex: 0 0 33%;
+		display: flex;
 		padding-right: $space-xs;
 		text-align: right;
 		color: $label-color;
@@ -29,6 +30,7 @@
 	// Dev
 
 	label {
+		flex: 1 1 0;
 		padding: ($input-btn-padding-y-sm + 1px) 0;
 	}
 
