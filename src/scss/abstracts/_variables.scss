@@ -133,6 +133,9 @@ $section-padding-mobile: $space-xxl;
 $input-btn-focus-width: 2px;
 $input-btn-border-radius: $border-radius-sm;
 
+$input-btn-padding-x-sm: $space-sm;
+$input-btn-padding-y-sm: 3px;
+
 
 //
 // Buttons
@@ -177,9 +180,10 @@ $input-padding-y-lg: 11px;
 $input-border-radius: $input-btn-border-radius;
 $input-border-radius-lg: $border-radius-sm;
 
-$input-focus-color: $secondary;
+$input-focus-color:  $secondary;
 $input-border-color: $shade-3;
-$placeholder-color: $shade-4;
+$placeholder-color:  $shade-4;
+$label-color:        $shade-6;
 
 $input-border-width: $border-width;
 

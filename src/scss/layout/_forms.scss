@@ -2,6 +2,7 @@
 // Forms
 //
 
+.input-group input,
 .form-control {
 	display: block;
 	width: 100%;
@@ -24,6 +25,11 @@
 .form-control-lg {
 	padding: $input-padding-y-lg $input-padding-x-lg;
 	border-radius: $input-border-radius-lg;
+}
+
+label {
+	display: inline-block;
+	color: $label-color;
 }
 
 ::placeholder {

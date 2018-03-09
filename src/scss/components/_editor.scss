@@ -3,18 +3,36 @@
 //
 
 .editor {
-	position: relative;
+	.metadata-list {
+		margin: 0;
+		padding-left: 0;
+	}
 
 	.metadata {
 		display: flex;
+		margin-bottom: $space-min;
 	}
 
 	.key {
 		flex: 0 0 33%;
+		padding-right: $space-xs;
+		text-align: right;
+		color: $label-color;
 	}
 
 	.value {
 		flex: 1 1 0;
 		display: flex;
+		padding-left: $space-xs;
+	}
+
+	// Dev
+
+	label {
+		padding: ($input-btn-padding-y-sm + 1px) 0;
+	}
+
+	input {
+		padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 	}
 }
