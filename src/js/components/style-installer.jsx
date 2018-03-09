@@ -210,7 +210,7 @@ class StyleInstaller extends React.Component {
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
-				className="style-installer modal modal-lg modal-centered"
+				className="style-installer modal modal-lg"
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
 				<div className="modal-content">
