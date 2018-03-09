@@ -41,11 +41,18 @@
 
 	// Dev
 
+	textarea {
+		@extend .form-control;
+		overflow: auto;
+		resize: vertical;
+	}
+
 	label {
 		flex: 1 1 0;
 		padding: ($input-btn-padding-y-sm + 1px) 0;
 	}
 
+	textarea,
 	input {
 		padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 	}
