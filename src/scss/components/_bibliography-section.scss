@@ -10,6 +10,18 @@
 		padding-top: $section-padding - 21px;
 	}
 
+	&.loading {
+		.spinner-container {
+			display: flex;
+			justify-content: center;
+			margin-top: $space-lg + 13px;
+		}
+
+		& ~ .section {
+			visibility: hidden;
+		}
+	}
+
 	.read-only & {
 		border-top: none;
 	}

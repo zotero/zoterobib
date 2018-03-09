@@ -79,13 +79,13 @@ class BibliographySection extends React.PureComponent {
 					}
 					{
 						this.props.isLoadingCitations ? (
-							<div className="hidden-xs-down">
+							<div className="spinner-container">
 								<Spinner />
 							</div>
 						) : <Bibliography { ...this.props } />
 					}
 					{
-						!this.props.isReadOnly && <DeleteAllButton { ...this.props } />
+						!this.props.isReadOnly && !this.props.isLoadingCitations && <DeleteAllButton { ...this.props } />
 					}
 				</React.Fragment>
 			);
@@ -96,7 +96,7 @@ class BibliographySection extends React.PureComponent {
 		return {
 			'section': true,
 			'section-bibliography': true,
-			'zotero-citations-loading': this.props.isLoadingCitations
+			'loading': this.props.isLoadingCitations
 		};
 	}
 
