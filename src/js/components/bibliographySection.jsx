@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const cx = require('classnames');
 
 const Editable = require('zotero-web-library/lib/component/editable');
 const Button = require('zotero-web-library/lib/component/ui/button');
@@ -78,7 +79,7 @@ class BibliographySection extends React.PureComponent {
 					}
 					{
 						this.props.isLoadingCitations ? (
-							<div className="zotero-citations-loading hidden-xs-down">
+							<div className="hidden-xs-down">
 								<Spinner />
 							</div>
 						) : <Bibliography { ...this.props } />
@@ -91,9 +92,17 @@ class BibliographySection extends React.PureComponent {
 		}
 	}
 
+	get className() {
+		return {
+			'section': true,
+			'section-bibliography': true,
+			'zotero-citations-loading': this.props.isLoadingCitations
+		};
+	}
+
 	render() {
 		return (
-			<section className="section section-bibliography">
+			<section className={ cx(this.className) }>
 				<div className="container">
 					{ this.renderBibliography() }
 					{
