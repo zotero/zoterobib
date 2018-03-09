@@ -360,7 +360,7 @@ class Container extends React.Component {
 	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
 		this.setState({
 			isTranslating: true,
-			url: identifier,
+			identifier,
 			errorMessage: ''
 		});
 
@@ -371,9 +371,7 @@ class Container extends React.Component {
 				if(isUrl) {
 					let url = validateUrl(identifier);
 					if(url) {
-						this.setState({
-							url: url
-						});
+						this.setState({ identifier: url });
 					}
 					if(multipleSelectedItems) {
 						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, false);
@@ -391,9 +389,8 @@ class Container extends React.Component {
 						} else {
 							this.bib.addItem(translationResponse.items[0]);
 						}
-
 						this.setState({
-							url: '',
+							identifier: '',
 							isTranslating: false,
 							bibliography: this.bibliography,
 							citations: this.citations,
@@ -464,7 +461,7 @@ class Container extends React.Component {
 			multipleChoiceItems: []
 		});
 		return await this.handleTranslateIdentifier(
-			this.state.url,
+			this.state.identifier,
 			multipleSelectedItems.reduce((aggr, item) => {
 				aggr[item.key] = item.value;
 				return aggr;

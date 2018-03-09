@@ -11,7 +11,7 @@ class CiteTools extends React.PureComponent {
 		return (
 			<div className="cite-tools">
 				<IdInput
-					url={ this.props.url }
+					identifier={ this.props.identifier }
 					isTranslating={ this.props.isTranslating }
 					onTranslationRequest={ this.props.onTranslationRequest }
 				/>
@@ -28,7 +28,7 @@ class CiteTools extends React.PureComponent {
 		isTranslating: PropTypes.bool,
 		onEditorOpen: PropTypes.func.isRequired,
 		onTranslationRequest: PropTypes.func.isRequired,
-		url: PropTypes.string,
+		identifier: PropTypes.string,
 	}
 }
 

@@ -2,59 +2,36 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Input = require('zotero-web-library/lib/component/input');
 
 class IdInput extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			url: props.url
-		};
-	}
-
 	componentWillReceiveProps(nextProps) {
-		this.setState({
-			url: nextProps.url
-		}, () => {
-			if(this.props.isTranslating && !nextProps.isTranslating) {
-				this.inputField.focus();
-			}
-		});
-	}
-
-	handleUrlChange(ev) {
-		this.setState({
-			url: ev.target.value
-		});
-	}
-
-	handleKeyboard(ev) {
-		if(ev.key === 'Enter' && this.state.url.length > 0 && !this.props.isTranslating) {
-			this.handleTranslateIdentifier();
+		if(this.props.isTranslating && !nextProps.isTranslating) {
+			this.inputField.focus();
 		}
 	}
 
-	handleTranslateIdentifier() {
-		this.props.onTranslationRequest(this.state.url);
+	handleCommit(identifier) {
+		if(identifier.length > 0 && !this.props.isTranslating) {
+			this.props.onTranslationRequest(identifier);
+		}
 	}
 
 	render() {
 		return (
 			<div className="id-input-container">
-				<input
+				<Input
 					ref = { i => this.inputField = i }
 					autoFocus
+					selectOnFocus
 					placeholder="Enter URL, ISBN, DOI, or PMID"
 					className="form-control form-control-lg id-input"
-					type="text" value={ this.state.url }
-					onChange={ this.handleUrlChange.bind(this) }
-					onKeyPress={ this.handleKeyboard.bind(this) }
+					type="text"
+					value={ this.props.identifier }
+					onCommit={ this.handleCommit.bind(this) }
+					onBlur={ () => true /* do not commit on blur */ }
+					isBusy={ this.props.isTranslating }
 				/>
-				{
-					this.props.isTranslating ? (
-						<Spinner />
-					) : null
-				}
 			</div>
 		);
 	}
@@ -62,7 +39,7 @@ class IdInput extends React.PureComponent {
 	static propTypes = {
 		isTranslating: PropTypes.bool,
 		onTranslationRequest: PropTypes.func.isRequired,
-		url: PropTypes.string,
+		identifier: PropTypes.string,
 	}
 }
 
