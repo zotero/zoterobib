@@ -36,6 +36,65 @@
 		@media (min-width: $bp-md) {
 			flex: 1 1 0;
 			padding-left: $space-xs;
+
+			> *:not(:first-child) {
+				margin-left: $space-min / 2;
+			}
+
+			> *:not(:last-child) {
+				margin-right: $space-min / 2;
+			}
+		}
+	}
+
+	.creators-entry {
+		.value {
+			flex-wrap: wrap;
+
+			@media (min-width: $bp-md) {
+				> *:not(:first-child) {
+					margin-left: $space-min / 2;
+				}
+
+				> *:not(:last-child) {
+					margin-right: $space-min / 2;
+				}
+			}
+
+			.field-editable-wrap {
+				flex: 1 1 100%;
+				margin-bottom: $space-min;
+
+				@media (min-width: $bp-md) {
+					flex: 1 1 0;
+					margin-bottom: 0;
+				}
+			}
+
+			.btn-icon {
+				flex: 1 1 0;
+				border: $input-border-width solid $input-border-color;
+				margin-right: $space-min;
+
+				&:focus {
+					.keyboard-user & {
+						border: $input-border-width solid $input-focus-color;
+					}
+				}
+
+				&:last-child {
+					margin-right: 0;
+				}
+
+				@media (min-width: $bp-md) {
+					flex: 0 0 auto;
+					margin-right: $space-min / 2;
+
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
 		}
 	}
 
