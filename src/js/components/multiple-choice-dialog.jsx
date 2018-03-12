@@ -20,7 +20,11 @@ class MultipleChoiceDialog extends React.Component {
 		let value = item.value;
 		let matches = value.match(/^\[([A-Z]*)\]/);
 		while(matches) {
-			badges.push(matches[1]);
+			let badge = matches[1]
+				.split(' ')
+				.map(w => w.substring(0, 1).toUpperCase() + w.substring(1).toLowerCase())
+				.join(' ');
+			badges.push(badge);
 			value = value.substring(matches[0].length);
 			matches = value.match(/^\[([A-Z]*)\]/);
 		}
