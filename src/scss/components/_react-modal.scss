@@ -26,7 +26,7 @@
 
 		&.modal-lg {
 			width: $modal-lg;
-			max-width: calc(100% - 64px);
+			max-width: calc(100% - 2 * #{$space-xl});
 		}
 	}
 
@@ -34,6 +34,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		height: calc(100% - 2 * #{$space-xs});
+
+		@media (min-width: $bp-md) {
+			height: calc(100% - 2 * #{$space-xl});
+		}
 
 		.icon-spin {
 			width: $icon-spin-size;
