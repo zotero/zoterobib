@@ -46,6 +46,28 @@ class Container extends React.Component {
 		this.handleCopy = this.handleCopy.bind(this);
 	}
 
+	displayWelcomeMessage() {
+		const message = {
+			action: 'Read More',
+			kind: 'info',
+			message: 'Welcome to zbib',
+		};
+		this.setState({
+			messages: [...this.state.messages, message]
+		});
+	}
+
+	displayFirstTranslationMessage() {
+		const message = {
+			action: 'Read More',
+			kind: 'success',
+			message: 'Your first citation has been added. Citations are stored locally in your browser.'
+		};
+		this.setState({
+			messages: [...this.state.messages, message]
+		});
+	}
+
 	componentWillMount() {
 		let cssFile = window.navigator.platform.includes('Win') ? 'fonts-win.css' : 'fonts-mac.css';
 		let element = document.createElement('link');
@@ -56,10 +78,9 @@ class Container extends React.Component {
 	}
 
 	async componentDidMount() {
-		const hasVisited = localStorage.getItem('zotero-bib-visited');
-		if(!hasVisited) {
+		if(!localStorage.getItem('zotero-bib-visited')) {
 			localStorage.setItem('zotero-bib-visited', 'true');
-
+			this.displayWelcomeMessage();
 		}
 
 		const citationStyles = [
@@ -400,6 +421,10 @@ class Container extends React.Component {
 							this.bib.addItem(processSentenceCaseAPAItems(translationResponse.items)[0]);
 						} else {
 							this.bib.addItem(translationResponse.items[0]);
+						}
+						if(!localStorage.getItem('zotero-bib-translated')) {
+							localStorage.setItem('zotero-bib-translated', 'true');
+							this.displayFirstTranslationMessage();
 						}
 						this.setState({
 							identifier: '',

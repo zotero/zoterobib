@@ -74,4 +74,12 @@
 	&.warning {
 		background: $message-warning-bg;
 	}
+
+	&.info {
+		background: lightblue;
+	}
+
+	&.success {
+		background: lightgreen;
+	}
 }
