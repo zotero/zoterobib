@@ -8,11 +8,10 @@ const cx = require('classnames');
 const Brand = require('./brand');
 const BibliographySection = require('./bibliographySection');
 const CiteTools = require('./cite-tools');
-const ErrorMessage = require('./error-message');
+const Message = require('./message');
 const ExportTools = require('./export-tools');
 const PermalinkTools = require('./permalink-tools');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const UndoMessage = require('./undo-message');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const Confirmation = require('./confirmation');
@@ -35,14 +34,18 @@ class ZBib extends React.PureComponent {
 					}) }>
 						<div className="zotero-bib-inner">
 							<div className="messages">
-								<ErrorMessage
+								<Message
+									kind="error"
 									message={ this.props.errorMessage }
 									onDismiss={ this.props.onClearError.bind(this) }
 								/>
-								<UndoMessage
+								<Message
+									autoDismiss
+									kind="warning"
+									action="Undo"
 									message={ this.props.lastDeletedItem ? 'Item deleted' : null }
-									onUndo={ this.props.onUndoDelete }
 									onDismiss={ this.props.onDismissUndo }
+									onAction={ this.props.onUndoDelete }
 								/>
 							</div>
 
