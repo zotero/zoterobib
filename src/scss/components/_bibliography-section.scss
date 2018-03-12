@@ -146,15 +146,42 @@
 				}
 			}
 
+			&.Select--single {
+				.Select-value-label {
+					overflow: inherit;
+					text-overflow: inherit;
+					white-space: inherit;
+				}
+			}
+
+			.Select-value {
+				position: static;
+				padding: 0;
+			}
+
 			.Select-input {
 				position: absolute;
+			}
+
+			.Select-arrow-zone {
+				margin-right: 0;
+			}
+
+			.Select-arrow {
+				background: image-url("bg-icons/16/chevron-11-down-light.svg");
 			}
 
 			.Select-menu-outer {
 				padding: $space-xs 0;
 			}
 
+			.Select-menu {
+				max-height: none;
+			}
+
 			.Select-option {
+				padding: $space-min $input-btn-padding-x-lg;
+
 				&:last-child {
 					color: $link-color;
 				}

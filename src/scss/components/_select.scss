@@ -21,6 +21,23 @@
 		}
 	}
 
+	&.Select--single {
+		.Select-value-label {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		&.has-value {
+			.Select-value {
+				padding-right:
+					$input-btn-padding-x
+					+ $input-border-width
+					+ $space-md;
+			}
+		}
+	}
+
 	.Select-multi-value-wrapper {
 		flex: 1 1 0;
 	}
@@ -57,13 +74,14 @@
 
 	.Select-arrow-zone {
 		flex: 0 0 auto;
+		margin-right: $input-btn-padding-x;
 	}
 
 	.Select-arrow {
 		display: block;
 		width: $space-md;
 		height: $space-md;
-		background: image-url("bg-icons/16/chevron-11-down.svg");
+		background: image-url("bg-icons/16/chevron-11-down-dark.svg");
 	}
 
 	&.is-focused {
