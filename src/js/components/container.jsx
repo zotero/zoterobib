@@ -23,7 +23,7 @@ class Container extends React.Component {
 			...this.props.config
 		},
 		editorItem: null,
-		errorMessage: null,
+		messages: [],
 		isConfirmingStyleSwitch: false,
 		isEditorOpen: false,
 		isInstallingStyle: false,
@@ -53,6 +53,30 @@ class Container extends React.Component {
 		element.setAttribute('type', 'text/css');
 		element.setAttribute('href', `/static/${cssFile}`);
 		document.getElementsByTagName('head')[0].appendChild(element);
+	}
+
+	async componentDidMount() {
+		const hasVisited = localStorage.getItem('zotero-bib-visited');
+		if(!hasVisited) {
+			localStorage.setItem('zotero-bib-visited', 'true');
+
+		}
+
+		const citationStyles = [
+			...coreCitationStyles.map(cs => ({
+				...cs,
+				isDependent: 0,
+				parent: null,
+				isCore: true
+			})),
+			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
+		];
+		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+		this.setState({ citationStyles });
+		document.addEventListener('copy', this.handleCopy);
+		await this.handleIdChanged(this.props);
+
+
 	}
 
 	async componentWillReceiveProps(props) {
@@ -85,9 +109,9 @@ class Container extends React.Component {
 					bibliography: this.bibliography
 				});
 			} catch(e) {
+				this.handleError('Failed to obtain selected citations style.');
 				this.setState({
-					citationStyle: state.citationStyle,
-					errorMessage: 'Failed to obtain selected citations style.'
+					citationStyle: state.citationStyle
 				});
 			} finally {
 				this.setState({
@@ -129,22 +153,6 @@ class Container extends React.Component {
 		}
 	}
 
-	async componentDidMount() {
-		const citationStyles = [
-			...coreCitationStyles.map(cs => ({
-				...cs,
-				isDependent: 0,
-				parent: null,
-				isCore: true
-			})),
-			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
-		];
-		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
-		this.setState({ citationStyles });
-		document.addEventListener('copy', this.handleCopy);
-		await this.handleIdChanged(this.props);
-	}
-
 	componentWillUnmount() {
 		document.removeEventListener('copy', this.handleCopy);
 	}
@@ -165,8 +173,6 @@ class Container extends React.Component {
 		let isReadOnly = !!props.match.params.id;
 		let citationStyle = this.state.citationStyle;
 		let title = this.state.title;
-		let errorMessage = null;
-
 
 		this.setState({
 			isReadOnly: undefined,
@@ -197,7 +203,7 @@ class Container extends React.Component {
 				}
 			} catch(e) {
 				props.history.push('/');
-				errorMessage = 'Failed to load citations by id';
+				this.handleError('Failed to load citations by id');
 			}
 		}
 
@@ -212,7 +218,6 @@ class Container extends React.Component {
 		this.setState({
 			isReadOnly,
 			citationStyle,
-			errorMessage,
 			title,
 			items: this.items,
 			isLoading: false,
@@ -222,7 +227,6 @@ class Container extends React.Component {
 
 	async handleSave() {
 		let permalink = null;
-		let errorMessage = null;
 		this.setState({ isSaving: true });
 		try {
 			const key = await saveToPermalink(this.state.config.storeUrl, {
@@ -233,9 +237,9 @@ class Container extends React.Component {
 			permalink = `${window.location.origin}/${key}`;
 		} catch(e) {
 			this.props.history.push('/');
-			errorMessage = 'Failed to save citations.' + e;
+			this.handleError('Failed to save citations.' + e);
 		}
-		this.setState({ permalink, errorMessage });
+		this.setState({ permalink });
 	}
 
 	handleDeleteCitations() {
@@ -279,11 +283,20 @@ class Container extends React.Component {
 		const item = this.bib.itemsRaw.find(item => item.key == itemId);
 
 		if(this.bib.removeItem(item)) {
+			const message = {
+				action: 'Undo',
+				autoDismiss: true,
+				kind: 'warning',
+				message: 'Item Deleted',
+				onAction: this.handleUndoDelete.bind(this),
+				onDismiss: this.handleDismissUndo.bind(this),
+			};
 			this.setState({
 				bibliography: this.bibliography,
 				citations: this.citations,
 				items: this.items,
-				lastDeletedItem: { ...item }
+				lastDeletedItem: { ...item },
+				messages: [...this.state.messages, message]
 			});
 		}
 	}
@@ -291,6 +304,7 @@ class Container extends React.Component {
 	handleUndoDelete() {
 		if(this.state.lastDeletedItem) {
 			this.handleItemCreated(this.state.lastDeletedItem);
+			this.handleClearMessage();
 			this.setState({
 				permalink: null,
 				lastDeletedItem: null
@@ -343,9 +357,7 @@ class Container extends React.Component {
 		try {
 			await validateItem(updatedItem);
 		} catch(e) {
-			this.setState({
-				errorMessage: 'Failed to obtain metadata. Please check your connection and try again.'
-			});
+			this.handleError('Failed to obtain metadata. Please check your connection and try again.');
 			return;
 		}
 
@@ -361,7 +373,7 @@ class Container extends React.Component {
 		this.setState({
 			isTranslating: true,
 			identifier,
-			errorMessage: ''
+			messages: []
 		});
 
 		let isUrl = !!multipleSelectedItems || !isIdentifier(identifier);
@@ -410,24 +422,18 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.FAILED:
-						this.setState({
-							errorMessage: 'An error occured while citing this source.',
-							isTranslating: false,
-						});
+						this.handleError('An error occured while citing this source.');
+						this.setState({ isTranslating: false });
 					break;
 				}
 			}
 			catch(e) {
-				this.setState({
-					errorMessage: 'An error occured while citing this source.',
-					isTranslating: false,
-				});
+				this.handleError('An error occured while citing this source.');
+				this.setState({ isTranslating: false });
 			}
 		} else {
-			this.setState({
-				errorMessage: 'Value entered doesn\'t appear to be a valid URL, ISBN, DOI, or PMID',
-				isTranslating: false,
-			});
+			this.handleError('Value entered doesn\'t appear to be a valid URL, ISBN, DOI, or PMID');
+			this.setState({ isTranslating: false });
 		}
 	}
 
@@ -441,11 +447,17 @@ class Container extends React.Component {
 	}
 
 	handleError(errorMessage) {
-		this.setState({ errorMessage });
+		const message = {
+			kind: 'error',
+			message: errorMessage,
+		};
+		this.setState({
+			messages: [...this.state.messages, message]
+		});
 	}
 
-	handleClearErrorMessage() {
-		this.setState({ errorMessage: '' });
+	handleClearMessage() {
+		this.setState({ messages: this.state.messages.slice(0, -1) });
 	}
 
 	handleMultipleChoiceCancel() {
@@ -621,7 +633,7 @@ class Container extends React.Component {
 			getFileData = { this.getFileData.bind(this) }
 			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
-			onClearError = { this.handleClearErrorMessage.bind(this) }
+			onClearMessage = { this.handleClearMessage.bind(this) }
 			onDeleteCitations = { this.handleDeleteCitations.bind(this) }
 			onDeleteEntry = { this.handleDeleteEntry.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }

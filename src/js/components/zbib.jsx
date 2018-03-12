@@ -34,19 +34,14 @@ class ZBib extends React.PureComponent {
 					}) }>
 						<div className="zotero-bib-inner">
 							<div className="messages">
-								<Message
-									kind="error"
-									message={ this.props.errorMessage }
-									onDismiss={ this.props.onClearError.bind(this) }
-								/>
-								<Message
-									autoDismiss
-									kind="warning"
-									action="Undo"
-									message={ this.props.lastDeletedItem ? 'Item deleted' : null }
-									onDismiss={ this.props.onDismissUndo }
-									onAction={ this.props.onUndoDelete }
-								/>
+								{ this.props.messages.map(message => (
+									<Message
+										key={ message.message }
+										onDismiss={ this.props.onClearMessage }
+										{ ...message }
+									/>
+									))
+								}
 							</div>
 
 							{
@@ -125,7 +120,7 @@ class ZBib extends React.PureComponent {
 		isMouseUser: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
 		errorMessage: PropTypes.string,
-		onClearError: PropTypes.func.isRequired,
+		onClearMessage: PropTypes.func.isRequired,
 		lastDeletedItem: PropTypes.object,
 		onUndoDelete: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,
