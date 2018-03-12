@@ -76,10 +76,10 @@
 	}
 
 	&.info {
-		background: lightblue;
+		background: $message-info-bg;
 	}
 
 	&.success {
-		background: lightgreen;
+		background: $message-success-bg;
 	}
 }

@@ -20,6 +20,8 @@ $primary:   $red;
 $secondary: $blue;
 $error:     $primary;
 $warning:   #ff794d;
+$success:   #3abd57;
+$info:      $blue;
 
 $shade-0: #fff;
 $shade-1: #f6f6f6;
@@ -162,6 +164,8 @@ $btn-secondary-color: $secondary;
 $btn-light-color:     $shade-5;
 $btn-error-color:     $error;
 $btn-warning-color:   $warning;
+$btn-info-color:      $info;
+$btn-success-color:   $success;
 
 $btn-icon-bg:   transparent;
 $btn-icon-size: $space-xl; // btn-sm size
@@ -302,6 +306,8 @@ $message-font-size-mobile: 20px;
 $message-color:            $shade-0;
 $message-error-bg:         $error;
 $message-warning-bg:       $warning;
+$message-info-bg:          $info;
+$message-success-bg:       $success;
 
 
 //

@@ -85,6 +85,14 @@ a.btn {
 	@include button-variant($btn-warning-color, $outline: true, $inverse: true);
 }
 
+.btn-outline-inverse-info {
+	@include button-variant($btn-info-color, $outline: true, $inverse: true);
+}
+
+.btn-outline-inverse-success {
+	@include button-variant($btn-success-color, $outline: true, $inverse: true);
+}
+
 .btn-icon {
 	display: flex;
 	align-items: center;
