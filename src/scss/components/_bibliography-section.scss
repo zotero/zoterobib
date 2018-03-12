@@ -127,6 +127,7 @@
 				color: $style-selector-color;
 				padding: $input-padding-y-lg $input-padding-x-lg;
 				border-radius: $input-border-radius-lg;
+				cursor: pointer;
 				transition:
 					background-color $input-transition,
 					border $input-transition,
@@ -145,12 +146,18 @@
 				}
 			}
 
+			.Select-input {
+				position: absolute;
+			}
+
 			.Select-menu-outer {
 				padding: $space-xs 0;
 			}
 
 			.Select-option {
-				padding: $space-min $input-padding-x-lg;
+				&:last-child {
+					color: $link-color;
+				}
 			}
 		}
 	}

@@ -4,22 +4,54 @@
 
 .Select {
 	position: relative;
+	flex: 1 1 0;
 
 	.Select-control {
 		display: flex;
 		align-items: center;
-		cursor: pointer;
 		border: $input-border-width solid $shade-3;
 		border-radius: $input-border-radius;
 		transition: border $input-transition, box-shadow $input-transition;
+		cursor: default;
+	}
+
+	&.is-searchable.is-open {
+		.Select-control {
+			cursor: text;
+		}
 	}
 
 	.Select-multi-value-wrapper {
 		flex: 1 1 0;
 	}
 
-	.Select-input {
+	.Select-value {
+		display: flex;
+		align-items: center;
 		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		padding: 0 $input-btn-padding-x + $input-border-width;
+
+		.input-group.busy & {
+			padding-right: $input-btn-padding-x + $space-md + $input-border-width + 1px;
+		}
+	}
+
+	.Select-input {
+		padding: 0 $input-btn-padding-x-sm;
+
+		> input {
+			border: none;
+			background: none;
+			padding: $input-btn-padding-y-sm 0;
+			font-family: inherit;
+			font-size: inherit;
+			font-weight: inherit;
+			outline: none;
+		}
 	}
 
 	.Select-arrow-zone {
@@ -47,15 +79,29 @@
 		top: calc(100% + #{$space-min});
 		width: 100%;
 		background-color: $select-menu-bg;
-		border: 1px solid $input-border-color;
+		//border: 1px solid $input-border-color;
 		border-radius: $select-menu-border-radius;
-		// todo: padding
+		z-index: $zindex-select-menu;
+		padding: $space-xs 0;
+		box-shadow:
+			0 0 0 1px rgba(0, 0, 0, 0.08),
+			0 3px 8px rgba(0, 0, 0, 0.2);
+		background-clip: padding-box;
+	}
+
+	.Select-menu {
+		max-height:
+			10 * (
+				$font-size-base
+				* $line-height-base
+				+ 2 * $input-btn-padding-y-sm
+				+ 2 * $input-border-width
+			);
+		overflow-y: auto;
 	}
 
 	.Select-option {
-		&:last-child {
-			color: $link-color;
-		}
+		padding: $space-min $input-btn-padding-x;
 
 		&:hover {
 			background: $select-option-hover-bg;

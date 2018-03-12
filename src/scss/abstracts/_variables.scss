@@ -115,7 +115,8 @@ $border-width: 1px;
 // Z-index master list
 //
 
-$zindex-messages: 1000;
+$zindex-select-menu: 1000;
+$zindex-messages:    1010;
 
 
 //
@@ -132,6 +133,8 @@ $section-padding-mobile: $space-xxl;
 
 $input-btn-focus-width: 2px;
 $input-btn-border-radius: $border-radius-sm;
+
+$input-btn-padding-x: $space-sm;
 
 $input-btn-padding-x-sm: $space-sm;
 $input-btn-padding-y-sm: 3px;
