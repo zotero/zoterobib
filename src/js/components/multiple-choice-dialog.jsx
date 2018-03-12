@@ -9,6 +9,34 @@ const Modal = require('./modal');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class MultipleChoiceDialog extends React.Component {
+	renderBadge(badge) {
+		return(
+			<span key={badge} className="badge badge-light">{ badge }</span>
+		);
+	}
+
+	renderItem(item) {
+		let badges = [];
+		let value = item.value;
+		let matches = value.match(/^\[([A-Z]*)\]/);
+		while(matches) {
+			badges.push(matches[1]);
+			value = value.substring(matches[0].length);
+			matches = value.match(/^\[([A-Z]*)\]/);
+		}
+		badges = [ ...new Set(badges) ];
+		return (
+			<li
+				className="result"
+				key={ item.key }
+				onClick={ () => this.props.onMultipleChoiceSelect([item]) }
+			>
+				{ badges.map(this.renderBadge.bind(this)) }
+				{ value }
+			</li>
+		);
+	}
+
 	render() {
 		return [
 			<KeyHandler
@@ -38,22 +66,7 @@ class MultipleChoiceDialog extends React.Component {
 					</div>
 					<div className="modal-body">
 						<ul className="results">
-							{
-								this.props.multipleChoiceItems.map(
-									item => {
-										return (
-											<li
-												className="result"
-												key={ item.key }
-												onClick={ () => this.props.onMultipleChoiceSelect([item]) }
-											>
-												<span className="badge badge-light"></span>
-												{ item.value }
-											</li>
-										);
-									}
-								)
-							}
+							{ this.props.multipleChoiceItems.map(this.renderItem.bind(this)) }
 						</ul>
 					</div>
 				</div>
