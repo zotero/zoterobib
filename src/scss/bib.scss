@@ -40,9 +40,11 @@
 @import "components/style-installer";
 @import "components/multiple-choice-dialog";
 @import "components/message";
+@import "components/export-tools";
 @import "components/permalink-tools";
 @import "components/brand";
 @import "components/input";
+
 
 //
 // Layout
@@ -58,7 +60,9 @@
 @import "layout/badge";
 @import "layout/messages";
 
-// Embedded external/dependency styles
-// --------------------------------------------------
 
-@import "third-party/react-dropdown";
+//
+// Vendors
+//
+
+@import "vendors/react-dropdown";

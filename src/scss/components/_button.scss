@@ -6,6 +6,7 @@
 	display: inline-block;
 	vertical-align: middle;
 	border: $btn-border-width solid transparent;
+	font-family: inherit;
 	font-size: $font-size-base;
 	line-height: $btn-line-height;
 	user-select: none;
@@ -35,6 +36,13 @@
 
 a.btn {
 	text-decoration: none;
+}
+
+.btn-xl {
+	font-size: $font-size-lg;
+	font-weight: 300;
+	padding: $btn-padding-y-xl $btn-padding-x-xl;
+	border-width: 2px;
 }
 
 .btn-lg {
@@ -114,5 +122,28 @@ a.btn {
 		.icon {
 			color: $shade-7;
 		}
+	}
+}
+
+.btn-group {
+	display: inline-flex;
+
+	> .btn {
+		position: relative;
+
+		&:focus,
+		&:hover {
+			z-index: 1;
+		}
+	}
+
+	> .btn:not(:first-child) {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+	> .btn:not(:last-child) {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
 	}
 }

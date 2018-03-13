@@ -85,20 +85,25 @@ class ExportDialog extends React.Component {
 	render() {
 		return (
 			<div className="export-tools">
-				<ClipboardButton
-					className="btn"
-					option-text={ this.handleGetText.bind(this, 'text') }
-					onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
-				>
-					{ this.state.clipboardConfirmations['text'] ? 'Copied!' : exportFormats['text'].label }
-				</ClipboardButton>
-				<Dropdown className="dropdown-wrapper">
-					<DropdownToggle>
-					</DropdownToggle>
-					<DropdownMenu>
-						{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }
-					</DropdownMenu>
-				</Dropdown>
+				<div className="btn-group">
+					<ClipboardButton
+						className="btn btn-secondary btn-xl copy-to-clipboard"
+						data-text={exportFormats['text'].label}
+						option-text={ this.handleGetText.bind(this, 'text') }
+						onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
+					>
+						<span>
+							{ this.state.clipboardConfirmations['text'] ? 'Copied!' : exportFormats['text'].label }
+						</span>
+					</ClipboardButton>
+					<Dropdown className="dropdown">
+						<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
+						</DropdownToggle>
+						<DropdownMenu>
+							{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }
+						</DropdownMenu>
+					</Dropdown>
+				</div>
 			</div>
 		);
 	}
