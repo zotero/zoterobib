@@ -115,18 +115,19 @@ class ZBib extends React.PureComponent {
 	}
 
 	static propTypes = {
-		isReadOnly: PropTypes.bool,
+		errorMessage: PropTypes.string,
+		isConfirmingStyleSwitch: PropTypes.bool,
 		isKeyboardUser: PropTypes.bool,
 		isMouseUser: PropTypes.bool,
+		isReadOnly: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
-		errorMessage: PropTypes.string,
-		onClearMessage: PropTypes.func.isRequired,
 		lastDeletedItem: PropTypes.object,
-		onUndoDelete: PropTypes.func.isRequired,
+		messages: PropTypes.array.isRequired,
+		onClearMessage: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,
-		isConfirmingStyleSwitch: PropTypes.bool,
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
+		onUndoDelete: PropTypes.func.isRequired,
 	}
 }
 
