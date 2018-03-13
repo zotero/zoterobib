@@ -5,6 +5,7 @@
 .Select {
 	position: relative;
 	flex: 1 1 0;
+	min-width: 0; // Prevent overflow
 
 	.Select-control {
 		display: flex;
@@ -40,6 +41,7 @@
 
 	.Select-multi-value-wrapper {
 		flex: 1 1 0;
+		min-width: 0; // Prevent overflow
 	}
 
 	.Select-value {
@@ -60,6 +62,8 @@
 	.Select-input {
 		padding: 0 $input-btn-padding-x-sm;
 		outline: none;
+		max-width: 100%;
+		overflow: hidden;
 
 		> input {
 			border: none;
