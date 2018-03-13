@@ -17,7 +17,9 @@ class Bibliography extends React.PureComponent {
 	}
 
 	handleEditCitation(itemId) {
-		this.props.onEditorOpen(itemId);
+		if(!this.props.isReadOnly) {
+			this.props.onEditorOpen(itemId);
+		}
 	}
 
 	handleDeleteCitation(itemId, ev) {
