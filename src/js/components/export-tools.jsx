@@ -5,9 +5,10 @@ const PropTypes = require('prop-types');
 const { saveAs } = require('file-saver');
 
 const ClipboardButton = require('react-clipboard.js').default;
-const Button = require('zotero-web-library/lib/component/ui/button');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
+const Dropdown = require('@trendmicro/react-dropdown').default;
+const { DropdownToggle, DropdownMenu, MenuItem } = require('@trendmicro/react-dropdown');
 
 class ExportDialog extends React.Component {
 	constructor(props) {
@@ -61,37 +62,43 @@ class ExportDialog extends React.Component {
 		return this.props.getCopyData(format);
 	}
 
+	renderMenuOption(format) {
+		return (
+			<MenuItem key={ format }>
+				{
+					exportFormats[format].isCopyable ?
+					<ClipboardButton
+						component="span"
+						option-text={ this.handleGetText.bind(this, format) }
+						onSuccess={ this.handleClipoardSuccess.bind(this, format) }
+					>
+						{ exportFormats[format].label }
+					</ClipboardButton> :
+					<span onClick={ this.handleDownloadFile.bind(this, format) }>
+						{ exportFormats[format].label }
+					</span>
+				}
+			</MenuItem>
+		);
+	}
+
 	render() {
 		return (
 			<div className="export-tools">
-				{
-					['text', 'html', 'rtf', 'ris'].map(format => {
-						if(exportFormats[format].isCopyable) {
-							return (
-								<ClipboardButton
-									className="btn"
-									option-text={ this.handleGetText.bind(this, format) }
-									onSuccess={ this.handleClipoardSuccess.bind(this, format) }
-									key={ `export-copy-as-${format}` }
-								>
-									{ this.state.clipboardConfirmations[format] ? 'Copied!' : exportFormats[format].label }
-								</ClipboardButton>
-							);
-						}
-
-						if(exportFormats[format].isDownloadable) {
-							return(
-								<a
-									onClick={ this.handleDownloadFile.bind(this, format) }
-									key={ `export-download-as-${format}` } >
-									<Button>
-										{ exportFormats[format].label }
-									</Button>
-								</a>
-							);
-						}
-					})
-				}
+				<ClipboardButton
+					className="btn"
+					option-text={ this.handleGetText.bind(this, 'text') }
+					onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
+				>
+					{ this.state.clipboardConfirmations['text'] ? 'Copied!' : exportFormats['text'].label }
+				</ClipboardButton>
+				<Dropdown className="dropdown-wrapper">
+					<DropdownToggle>
+					</DropdownToggle>
+					<DropdownMenu>
+						{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }
+					</DropdownMenu>
+				</Dropdown>
 			</div>
 		);
 	}

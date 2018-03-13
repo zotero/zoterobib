@@ -40,6 +40,7 @@
     "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'"
   },
   "dependencies": {
+    "@trendmicro/react-dropdown": "^1.2.1",
     "array-equal": "^1.0.0",
     "babel-regenerator-runtime": "^6.5.0",
     "classnames": "^2.2.5",
