@@ -19,19 +19,25 @@ const Editor = require('./editor');
 const StyleInstaller = require('./style-installer');
 
 class ZBib extends React.PureComponent {
+	get className() {
+		return {
+			'zotero-bib-container': true,
+			'loading': typeof this.props.isReadOnly === 'undefined',
+			'keyboard-user': this.props.isKeyboardUser,
+			'mouse-user': this.props.isMouseUser,
+			'touch-user': this.props.isTouchUser,
+			'read-only': this.props.isReadOnly,
+			'write': !this.props.isReadOnly,
+		};
+	}
+
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
-				?	<div className="zotero-bib-container loading">
+				?	<div className={ cx(this.className) }>
 						<Spinner />
 					</div>
-				:	<div className={ cx('zotero-bib-container', {
-						'keyboard-user': this.props.isKeyboardUser,
-						'mouse-user': this.props.isMouseUser,
-						'touch-user': this.props.isTouchUser,
-						'read-only': this.props.isReadOnly,
-						'write': !this.props.isReadOnly,
-					}) }>
+				:	<div className={ cx(this.className) }>
 						<div className="zotero-bib-inner">
 							<div className="messages">
 								{ this.props.messages.map(message => (
