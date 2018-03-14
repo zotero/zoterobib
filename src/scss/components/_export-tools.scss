@@ -60,7 +60,7 @@
 	}
 
 	.dropdown {
-		.btn {
+		>.btn {
 			background-image: linear-gradient(to right, #4f5eff, #5959ff);
 			position: relative;
 
@@ -94,8 +94,8 @@
 			}
 		}
 
-		&.dropdown---open---1ju75 {
-			.btn {
+		&.dropdown.show {
+			>.btn {
 				&,
 				&:hover {
 					background-image: linear-gradient(to right, darken(#4f5eff, 8%), darken(#5959ff, 8%));
@@ -112,13 +112,13 @@
 			}
 		}
 
-		.dropdown---menu-item---1LjoL {
+		.dropdown-item {
 			padding: $space-min $input-btn-padding-x-lg;
 		}
 	}
 
-	.dropdown---open---1ju75 {
-		.btn {
+	.dropdown.show {
+		>.btn {
 			&::before {
 				opacity: 0;
 			}
