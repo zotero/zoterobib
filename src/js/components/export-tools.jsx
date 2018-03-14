@@ -7,15 +7,15 @@ const { saveAs } = require('file-saver');
 const ClipboardButton = require('react-clipboard.js').default;
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
-const Dropdown = require('@trendmicro/react-dropdown').default;
-const { DropdownToggle, DropdownMenu, MenuItem } = require('@trendmicro/react-dropdown');
+const Dropdown = require('reactstrap/lib/Dropdown').default;
+const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
+const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
+const DropdownItem = require('reactstrap/lib/DropdownItem').default;
 
 class ExportDialog extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			clipboardConfirmations: {}
-		};
+	state = {
+		isDropdownOpen: false,
+		clipboardConfirmations: {}
 	}
 
 	componentWillReceiveProps(props) {
@@ -62,9 +62,13 @@ class ExportDialog extends React.Component {
 		return this.props.getCopyData(format);
 	}
 
+	handleToggleDropdown() {
+		this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
+	}
+
 	renderMenuOption(format) {
 		return (
-			<MenuItem key={ format }>
+			<DropdownItem className="btn" key={ format }>
 				{
 					exportFormats[format].isCopyable ?
 					<ClipboardButton
@@ -78,7 +82,7 @@ class ExportDialog extends React.Component {
 						{ exportFormats[format].label }
 					</span>
 				}
-			</MenuItem>
+			</DropdownItem>
 		);
 	}
 
@@ -96,8 +100,13 @@ class ExportDialog extends React.Component {
 							{ this.state.clipboardConfirmations['text'] ? 'Copied!' : exportFormats['text'].label }
 						</span>
 					</ClipboardButton>
-					<Dropdown className="dropdown">
+					<Dropdown
+						isOpen={ this.state.isDropdownOpen }
+						toggle={ this.handleToggleDropdown.bind(this) }
+						className="dropdown"
+					>
 						<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
+							<span className="dropdown-caret" />
 						</DropdownToggle>
 						<DropdownMenu className="dropdown-menu">
 							{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }

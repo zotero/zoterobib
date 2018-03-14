@@ -17,7 +17,7 @@
 		}
 	}
 
-	.dropdown---caret---3CkEt {
+	.dropdown-caret {
 		width: $space-md;
 		height: $space-md;
 		display: inline-block;
@@ -25,7 +25,6 @@
 	}
 
 	.dropdown-menu {
-		position: absolute;
 		left: 0;
 		top: calc(100% + 4px);
 		background-color: $dropdown-menu-bg;
@@ -34,7 +33,7 @@
 		display: none;
 	}
 
-	&.dropdown---open---1ju75 {
+	&.dropdown.show {
 		.btn-secondary {
 			&,
 			&:hover {
@@ -49,10 +48,12 @@
 		}
 	}
 
-	.dropdown---menu-item---1LjoL {
+	.dropdown-item {
 		white-space: nowrap;
 		padding: $space-min $input-btn-padding-x;
 		cursor: pointer;
+		width: 100%;
+		text-align: left;
 
 		&:hover {
 			background-color: $menu-item-hover-bg;
