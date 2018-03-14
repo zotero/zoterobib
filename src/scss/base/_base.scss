@@ -28,6 +28,7 @@ main,
 }
 
 body {
+	min-width: $body-min-width;
 	color: $body-color;
 	background-color: $body-bg;
 }
