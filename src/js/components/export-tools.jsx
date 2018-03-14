@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const { saveAs } = require('file-saver');
+const cx = require('classnames');
 
 const ClipboardButton = require('react-clipboard.js').default;
 const exportFormats = require('../constants/export-formats');
@@ -11,6 +12,7 @@ const Dropdown = require('reactstrap/lib/Dropdown').default;
 const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
 const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
 const DropdownItem = require('reactstrap/lib/DropdownItem').default;
+const formatsInDropdown = ['html', 'rtf', 'ris'];
 
 class ExportDialog extends React.Component {
 	state = {
@@ -62,23 +64,39 @@ class ExportDialog extends React.Component {
 		return this.props.getCopyData(format);
 	}
 
-	handleToggleDropdown() {
+	handleToggleDropdown(ev) {
+		const isFromDropdown = ev.target && ev.target.closest('.clipboard-button');
+		const isCopied = formatsInDropdown.some(
+			format => this.state.clipboardConfirmations[format]
+		);
+		if(this.state.isDropdownOpen && isFromDropdown && isCopied) {
+			this.dropdownTimer = setTimeout(() => {
+				this.setState({ 'isDropdownOpen': false });
+			}, 1000);
+			return false;
+		}
+		clearTimeout(this.dropdownTimer);
 		this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
 	}
 
 	renderMenuOption(format) {
+		const isCopied = this.state.clipboardConfirmations[format];
 		return (
-			<DropdownItem className="btn" key={ format }>
+			<DropdownItem key={ format }>
 				{
 					exportFormats[format].isCopyable ?
 					<ClipboardButton
-						component="span"
+						className="btn clipboard-button"
+						component="div"
 						option-text={ this.handleGetText.bind(this, format) }
 						onSuccess={ this.handleClipoardSuccess.bind(this, format) }
 					>
-						{ exportFormats[format].label }
+						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
+							<span aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
+							<span aria-hidden={ isCopied }>Copied</span>
+						</div>
 					</ClipboardButton> :
-					<span onClick={ this.handleDownloadFile.bind(this, format) }>
+					<span className="btn" onClick={ this.handleDownloadFile.bind(this, format) }>
 						{ exportFormats[format].label }
 					</span>
 				}
@@ -87,6 +105,7 @@ class ExportDialog extends React.Component {
 	}
 
 	render() {
+		const isCopied = this.state.clipboardConfirmations['text'];
 		return (
 			<div className="export-tools">
 				<Dropdown
@@ -100,15 +119,16 @@ class ExportDialog extends React.Component {
 						option-text={ this.handleGetText.bind(this, 'text') }
 						onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
 					>
-						<span>
-							{ this.state.clipboardConfirmations['text'] ? 'Copied!' : exportFormats['text'].label }
-						</span>
+						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
+							<span aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
+							<span aria-hidden={ isCopied }>Copied</span>
+						</div>
 					</ClipboardButton>
 					<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
 						<span className="dropdown-caret" />
 					</DropdownToggle>
 					<DropdownMenu className="dropdown-menu">
-						{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }
+						{ formatsInDropdown.map(this.renderMenuOption.bind(this)) }
 					</DropdownMenu>
 				</Dropdown>
 			</div>
