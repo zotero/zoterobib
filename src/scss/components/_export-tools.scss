@@ -128,7 +128,12 @@
 			.dropdown-toggle {
 				&,
 				&:hover {
-					background-image: linear-gradient(to right, darken(#4f5eff, 8%), darken(#5959ff, 8%));
+					background-image:
+						linear-gradient(
+							to right,
+							darken(mix($violet, $btn-secondary-color, 79%), 8%),
+							darken($violet, 8%)
+						);
 				}
 			}
 		}
