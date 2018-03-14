@@ -111,10 +111,10 @@ class ExportDialog extends React.Component {
 				<Dropdown
 					isOpen={ this.state.isDropdownOpen }
 					toggle={ this.handleToggleDropdown.bind(this) }
-					className="btn-group"
+					className={ cx('btn-group', { 'success': isCopied}) }
 				>
 					<ClipboardButton
-						className={ cx('btn btn-secondary btn-xl copy-to-clipboard', { 'feedback': isCopied}) }
+						className="btn btn-secondary btn-xl copy-to-clipboard"
 						data-text={exportFormats['text'].label}
 						option-text={ this.handleGetText.bind(this, 'text') }
 						onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
