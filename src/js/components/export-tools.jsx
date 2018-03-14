@@ -92,7 +92,7 @@ class ExportDialog extends React.Component {
 						onSuccess={ this.handleClipoardSuccess.bind(this, format) }
 					>
 						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
-							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
+							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['html'].label }</span>
 							<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
 						</div>
 					</ClipboardButton> :
