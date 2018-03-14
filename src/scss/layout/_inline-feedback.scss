@@ -1,0 +1,24 @@
+//
+// Inline feedback
+//
+
+.inline-feedback {
+	position: relative;
+
+	.shorter {
+		position: absolute;
+		left: 0;
+		top: 0;
+		visibility: hidden;
+	}
+
+	&.active {
+		:not(.feedback) {
+			visibility: hidden;
+		}
+
+		.feedback {
+			visibility: visible;
+		}
+	}
+}

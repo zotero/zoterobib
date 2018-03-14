@@ -58,19 +58,10 @@
 			}
 		}
 
-		span {
-			position: absolute;
-			top: $btn-padding-y-xl;
-			right: $btn-padding-x-xl;
-			bottom: $btn-padding-y-xl;
-			left: $btn-padding-x-xl;
+		.feedback {
+			width: 100%;
 			display: flex;
 			justify-content: center;
-		}
-
-		&::before {
-			content: attr(data-text);
-			color: transparent;
 		}
 	}
 
@@ -140,10 +131,16 @@
 
 		.dropdown-menu {
 			text-align: left;
+
+			.feedback {
+				color: $success;
+			}
 		}
 
 		.dropdown-item {
-			padding: 0;
+			> * {
+				padding: $space-min $input-btn-padding-x-lg;
+			}
 		}
 	}
 

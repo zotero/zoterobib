@@ -46,11 +46,16 @@
 	.dropdown-item {
 		display: block;
 		width: 100%;
-		padding: $space-min $input-btn-padding-x;
 		border: none;
 		text-align: left;
 		background-color: transparent;
 		margin: 0;
+		padding: 0;
+
+		> * {
+			display: block;
+			padding: $space-min $input-btn-padding-x;
+		}
 
 		&:hover {
 			background-color: $menu-item-hover-bg;

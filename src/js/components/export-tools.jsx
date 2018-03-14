@@ -82,7 +82,7 @@ class ExportDialog extends React.Component {
 	renderMenuOption(format) {
 		const isCopied = this.state.clipboardConfirmations[format];
 		return (
-			<DropdownItem key={ format }>
+			<DropdownItem key={ format } className="btn">
 				{
 					exportFormats[format].isCopyable ?
 					<ClipboardButton
@@ -92,11 +92,11 @@ class ExportDialog extends React.Component {
 						onSuccess={ this.handleClipoardSuccess.bind(this, format) }
 					>
 						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
-							<span aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
-							<span aria-hidden={ isCopied }>Copied</span>
+							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
+							<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
 						</div>
 					</ClipboardButton> :
-					<span className="btn" onClick={ this.handleDownloadFile.bind(this, format) }>
+					<span onClick={ this.handleDownloadFile.bind(this, format) }>
 						{ exportFormats[format].label }
 					</span>
 				}
@@ -114,14 +114,14 @@ class ExportDialog extends React.Component {
 					className="btn-group"
 				>
 					<ClipboardButton
-						className="btn btn-secondary btn-xl copy-to-clipboard"
+						className={ cx('btn btn-secondary btn-xl copy-to-clipboard', { 'feedback': isCopied}) }
 						data-text={exportFormats['text'].label}
 						option-text={ this.handleGetText.bind(this, 'text') }
 						onSuccess={ this.handleClipoardSuccess.bind(this, 'text') }
 					>
 						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
-							<span aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
-							<span aria-hidden={ isCopied }>Copied</span>
+							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
+							<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
 						</div>
 					</ClipboardButton>
 					<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
