@@ -15,6 +15,7 @@
 	font-weight: 400;
 	border-radius: $btn-border-radius;
 	padding: $btn-padding-y $btn-padding-x;
+	margin: 0; // Remove margin in Safari
 	transition:
 		color $btn-transition,
 		background-color $btn-transition,
