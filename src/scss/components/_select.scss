@@ -102,14 +102,12 @@
 		left: 0;
 		top: calc(100% + #{$space-min});
 		width: 100%;
-		background-color: $select-menu-bg;
+		background-color: $menu-bg;
 		//border: 1px solid $input-border-color;
-		border-radius: $select-menu-border-radius;
+		border-radius: $menu-border-radius;
 		z-index: $zindex-select-menu;
 		padding: $space-xs 0;
-		box-shadow:
-			0 0 0 1px rgba(0, 0, 0, 0.08),
-			0 3px 8px rgba(0, 0, 0, 0.2);
+		box-shadow: $menu-box-shadow;
 		background-clip: padding-box;
 	}
 
@@ -128,7 +126,7 @@
 		padding: $space-min $input-btn-padding-x;
 
 		&:hover {
-			background: $select-option-hover-bg;
+			background: $menu-item-hover-bg;
 			cursor: pointer;
 		}
 	}

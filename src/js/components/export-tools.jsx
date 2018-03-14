@@ -99,7 +99,7 @@ class ExportDialog extends React.Component {
 					<Dropdown className="dropdown">
 						<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
 						</DropdownToggle>
-						<DropdownMenu>
+						<DropdownMenu className="dropdown-menu">
 							{ ['html', 'rtf', 'ris'].map(this.renderMenuOption.bind(this)) }
 						</DropdownMenu>
 					</Dropdown>

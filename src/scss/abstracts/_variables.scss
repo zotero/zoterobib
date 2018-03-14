@@ -112,6 +112,11 @@ $border-radius-lg: 6px;
 
 $border-width: 1px;
 
+$menu-bg: $body-bg;
+$menu-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.2);
+$menu-border-radius: $border-radius-sm;
+$menu-item-hover-bg: $shade-1;
+
 
 //
 // Z-index master list
@@ -208,14 +213,6 @@ $input-transition: 0.15s ease;
 
 $icon-color: $shade-6;
 $icon-spin-size: $space-xl;
-
-//
-// Select
-//
-
-$select-menu-bg:            $shade-0;
-$select-menu-border-radius: $border-radius-sm;
-$select-option-hover-bg:    $shade-1;
 
 
 //
@@ -318,3 +315,10 @@ $message-success-bg:       $success;
 //
 
 $permalink-spinner-size: $space-xl;
+
+
+//
+// Dropdown
+//
+
+$dropdown-menu-bg: $body-bg;
