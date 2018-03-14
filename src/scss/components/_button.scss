@@ -33,6 +33,11 @@
 	&[disabled] {
 		opacity: 0.5;
 	}
+
+	&::-moz-focus-inner {
+		padding: 0;
+		border-style: none;
+	}
 }
 
 a.btn {
