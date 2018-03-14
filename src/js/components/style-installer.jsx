@@ -118,7 +118,7 @@ class StyleInstaller extends React.Component {
 
 	handleInstall(style, ev) {
 		ev.stopPropagation();
-		this.props.onStyleInstallerInstall(style);
+		this.props.onStyleInstallerSelect(style);
 		this.handleCancel();
 	}
 
