@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const ClipboardButton = require('react-clipboard.js').default;
+const copy = require('copy-to-clipboard');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
@@ -46,6 +46,13 @@ class PermalinkTools extends React.Component {
 		}, 1000);
 	}
 
+	handleCopy() {
+		const result = copy(this.props.permalink);
+		if(result) {
+			this.handleClipoardSuccess();
+		}
+	}
+
 	render() {
 		if(this.state.isSavingPermalink) {
 			return (
@@ -57,13 +64,13 @@ class PermalinkTools extends React.Component {
 
 		return this.props.permalink ? (
 			<div className="permalink-tools">
-				<ClipboardButton
+				<Button
 					className="btn btn-lg btn-block btn-secondary"
 					data-clipboard-text={ this.props.permalink }
-					onSuccess={ this.handleClipoardSuccess.bind(this) }
+					onClick={ this.handleCopy.bind(this) }
 				>
 					{ this.state.isRecentlyCopied ? 'Copied!' : 'Copy URL' }
-				</ClipboardButton>
+				</Button>
 				<a
 					className="btn btn-lg btn-block btn-secondary"
 					href={ this.props.permalink }>
