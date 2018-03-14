@@ -11,9 +11,11 @@ const StyleSelector = require('./style-selector');
 const Bibliography = require('./bibliography');
 const DeleteAllButton = require('./delete-all-button');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Confirmation = require('./confirmation');
 
 class BibliographySection extends React.PureComponent {
 	state = {
+		isConfirmingOverride: false,
 		isEditingTitle: false
 	}
 
@@ -34,6 +36,22 @@ class BibliographySection extends React.PureComponent {
 		this.setState({
 			isEditingTitle: false
 		});
+	}
+
+	handleEditBibliography() {
+		if(this.props.localCitationsCount > 0) {
+			this.setState({ isConfirmingOverride: true });
+		} else {
+			this.props.onOverride();
+		}
+	}
+
+	handleOverride() {
+		this.props.onOverride();
+	}
+
+	handleCancel() {
+		this.setState({ isConfirmingOverride: false });
 	}
 
 	renderBibliography() {
@@ -87,6 +105,17 @@ class BibliographySection extends React.PureComponent {
 					{
 						!this.props.isReadOnly && !this.props.isLoadingCitations && <DeleteAllButton { ...this.props } />
 					}
+					<Confirmation
+						isOpen={ this.props.isReadOnly && this.state.isConfirmingOverride }
+						onConfirm={ this.handleOverride.bind(this) }
+						onCancel={ this.handleCancel.bind(this) }
+						title="Clear existing bibliography?"
+						confirmLabel="Continue"
+						>
+							<p>
+								There is an existing bibliography with { this.props.localCitationsCount } { this.props.localCitationsCount > 1 ? 'entries' : 'entry' } in the editor. If you continue, the existing bibliography will be replaced with this one.
+							</p>
+					</Confirmation>
 				</React.Fragment>
 			);
 		}
@@ -108,6 +137,7 @@ class BibliographySection extends React.PureComponent {
 					{
 						this.props.isReadOnly && (
 							<Button
+								onClick={ this.handleEditBibliography.bind(this) }
 								className="btn-sm btn-outline-secondary">
 								Edit Bibliography
 							</Button>
@@ -124,10 +154,12 @@ class BibliographySection extends React.PureComponent {
 
 	static propTypes = {
 		citations: PropTypes.object,
-		isReadOnly: PropTypes.bool,
-		title: PropTypes.string,
-		onTitleChanged: PropTypes.func.isRequired,
 		isLoadingCitations: PropTypes.bool,
+		isReadOnly: PropTypes.bool,
+		localCitationsCount: PropTypes.number,
+		onOverride: PropTypes.func.isRequired,
+		onTitleChanged: PropTypes.func.isRequired,
+		title: PropTypes.string,
 	}
 }
 

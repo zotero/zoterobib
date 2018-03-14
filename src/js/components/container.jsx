@@ -240,6 +240,7 @@ class Container extends React.Component {
 			isReadOnly,
 			citationStyle,
 			title,
+			localCitationsCount: this.bib.items.length,
 			items: this.items,
 			isLoading: false,
 		});
