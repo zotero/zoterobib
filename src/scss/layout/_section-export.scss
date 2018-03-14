@@ -5,6 +5,14 @@
 .section-export {
 	text-align: center;
 
+	.write & {
+		padding-top: $section-padding-mobile - 13px;
+
+		@media (min-width: $bp-md) {
+			padding-top: $section-padding - 16px;
+		}
+	}
+
 	.read-only & {
 		h2 {
 			display: none;

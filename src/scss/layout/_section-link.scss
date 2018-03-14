@@ -4,4 +4,9 @@
 
 .section-link {
 	text-align: center;
+	padding-top: $section-padding-mobile - 13px;
+
+	@media (min-width: $bp-md) {
+		padding-top: $section-padding - 16px;
+	}
 }
