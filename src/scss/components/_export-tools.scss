@@ -105,6 +105,11 @@
 
 		.dropdown-menu {
 			text-align: left;
+
+			@media (max-width: ($bp-md - 1px)) {
+				left: auto;
+				right: 0;
+			}
 		}
 
 		.dropdown---menu-item---1LjoL {
