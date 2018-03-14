@@ -1,13 +1,6 @@
 .dropdown {
-	position: relative;
-
 	.dropdown-toggle {
 		display: inline-flex;
-
-		&:last-of-type {
-			border-top-left-radius: 0;
-			border-bottom-left-radius: 0;
-		}
 
 		&.btn-xl {
 			height:
@@ -33,26 +26,28 @@
 		display: none;
 	}
 
-	&.dropdown.show {
-		.btn-secondary {
-			&,
-			&:hover {
-				background-color: darken($btn-secondary-color, 8%);
-				box-shadow: none;
+	&.show {
+		.dropdown-toggle {
+			&.btn-secondary {
+				&:hover {
+					background-color: darken($btn-secondary-color, 8%);
+					box-shadow: none;
+				}
 			}
 		}
 
 		.dropdown-menu {
 			display: block;
 			padding: $space-xs 0;
+			margin: $space-min 0;
 		}
 	}
 
 	.dropdown-item {
-		white-space: nowrap;
-		padding: $space-min $input-btn-padding-x;
-		cursor: pointer;
+		display: block;
 		width: 100%;
+		padding: $space-min $input-btn-padding-x;
+		border: none;
 		text-align: left;
 
 		&:hover {

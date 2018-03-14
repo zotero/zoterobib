@@ -131,9 +131,12 @@ a.btn {
 	> .btn {
 		position: relative;
 
-		&:focus,
-		&:hover {
+		&:focus {
 			z-index: 1;
+		}
+
+		&:hover {
+			z-index: 2;
 		}
 	}
 
@@ -142,7 +145,7 @@ a.btn {
 		border-bottom-left-radius: 0;
 	}
 
-	> .btn:not(:last-child) {
+	> .btn:not(:last-child):not(.dropdown-toggle) {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
