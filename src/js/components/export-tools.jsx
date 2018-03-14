@@ -74,7 +74,7 @@ class ExportDialog extends React.Component {
 		if(this.state.isDropdownOpen && isFromCopyTrigger) {
 			this.dropdownTimer = setTimeout(() => {
 				this.setState({ 'isDropdownOpen': false });
-			}, 1000);
+			}, 950);
 			return false;
 		}
 		clearTimeout(this.dropdownTimer);
