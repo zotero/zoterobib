@@ -166,7 +166,9 @@
 	}
 
 	.dropdown .btn:focus,
-	.btn:focus + .btn {
+	.btn:focus + .btn,
+	.dropdown .btn:active,
+	.btn:active + .btn {
 		&::before {
 			opacity: 0;
 		}
