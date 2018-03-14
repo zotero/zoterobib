@@ -49,6 +49,8 @@
 		padding: $space-min $input-btn-padding-x;
 		border: none;
 		text-align: left;
+		background-color: transparent;
+		margin: 0;
 
 		&:hover {
 			background-color: $menu-item-hover-bg;
