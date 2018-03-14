@@ -4,27 +4,44 @@
 
 .export-tools {
 	.btn-secondary {
-		&:hover {
-			background-color: lighten($btn-secondary-color, 4%);
-		}
-
-		&:active {
-			background-color: darken($btn-secondary-color, 8%);
-		}
+		background-origin: border-box;
 
 		&:focus {
 			.keyboard-user & {
+				box-shadow: none; // Use padding as focus state (no gradients in box-shadows possible)
+				padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-xl + 2px);
+				margin: -2px;
+
 				&:hover {
-					box-shadow:
-						0 0 0 $input-btn-focus-width lighten($btn-secondary-color, 4%),
-						0 4px 4px $btn-box-shadow-color;
+					box-shadow: 0 4px 4px $btn-box-shadow-color;
 				}
 			}
 		}
 	}
 
 	.copy-to-clipboard {
+		background-image: linear-gradient(to right, $btn-secondary-color, #4f5eff);
+		background-clip: border-box;
 		position: relative;
+
+		&:hover {
+			background-image: linear-gradient(to right, lighten($btn-secondary-color, 4%), lighten(#4f5eff, 4%));
+		}
+
+		&:active {
+			background-image: linear-gradient(to right, darken($btn-secondary-color, 8%), darken(#4f5eff, 8%));
+		}
+
+		&:focus {
+			.keyboard-user & {
+				span {
+					top: $btn-padding-y-xl + 2px;
+					right: $btn-padding-x-xl + 2px;
+					bottom: $btn-padding-y-xl + 2px;
+					left: $btn-padding-x-xl + 2px;
+				}
+			}
+		}
 
 		span {
 			position: absolute;
@@ -44,7 +61,26 @@
 
 	.dropdown {
 		.btn {
+			background-image: linear-gradient(to right, #4f5eff, #5959ff);
 			position: relative;
+
+			&:hover {
+				background-image: linear-gradient(to right, lighten(#4f5eff, 4%), lighten(#5959ff, 4%));
+			}
+
+			&:active {
+				background-image: linear-gradient(to right, darken(#4f5eff, 8%), darken(#5959ff, 8%));
+			}
+
+			&:focus {
+				.keyboard-user & {
+					height:
+						$font-size-lg * $line-height-base
+						+ 2 * $btn-padding-y-xl
+						+ 2 * 2px
+						+ 2 * 2px;
+				}
+			}
 
 			&::before {
 				content: "";
@@ -55,6 +91,15 @@
 				width: 1px;
 				background: rgba(255, 255, 255, 0.8);
 				transition: opacity 0.15s ease;
+			}
+		}
+
+		&.dropdown---open---1ju75 {
+			.btn {
+				&,
+				&:hover {
+					background-image: linear-gradient(to right, darken(#4f5eff, 8%), darken(#5959ff, 8%));
+				}
 			}
 		}
 
