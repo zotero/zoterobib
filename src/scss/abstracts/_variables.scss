@@ -101,8 +101,19 @@ $body-min-width: 320px;
 $grid-gutter-width: $space-xl;
 $container-width:   768px + $grid-gutter-width;
 
+$bp-xs: 0px;
 $bp-sm: 568px;
 $bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+
+$grid-breakpoints: (
+	xs: $bp-xs,
+	sm: $bp-sm,
+	md: $bp-md,
+	lg: $bp-lg,
+	xl: $bp-xl
+);
 
 
 //

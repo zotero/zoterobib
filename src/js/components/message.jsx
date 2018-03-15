@@ -64,7 +64,7 @@ class Message extends React.Component {
 		return this.props.message ? (
 			<div className={ cx(this.className) }>
 				<p className="text">
-					{ this.props.message + ' ' }
+					<span dangerouslySetInnerHTML={{ __html: this.props.message + ' ' }} />
 					{ this.props.action ? this.renderButton() : null }
 				</p>
 				<button

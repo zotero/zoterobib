@@ -50,7 +50,7 @@ class Container extends React.Component {
 		const message = {
 			action: 'Read More',
 			kind: 'info',
-			message: 'Welcome to zbib',
+			message: '<span class="welcome d-xs-block d-sm-inline"><span class="d-lg-block d-xl-inline"><span class="d-md-block d-lg-inline">ZBib is a free service that helps you quickly create</span> a bibliography</span> in any citation style.</span>',
 		};
 		this.setState({
 			messages: [...this.state.messages, message]
