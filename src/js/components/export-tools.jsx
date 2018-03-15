@@ -81,6 +81,12 @@ class ExportDialog extends React.Component {
 		this.setState({ isDropdownOpen: !this.state.isDropdownOpen });
 	}
 
+	handleCopyToClipboardClick() {
+		// explicitely hide the dropdown
+		this.setState({ 'isDropdownOpen': false });
+		this.handleCopy('text');
+	}
+
 	renderMenuOption(format) {
 		const isCopied = this.state.clipboardConfirmations[format];
 		if(exportFormats[format].isCopyable) {
@@ -120,7 +126,7 @@ class ExportDialog extends React.Component {
 				>
 					<Button
 						className='btn btn-secondary btn-xl copy-to-clipboard'
-						onClick={ this.handleCopy.bind(this, 'text') }
+						onClick={ this.handleCopyToClipboardClick.bind(this) }
 					>
 						<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
