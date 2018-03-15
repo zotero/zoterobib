@@ -64,7 +64,8 @@ class Message extends React.Component {
 		return this.props.message ? (
 			<div className={ cx(this.className) }>
 				<p className="text">
-					<span dangerouslySetInnerHTML={{ __html: this.props.message + ' ' }} />
+					{ this.props.message }
+					{ ' ' }
 					{ this.props.action ? this.renderButton() : null }
 				</p>
 				<button
@@ -86,7 +87,7 @@ class Message extends React.Component {
 		autoDismiss: PropTypes.bool,
 		kind: PropTypes.oneOf(['info', 'success', 'warning', 'error']).isRequired,
 		location: PropTypes.object,
-		message: PropTypes.string,
+		message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 		onAction: PropTypes.func,
 		onDismiss: PropTypes.func.isRequired,
 	}
