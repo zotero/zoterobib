@@ -45,7 +45,8 @@
 		margin: 0;
 		padding: $space-min $input-btn-padding-x;
 
-		&:hover {
+		&:hover,
+		&:focus {
 			background-color: $menu-item-hover-bg;
 		}
 	}
