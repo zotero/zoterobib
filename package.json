@@ -37,7 +37,9 @@
     "lint": "run-p stylelint eslint",
     "watch:stylelint": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run stylelint'",
     "watch:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
-    "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'"
+    "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'",
+    "preshrinkwrap": "rimraf ./node_modules/reactstrap/node_modules/react-popper && npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'",
+    "postshrinkwrap": "npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'"
   },
   "dependencies": {
     "array-equal": "^1.0.0",
@@ -62,7 +64,7 @@
     "zotero-api-client": "^0.9.4",
     "zotero-api-client-cache": "^0.2.0",
     "zotero-bib": "github:zotero/bib#v0.5.2-release",
-    "zotero-web-library": "^0.9.34-alpha"
+    "zotero-web-library": "^0.9.35-alpha"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
@@ -86,6 +88,7 @@
     "handlebars": "^4.0.11",
     "http-proxy": "^1.16.2",
     "http-server": "^0.10.0",
+    "json": "^9.0.6",
     "mapstraction": "^1.0.1",
     "minimist": "^1.2.0",
     "node-sass": "^4.7.2",
