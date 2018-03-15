@@ -28,6 +28,7 @@ class ZBib extends React.PureComponent {
 			'touch-user': this.props.isTouchUser,
 			'read-only': this.props.isReadOnly,
 			'write': !this.props.isReadOnly,
+			'welcome': this.props.messages.some(m => m.isWelcomeMessage),
 		};
 	}
 

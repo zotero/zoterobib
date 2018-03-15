@@ -50,6 +50,7 @@ class Container extends React.Component {
 		const message = {
 			action: 'Read More',
 			kind: 'info',
+			isWelcomeMessage: true,
 			message: (
 				<span className="welcome d-xs-block d-sm-inline">
 					<span className="d-lg-block d-xl-inline">
