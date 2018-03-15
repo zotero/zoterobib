@@ -91,13 +91,13 @@
 			.editable-control {
 				border: 1px solid $input-focus-color;
 				box-shadow: 0 0 0 2px $secondary;
-				line-height: inherit;
+				line-height: normal; // Heading line-height would clip decenders
 				margin: 0;
-				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
+				padding: 4px 0;
 				text-align: left;
 
 				@media (min-width: $bp-md) {
-					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
+					padding: 7px 0 8px;
 					text-align: inherit;
 				}
 			}
