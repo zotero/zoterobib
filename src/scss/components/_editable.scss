@@ -8,6 +8,7 @@
 	justify-content: space-between;
 	align-items: center;
 	min-width: 0; // Fix truncation
+	cursor: pointer;
 
 	//@include bp-up(sm) {
 	//	padding-left: $editable-border-width + $editable-padding-horizontal;

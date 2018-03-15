@@ -49,6 +49,71 @@
 	}
 
 	.creators-entry {
+		.key {
+
+			// Editable
+			.field-editable-wrap {
+				flex: 1 1 auto;
+				display: flex;
+			}
+
+			.editable {
+				padding: ($input-btn-padding-y-sm + 1px) 0;
+			}
+
+			.editable-value {
+				display: flex;
+				align-items: center;
+
+				@media (min-width: $bp-md) {
+					justify-content: flex-end;
+				}
+			}
+
+			.text-container {
+				line-height: $line-height-base;
+			}
+
+			.Select-arrow {
+				display: inline-block;
+				width: $space-md;
+				height: $space-md;
+				background: url("/static/images/bg-icons/16/chevron-11-down-777.svg");
+				margin-left: $space-min;
+
+				@media (min-width: $bp-md) {
+					order: -1;
+					margin-left: 0;
+					margin-right: $space-min;
+				}
+			}
+
+			// Select
+			.Select-control {
+				justify-content: flex-end;
+				border-color: transparent;
+			}
+
+			.Select-multi-value-wrapper {
+				flex: 0 0 auto;
+			}
+
+			.Select-value {
+				flex: 0 0 auto;
+				position: static;
+				padding: 0;
+			}
+
+			.Select-input {
+				position: absolute;
+			}
+
+			.Select-arrow-zone {
+				order: -1;
+				margin: 0;
+			}
+		}
+
 		.value {
 			flex-wrap: wrap;
 
