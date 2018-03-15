@@ -47,17 +47,6 @@
 				);
 		}
 
-		&:focus {
-			.keyboard-user & {
-				span {
-					top: $btn-padding-y-xl + 2px;
-					right: $btn-padding-x-xl + 2px;
-					bottom: $btn-padding-y-xl + 2px;
-					left: $btn-padding-x-xl + 2px;
-				}
-			}
-		}
-
 		.feedback {
 			width: 100%;
 			display: flex;
@@ -101,7 +90,7 @@
 				bottom: 10px;
 				width: 1px;
 				background: rgba(255, 255, 255, 0.8);
-				transition: opacity 0.15s ease;
+				transition: opacity $btn-transition;
 			}
 		}
 
@@ -153,7 +142,14 @@
 		}
 
 		.btn:focus,
-		.btn:focus + .btn,
+		.btn:focus + .btn {
+			.keyboard-user & {
+				&::before {
+					opacity: 0;
+				}
+			}
+		}
+
 		.btn:active,
 		.btn:active + .btn {
 			&::before {
