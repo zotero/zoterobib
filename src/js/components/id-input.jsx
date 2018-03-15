@@ -24,6 +24,7 @@ class IdInput extends React.PureComponent {
 					ref = { i => this.inputField = i }
 					autoFocus
 					selectOnFocus
+					tabIndex={ 0 }
 					placeholder="Enter URL, ISBN, DOI, or PMID"
 					className="form-control form-control-lg id-input"
 					type="text"
