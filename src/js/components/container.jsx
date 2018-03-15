@@ -318,6 +318,7 @@ class Container extends React.Component {
 		if(this.bib.removeItem(item)) {
 			const message = {
 				action: 'Undo',
+				isUndoMessage: true,
 				autoDismiss: true,
 				kind: 'warning',
 				message: 'Item Deleted',
@@ -329,7 +330,10 @@ class Container extends React.Component {
 				citations: this.citations,
 				items: this.items,
 				lastDeletedItem: { ...item },
-				messages: [...this.state.messages, message]
+				messages: [
+					...this.state.messages.filter(m => !m.isUndoMessage),
+					message
+				]
 			});
 		}
 	}
