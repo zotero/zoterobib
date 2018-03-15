@@ -141,9 +141,7 @@
 		}
 
 		.dropdown-item {
-			> * {
-				padding: $space-min $input-btn-padding-x-lg;
-			}
+			padding: $space-min $input-btn-padding-x-lg;
 		}
 
 		&:hover {
