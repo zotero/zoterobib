@@ -90,10 +90,10 @@ class ExportDialog extends React.Component {
 					onClick={ this.handleCopy.bind(this, format) }
 					className="btn clipboard-trigger"
 				>
-					<div className={ cx('inline-feedback', { 'active': isCopied }) }>
+					<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 						<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['html'].label }</span>
 						<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
-					</div>
+					</span>
 				</DropdownItem>
 			);
 		} else {
@@ -122,10 +122,10 @@ class ExportDialog extends React.Component {
 						className='btn btn-secondary btn-xl copy-to-clipboard'
 						onClick={ this.handleCopy.bind(this, 'text') }
 					>
-						<div className={ cx('inline-feedback', { 'active': isCopied }) }>
+						<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 							<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['text'].label }</span>
 							<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
-						</div>
+						</span>
 					</Button>
 					<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
 						<span className="dropdown-caret" />
