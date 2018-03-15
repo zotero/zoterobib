@@ -19,6 +19,13 @@
 		}
 	}
 
+	.btn-xl {
+		@media (max-width: ($bp-sm - 1px)) {
+			padding-left: $btn-padding-x-lg;
+			padding-right: $btn-padding-x-lg;
+		}
+	}
+
 	.copy-to-clipboard {
 		background-image:
 			linear-gradient(
