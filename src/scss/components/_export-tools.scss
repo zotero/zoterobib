@@ -36,7 +36,7 @@
 		background-clip: border-box;
 		position: relative;
 
-		&:hover {
+		&:hover:not(:disabled) {
 			background-image:
 				linear-gradient(
 					to right,
@@ -45,7 +45,7 @@
 				);
 		}
 
-		&:active {
+		&:active:not(:disabled) {
 			background-image:
 				linear-gradient(
 					to right,
@@ -71,7 +71,7 @@
 				);
 			position: relative;
 
-			&:hover {
+			&:hover:not(:disabled) {
 				background-image:
 					linear-gradient(
 						to right,
@@ -80,7 +80,7 @@
 					);
 			}
 
-			&:active {
+			&:active:not(:disabled) {
 				background-image:
 					linear-gradient(
 						to right,
@@ -141,7 +141,7 @@
 		}
 
 		&:hover {
-			.dropdown-toggle {
+			.dropdown-toggle:not(:disabled) {
 				&::before {
 					opacity: 0;
 				}
@@ -157,8 +157,8 @@
 			}
 		}
 
-		.btn:active,
-		.btn:active + .btn {
+		.btn:active:not(:disabled),
+		.btn:active + .btn:not(:disabled) {
 			&::before {
 				opacity: 0;
 			}
