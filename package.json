@@ -62,7 +62,6 @@
     "reactstrap": "^5.0.0-beta.2",
     "zotero-api-client": "^0.9.4",
     "zotero-api-client-cache": "^0.2.0",
-    "zotero-base-mappings": "0.0.2",
     "zotero-bib": "github:zotero/bib#v0.5.2-release",
     "zotero-web-library": "^0.9.36-alpha"
   },
