@@ -56,7 +56,7 @@ class MultipleChoiceDialog extends React.Component {
 				className="multiple-choice-dialog modal modal-lg modal-centered"
 				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
 			>
-				<div className="modal-content">
+				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
 							Please select a citation from the list

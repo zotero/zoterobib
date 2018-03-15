@@ -28,7 +28,7 @@ class Confirmation extends React.Component {
 				contentLabel={ this.props.title }
 				onRequestClose={ () => this.props.onCancel() }
 			>
-				<div className="modal-content">
+				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
 							{ this.props.title }

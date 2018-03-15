@@ -214,7 +214,7 @@ class StyleInstaller extends React.Component {
 				className="style-installer modal modal-lg"
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
-				<div className="modal-content">
+				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
 							Add Citation Styles

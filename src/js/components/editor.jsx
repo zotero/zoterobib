@@ -175,7 +175,7 @@ class Editor extends React.Component {
 
 	renderModalContent() {
 		return (
-			<div className="modal-content">
+			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
 					{ this.itemTitle }
