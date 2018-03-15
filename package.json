@@ -38,8 +38,7 @@
     "watch:stylelint": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run stylelint'",
     "watch:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
     "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'",
-    "preshrinkwrap": "rimraf ./node_modules/reactstrap/node_modules/react-popper && npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'",
-    "postshrinkwrap": "npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'"
+    "preshrinkwrap": "rimraf ./node_modules/reactstrap/node_modules/react-popper && npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'"
   },
   "dependencies": {
     "array-equal": "^1.0.0",
