@@ -57,10 +57,10 @@ class Container extends React.Component {
 						<span className="d-md-block d-lg-inline">
 							ZBib is a free service that helps you quickly create
 						</span>
-						{' '}
+						{ ' ' }
 						a bibliography
 					</span>
-					{' '}
+					{ ' ' }
 					in any citation style.
 				</span>
 			)
