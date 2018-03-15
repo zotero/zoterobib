@@ -5,7 +5,12 @@
 .cite-tools {
 	text-align: center;
 
-	.id-input {
+	.id-input-container {
+		display: flex;
 		margin-bottom: $space-xl;
+	}
+
+	.input-group {
+		margin-right: $space-min;
 	}
 }

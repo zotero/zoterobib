@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const Input = require('zotero-web-library/lib/component/input');
+const Button = require('zotero-web-library/lib/component/ui/button');
 
 class IdInput extends React.PureComponent {
 	componentWillReceiveProps(nextProps) {
@@ -33,6 +34,9 @@ class IdInput extends React.PureComponent {
 					onBlur={ () => true /* do not commit on blur */ }
 					isBusy={ this.props.isTranslating }
 				/>
+				<Button className="btn-lg btn-secondary">
+					Cite
+				</Button>
 			</div>
 		);
 	}
