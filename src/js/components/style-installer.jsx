@@ -137,6 +137,42 @@ class StyleInstaller extends React.Component {
 		this.props.onStyleInstallerCancel();
 	}
 
+	get keyHandlers() {
+		return (
+			<React.Fragment>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ this.handleEscapeKey.bind(this) }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="ArrowDown"
+					onKeyHandle={ this.handleArrowDownKey.bind(this) }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="ArrowUp"
+					onKeyHandle={ this.handleArrowUpKey.bind(this) }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Enter"
+					onKeyHandle={ this.handleEnterKey.bind(this) }
+				/>
+			</React.Fragment>
+		);
+	}
+
+	get className() {
+		return {
+			'style-installer': true,
+			'modal': true,
+			'modal-lg': true,
+			'loading': !this.state.isReady
+		};
+	}
+
 	renderStyleItem(style) {
 		const styleData = this.props.citationStyles.find(cs => cs.name === style.name);
 		const isInstalled = typeof styleData !== 'undefined';
@@ -178,81 +214,56 @@ class StyleInstaller extends React.Component {
 		);
 	}
 
+	renderModalContent() {
+		return(
+			<div className="modal-content" tabIndex={ -1 }>
+				<div className="modal-header">
+					<h4 className="modal-title text-truncate">
+						Add Citation Styles
+					</h4>
+					<Button
+						className="close"
+						onClick={ this.handleCancel.bind(this) }
+					>
+						<Icon type={ '24/remove' } width="24" height="24" />
+					</Button>
+				</div>
+				<div className="modal-body">
+					<Input
+						autoFocus
+						className="form-control form-control-lg"
+						onChange={ this.handleFilterChange.bind(this) }
+						onKeyDown={ this.handleInputKeydown.bind(this) }
+						placeholder="Enter three characters or more to search"
+						type="text"
+						value={ this.state.filterInput }
+						isBusy={ this.state.isSearching }
+					/>
+						<ul className="style-list">
+							{
+								this.state.filterInput.length > 2 ?
+								this.state.items.map(this.renderStyleItem.bind(this)) :
+									this.props.citationStyles.map(this.renderStyleItem.bind(this))
+							}
+						</ul>
+				</div>
+			</div>
+		);
+	}
+
 	render() {
-		let keyHandlers = [
-			<KeyHandler
-				key="key-handler-escape"
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ this.handleEscapeKey.bind(this) }
-			/>,
-			<KeyHandler
-				key="key-handler-arrow-down"
-				keyEventName={ KEYDOWN }
-				keyValue="ArrowDown"
-				onKeyHandle={ this.handleArrowDownKey.bind(this) }
-			/>,
-			<KeyHandler
-				key="key-handler-arrow-up"
-				keyEventName={ KEYDOWN }
-				keyValue="ArrowUp"
-				onKeyHandle={ this.handleArrowUpKey.bind(this) }
-			/>,
-			<KeyHandler
-				key="key-handler-enter"
-				keyEventName={ KEYDOWN }
-				keyValue="Enter"
-				onKeyHandle={ this.handleEnterKey.bind(this) }
-			/>,
-		];
-		return [
-			...(this.props.isInstallingStyle ? keyHandlers : []),
+		return (
 			<Modal
 				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
-				className="style-installer modal modal-lg"
+				className={ cx(this.className) }
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
-				<div className="modal-content" tabIndex={ -1 }>
-					<div className="modal-header">
-						<h4 className="modal-title text-truncate">
-							Add Citation Styles
-						</h4>
-						<Button
-							className="close"
-							onClick={ this.handleCancel.bind(this) }
-						>
-							<Icon type={ '24/remove' } width="24" height="24" />
-						</Button>
-					</div>
-					<div className="modal-body">
-						<Input
-							autoFocus
-							className="form-control form-control-lg"
-							onChange={ this.handleFilterChange.bind(this) }
-							onKeyDown={ this.handleInputKeydown.bind(this) }
-							placeholder="Enter three characters or more to search"
-							type="text"
-							value={ this.state.filterInput }
-							isBusy={ this.state.isSearching }
-						/>
-						{
-							this.state.isReady ? (
-								<ul className="style-list">
-									{
-										this.state.filterInput.length > 2 ?
-											// this.state.items.length :
-										this.state.items.map(this.renderStyleItem.bind(this)) :
-											this.props.citationStyles.map(this.renderStyleItem.bind(this))
-									}
-								</ul>
-							) : <Spinner />
-						}
-					</div>
-				</div>
+				{ this.state.isReady ? this.renderModalContent() : <Spinner /> }
+				{ this.props.isInstallingStyle & this.keyHandlers }
 			</Modal>
-		];
+		);
 	}
 
 	static propTypes = {
