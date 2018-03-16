@@ -203,15 +203,15 @@
         <circle cx="243.998" cy="183" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
         <circle cx="189.998" cy="168" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
         <circle cx="157.998" cy="184" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="262" cy="80" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="265.998" cy="166" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
+        <circle cx="262" cy="80" r="2" fill="#eb5f8b"/>
+        <circle cx="265.998" cy="166" r="2" fill="#eb5f8b"/>
         <circle cx="140" cy="44" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="33" cy="49" r="3" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="56" cy="32" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="283" cy="99" r="3" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="273" cy="155" r="3" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="240" cy="30" r="2" fill="#e52e3d" style="mix-blend-mode: screen"/>
-        <circle cx="7" cy="149" r="3" fill="#e52e3d" style="mix-blend-mode: screen"/>
+        <circle cx="33" cy="49" r="3" fill="#eb5f8b"/>
+        <circle cx="56" cy="32" r="2" fill="#eb5f8b"/>
+        <circle cx="283" cy="99" r="3" fill="#eb5f8b"/>
+        <circle cx="273" cy="155" r="3" fill="#eb5f8b"/>
+        <circle cx="240" cy="30" r="2" fill="#eb5f8b"/>
+        <circle cx="7" cy="149" r="3" fill="#eb5f8b"/>
         <rect x="6" y="188" width="268" height="2" fill="url(#Unbenannter_Verlauf_4)" style="mix-blend-mode: hard-light"/>
         <g>
           <rect x="142.998" y="169" width="1" height="25" fill="url(#Unbenannter_Verlauf_11)"/>
