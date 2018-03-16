@@ -1,0 +1,15 @@
+//
+// About
+//
+
+.about {
+	background: $about-bg;
+	color: $shade-0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	h1,
+	.lead {
+		text-align: center;
+	}
+}

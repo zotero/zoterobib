@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66">
+  <g>
+    <circle cx="33" cy="33" r="33" fill="#376bf1"/>
+    <g>
+      <g>
+        <rect x="15" y="11" width="36" height="36" fill="none"/>
+        <rect x="16" y="28" width="35" height="19" rx="1" ry="1" fill="#87a6f7"/>
+        <rect x="18" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="22" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="26" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="30" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="34" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="38" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="42" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="46" y="30" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="18" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="22" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="26" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="30" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="34" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="38" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="42" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="46" y="34" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="18" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="22" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="26" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="30" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="34" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="42" y="38" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="18" y="42" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="22" y="42" width="15" height="3" fill="#d7e1fc"/>
+        <rect x="42" y="42" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="38" y="42" width="3" height="3" fill="#d7e1fc"/>
+        <rect x="46" y="42" width="3" height="3" fill="#d7e1fc"/>
+      </g>
+      <path d="M32.888,28.5c-5-10,12.98-5,7.98-13" fill="none" stroke="#87a6f7" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

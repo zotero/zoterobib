@@ -17,6 +17,7 @@ const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const Confirmation = require('./confirmation');
 const Editor = require('./editor');
 const StyleInstaller = require('./style-installer');
+const About = require('./about');
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -95,6 +96,12 @@ class ZBib extends React.PureComponent {
 											<Brand />
 										</div>
 									</section>
+								)
+							}
+
+							{
+								!this.props.isReadOnly && (
+									<About />
 								)
 							}
 
