@@ -41,7 +41,14 @@ h2,
 
 h1,
 .h1 {
-	font-size: $h1-font-size;
+	font-size: $h1-font-size-mobile;
+	margin-bottom: $lead-font-size-mobile;
+	margin-top: 0;
+
+	@media (min-width: $bp-md) {
+		font-size: $h1-font-size;
+		margin-bottom: $lead-font-size;
+	}
 }
 
 h2,
@@ -72,6 +79,16 @@ h5,
 	font-size: $h5-font-size;
 	margin-top: 0;
 	margin-bottom: $space-xs;
+	letter-spacing: 0;
+}
+
+a {
+	color: $link-color;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 .lead {

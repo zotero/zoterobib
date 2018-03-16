@@ -1,3 +1,13 @@
 //
 // Section about
 //
+
+.section-about {
+	padding-top: 80px;
+	padding-bottom: 80px - 10px;
+
+	@media (min-width: $bp-md) {
+		padding-top: 120px;
+		padding-bottom: 120px - 10px;
+	}
+}

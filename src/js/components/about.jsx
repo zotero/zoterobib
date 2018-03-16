@@ -20,7 +20,7 @@ class About extends React.PureComponent {
 						Brought to you by the Zotero team, ZBib helps you build a
 						bibliography instantly, without downloading or installing any
 						software. If you need to organize, analyze, and share your research
-						sources, we recommend using Zotero instead.
+						sources, we recommend using <a href="https://www.zotero.org/">Zotero</a> instead.
 					</p>
 					<section className="features">
 						<div className="column">
@@ -139,8 +139,13 @@ class About extends React.PureComponent {
 							</section>
 						</div>
 					</section>
-					<Button className="btn-lg btn-outline-inverse-blue-dark">Awesome! Let’s start!</Button>
-					<p>Need help? Visit our support pages.</p>
+					<Button className="btn-lg btn-outline-inverse-blue-dark">
+						Awesome! Let’s start!
+					</Button>
+					<p className="support">
+						<span className="d-xs-block d-sm-inline">Need help?</span>
+						{ ' ' }
+						Visit our <a href="">support pages</a>.</p>
 				</div>
 			</section>
 		);

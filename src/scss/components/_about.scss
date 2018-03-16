@@ -13,28 +13,6 @@
 		max-width: 940px;
 	}
 
-	p {
-		margin-top: 0;
-	}
-
-	.zbib-illustration {
-		display: block;
-		margin: auto;
-	}
-
-	h1,
-	.lead {
-		text-align: center;
-	}
-
-	.features {
-		text-align: left;
-
-		@media (min-width: $bp-md) {
-			display: flex;
-		}
-	}
-
 	.column {
 		flex: 0 0 50%;
 
@@ -49,14 +27,67 @@
 		}
 	}
 
+	a {
+		color: mix($link-color, $shade-0, 40%);
+	}
+
+	p {
+		margin-top: 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.zbib-illustration {
+		display: block;
+		margin: 0 auto (96px - 25px);
+
+		@media (max-width: ($bp-md - 1px)) {
+			width: 150px;
+			height: auto;
+			margin: 0 auto (64px - 16px);
+		}
+	}
+
+	.features {
+		text-align: left;
+		margin-top: 80px - 7px;
+		margin-bottom: 80px - 7px;
+
+		@media (min-width: $bp-md) {
+			display: flex;
+			margin-top: 120px - 19px;
+			margin-bottom: 96px - 7px;
+		}
+	}
+
 	.feature {
 		padding-left: 66px + $space-md;
 		position: relative;
+		margin-bottom: 96px - 16px;
+
+		@media (min-width: $bp-md) {
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
 	}
 
 	.feature-icon {
 		position: absolute;
 		left: 0;
 		top: -21px;
+	}
+
+	.support {
+		font-weight: 300;
+		font-size: $lead-font-size-mobile;
+		margin-top: $space-xl - 13px;
+
+		@media (min-width: $bp-md) {
+			font-size: $lead-font-size;
+			margin-top: $space-xxl - 15px;
+		}
 	}
 }
