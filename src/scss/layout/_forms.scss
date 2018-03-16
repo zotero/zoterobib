@@ -14,6 +14,7 @@
 	// todo: padding
 	border-radius: $input-border-radius;
 	transition: border $input-transition, box-shadow $input-transition;
+	margin: 0; // Remove margin in Safari
 
 	&:focus {
 		border: $input-border-width solid $input-focus-color;
