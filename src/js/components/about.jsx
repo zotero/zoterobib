@@ -82,13 +82,13 @@ class About extends React.PureComponent {
 						<div className="column">
 							<section className="feature">
 								<img
-									src="/static/images/about/editing-item.svg"
+									src="/static/images/about/editing.svg"
 									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Editing item</h2>
+								<h2 className="h5">Editing an item</h2>
 								<p>
 									You can manually edit your bibliography entries just by
 									clicking on an item, whether or not that item was added
