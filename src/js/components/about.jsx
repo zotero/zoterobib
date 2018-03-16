@@ -1,6 +1,7 @@
 'use strict';
 
 const React = require('react');
+const Button = require('zotero-web-library/lib/component/ui/button');
 
 class About extends React.PureComponent {
 	render() {
@@ -9,6 +10,7 @@ class About extends React.PureComponent {
 				<div className="container">
 					<img
 						src="/static/images/about/zbib-illustration.svg"
+						className="zbib-illustration"
 						width="300"
 						height="400"
 						alt="ZBib"
@@ -25,6 +27,7 @@ class About extends React.PureComponent {
 							<section className="feature">
 								<img
 									src="/static/images/about/cite.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -38,6 +41,7 @@ class About extends React.PureComponent {
 							<section className="feature">
 								<img
 									src="/static/images/about/manual-entry.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -49,9 +53,10 @@ class About extends React.PureComponent {
 									always enter the reference information by hand.
 								</p>
 							</section>
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/bibliography-title.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -59,9 +64,10 @@ class About extends React.PureComponent {
 								<h2 className="h5">Bibliography title</h2>
 								<p>To rename your bibliography, just click its title.</p>
 							</section>
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/style-selection.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -74,9 +80,10 @@ class About extends React.PureComponent {
 							</section>
 						</div>
 						<div className="column">
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/editing-item.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -88,9 +95,10 @@ class About extends React.PureComponent {
 									automatically or manually.
 								</p>
 							</section>
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/deleting-items.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -101,9 +109,10 @@ class About extends React.PureComponent {
 									{ ' ' }<em>Delete All</em>.
 								</p>
 							</section>
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/export.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -114,9 +123,10 @@ class About extends React.PureComponent {
 									or as HTML, rich text (RTF), or a RIS file.
 								</p>
 							</section>
-							<section>
+							<section className="feature">
 								<img
 									src="/static/images/about/link.svg"
+									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
@@ -129,7 +139,7 @@ class About extends React.PureComponent {
 							</section>
 						</div>
 					</section>
-					<button>Awesome! Let’s start!</button>
+					<Button className="btn-lg btn-outline-inverse-blue-dark">Awesome! Let’s start!</Button>
 					<p>Need help? Visit our support pages.</p>
 				</div>
 			</section>

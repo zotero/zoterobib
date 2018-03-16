@@ -5,11 +5,58 @@
 .about {
 	background: $about-bg;
 	color: $shade-0;
+	text-align: center;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	.container {
+		max-width: 940px;
+	}
+
+	p {
+		margin-top: 0;
+	}
+
+	.zbib-illustration {
+		display: block;
+		margin: auto;
+	}
 
 	h1,
 	.lead {
 		text-align: center;
+	}
+
+	.features {
+		text-align: left;
+
+		@media (min-width: $bp-md) {
+			display: flex;
+		}
+	}
+
+	.column {
+		flex: 0 0 50%;
+
+		@media (min-width: $bp-md) {
+			&:nth-child(1) {
+				padding-right: 40px;
+			}
+
+			&:nth-child(2) {
+				padding-left: 40px;
+			}
+		}
+	}
+
+	.feature {
+		padding-left: 66px + $space-md;
+		position: relative;
+	}
+
+	.feature-icon {
+		position: absolute;
+		left: 0;
+		top: -21px;
 	}
 }

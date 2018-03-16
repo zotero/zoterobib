@@ -102,6 +102,10 @@ a.btn {
 	@include button-variant($btn-success-color, $outline: true, $inverse: true);
 }
 
+.btn-outline-inverse-blue-dark {
+	@include button-variant($blue-dark, $outline: true, $inverse: true);
+}
+
 .btn-icon {
 	display: flex;
 	align-items: center;
