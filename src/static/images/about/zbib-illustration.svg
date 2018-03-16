@@ -46,7 +46,7 @@
         <path d="M205,259c38-28,126,28,62,36" fill="none" stroke="#3abd57" stroke-miterlimit="10" stroke-width="2"/>
         <path d="M140,198c0,26-60-22-60,28,0,0-25,161,95,67s136-12,92-8" fill="none" stroke="#4d4dff" stroke-miterlimit="10" stroke-width="2"/>
         <path d="M102,198c0,14,35.748,19.289,40,40,7.171,34.926,23.43,27.572,58.608,8.887C285.468,201.815,316.085,249.7,267,255" fill="none" stroke="#e52e3d" stroke-miterlimit="10" stroke-width="2"/>
-        <path d="M119,199c0,24,62.412,68.519,112,48,58-24,102,10,36,28" fill="none" stroke="#222" stroke-miterlimit="10" stroke-width="2"/>
+        <path d="M119,199c0,24,62.412,68.519,112,48,58-24,99.583,10.75,36,28" fill="none" stroke="#222" stroke-miterlimit="10" stroke-width="2"/>
         <rect x="24" y="66" width="32" height="124" rx="2" ry="2" fill="#2970ff"/>
         <rect x="28" y="82" width="24" height="14" fill="#2970ff" opacity="0.4" style="mix-blend-mode: multiply"/>
         <rect x="28" y="98" width="24" height="14" fill="#2970ff" opacity="0.4" style="mix-blend-mode: multiply"/>
