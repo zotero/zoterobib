@@ -14,7 +14,7 @@
 $red:          #e52e3d;
 $blue:         #2970ff;
 $blue-dark:    #333c66;
-$blue-darkest: #292b33;
+$blue-darkest: #142266;
 $violet:       #5959ff;
 
 $primary:   $red;
@@ -285,7 +285,7 @@ $style-border-color: $shade-2;
 // React-modal
 //
 
-$modal-backdrop-bg:           rgba($blue-darkest, 0.6);
+$modal-backdrop-bg:           rgba($blue-darkest, 0.5);
 $modal-content-bg:            $shade-0;
 $modal-header-color:          $shade-0;
 $modal-header-bg:             $blue-dark;
