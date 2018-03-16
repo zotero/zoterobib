@@ -57,55 +57,33 @@
 				display: flex;
 			}
 
-			.editable {
-				padding: ($input-btn-padding-y-sm + 1px) 0;
-			}
-
-			.editable-value {
-				display: flex;
-				align-items: center;
-
-				@media (min-width: $bp-md) {
-					justify-content: flex-end;
-				}
-
-				.Select-arrow {
-					display: inline-block;
-					width: $space-md;
-					height: $space-md;
-					background: url("/static/images/bg-icons/16/chevron-11-down-777.svg");
-					margin-left: $space-min;
-
-					@media (min-width: $bp-md) {
-						order: -1;
-						margin-left: 0;
-						margin-right: $space-min;
-					}
-				}
-			}
-
-			.text-container {
-				line-height: $line-height-base;
-			}
-
 			// Select
-			.input-group {
-				height:
-					$font-size-base
-					* $line-height-base
-					+ 2 * $input-btn-padding-y-sm
-					+ 2 * $input-border-width
-					- 2 * ($input-btn-padding-y-sm + 1px);
-
-				@media (min-width: $bp-md) {
-					flex: 0 0 calc(100% + #{$input-btn-padding-x-sm + $input-border-width});
-				}
-			}
-
 			.Select {
 				.Select-control {
+					border: none;
+					cursor: pointer;
+
 					@media (min-width: $bp-md) {
 						justify-content: flex-end;
+					}
+
+					&:hover {
+						color: $secondary;
+
+						.Select-arrow {
+							background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
+						}
+					}
+				}
+
+				&.is-focused {
+					.Select-control {
+						box-shadow: none;
+						color: $secondary;
+					}
+
+					.Select-arrow {
+						background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
 					}
 				}
 
@@ -117,10 +95,6 @@
 					flex: 0 0 auto;
 					position: static;
 					padding: 0;
-
-					@media (min-width: $bp-md) {
-						padding: 0 $input-btn-padding-x-sm 0 0;
-					}
 				}
 
 				.Select-input {
@@ -144,8 +118,14 @@
 					}
 				}
 
-				.Select-menu {
+				.Select-menu-outer {
 					text-align: left;
+					width: auto;
+
+					@media (min-width: $bp-md) {
+						left: auto;
+						right: 0;
+					}
 				}
 			}
 		}

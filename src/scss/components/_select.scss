@@ -124,10 +124,11 @@
 
 	.Select-option {
 		padding: $space-min $input-btn-padding-x;
+		cursor: pointer;
 
-		&:hover {
+		&:hover,
+		&.is-focused {
 			background: $menu-item-hover-bg;
-			cursor: pointer;
 		}
 	}
 }
