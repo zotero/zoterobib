@@ -27,6 +27,10 @@
 		}
 	}
 
+	.h4 {
+		margin-bottom: $space-xs;
+	}
+
 	a {
 		color: mix($link-color, $shade-0, 40%);
 	}
@@ -60,7 +64,7 @@
 
 		@media (min-width: $bp-md) {
 			display: flex;
-			margin-top: 120px - 19px;
+			margin-top: 120px - 20px;
 			margin-bottom: 96px - 7px;
 		}
 	}
@@ -80,7 +84,11 @@
 	.feature-icon {
 		position: absolute;
 		left: 0;
-		top: -21px;
+		top: -23px;
+
+		@media (min-width: $bp-md) {
+			top: -20px;
+		}
 	}
 
 	.support {

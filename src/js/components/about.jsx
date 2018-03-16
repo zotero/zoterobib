@@ -32,7 +32,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Entering an item</h2>
+								<h2 className="h4">Entering an item</h2>
 								<p>
 									By simply entering a URL, DOI, ISBN, or PMID, ZBib can
 									automatically import most references.
@@ -46,7 +46,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Manual entry</h2>
+								<h2 className="h4">Manual entry</h2>
 								<p>
 									If you would like to enter a reference manually or if
 									automatic import doesn’t find what you’re looking for, you can
@@ -61,7 +61,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Bibliography title</h2>
+								<h2 className="h4">Bibliography title</h2>
 								<p>To rename your bibliography, just click its title.</p>
 							</section>
 							<section className="feature">
@@ -72,7 +72,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Style selection</h2>
+								<h2 className="h4">Style selection</h2>
 								<p>
 									To change your bibliography’s formatting style, free free to
 									choose from over 9000 styles.
@@ -88,7 +88,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Editing an item</h2>
+								<h2 className="h4">Editing an item</h2>
 								<p>
 									You can manually edit your bibliography entries just by
 									clicking on an item, whether or not that item was added
@@ -103,7 +103,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Deleting items</h2>
+								<h2 className="h4">Deleting items</h2>
 								<p>
 									To delete an entry click its ×; to remove all entries click
 									{ ' ' }<em>Delete All</em>.
@@ -117,7 +117,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Export</h2>
+								<h2 className="h4">Export</h2>
 								<p>
 									You can export your completed bibliography to the clipboard,
 									or as HTML, rich text (RTF), or a RIS file.
@@ -131,7 +131,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Link to this version</h2>
+								<h2 className="h4">Link to this version</h2>
 								<p>
 									If you would like to save a link to your ZBib library or to
 									share it with someone else, you can generate a link.
