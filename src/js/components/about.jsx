@@ -116,7 +116,7 @@ class About extends React.PureComponent {
 							</section>
 							<section>
 								<img
-									src="/static/images/about/export.svg"
+									src="/static/images/about/link.svg"
 									width="66"
 									height="66"
 									alt=""
