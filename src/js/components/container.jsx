@@ -343,7 +343,7 @@ class Container extends React.Component {
 	handleUndoDelete() {
 		if(this.state.lastDeletedItem) {
 			this.handleItemCreated(this.state.lastDeletedItem);
-			this.handleClearMessage();
+			this.handleClearMessage(this.state.messages.find(m => m.isUndoMessage));
 			this.setState({
 				permalink: null,
 				lastDeletedItem: null
@@ -352,7 +352,9 @@ class Container extends React.Component {
 	}
 
 	handleDismissUndo() {
+		this.handleClearMessage(this.state.messages.find(m => m.isUndoMessage));
 		this.setState({ lastDeletedItem: null });
+
 	}
 
 	async handleCitationStyleChanged(citationStyle) {
@@ -499,8 +501,8 @@ class Container extends React.Component {
 		});
 	}
 
-	handleClearMessage() {
-		this.setState({ messages: this.state.messages.slice(0, -1) });
+	handleClearMessage(message) {
+		this.setState({ messages: this.state.messages.filter(msg => msg != message) });
 	}
 
 	handleMultipleChoiceCancel() {

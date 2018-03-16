@@ -32,6 +32,10 @@ class ZBib extends React.PureComponent {
 		};
 	}
 
+	handleClearMessage(message) {
+		this.props.onClearMessage(message);
+	}
+
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -44,7 +48,7 @@ class ZBib extends React.PureComponent {
 								{ this.props.messages.map(message => (
 									<Message
 										key={ message.message }
-										onDismiss={ this.props.onClearMessage }
+										onDismiss={ this.handleClearMessage.bind(this, message) }
 										{ ...message }
 									/>
 									))
