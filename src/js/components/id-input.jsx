@@ -6,13 +6,25 @@ const Input = require('zotero-web-library/lib/component/input');
 const Button = require('zotero-web-library/lib/component/ui/button');
 
 class IdInput extends React.PureComponent {
+	state = {
+		identifier: ''
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if(this.props.isTranslating && !nextProps.isTranslating) {
 			this.inputField.focus();
 		}
+		if(this.props.identifier && !nextProps.identifier) {
+			this.setState({ identifier: nextProps.identifier });
+		}
 	}
 
-	handleCommit(identifier) {
+	handleChange(identifier) {
+		this.setState({ identifier });
+	}
+
+	handleCite() {
+		const { identifier } = this.state;
 		if(identifier.length > 0 && !this.props.isTranslating) {
 			this.props.onTranslationRequest(identifier);
 		}
@@ -22,19 +34,23 @@ class IdInput extends React.PureComponent {
 		return (
 			<div className="id-input-container">
 				<Input
-					ref = { i => this.inputField = i }
 					autoFocus
+					className="form-control form-control-lg id-input"
+					isBusy={ this.props.isTranslating }
+					onBlur={ () => true /* do not commit on blur */ }
+					onChange={ this.handleChange.bind(this) }
+					onCommit={ this.handleCite.bind(this) }
+					placeholder="Enter URL, ISBN, DOI, or PMID"
+					ref = { i => this.inputField = i }
 					selectOnFocus
 					tabIndex={ 0 }
-					placeholder="Enter URL, ISBN, DOI, or PMID"
-					className="form-control form-control-lg id-input"
 					type="text"
-					value={ this.props.identifier }
-					onCommit={ this.handleCommit.bind(this) }
-					onBlur={ () => true /* do not commit on blur */ }
-					isBusy={ this.props.isTranslating }
+					value={ this.state.identifier }
 				/>
-				<Button className="btn-lg btn-secondary">
+				<Button
+					className="btn-lg btn-secondary"
+					onClick={ this.handleCite.bind(this) }
+				>
 					Cite
 				</Button>
 			</div>
@@ -42,9 +58,9 @@ class IdInput extends React.PureComponent {
 	}
 
 	static propTypes = {
+		identifier: PropTypes.string,
 		isTranslating: PropTypes.bool,
 		onTranslationRequest: PropTypes.func.isRequired,
-		identifier: PropTypes.string,
 	}
 }
 
