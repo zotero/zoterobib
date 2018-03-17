@@ -41,16 +41,18 @@ class Modal extends React.PureComponent {
 	}
 
 	handleModalOpen() {
+		this.contentRef.firstChild.focus();
 		// remove maxHeight hack that prevents scroll on focus
 		this.contentRef.style.maxHeight = null;
-		this.contentRef.firstChild.focus();
+		this.contentRef.style.overflowY = null;
+		console.log(this.contentRef.firstChild);
 	}
 
 	render() {
 		return <ReactModal
 			role="dialog"
 			// prevent scroll on focus by setting max height
-			style={{ content: { maxHeight: '90%' } }}
+			style={{ content: { maxHeight: 'calc(100% - 32px)', overflowY: 'hidden' } }}
 			onAfterOpen={ this.handleModalOpen.bind(this) }
 			contentRef={ contentRef => { this.contentRef = contentRef; } }
 			parentSelector={ () => document.querySelector('.zotero-bib-container') }
