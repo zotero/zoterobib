@@ -30,5 +30,23 @@
 				margin-right: $grid-gutter-width;
 			}
 		}
+
+		&.success {
+			background-color: $btn-success-color;
+
+			&:active {
+				background-color: darken($btn-success-color, 8%);
+			}
+
+			&:focus {
+				.keyboard-user & {
+					box-shadow: 0 0 0 $input-btn-focus-width $btn-success-color;
+
+					&:active {
+						box-shadow: 0 0 0 $input-btn-focus-width darken($btn-success-color, 8%);
+					}
+				}
+			}
+		}
 	}
 }

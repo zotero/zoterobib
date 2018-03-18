@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const copy = require('copy-to-clipboard');
+const cx = require('classnames');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
@@ -65,7 +66,10 @@ class PermalinkTools extends React.Component {
 		return this.props.permalink ? (
 			<div className="permalink-tools">
 				<Button
-					className="btn btn-lg btn-block btn-secondary"
+					className={
+						cx('btn btn-lg btn-block btn-secondary',
+						{ success: this.state.isRecentlyCopied})
+					}
 					data-clipboard-text={ this.props.permalink }
 					onClick={ this.handleCopy.bind(this) }
 				>
