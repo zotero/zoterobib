@@ -24,6 +24,23 @@
 
 
 //
+// Layout
+//
+
+@import "layout/grid";
+@import "layout/forms";
+@import "layout/sections";
+@import "layout/section-cite";
+@import "layout/section-export";
+@import "layout/section-link";
+@import "layout/section-about";
+@import "layout/section-brand";
+@import "layout/badge";
+@import "layout/messages";
+@import "layout/inline-feedback";
+
+
+//
 // Components
 //
 
@@ -47,18 +64,4 @@
 @import "components/about";
 
 
-//
-// Layout
-//
 
-@import "layout/grid";
-@import "layout/forms";
-@import "layout/sections";
-@import "layout/section-cite";
-@import "layout/section-export";
-@import "layout/section-link";
-@import "layout/section-about";
-@import "layout/section-brand";
-@import "layout/badge";
-@import "layout/messages";
-@import "layout/inline-feedback";

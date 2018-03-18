@@ -6,10 +6,10 @@
 	text-align: center;
 
 	.write & {
-		padding-top: $section-padding-mobile - 13px;
+		padding-top: $section-padding-mobile - 9px; // t height
 
 		@media (min-width: $bp-md) {
-			padding-top: $section-padding - 16px;
+			padding-top: $section-padding - 11px; // t height
 		}
 	}
 

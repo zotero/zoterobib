@@ -4,11 +4,6 @@
 
 .section-bibliography {
 	text-align: center;
-	padding-top: $section-padding-mobile - 16px;
-
-	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 21px;
-	}
 
 	&.loading {
 		.spinner-container {
@@ -20,10 +15,6 @@
 		& ~ .section {
 			visibility: hidden;
 		}
-	}
-
-	.read-only & {
-		border-top: none;
 	}
 
 	.empty-bibliography {
@@ -54,6 +45,12 @@
 	}
 
 	.write & {
+		padding-top: $section-padding-mobile - 16px;
+
+		@media (min-width: $bp-md) {
+			padding-top: $section-padding - 21px;
+		}
+
 		.bibliography-title {
 			display: flex;
 			align-items: center;
@@ -185,6 +182,23 @@
 				&:last-child {
 					color: $link-color;
 				}
+			}
+		}
+	}
+
+	.read-only & {
+		border-top: none;
+		padding-top: $section-padding-mobile - 9px;
+
+		@media (min-width: $bp-md) {
+			padding-top: $section-padding - 11px;
+		}
+
+		.h2 {
+			margin-bottom: $space-xl - 16px;
+
+			@media (min-width: $bp-md) {
+				margin-bottom: ($space-xxl - 18px);
 			}
 		}
 	}
