@@ -136,10 +136,6 @@
 			}
 		}
 
-		.dropdown-item {
-			padding: $space-min $input-btn-padding-x-lg;
-		}
-
 		&:hover {
 			.dropdown-toggle:not(:disabled) {
 				&::before {

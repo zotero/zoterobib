@@ -28,6 +28,15 @@
 			padding-right: $space-xs;
 			margin-bottom: 0;
 		}
+
+		a {
+			color: $label-color;
+			text-decoration: none;
+
+			&[href]:hover {
+				color: $link-color;
+			}
+		}
 	}
 
 	.value {
@@ -55,6 +64,14 @@
 			.field-editable-wrap {
 				flex: 1 1 auto;
 				display: flex;
+
+				@media (min-width: $bp-md) {
+					justify-content: flex-end;
+				}
+			}
+
+			.input-group {
+				flex: 0 0 auto;
 			}
 
 			// Select
@@ -121,11 +138,11 @@
 				.Select-menu-outer {
 					text-align: left;
 					width: auto;
+					white-space: nowrap;
+				}
 
-					@media (min-width: $bp-md) {
-						left: auto;
-						right: 0;
-					}
+				.Select-option {
+					padding: $input-btn-padding-y-sm $input-btn-padding-x-lg;
 				}
 			}
 		}
