@@ -233,6 +233,10 @@
 			right: $input-btn-padding-x-sm + $input-border-width;
 		}
 
+		.Select + .icon-spin {
+			right: $input-btn-padding-x-sm + $input-border-width + $space-md + $space-min;
+		}
+
 		&.busy {
 			input {
 				padding-right: $input-btn-padding-x-sm + $space-md + 1px;

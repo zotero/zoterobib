@@ -35,6 +35,16 @@
 					$input-btn-padding-x
 					+ $input-border-width
 					+ $space-md;
+
+				.busy & {
+					padding-right:
+						$input-btn-padding-x
+						+ $input-border-width
+						+ $space-md
+						+ $space-md
+						+ $space-min
+						+ 1px;
+				}
 			}
 		}
 	}
