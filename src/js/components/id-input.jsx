@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Input = require('zotero-web-library/lib/component/input');
+const Input = require('zotero-web-library/lib/component/form/input');
 const Button = require('zotero-web-library/lib/component/ui/button');
 
 class IdInput extends React.PureComponent {

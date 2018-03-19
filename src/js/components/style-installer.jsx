@@ -7,7 +7,7 @@ const { KEYDOWN } = require('react-key-handler');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
-const Input = require('zotero-web-library/lib/component/input');
+const Input = require('zotero-web-library/lib/component/form/input');
 const cx = require('classnames');
 const Modal = require('./modal');
 
