@@ -45,12 +45,12 @@
 
 	.zbib-illustration {
 		position: relative;
-		left: 10px;
+		left: 11px;
 		display: block;
 		margin: 0 auto (96px - 25px);
 
 		@media (max-width: ($bp-md - 1px)) {
-			left: 5px;
+			left: 6px;
 			width: 150px;
 			height: auto;
 			margin: 0 auto (64px - 16px);
