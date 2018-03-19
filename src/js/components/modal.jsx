@@ -45,7 +45,6 @@ class Modal extends React.PureComponent {
 		// remove maxHeight hack that prevents scroll on focus
 		this.contentRef.style.maxHeight = null;
 		this.contentRef.style.overflowY = null;
-		console.log(this.contentRef.firstChild);
 	}
 
 	render() {
