@@ -2,8 +2,15 @@
 
 const React = require('react');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const SmoothScroll = require('smooth-scroll');
+const scroll = new SmoothScroll();
 
 class About extends React.PureComponent {
+	handleClick() {
+		const target = document.querySelector('.zotero-bib-container');
+		scroll.animateScroll(target);
+	}
+
 	render() {
 		return (
 			<section className="section section-about about">
@@ -149,7 +156,10 @@ class About extends React.PureComponent {
 							</section>
 						</div>
 					</section>
-					<Button className="btn-lg btn-outline-inverse-blue-dark">
+					<Button
+						onClick={ this.handleClick.bind(this) }
+						className="btn-lg btn-outline-inverse-blue-dark"
+					>
 						Awesome! Let’s start!
 					</Button>
 					<p className="support">
