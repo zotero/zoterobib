@@ -45,7 +45,7 @@ class DeleteAllButton extends React.Component {
 					<p>
 						{ entriesCount > 0 && (
 							<span>
-								{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be removed. Bibliography title will be reset.
+								{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be deleted.
 							</span>
 						)
 						}

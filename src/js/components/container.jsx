@@ -143,7 +143,7 @@ class Container extends React.Component {
 					bibliography: this.bibliography
 				});
 			} catch(e) {
-				this.handleError('Failed to obtain selected citations style.');
+				this.handleError('Failed to obtain selected citation style');
 				this.setState({
 					citationStyle: state.citationStyle
 				});
@@ -467,13 +467,13 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.FAILED:
-						this.handleError('An error occured while citing this source.');
+						this.handleError('An error occurred while citing this source.');
 						this.setState({ isTranslating: false });
 					break;
 				}
 			}
 			catch(e) {
-				this.handleError('An error occured while citing this source.');
+				this.handleError('An error occurred while citing this source.');
 				this.setState({ isTranslating: false });
 			}
 		} else {

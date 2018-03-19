@@ -60,7 +60,7 @@ class BibliographySection extends React.PureComponent {
 				<React.Fragment>
 					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
 					<h2 className="empty-title">Your bibliography is empty.</h2>
-					<p className="lead empty-lead">To add your sources simply enter an URL, ISBN, DOI, or PMID in the search box above. Of course you can add them manually too.</p>
+					<p className="lead empty-lead">To add a source, simply type or paste its URL, ISBN, DOI, or PMID into the search box above.</p>
 				</React.Fragment>
 			);
 		} else {
