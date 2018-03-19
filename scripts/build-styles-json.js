@@ -7,7 +7,7 @@ const appDefaults = require('../src/js/constants/defaults');
 
 const styles = [
 	'apa',
-	'chicago-author-date',
+	'chicago-note-bibliography',
 	'modern-language-association',
 	'turabian-fullnote-bibliography'
 ];
