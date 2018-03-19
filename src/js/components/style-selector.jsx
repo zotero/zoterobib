@@ -22,7 +22,7 @@ class StyleSelector extends React.Component {
 						})),
 						{
 							value: 'install',
-							label: `${Math.floor(citationStylesCount / 100) * 100}+ other styles available …`
+							label: `${(Math.floor(citationStylesCount / 100) * 100).toLocaleString()}+ other styles available…`
 						}
 					] }
 					onChange={ ev => this.props.onCitationStyleChanged(ev.value) }
