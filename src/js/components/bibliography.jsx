@@ -60,6 +60,7 @@ class Bibliography extends React.PureComponent {
 	renderBibliographyItem(child, i) {
 		let [ itemId ] = this.props.bibliography[0]['entry_ids'][i];
 		let { Tag, attrs } = parseTagAndAttrsFromNode(child);
+		let rawItem = this.props.items.find(i => i.key === itemId);
 		return (
 			<li key={ itemId }
 				className="citation"
@@ -80,6 +81,9 @@ class Bibliography extends React.PureComponent {
 						</Button>
 					)
 				}
+				<script type="application/vnd.zotero.data+json">
+					{ JSON.stringify(rawItem) }
+				</script>
 			</li>
 		);
 	}
@@ -121,6 +125,7 @@ class Bibliography extends React.PureComponent {
 	static propTypes = {
 		bibliography: PropTypes.array,
 		isReadOnly: PropTypes.bool,
+		items: PropTypes.array,
 		match: PropTypes.object,
 		onDeleteEntry: PropTypes.func.isRequired,
 		onEditorOpen:  PropTypes.func.isRequired,
