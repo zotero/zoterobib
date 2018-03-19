@@ -17,10 +17,11 @@ class About extends React.PureComponent {
 					/>
 					<h1>Cite anything</h1>
 					<p className="lead">
-						Brought to you by the Zotero team, ZBib helps you build a
-						bibliography instantly, without downloading or installing any
-						software. If you need to organize, analyze, and share your research
-						sources, we recommend using <a href="https://www.zotero.org/">Zotero</a> instead.
+						Brought to you by the team behind <a href="https://www.zotero.org/">Zotero</a>,
+						ZBib helps you build a bibliography instantly, without downloading or
+						installing any software. If you need to reuse your research sources across
+						multiple projects or build a shared research library, we recommend using
+						Zotero instead.
 					</p>
 					<section className="features">
 						<div className="column">
@@ -32,10 +33,11 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h4">Entering an item</h2>
+								<h2 className="h4">Adding a bibliography entry</h2>
 								<p>
-									By simply entering a URL, DOI, ISBN, or PMID, ZBib can
-									automatically import most references.
+									Simply type or paste in a URL, DOI, ISBN, or PMID, and ZBib
+									will automatically import the reference and add it to your
+									bibliography.
 								</p>
 							</section>
 							<section className="feature">
@@ -48,8 +50,8 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Manual entry</h2>
 								<p>
-									If you would like to enter a reference manually or if
-									automatic import doesn’t find what you’re looking for, you can
+									If automatic import doesn’t find what you’re looking for or
+									you’re entering something without a URL or identifier, you can
 									always enter the reference information by hand.
 								</p>
 							</section>
@@ -62,7 +64,7 @@ class About extends React.PureComponent {
 									alt=""
 								/>
 								<h2 className="h4">Bibliography title</h2>
-								<p>To rename your bibliography, just click its title.</p>
+								<p>To give your bibliography a name, just click its title.</p>
 							</section>
 							<section className="feature">
 								<img
@@ -74,8 +76,9 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Style selection</h2>
 								<p>
-									To change your bibliography’s formatting style, free free to
-									choose from over 9000 styles.
+									Format your bibliography using APA, MLA, Chicago/Turabian, or
+									any of the 9,000+
+									other <a href="http://citationstyles.org/">CSL</a> styles.
 								</p>
 							</section>
 						</div>
@@ -90,9 +93,8 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Editing an item</h2>
 								<p>
-									You can manually edit your bibliography entries just by
-									clicking on an item, whether or not that item was added
-									automatically or manually.
+									You might need to add or change a few fields after adding an
+									item. Click on a bibliography entry to make manual changes.
 								</p>
 							</section>
 							<section className="feature">
@@ -105,8 +107,8 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Deleting items</h2>
 								<p>
-									To delete an entry click its ×; to remove all entries click
-									{ ' ' }<em>Delete All</em>.
+									Click the × next to a bibliography entry to delete it. To start
+									a new bibliography, click <i>Delete All</i> to remove all entries.
 								</p>
 							</section>
 							<section className="feature">
@@ -119,8 +121,11 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Export</h2>
 								<p>
-									You can export your completed bibliography to the clipboard,
-									or as HTML, rich text (RTF), or a RIS file.
+									When you’re done, you can copy a formatted bibliography to the
+									clipboard and paste it into your document. You can also
+									export HTML to add to a webpage, an RTF document to open
+									in a word processor, or a RIS file to import into a reference
+									manager.
 								</p>
 							</section>
 							<section className="feature">
@@ -133,8 +138,13 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Link to this version</h2>
 								<p>
-									If you would like to save a link to your ZBib library or to
-									share it with someone else, you can generate a link.
+									ZBib automatically saves your bibliography to your browser’s
+									local storage — you can close the page and return to it
+									anytime. If you want to edit your bibliography on another
+									device, share it with someone else, or temporarily work on
+									another bibliography, you can generate a link to a copy of the
+									bibliography on zbib.org. Use the same link to retrieve your
+									bibliography later.
 								</p>
 							</section>
 						</div>

@@ -2,7 +2,7 @@ module.exports = {
 	'html': {
 		extension: 'html',
 		mime: 'text/html',
-		label: 'Copy HTML Code',
+		label: 'Copy HTML',
 		isDownloadable: false,
 		isCopyable: true
 	},

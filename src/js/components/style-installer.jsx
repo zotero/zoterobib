@@ -219,7 +219,7 @@ class StyleInstaller extends React.Component {
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						Add Citation Styles
+						Add a Citation Style
 					</h4>
 					<Button
 						className="close"
@@ -234,7 +234,7 @@ class StyleInstaller extends React.Component {
 						className="form-control form-control-lg"
 						onChange={ this.handleFilterChange.bind(this) }
 						onKeyDown={ this.handleInputKeydown.bind(this) }
-						placeholder="Enter three characters or more to search"
+						placeholder="Enter three or more characters to search"
 						type="text"
 						value={ this.state.filterInput }
 						isBusy={ this.state.isSearching }
