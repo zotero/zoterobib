@@ -2,7 +2,10 @@
 // Forms
 //
 
-.input-group > input, // dev
+::placeholder {
+	color: $placeholder-color;
+}
+
 .form-control {
 	display: block;
 	width: 100%;
@@ -26,6 +29,23 @@
 .form-control-lg {
 	padding: $input-padding-y-lg $input-padding-x-lg;
 	border-radius: $input-border-radius-lg;
+
+	.busy & {
+		padding-right: $input-padding-x-lg + $space-lg + 1px;
+	}
+}
+
+.form-control-sm {
+	padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
+
+	.busy & {
+		padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+	}
+}
+
+textarea {
+	overflow: auto;
+	resize: vertical;
 }
 
 label {
@@ -48,13 +68,20 @@ label {
 		right: $space-md + $input-border-width;
 	}
 
-	&.busy {
-		.form-control-lg {
-			padding-right: $input-padding-x-lg + $space-lg + 1px;
+	.form-control-sm {
+		& + .icon-spin {
+			width: $space-md;
+			height: $space-md;
+			top: $space-xs;
+			right: $input-btn-padding-x-sm + $input-border-width;
+		}
+
+		&.Select + .icon-spin {
+			right:
+				$input-btn-padding-x-sm
+				+ $input-border-width
+				+ $space-md
+				+ $space-min;
 		}
 	}
-}
-
-::placeholder {
-	color: $placeholder-color;
 }
