@@ -44,32 +44,4 @@ body {
 			height: $zotero-bib-spinner-size;
 		}
 	}
-
-	&.welcome {
-		padding-top: 253px;
-
-		@media (min-width: $bp-sm) {
-			padding-top: 223px;
-		}
-
-		@media (min-width: $bp-md) {
-			padding-top: 148px;
-		}
-
-		@media (min-width: $bp-xl) {
-			padding-top: 112px;
-		}
-	}
-}
-
-.message {
-	.welcome {
-		letter-spacing: -0.01em;
-		max-width: 300px;
-
-		@media (min-width: $bp-sm) {
-			max-width: none;
-			letter-spacing: inherit;
-		}
-	}
 }
