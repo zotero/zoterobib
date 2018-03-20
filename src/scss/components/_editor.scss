@@ -212,16 +212,6 @@
 		}
 	}
 
-	.Select {
-		.Select-control {
-			height:
-				$font-size-base
-				* $line-height-base
-				+ 2 * $input-btn-padding-y-sm
-				+ 2 * $input-border-width;
-		}
-	}
-
 	// Dev
 
 	label {

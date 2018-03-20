@@ -10,7 +10,6 @@
 	.Select-control {
 		display: flex;
 		align-items: center;
-		border: $input-border-width solid $shade-3;
 		border-radius: $input-border-radius;
 		transition: border $input-transition, box-shadow $input-transition;
 		cursor: default;
@@ -33,13 +32,11 @@
 			.Select-value {
 				padding-right:
 					$input-btn-padding-x
-					+ $input-border-width
 					+ $space-md;
 
 				.busy & {
 					padding-right:
 						$input-btn-padding-x
-						+ $input-border-width
 						+ $space-md
 						+ $space-md
 						+ $space-min
@@ -51,6 +48,8 @@
 
 	.Select-multi-value-wrapper {
 		flex: 1 1 0;
+		display: flex;
+		align-items: center;
 		min-width: 0; // Prevent overflow
 	}
 
@@ -62,7 +61,7 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-		padding: 0 $input-btn-padding-x + $input-border-width;
+		padding: 0 $input-btn-padding-x;
 
 		.input-group.busy & {
 			padding-right: $input-btn-padding-x + $space-md + $input-border-width + 1px;
@@ -70,16 +69,14 @@
 	}
 
 	.Select-input {
-		padding: 0 $input-btn-padding-x-sm;
 		outline: none;
 		max-width: 100%;
 		overflow: hidden;
-		vertical-align: middle;
 
 		> input {
 			border: none;
 			background: none;
-			padding: $input-btn-padding-y-sm 0;
+			padding: 0;
 			font-family: inherit;
 			font-size: inherit;
 			font-weight: inherit;
@@ -89,7 +86,6 @@
 
 	.Select-arrow-zone {
 		flex: 0 0 auto;
-		margin-right: $input-btn-padding-x;
 	}
 
 	.Select-arrow {
@@ -99,19 +95,11 @@
 		background: image-url("bg-icons/16/chevron-11-down-dark.svg");
 	}
 
-	&.is-focused {
-		.Select-control {
-			border: $input-border-width solid $secondary;
-			box-shadow: 0 0 0 2px $secondary;
-			outline: none;
-		}
-	}
-
 	.Select-menu-outer {
 		position: absolute;
-		left: 0;
+		left: -$input-border-width;
 		top: calc(100% + #{$space-min});
-		width: 100%;
+		right: -$input-border-width;
 		background-color: $menu-bg;
 		//border: 1px solid $input-border-color;
 		border-radius: $menu-border-radius;

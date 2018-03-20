@@ -19,7 +19,8 @@
 	transition: border $input-transition, box-shadow $input-transition;
 	margin: 0; // Remove margin in Safari
 
-	&:focus {
+	&:focus,
+	&.is-focused { // Select
 		border: $input-border-width solid $input-focus-color;
 		box-shadow: 0 0 0 2px $secondary;
 		outline: none;
