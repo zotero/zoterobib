@@ -91,26 +91,34 @@
 
 			// Select
 			.Select {
+				border-color: transparent;
+				border-width: $input-border-width 0;
+				cursor: pointer;
+				padding-left: 0;
+				padding-right: 0;
+
+				&:hover {
+					.Select-control {
+						color: $link-color;
+					}
+
+					.Select-arrow {
+						background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
+					}
+				}
+
 				.Select-control {
-					border: none;
 					cursor: pointer;
 
 					@media (min-width: $bp-md) {
 						justify-content: flex-end;
 					}
-
-					&:hover {
-						color: $secondary;
-
-						.Select-arrow {
-							background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
-						}
-					}
 				}
 
 				&.is-focused {
+					box-shadow: none;
+
 					.Select-control {
-						box-shadow: none;
 						color: $secondary;
 					}
 
@@ -154,6 +162,7 @@
 					text-align: left;
 					width: auto;
 					white-space: nowrap;
+					right: auto;
 				}
 
 				.Select-option {
