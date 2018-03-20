@@ -4,6 +4,8 @@
 
 .editor {
 	.metadata-list {
+		display: flex;
+		flex-direction: column;
 		margin: 0;
 		padding-left: 0;
 		list-style: none;
@@ -14,6 +16,19 @@
 
 		@media (min-width: $bp-md) {
 			display: flex;
+		}
+
+		&.abstract,
+		&.extra {
+			margin-top: $space-lg - $space-min;
+		}
+
+		&.abstract {
+			order: 100;
+		}
+
+		&.extra {
+			order: 101;
 		}
 	}
 
