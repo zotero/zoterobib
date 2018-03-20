@@ -32,7 +32,9 @@
 	border-radius: $input-border-radius-lg;
 
 	.busy & {
-		padding-right: $input-padding-x-lg + $space-lg + 1px;
+		&:not(.Select) {
+			padding-right: $input-padding-x-lg + $space-lg + 1px;
+		}
 	}
 }
 
@@ -40,7 +42,9 @@
 	padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 
 	.busy & {
-		padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+		&:not(.Select) {
+			padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+		}
 	}
 }
 
