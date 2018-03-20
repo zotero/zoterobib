@@ -69,7 +69,7 @@ class BibliographySection extends React.PureComponent {
 					{
 						this.props.isReadOnly ? (
 							<h1 className="h2 bibliography-title">
-								{ this.props.title || 'Untitled' }
+								{ this.props.title || 'Bibliography' }
 							</h1>
 						) : (
 							<h2 onClick={ this.handleTitleEdit.bind(this) }
@@ -78,7 +78,7 @@ class BibliographySection extends React.PureComponent {
 								className="bibliography-title"
 							>
 								<Editable
-									placeholder="Untitled"
+									placeholder="Bibliography"
 									value={ this.props.title || '' }
 									isActive={ this.state.isEditingTitle }
 									onCommit={ this.handleTitleCommit.bind(this) }
