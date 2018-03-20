@@ -9,6 +9,12 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const { noop } = require('zotero-web-library/lib/utils');
 
 class Message extends React.Component {
+	componentDidMount() {
+		if(this.props.autoDismiss) {
+			this.timeout = setTimeout(this.props.onDismiss, 5000);
+		}
+	}
+
 	componentWillUnmount() {
 		if(this.timeout) {
 			clearTimeout(this.timeout);
@@ -20,13 +26,6 @@ class Message extends React.Component {
 		if('location' in nextProps &&
 			nextProps.location.pathname !== this.props.location.pathname) {
 			this.props.onDismiss();
-		}
-
-		if(nextProps.autoDismiss) {
-			//show dialog for 5 sec
-			if(this.props.message !== nextProps.message && nextProps.message !== null) {
-				this.timeout = setTimeout(this.props.onDismiss, 5000);
-			}
 		}
 	}
 

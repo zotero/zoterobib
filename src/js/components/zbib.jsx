@@ -48,7 +48,7 @@ class ZBib extends React.PureComponent {
 							<div className="messages">
 								{ this.props.messages.map(message => (
 									<Message
-										key={ message.message }
+										key={ message.id }
 										onDismiss={ this.handleClearMessage.bind(this, message) }
 										{ ...message }
 									/>

@@ -10,6 +10,9 @@ const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validate
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
+var msgId = 0;
+
+const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
 
 class Container extends React.Component {
 	state = {
@@ -48,6 +51,7 @@ class Container extends React.Component {
 
 	displayWelcomeMessage() {
 		const message = {
+			id: getNextMessageId(),
 			action: 'Read More',
 			kind: 'info',
 			isWelcomeMessage: true,
@@ -72,6 +76,7 @@ class Container extends React.Component {
 
 	displayFirstTranslationMessage() {
 		const message = {
+			id: getNextMessageId(),
 			action: 'Read More',
 			kind: 'success',
 			message: 'Your first citation has been added. Citations are stored locally in your browser.'
@@ -319,6 +324,7 @@ class Container extends React.Component {
 
 		if(this.bib.removeItem(item)) {
 			const message = {
+				id: getNextMessageId(),
 				action: 'Undo',
 				isUndoMessage: true,
 				autoDismiss: true,
@@ -493,6 +499,7 @@ class Container extends React.Component {
 
 	handleError(errorMessage) {
 		const message = {
+			id: getNextMessageId(),
 			kind: 'error',
 			message: errorMessage,
 		};
