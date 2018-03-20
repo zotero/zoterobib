@@ -18,7 +18,7 @@ class About extends React.PureComponent {
 					<img
 						src="/static/images/about/zbib-illustration.svg"
 						className="zbib-illustration"
-						width="311"
+						width="312"
 						height="400"
 						alt="ZBib"
 					/>
