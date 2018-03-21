@@ -107,9 +107,7 @@ a.btn {
 }
 
 .btn-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	position: relative;
 	width: $btn-icon-size;
 	height: $btn-icon-size;
 	padding: 0;
@@ -121,6 +119,13 @@ a.btn {
 			border-color: $btn-secondary-color;
 			box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
 		}
+	}
+
+	.icon {
+		position: absolute; // Flexbox in buttons doesn’t work yet in all browsers
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
 	}
 
 	&:active:not(:disabled) {
