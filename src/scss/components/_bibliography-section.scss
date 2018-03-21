@@ -137,6 +137,9 @@
 
 			&.is-focused {
 				.Select-control {
+					box-shadow: 0 0 0 2px $secondary;
+					outline: none;
+
 					&:hover {
 						box-shadow: 0 0 0 2px $style-selector-hover-bg;
 					}
