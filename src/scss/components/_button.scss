@@ -123,7 +123,7 @@ a.btn {
 		}
 	}
 
-	&:active {
+	&:active:not(:disabled) {
 		.icon {
 			color: $shade-7;
 		}
