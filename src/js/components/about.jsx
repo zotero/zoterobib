@@ -115,7 +115,7 @@ class About extends React.PureComponent {
 								<h2 className="h4">Deleting items</h2>
 								<p>
 									Click the × next to a bibliography entry to delete it. To start
-									a new bibliography, click <i>Delete All</i> to remove all entries.
+									a new bibliography, click <em>Delete All</em> to remove all entries.
 								</p>
 							</section>
 							<section className="feature">
