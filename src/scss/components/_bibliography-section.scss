@@ -20,11 +20,11 @@
 	.empty-bibliography {
 		width: 160px;
 		height: auto;
-		margin-bottom: $space-xxl - 20px;
+		margin-bottom: $space-xl - 16px;
 
 		@media (min-width: $bp-md) {
 			width: auto;
-			margin-bottom: $space-xxxl + $space-xs - 23px;
+			margin-bottom: $space-xxl - 18px;
 		}
 	}
 
@@ -45,10 +45,12 @@
 	}
 
 	.write & {
-		padding-top: $section-padding-mobile - 16px;
+		&:not(.empty) {
+			padding-top: $section-padding-mobile - 16px;
 
-		@media (min-width: $bp-md) {
-			padding-top: $section-padding - 21px;
+			@media (min-width: $bp-md) {
+				padding-top: $section-padding - 21px;
+			}
 		}
 
 		.bibliography-title {

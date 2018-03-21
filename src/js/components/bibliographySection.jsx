@@ -125,7 +125,8 @@ class BibliographySection extends React.PureComponent {
 		return {
 			'section': true,
 			'section-bibliography': true,
-			'loading': this.props.isLoadingCitations
+			'loading': this.props.isLoadingCitations,
+			'empty': Object.keys(this.props.citations).length === 0
 		};
 	}
 
