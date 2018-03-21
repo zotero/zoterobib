@@ -3,7 +3,9 @@
 //
 
 html {
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-text-size-adjust: 100%; // Prevent font size adjustments
+	-ms-text-size-adjust: 100%; // Prevent font size adjustments
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0); // Hide default tap highlight in iOS
 }
 
 body {
