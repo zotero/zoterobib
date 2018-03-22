@@ -24,6 +24,12 @@
 		@media (max-width: ($bp-sm - 1px)) {
 			padding-left: $btn-padding-x-lg;
 			padding-right: $btn-padding-x-lg;
+
+			&:focus {
+				.keyboard-user & {
+					padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-lg + 2px);
+				}
+			}
 		}
 	}
 
