@@ -47,6 +47,7 @@ class Container extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleCopy = this.handleCopy.bind(this);
+		this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
 	}
 
 	displayWelcomeMessage() {
@@ -101,6 +102,7 @@ class Container extends React.Component {
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 		this.setState({ citationStyles });
 		document.addEventListener('copy', this.handleCopy);
+		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		await this.handleIdChanged(this.props);
 
 
@@ -182,6 +184,7 @@ class Container extends React.Component {
 
 	componentWillUnmount() {
 		document.removeEventListener('copy', this.handleCopy);
+		document.removeEventListener('visibilityChange', this.handleVisibilityChange);
 	}
 
 	handleCopy(ev) {
@@ -193,6 +196,12 @@ class Container extends React.Component {
 			ev.clipboardData.setData(formattedMime, formattedValue);
 			ev.preventDefault();
 			delete this.copyDataInclude;
+		}
+	}
+
+	handleVisibilityChange() {
+		if(!this.state.isReadOnly && document.visibilityState === 'visible') {
+			this.handleIdChanged(this.props);
 		}
 	}
 
