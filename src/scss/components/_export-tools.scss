@@ -5,6 +5,7 @@
 .export-tools {
 	.btn-secondary {
 		background-origin: border-box;
+		outline: 1px solid transparent; // Prevent rendering issue on iOS (thin gap)
 
 		&:focus {
 			.keyboard-user & {
