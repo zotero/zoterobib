@@ -6,7 +6,7 @@ const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, getBibliographyFormatParameters, retrieveStylesData, processSentenceCaseAPAItems } = require('../utils');
+const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, parseIdentifier, getBibliographyFormatParameters, retrieveStylesData, processSentenceCaseAPAItems } = require('../utils');
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
@@ -414,6 +414,8 @@ class Container extends React.Component {
 	}
 
 	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
+		identifier = parseIdentifier(identifier);
+
 		this.setState({
 			isTranslating: true,
 			identifier,

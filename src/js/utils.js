@@ -43,6 +43,17 @@ const syncRequestAsText = url => {
 	return xhr.responseText;
 };
 
+const parseIdentifier = identifier => {
+	identifier = identifier.trim();
+
+	//attemt to extract DOI from doi url:
+	const matches = identifier.match(/^https?:\/\/doi.org\/(10(?:\.[0-9]{4,})?\/[^\s]*[^\s\.,])$/);
+	if(matches) {
+		return matches[1];
+	}
+	return identifier;
+};
+
 const isIdentifier = identifier => {
 	identifier = identifier.trim();
 	return (
@@ -304,6 +315,7 @@ module.exports = {
 	getCSL,
 	getItemTypeMeta,
 	isIdentifier,
+	parseIdentifier,
 	parseTagAndAttrsFromNode,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
