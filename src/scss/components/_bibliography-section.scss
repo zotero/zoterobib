@@ -75,14 +75,13 @@
 
 			.editable-value {
 				line-height: $headings-line-height;
-				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2 - 1px) 0;
+				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2) 0;
 				text-align: left;
-				border: 1px solid transparent; // Keep text stable
 				word-wrap: break-word;
 				min-width: 0; // Fix word-wrap
 
 				@media (min-width: $bp-md) {
-					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2 - 1px) 0;
+					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2) 0;
 					text-align: inherit;
 				}
 			}
@@ -92,11 +91,11 @@
 				box-shadow: 0 0 0 2px $secondary;
 				line-height: normal; // Heading line-height would clip decenders
 				margin: 0;
-				padding: 4px 0;
+				padding: 4px $space-md;
 				text-align: left;
 
 				@media (min-width: $bp-md) {
-					padding: 7px 0 8px;
+					padding: 7px $space-lg 8px;
 					text-align: inherit;
 				}
 			}
