@@ -102,6 +102,7 @@ class Bibliography extends React.PureComponent {
 				<React.Fragment>
 					{ this.keyHandlers }
 					<div key="bibliography read-only"
+						className="bibliography"
 						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
 					/>
 					{this.props.items.map(rawItem => (
