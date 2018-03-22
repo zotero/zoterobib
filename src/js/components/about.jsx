@@ -64,14 +64,18 @@ class About extends React.PureComponent {
 							</section>
 							<section className="feature">
 								<img
-									src="/static/images/about/bibliography-title.svg"
+									src="/static/images/about/autosave.svg"
 									className="feature-icon"
 									width="66"
 									height="66"
 									alt=""
 								/>
-								<h2 className="h4">Bibliography title</h2>
-								<p>To give your bibliography a name, just click its title.</p>
+								<h2 className="h4">Autosave</h2>
+								<p>
+									ZBib automatically saves your bibliography to your browser’s
+									local storage — you can close the page and return to it
+									anytime.
+								</p>
 							</section>
 							<section className="feature">
 								<img
@@ -145,13 +149,11 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Link to this version</h2>
 								<p>
-									ZBib automatically saves your bibliography to your browser’s
-									local storage — you can close the page and return to it
-									anytime. If you want to edit your bibliography on another
-									device, share it with someone else, or temporarily work on
-									another bibliography, you can generate a link to a copy of the
-									bibliography on zbib.org. Use the same link to retrieve your
-									bibliography later.
+									If you want to edit your bibliography on another device, share
+									it with someone else, or temporarily work on another
+									bibliography, you can generate a link to a copy of the
+									bibliography on zbib.org. {/*Use the same link to retrieve your
+									bibliography later.*/}
 								</p>
 							</section>
 						</div>
