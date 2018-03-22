@@ -261,7 +261,7 @@ class StyleInstaller extends React.Component {
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
 				{ this.state.isReady ? this.renderModalContent() : <Spinner /> }
-				{ this.props.isInstallingStyle & this.keyHandlers }
+				{ this.props.isInstallingStyle && this.keyHandlers }
 			</Modal>
 		);
 	}
