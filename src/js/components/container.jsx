@@ -246,8 +246,8 @@ class Container extends React.Component {
 			isReadOnly,
 			citationStyle,
 			title,
-			localCitationsCount: this.bib.items.length,
-			items: this.items,
+			localCitationsCount: this.bib.itemsRaw.length,
+			items: isReadOnly ? this.bibRemote.itemsRaw : this.bib.itemsRaw,
 			isLoading: false,
 		});
 
@@ -275,7 +275,7 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			citations: this.citations,
-			items: this.items,
+			items: this.bib.itemsRaw,
 			permalink: null,
 			title: null
 		});
@@ -287,7 +287,7 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			citations: this.citations,
-			items: this.items,
+			items: this.bib.itemsRaw,
 			editorItem: item.key
 		});
 	}
@@ -324,7 +324,7 @@ class Container extends React.Component {
 			this.setState({
 				bibliography: this.bibliography,
 				citations: this.citations,
-				items: this.items,
+				items: this.bib.itemsRaw,
 				lastDeletedItem: { ...item },
 				messages: [
 					...this.state.messages.filter(m => !m.isUndoMessage),
@@ -382,10 +382,10 @@ class Container extends React.Component {
 	}
 
 	async handleItemUpdate(itemKey, patch) {
-		const index = this.bib.items.findIndex(item => item.key === itemKey);
+		const index = this.bib.itemsRaw.findIndex(item => item.key === itemKey);
 
 		let updatedItem = {
-			...this.bib.items[index],
+			...this.bib.itemsRaw[index],
 			...patch
 		};
 
@@ -400,7 +400,7 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			citations: this.citations,
-			items: this.items
+			items: this.bib.itemsRaw
 		});
 	}
 
@@ -445,7 +445,7 @@ class Container extends React.Component {
 							isTranslating: false,
 							bibliography: this.bibliography,
 							citations: this.citations,
-							items: this.items,
+							items: this.bib.itemsRaw,
 							permalink: null,
 						});
 					break;
@@ -479,7 +479,7 @@ class Container extends React.Component {
 	handleOverride() {
 		this.bib.clearItems();
 		this.bib = this.bibRemote;
-		this.bib.setItemsStorage(this.bib.items);
+		this.bib.setItemsStorage(this.bib.itemsRaw);
 		delete this.bibRemote;
 		this.props.history.replace('/');
 		this.setState({ isReadOnly: false });
@@ -662,10 +662,6 @@ class Container extends React.Component {
 		);
 	}
 
-	get items() {
-		const bib = this.state.isReadOnly ? this.bibRemote : this.bib;
-		return bib ? [...bib.items] : [];
-	}
 
 	render() {
 		return <ZBib

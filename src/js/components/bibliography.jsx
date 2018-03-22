@@ -98,13 +98,19 @@ class Bibliography extends React.PureComponent {
 		div.innerHTML = html;
 
 		if(this.props.isReadOnly) {
-			return [
-				...this.keyHandlers,
-				<div key="bibliography read-only"
-					className="bibliography"
-					dangerouslySetInnerHTML={ { __html: div.innerHTML } }
-				/>
-			];
+			return (
+				<React.Fragment>
+					{ this.keyHandlers }
+					<div key="bibliography read-only"
+						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
+					/>
+					{this.props.items.map(rawItem => (
+						<script key={ rawItem.key } type="application/vnd.zotero.data+json">
+							{ JSON.stringify(rawItem) }
+						</script>
+					))}
+				</React.Fragment>
+			);
 		} else {
 			return [
 				...this.keyHandlers,
