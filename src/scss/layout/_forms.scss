@@ -16,7 +16,7 @@
 	color: inherit;
 	// todo: padding
 	border-radius: $input-border-radius;
-	transition: border $input-transition, box-shadow $input-transition;
+	transition: border $input-transition, box-shadow $input-transition, padding $input-transition;
 	margin: 0; // Remove margin in Safari
 	background-clip: padding-box; // Remove inner shadow on iOS
 
