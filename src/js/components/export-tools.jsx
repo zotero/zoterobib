@@ -125,6 +125,7 @@ class ExportDialog extends React.Component {
 					className={ cx('btn-group', { 'success': isCopied}) }
 				>
 					<Button
+						disabled={ this.props.itemsCount === 0 }
 						className='btn btn-secondary btn-xl copy-to-clipboard'
 						onClick={ this.handleCopyToClipboardClick.bind(this) }
 					>
@@ -133,7 +134,10 @@ class ExportDialog extends React.Component {
 							<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
 						</span>
 					</Button>
-					<DropdownToggle className="btn btn-secondary btn-xl dropdown-toggle">
+					<DropdownToggle
+						disabled={ this.props.itemsCount === 0 }
+						className="btn btn-secondary btn-xl dropdown-toggle"
+						>
 						<span className="dropdown-caret" />
 					</DropdownToggle>
 					<DropdownMenu className="dropdown-menu">
@@ -152,6 +156,7 @@ class ExportDialog extends React.Component {
 		getCopyData: PropTypes.func.isRequired,
 		getFileData: PropTypes.func.isRequired,
 		isReadOnly: PropTypes.bool,
+		itemsCount: PropTypes.number,
 		match: PropTypes.object,
 		onExported: PropTypes.func,
 	}
