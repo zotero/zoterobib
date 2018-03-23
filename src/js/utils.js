@@ -67,6 +67,8 @@ const isIdentifier = identifier => {
 	);
 };
 
+const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
+
 const validateUrl = url => {
 		try {
 			url = new URL(url);
@@ -314,6 +316,7 @@ module.exports = {
 	getCiteproc,
 	getCSL,
 	getItemTypeMeta,
+	isApa,
 	isIdentifier,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,

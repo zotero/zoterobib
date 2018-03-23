@@ -6,7 +6,17 @@ const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
-const { fetchFromPermalink, saveToPermalink, getCiteproc, validateItem, validateUrl, isIdentifier, parseIdentifier, getBibliographyFormatParameters, retrieveStylesData, processSentenceCaseAPAItems } = require('../utils');
+const { fetchFromPermalink,
+ saveToPermalink,
+ getCiteproc,
+ validateItem,
+ validateUrl,
+ isIdentifier,
+ parseIdentifier,
+ getBibliographyFormatParameters,
+ retrieveStylesData,
+ processSentenceCaseAPAItems,
+ isApa } = require('../utils');
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
@@ -26,7 +36,6 @@ class Container extends React.Component {
 			...this.props.config
 		},
 		editorItem: null,
-		messages: [],
 		isConfirmingStyleSwitch: false,
 		isEditorOpen: false,
 		isInstallingStyle: false,
@@ -37,10 +46,12 @@ class Container extends React.Component {
 		isStylesDataLoading: false,
 		isTranslating: false,
 		lastDeletedItem: null,
+		messages: [],
 		multipleChoiceItems: [],
 		permalink: null,
 		stylesData: null,
 		title: localStorage.getItem('zotero-bib-title') || null,
+		unconfirmedCitationStyle: null,
 		url: '',
 	}
 
@@ -118,7 +129,7 @@ class Container extends React.Component {
 		if((this.state.isReadOnly !== state.isReadOnly)
 			|| (this.state.citationStyle !== state.citationStyle)
 		) {
-			if(this.state.citationStyle === 'apa' &&
+			if(isApa(this.state.citationStyle) &&
 				this.state.isConfirmingStyleSwitch != state.isConfirmingStyleSwitch
 			) {
 				let processedItems = processSentenceCaseAPAItems(this.bib.itemsRaw);
@@ -162,9 +173,10 @@ class Container extends React.Component {
 			this.state.citationStyle !== state.citationStyle &&
 			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
 		) {
-			if(this.state.citationStyle === 'apa') {
+			if(isApa(this.state.citationStyle)) {
 				this.setState({
 					citationStyle: state.citationStyle,
+					unconfirmedCitationStyle: this.state.citationStyle,
 					isConfirmingStyleSwitch: true
 				});
 			}
@@ -447,7 +459,7 @@ class Container extends React.Component {
 
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
-						if(this.state.citationStyle === 'apa') {
+						if(isApa(this.state.citationStyle)) {
 							this.bib.addItem(processSentenceCaseAPAItems(translationResponse.items)[0]);
 						} else {
 							this.bib.addItem(translationResponse.items[0]);
@@ -562,14 +574,16 @@ class Container extends React.Component {
 
 	handleStyleSwitchConfirm() {
 		this.setState({
-			citationStyle: 'apa',
-			isConfirmingStyleSwitch: false
+			citationStyle: this.state.unconfirmedCitationStyle,
+			isConfirmingStyleSwitch: false,
+			unconfirmedCitationStyle: null,
 		});
 	}
 
 	handleStyleSwitchCancel() {
 		this.setState({
-			isConfirmingStyleSwitch: false
+			isConfirmingStyleSwitch: false,
+			unconfirmedCitationStyle: null,
 		});
 	}
 
