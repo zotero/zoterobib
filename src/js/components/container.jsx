@@ -199,9 +199,14 @@ class Container extends React.Component {
 		}
 	}
 
-	handleVisibilityChange() {
+	async handleVisibilityChange() {
 		if(!this.state.isReadOnly && document.visibilityState === 'visible') {
-			this.handleIdChanged(this.props);
+			this.bib.reloadItems();
+			this.setState({
+				bibliography: this.bibliography,
+				citations: this.citations,
+				items: this.bib.items,
+			});
 		}
 	}
 
