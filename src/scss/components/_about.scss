@@ -53,28 +53,30 @@
 			left: 6px;
 			width: 156px;
 			height: auto;
-			margin: 0 auto (64px - 16px);
+			margin: 0 auto ($space-xxxl - 16px);
 		}
 	}
 
 	.features {
 		text-align: left;
-		margin-top: 80px - 7px;
-		margin-bottom: 80px - 7px;
+		margin-top: 80px - 17px;
+		margin-bottom: $space-xxxl - 7px;
 
 		@media (min-width: $bp-md) {
 			display: flex;
 			margin-top: 120px - 20px;
-			margin-bottom: 96px - 7px;
+			margin-bottom: $space-max - 7px;
 		}
 	}
 
 	.feature {
 		padding-left: 66px + $space-md;
 		position: relative;
-		margin-bottom: 96px - 16px;
+		margin-bottom: $space-xxxl - 16px;
 
 		@media (min-width: $bp-md) {
+			margin-bottom: $space-max - 17px;
+
 			&:last-child {
 				margin-bottom: 0;
 			}
