@@ -1,10 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66">
-  <g>
-    <circle cx="33" cy="33" r="33" fill="#7e54aa"/>
-    <rect x="17" y="24" width="33" height="26" fill="#bea9d4"/>
-    <polygon points="34 24 17 24 21 16 34 16 34 24" fill="#dfd4ea"/>
-    <polygon points="50 24 33 24 33 16 46 16 50 24" fill="#dfd4ea"/>
-    <rect x="32" y="24" width="3" height="6" fill="#fff"/>
-    <rect x="32" y="16" width="3" height="8" fill="#fff"/>
+  <title>Zeichenfläche 60 Kopie 5</title>
+  <g id="Ebene_1" data-name="Ebene 1">
+    <g>
+      <circle cx="33" cy="33" r="33" fill="#6f59b9"/>
+      <rect x="17" y="24" width="33" height="26" fill="#b7acdc"/>
+      <polygon points="34 24 17 24 21 16 34 16 34 24" fill="#dbd5ed"/>
+      <polygon points="50 24 33 24 33 16 46 16 50 24" fill="#dbd5ed"/>
+      <rect x="32" y="24" width="3" height="6" fill="#fff"/>
+      <rect x="32" y="16" width="3" height="8" fill="#fff"/>
+    </g>
   </g>
 </svg>

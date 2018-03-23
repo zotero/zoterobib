@@ -64,40 +64,6 @@ class About extends React.PureComponent {
 							</section>
 							<section className="feature">
 								<img
-									src="/static/images/about/autosave.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Autosave</h2>
-								<p>
-									ZBib automatically saves your bibliography to your browser’s
-									local storage — you can close the page and return to it
-									anytime. (If you’re using private/incognito mode in your
-									browser, your bibliography will be cleared when you close the
-									window.)
-								</p>
-							</section>
-							<section className="feature">
-								<img
-									src="/static/images/about/style-selection.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Style selection</h2>
-								<p>
-									Format your bibliography using APA, MLA, Chicago/Turabian, or
-									any of the 9,000+
-									other <a href="http://citationstyles.org/">CSL</a> styles.
-								</p>
-							</section>
-						</div>
-						<div className="column">
-							<section className="feature">
-								<img
 									src="/static/images/about/editing.svg"
 									className="feature-icon"
 									width="66"
@@ -124,6 +90,23 @@ class About extends React.PureComponent {
 									a new bibliography, click <i>Delete All</i> to remove all entries.
 								</p>
 							</section>
+						</div>
+						<div className="column">
+							<section className="feature">
+								<img
+									src="/static/images/about/style-selection.svg"
+									className="feature-icon"
+									width="66"
+									height="66"
+									alt=""
+								/>
+								<h2 className="h4">Style selection</h2>
+								<p>
+									Format your bibliography using APA, MLA, Chicago/Turabian, or
+									any of the 9,000+
+									other <a href="http://citationstyles.org/">CSL</a> styles.
+								</p>
+							</section>
 							<section className="feature">
 								<img
 									src="/static/images/about/export.svg"
@@ -139,6 +122,23 @@ class About extends React.PureComponent {
 									export HTML to add to a webpage, an RTF document to open
 									in a word processor, or a RIS file to import into a reference
 									manager.
+								</p>
+							</section>
+							<section className="feature">
+								<img
+									src="/static/images/about/autosave.svg"
+									className="feature-icon"
+									width="66"
+									height="66"
+									alt=""
+								/>
+								<h2 className="h4">Autosave</h2>
+								<p>
+									ZBib automatically saves your bibliography to your browser’s
+									local storage — you can close the page and return to it
+									anytime. (If you’re using private/incognito mode in your
+									browser, your bibliography will be cleared when you close the
+									window.)
 								</p>
 							</section>
 							<section className="feature">
