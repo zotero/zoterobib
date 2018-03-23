@@ -13,6 +13,15 @@
 		border-radius: $input-border-radius;
 		transition: border $input-transition, box-shadow $input-transition;
 		cursor: default;
+		border: $input-border-width solid $input-border-color;
+	}
+
+	&.is-focused {
+		.Select-control {
+			border: $input-border-width solid $input-focus-color;
+			box-shadow: 0 0 0 2px $secondary;
+			outline: none;
+		}
 	}
 
 	&.is-searchable.is-open {

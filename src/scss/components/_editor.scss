@@ -91,12 +91,6 @@
 
 			// Select
 			.Select {
-				border-color: transparent;
-				border-width: $input-border-width 0;
-				cursor: pointer;
-				padding-left: 0;
-				padding-right: 0;
-
 				&:hover {
 					.Select-control {
 						color: $link-color;
@@ -107,23 +101,26 @@
 					}
 				}
 
-				.Select-control {
-					cursor: pointer;
-
-					@media (min-width: $bp-md) {
-						justify-content: flex-end;
-					}
-				}
-
 				&.is-focused {
-					box-shadow: none;
-
 					.Select-control {
+						box-shadow: none;
 						color: $secondary;
 					}
 
 					.Select-arrow {
 						background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
+					}
+				}
+
+				.Select-control {
+					cursor: pointer;
+					border-color: transparent;
+					border-width: $input-border-width 0;
+					padding-left: 0;
+					padding-right: 0;
+
+					@media (min-width: $bp-md) {
+						justify-content: flex-end;
 					}
 				}
 

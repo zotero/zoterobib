@@ -20,8 +20,7 @@
 	margin: 0; // Remove margin in Safari
 	background-clip: padding-box; // Remove inner shadow on iOS
 
-	&:focus,
-	&.is-focused { // Select
+	&:focus {
 		border: $input-border-width solid $input-focus-color;
 		box-shadow: 0 0 0 2px $secondary;
 		outline: none;
@@ -37,6 +36,15 @@
 			padding-right: $input-padding-x-lg + $space-lg + 1px;
 		}
 	}
+
+	&.Select {
+		padding: 0;
+		border: none;
+
+		.Select-control {
+			padding: $input-padding-y-lg $input-padding-x-lg;
+		}
+	}
 }
 
 .form-control-sm {
@@ -45,6 +53,15 @@
 	.busy & {
 		&:not(.Select) {
 			padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+		}
+	}
+
+	&.Select {
+		padding: 0;
+		border: none;
+
+		.Select-control {
+			padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 		}
 	}
 }
