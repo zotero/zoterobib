@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
+const deepEqual = require('deep-equal');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
@@ -14,7 +15,7 @@ const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/i
 const { reverseMap } = require('zotero-web-library/lib/utils');
 const Modal = require('./modal');
 
-class Editor extends React.Component {
+class Editor extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -26,10 +27,9 @@ class Editor extends React.Component {
 		this.prepareState(this.props);
 	}
 
-	async componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps) {
 		if(this.props.isEditorOpen === nextProps.isEditorOpen
-			&& this.props.editorItem === nextProps.editorItem
-			&& this.props.items === nextProps.items) {
+			&& deepEqual(this.props.editorItem, nextProps.editorItem)) {
 			return;
 		}
 
@@ -51,13 +51,13 @@ class Editor extends React.Component {
 				creators: []
 			};
 		} else {
-			item = props.items.find(item => item.key === props.editorItem);
-			if(!item) {
-				this.setState({
-					isLoading: true
-				});
-				return;
-			}
+			item = props.editorItem;
+			// if(!item) {
+			// 	this.setState({
+			// 		isLoading: true
+			// 	});
+			// 	return;
+			// }
 		}
 
 		try {
@@ -219,7 +219,7 @@ class Editor extends React.Component {
 
 	static propTypes = {
 		className: PropTypes.string,
-		editorItem: PropTypes.string,
+		editorItem: PropTypes.object,
 		isEditorOpen: PropTypes.bool,
 		items: PropTypes.array,
 		location: PropTypes.object,

@@ -314,14 +314,14 @@ class Container extends React.Component {
 			bibliography: this.bibliography,
 			citations: this.citations,
 			items: this.bib.itemsRaw,
-			editorItem: item.key
+			editorItem: this.bib.itemsRaw.find(i => i.key === item.key)
 		});
 	}
 
 	handleOpenEditor(itemId = null) {
 		this.setState({
 			isEditorOpen: true,
-			editorItem: itemId
+			editorItem: this.bib.itemsRaw.find(i => i.key === itemId)
 		});
 	}
 
@@ -426,7 +426,8 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			citations: this.citations,
-			items: this.bib.itemsRaw
+			items: this.bib.itemsRaw,
+			editorItem: this.bib.itemsRaw.find(i => i.key === itemKey)
 		});
 	}
 
