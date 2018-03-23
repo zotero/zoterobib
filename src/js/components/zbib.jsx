@@ -117,10 +117,10 @@ class ZBib extends React.PureComponent {
 									convert the titles of entries to sentence case for you, but
 									you’ll need to manually edit some entries to capitalize proper
 									nouns:</p>
-									
+
 									<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
 									<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
-									<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: 'red', fontWeight: 'bold'}}>T</span>witter content</i></p>
+									<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
 							<MultipleChoiceDialog { ...this.props } />
 							<StyleInstaller { ...this.props } />
