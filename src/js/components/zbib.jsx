@@ -110,19 +110,17 @@ class ZBib extends React.PureComponent {
 								onConfirm={ this.props.onStyleSwitchConfirm }
 								onCancel={ this.props.onStyleSwitchCancel }
 								title="Converting Titles to Sentence Case"
-									confirmLabel="Continue"
+									confirmLabel="OK, I’ll Edit Them"
 								>
-									<p>The selected citation style requires titles to be in sentence case rather
-									than title case (e.g., “Circadian mood variations in Twitter content” rather
-									than “Circadian Mood Variations in Twitter Content”). ZBib partially
-									automates this for you by converting the titles of entries to sentence case.
-									You will need to manually adjust your entries to capitalize proper nouns
-									(e.g., “Twitter” in the above example) and, if the style requires it, the
-									first word after the colon in subtitles.</p>
-
-									<p>If you later switch to a citation style that requires title case, ZBib
-									can automatically generate title-cased titles without changing your stored
-									entries.</p>
+									<p>APA style requires titles to be in sentence case rather than
+									title case. When you use APA style, ZBib will partially
+									convert the titles of entries to sentence case for you, but
+									you’ll need to manually edit some entries to capitalize proper
+									nouns:</p>
+									
+									<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
+									<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
+									<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: 'red', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
 							<MultipleChoiceDialog { ...this.props } />
 							<StyleInstaller { ...this.props } />
