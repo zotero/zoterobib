@@ -11,6 +11,10 @@
 	}
 
 	.brand-subhead {
-		margin-bottom: 45px;
+		margin-bottom: $space-xl - 3px;
+
+		@media (min-width: $bp-md) {
+			margin-bottom: $space-xxl - 3px;
+		}
 	}
 }
