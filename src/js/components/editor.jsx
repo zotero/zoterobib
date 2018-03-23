@@ -114,7 +114,11 @@ class Editor extends React.Component {
 	async handleItemUpdate(fieldKey, newValue) {
 		if(!('key' in this.state.item)) {
 			this.state.item.key = Math.random().toString(36).substr(2, 8).toUpperCase();
-			this.props.onItemCreated(this.state.item);
+			this.props.onItemCreated({
+				...this.state.item,
+				[fieldKey]: newValue
+			});
+			return;
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);
