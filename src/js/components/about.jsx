@@ -74,7 +74,9 @@ class About extends React.PureComponent {
 								<p>
 									ZBib automatically saves your bibliography to your browser’s
 									local storage — you can close the page and return to it
-									anytime.
+									anytime. (If you’re using private/incognito mode in your
+									browser, your bibliography will be cleared when you close the
+									window.)
 								</p>
 							</section>
 							<section className="feature">
@@ -150,10 +152,9 @@ class About extends React.PureComponent {
 								<h2 className="h4">Link to this version</h2>
 								<p>
 									If you want to edit your bibliography on another device, share
-									it with someone else, or temporarily work on another
-									bibliography, you can generate a link to a copy of the
-									bibliography on zbib.org. {/*Use the same link to retrieve your
-									bibliography later.*/}
+									it with someone else, or switch to another bibliography, you
+									can generate a link to a copy of the current version on
+									zbib.org. Use the link to retrieve your bibliography later.
 								</p>
 							</section>
 						</div>
