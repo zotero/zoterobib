@@ -62,12 +62,14 @@ class Container extends React.Component {
 	}
 
 	displayWelcomeMessage() {
+		const id = getNextMessageId();
 		const message = {
-			id: getNextMessageId(),
 			action: 'Read More',
-			kind: 'info',
+			id,
 			isWelcomeMessage: true,
-			message: 'ZBib is a free service that helps you quickly create a bibliography in any citation style.'
+			kind: 'info',
+			message: 'ZBib is a free service that helps you quickly create a bibliography in any citation style.',
+			onAction: this.handleReadMoreClick.bind(this, id),
 		};
 		this.setState({
 			messages: [...this.state.messages, message]
@@ -75,11 +77,13 @@ class Container extends React.Component {
 	}
 
 	displayFirstTranslationMessage() {
+		const id = getNextMessageId();
 		const message = {
-			id: getNextMessageId(),
 			action: 'Read More',
+			id,
 			kind: 'success',
-			message: 'Your first citation has been added. Citations are stored locally in your browser.'
+			message: 'Your first citation has been added. Citations are stored locally in your browser.',
+			onAction: this.handleReadMoreClick.bind(this, id),
 		};
 		this.setState({
 			messages: [...this.state.messages, message]
@@ -526,6 +530,9 @@ class Container extends React.Component {
 	}
 
 	handleClearMessage(message) {
+		message = typeof message === 'number' ?
+			this.state.messages.find(m => m.id === message) :
+			message;
 		this.setState({ messages: this.state.messages.filter(msg => msg != message) });
 	}
 
@@ -593,6 +600,11 @@ class Container extends React.Component {
 			permalink: null,
 			title
 		});
+	}
+
+	handleReadMoreClick(id) {
+		location.href = '#help';
+		this.handleClearMessage(id);
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
