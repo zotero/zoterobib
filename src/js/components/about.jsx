@@ -64,6 +64,17 @@ class About extends React.PureComponent {
 							</section>
 							<section className="feature">
 								<img
+									src="/static/images/about/bibliography-title.svg"
+									className="feature-icon"
+									width="66"
+									height="66"
+									alt=""
+								/>
+								<h2 className="h5">Bibliography title</h2>
+								<p>To rename your bibliography, just click its title.</p>
+							</section>
+							<section className="feature">
+								<img
 									src="/static/images/about/editing.svg"
 									className="feature-icon"
 									width="66"
