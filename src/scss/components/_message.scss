@@ -67,6 +67,15 @@
 		}
 	}
 
+	.btn-icon {
+		&:focus {
+			.keyboard-user & {
+				border-color: $message-focus-color;
+				box-shadow: 0 0 0 $input-btn-focus-width $message-focus-color;
+			}
+		}
+	}
+
 	&.error {
 		background: $message-error-bg;
 	}
