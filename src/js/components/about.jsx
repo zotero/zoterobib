@@ -70,7 +70,7 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h5">Bibliography title</h2>
+								<h2 className="h4">Bibliography title</h2>
 								<p>To rename your bibliography, just click its title.</p>
 							</section>
 							<section className="feature">
