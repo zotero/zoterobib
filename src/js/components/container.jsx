@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const SmoothScroll = require('smooth-scroll');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
@@ -20,6 +21,7 @@ const { fetchFromPermalink,
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
+const scroll = new SmoothScroll();
 var msgId = 0;
 
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -603,7 +605,8 @@ class Container extends React.Component {
 	}
 
 	handleReadMoreClick(id) {
-		location.href = '#help';
+		const target = document.querySelector('.section-about');
+		scroll.animateScroll(target);
 		this.handleClearMessage(id);
 	}
 
