@@ -75,17 +75,21 @@
 	}
 
 	.feature {
-		flex: 0 0 33%;
 		position: relative;
 		margin-bottom: $space-xxxl - 16px;
 
 		@media (min-width: $bp-md) {
+			flex: 0 0 50%;
 			margin-bottom: $space-max - 17px;
 			padding: 0 40px;
 
 			&:last-child {
-				margin-bottom: 0;
+				//margin-bottom: 0;
 			}
+		}
+
+		@media (min-width: $bp-lg) {
+			flex: 0 0 33%;
 		}
 	}
 
