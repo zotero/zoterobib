@@ -64,7 +64,6 @@ class Message extends React.Component {
 			<div className={ cx(this.className) }>
 				<p className="text">
 					{ this.props.message }
-					{ ' ' }
 					{ this.props.action ? this.renderButton() : null }
 				</p>
 				<button
