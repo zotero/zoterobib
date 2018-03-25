@@ -10,7 +10,7 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	.container {
-		max-width: 972px;
+		max-width: 1172px;
 	}
 
 	.column {
@@ -29,6 +29,7 @@
 
 	.h4 {
 		margin-bottom: $space-xs;
+		text-align: center;
 	}
 
 	a {
@@ -60,22 +61,27 @@
 	.features {
 		text-align: left;
 		margin-top: 80px - 17px;
-		margin-bottom: $space-xxxl - 7px;
+		margin-bottom: $space-xxxl - 7px - 48px;
 
 		@media (min-width: $bp-md) {
 			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
 			margin-top: 120px - 20px;
-			margin-bottom: $space-max - 7px;
+			margin-bottom: $space-max - 7px - 79px;
+			margin-left: -40px;
+			margin-right: -40px;
 		}
 	}
 
 	.feature {
-		padding-left: 66px + $space-md;
+		flex: 0 0 33%;
 		position: relative;
 		margin-bottom: $space-xxxl - 16px;
 
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-max - 17px;
+			padding: 0 40px;
 
 			&:last-child {
 				margin-bottom: 0;
@@ -84,13 +90,8 @@
 	}
 
 	.feature-icon {
-		position: absolute;
-		left: 0;
-		top: -23px;
-
-		@media (min-width: $bp-md) {
-			top: -20px;
-		}
+		display: block;
+		margin: 0 auto $space-md;
 	}
 
 	.support {
