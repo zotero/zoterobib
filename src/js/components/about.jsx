@@ -113,8 +113,8 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Style selection</h2>
 								<p>
-									Format your bibliography using APA, MLA, Chicago/Turabian, or
-									any of the 9,000+
+									Format your bibliography using APA, MLA, Chicago / Turabian,
+									or any of the 9,000+
 									other <a href="http://citationstyles.org/">CSL</a> styles.
 								</p>
 							</section>
@@ -147,7 +147,7 @@ class About extends React.PureComponent {
 								<p>
 									ZBib automatically saves your bibliography to your browser’s
 									local storage — you can close the page and return to it
-									anytime. (If you’re using private/incognito mode in your
+									anytime. (If you’re using private / incognito mode in your
 									browser, your bibliography will be cleared when you close the
 									window.)
 								</p>
