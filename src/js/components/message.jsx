@@ -35,10 +35,10 @@ class Message extends React.Component {
 		this.props.onDismiss();
 	}
 
-	handleAction() {
+	handleAction(event) {
 		clearTimeout(this.timeout);
 		delete this.timeout;
-		this.props.onAction();
+		this.props.onAction(event);
 	}
 
 	get className() {
