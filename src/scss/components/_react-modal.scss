@@ -82,6 +82,12 @@
 		.icon {
 			color: $modal-header-color;
 		}
+
+		&:active {
+			.icon {
+				color: $modal-header-color;
+			}
+		}
 	}
 }
 
