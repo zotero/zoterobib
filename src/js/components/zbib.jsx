@@ -110,7 +110,7 @@ class ZBib extends React.PureComponent {
 								onConfirm={ this.props.onStyleSwitchConfirm }
 								onCancel={ this.props.onStyleSwitchCancel }
 								title="Converting Titles to Sentence Case"
-									confirmLabel="OK, I’ll Edit Them"
+								confirmLabel="OK, I’ll Edit Them"
 								>
 									<p>APA style requires titles to be in sentence case rather than
 									title case. When you use APA style, ZBib will partially
