@@ -81,8 +81,9 @@ class Editor extends React.PureComponent {
 		}));
 
 		const hiddenFields = [
-			...hideFields.filter(f => f != 'abstractNote'),
-			'rights'
+			...hideFields,
+			'rights',
+			'extra',
 		];
 
 		const titleField = item.itemType in baseMappings && baseMappings[item.itemType]['title'] || 'title';
@@ -94,6 +95,10 @@ class Editor extends React.PureComponent {
 			...itemTypeFields.filter(itf => itf.field !== titleField)
 		]
 			.filter(f => f && !hiddenFields.includes(f.field))
+			.concat([
+				itemTypeFields.find(itf => itf.field === 'abstractNote'),
+				itemTypeFields.find(itf => itf.field === 'extra'),
+		])
 			.map(f => ({
 				options: f.field === 'itemType' ? itemTypes : null,
 				key: f.field,
