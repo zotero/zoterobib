@@ -41,6 +41,7 @@
 	}
 
 	.close {
+
 		order: -1;
 		width: $space-xxl;
 		height: $space-xxl;
@@ -53,8 +54,21 @@
 			margin: (-$space-xl / 2) $space-sm (-$space-xl / 2) 0;
 		}
 
+		&:focus {
+			.keyboard-user & {
+				border-color: $message-focus-color;
+				box-shadow: 0 0 0 $input-btn-focus-width $message-focus-color;
+			}
+		}
+
 		.icon {
 			color: $message-color;
+		}
+
+		&:active {
+			.icon {
+				color: $message-color;
+			}
 		}
 	}
 
@@ -64,15 +78,6 @@
 
 		@media (min-width: $bp-md) {
 			margin: -1em 0 -1em $space-lg;
-		}
-	}
-
-	.btn-icon {
-		&:focus {
-			.keyboard-user & {
-				border-color: $message-focus-color;
-				box-shadow: 0 0 0 $input-btn-focus-width $message-focus-color;
-			}
 		}
 	}
 
