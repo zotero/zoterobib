@@ -63,6 +63,12 @@ class Container extends React.Component {
 		this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
 	}
 
+	clearMessages() {
+		this.setState({
+			messages: []
+		});
+	}
+
 	displayWelcomeMessage() {
 		const id = getNextMessageId();
 		const message = {
@@ -180,6 +186,7 @@ class Container extends React.Component {
 			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
 		) {
 			if(isApa(this.state.citationStyle)) {
+				this.clearMessages();
 				this.setState({
 					citationStyle: state.citationStyle,
 					unconfirmedCitationStyle: this.state.citationStyle,
@@ -325,6 +332,7 @@ class Container extends React.Component {
 	}
 
 	handleOpenEditor(itemId = null) {
+		this.clearMessages();
 		this.setState({
 			isEditorOpen: true,
 			editorItem: this.bib.itemsRaw.find(i => i.key === itemId)
@@ -388,6 +396,7 @@ class Container extends React.Component {
 			return;
 		}
 		if(citationStyle === 'install') {
+			this.clearMessages();
 			this.setState({
 				isStylesDataLoading: true,
 				isInstallingStyle: true
@@ -485,6 +494,7 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.MULTIPLE_ITEMS:
+						this.clearMessages();
 						this.setState({
 							isTranslating: false,
 							isPickingItem: true,
