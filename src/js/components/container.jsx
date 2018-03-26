@@ -604,9 +604,9 @@ class Container extends React.Component {
 		});
 	}
 
-	handleReadMoreClick(id) {
+	handleReadMoreClick(id, event) {
 		const target = document.querySelector('.section-about');
-		scroll.animateScroll(target);
+		scroll.animateScroll(target, event.target, { header: '.message' });
 		this.handleClearMessage(id);
 	}
 
