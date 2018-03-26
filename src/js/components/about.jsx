@@ -14,7 +14,7 @@ class About extends React.PureComponent {
 			<section className="section section-about about">
 				<div className="container">
 					<img
-						src="/static/images/about/zbib-illustration.svg"
+						src="/static/images/about/citeproc.svg"
 						className="zbib-illustration"
 						width="312"
 						height="400"
