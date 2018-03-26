@@ -21,7 +21,7 @@
 	width: auto;
 	margin: $space-xs;
 
-	@media (min-width: $bp-sm) {
+	@media (min-width: $bp-md) {
 		max-width: $modal-md;
 		margin: $space-xl auto;
 
@@ -61,7 +61,7 @@
 	color: $modal-header-color;
 	background-color: $modal-header-bg;
 
-	@media (min-width: $bp-sm) {
+	@media (min-width: $bp-md) {
 		padding: $modal-header-padding-md;
 	}
 
@@ -72,7 +72,7 @@
 		width: $space-xxxl;
 		height: $space-xxxl;
 
-		@media (min-width: $bp-sm) {
+		@media (min-width: $bp-md) {
 			margin: -$modal-header-padding-md;
 			margin-left: auto;
 			width: $space-xl + 2 * $space-lg;
@@ -102,7 +102,7 @@
 .modal-footer {
 	padding: $modal-inner-padding-mobile;
 
-	@media (min-width: $bp-sm) {
+	@media (min-width: $bp-md) {
 		padding: $modal-inner-padding-md;
 	}
 }
@@ -125,7 +125,7 @@
 
 .modal-lg {
 	.modal-header {
-		@media (min-width: $bp-sm) {
+		@media (min-width: $bp-md) {
 			padding: $modal-header-padding-lg;
 
 			.close {
@@ -139,7 +139,7 @@
 
 	.modal-body,
 	.modal-footer {
-		@media (min-width: $bp-sm) {
+		@media (min-width: $bp-md) {
 			padding: $modal-inner-padding-lg;
 		}
 	}
@@ -150,7 +150,7 @@
 	align-items: center;
 	min-height: calc(100% - #{2 * $space-xs});
 
-	@media (min-width: $bp-sm) {
+	@media (min-width: $bp-md) {
 		min-height: calc(100% - #{2 * $space-xl});
 	}
 }
