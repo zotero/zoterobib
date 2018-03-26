@@ -6,4 +6,8 @@
 	max-width: $container-width;
 	margin: auto;
 	padding: 0 ($grid-gutter-width / 2);
+
+	@media (min-width: $bp-md) {
+		width: calc(100% - #{$space-xxl});
+	}
 }
