@@ -3,12 +3,10 @@
 const React = require('react');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const SmoothScroll = require('smooth-scroll');
-const scroll = new SmoothScroll();
 
 class About extends React.PureComponent {
-	handleClick() {
-		const target = document.querySelector('.zotero-bib-container');
-		scroll.animateScroll(target);
+	handleClick(event) {
+		this.props.onGetStartedClick(event);
 	}
 
 	render() {

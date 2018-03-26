@@ -610,6 +610,12 @@ class Container extends React.Component {
 		this.handleClearMessage(id);
 	}
 
+	handleGetStartedClick() {
+		const target = document.querySelector('.zotero-bib-container');
+		scroll.animateScroll(target);
+		document.querySelector('.id-input').focus();
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
@@ -722,6 +728,7 @@ class Container extends React.Component {
 			onEditorClose = { this.handleCloseEditor.bind(this) }
 			onEditorOpen = { this.handleOpenEditor.bind(this) }
 			onError = { this.handleError.bind(this) }
+			onGetStartedClick = { this.handleGetStartedClick.bind(this) }
 			onItemCreated = { this.handleItemCreated.bind(this) }
 			onItemUpdate = { this.handleItemUpdate.bind(this) }
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
