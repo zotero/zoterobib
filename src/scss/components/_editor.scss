@@ -66,15 +66,8 @@
 
 	.creators-entry {
 		.key {
-
-			// Editable
-			.field-editable-wrap {
-				flex: 1 1 auto;
-				display: flex;
-
-				@media (min-width: $bp-md) {
-					justify-content: flex-end;
-				}
+			@media (min-width: $bp-md) {
+				justify-content: flex-end;
 			}
 
 			.input-group {
@@ -173,7 +166,7 @@
 				}
 			}
 
-			.field-editable-wrap {
+			.input-group {
 				flex: 1 1 100%;
 				margin-bottom: $space-min;
 
