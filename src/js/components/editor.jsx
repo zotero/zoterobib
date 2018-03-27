@@ -52,12 +52,6 @@ class Editor extends React.PureComponent {
 			};
 		} else {
 			item = props.editorItem;
-			// if(!item) {
-			// 	this.setState({
-			// 		isLoading: true
-			// 	});
-			// 	return;
-			// }
 		}
 
 		try {
