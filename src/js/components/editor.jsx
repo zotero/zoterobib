@@ -6,7 +6,6 @@ const cx = require('classnames');
 const deepEqual = require('deep-equal');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const { baseMappings } = require('zotero-web-library/lib/constants/item');
@@ -184,10 +183,10 @@ class Editor extends React.PureComponent {
 					{ this.itemTitle }
 					</h4>
 					<Button
-						className="close"
+						className="btn-outline-inverse-blue-dark"
 						onClick={ () => this.props.onEditorClose() }
 					>
-						<Icon type={ '24/remove' } width="24" height="24" />
+						Done
 					</Button>
 				</div>
 				<div className="modal-body">

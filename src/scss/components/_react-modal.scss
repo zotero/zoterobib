@@ -89,6 +89,15 @@
 			}
 		}
 	}
+
+	[class^="btn-outline-inverse"] {
+		flex: 0 0 auto;
+		margin: -1em 0 -1em $space-md;
+
+		@media (min-width: $bp-md) {
+			margin-left: $space-xl;
+		}
+	}
 }
 
 .modal-title {
