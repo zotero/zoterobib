@@ -1,3 +1,4 @@
+// adapted from https://github.com/zotero/zotero/blob/553d2b00d86f852e051a9d76474993cd0575f7cd/chrome/content/zotero/xpcom/cite.js#L140-L274
 const formatBib = (bib) => {
 	var output = [
 		bib[0].bibstart,
@@ -24,7 +25,7 @@ const formatBib = (bib) => {
 
 	const container = document.createElement('div');
 	container.innerHTML = output.join('');
-	const div = container.firstChild;
+	const bibBody = container.firstChild;
 	const leftMarginDivs = container.querySelectorAll('.csl-left-margin');
 	const rightInlineDivs = container.querySelectorAll('.csl-right-inline');
 	const indentDivs = container.querySelectorAll('.csl-indent');
@@ -41,7 +42,7 @@ const formatBib = (bib) => {
 		lineSpacing = 1.35;
 	}
 
-	var style = div.getAttribute('style') || '';
+	var style = bibBody.getAttribute('style') || '';
 	style += 'line-height: ' + lineSpacing + '; ';
 
 	if(hangingIndent) {
@@ -55,7 +56,7 @@ const formatBib = (bib) => {
 	}
 
 	if(style) {
-		div.setAttribute('style', style);
+		bibBody.setAttribute('style', style);
 	}
 
 	// csl-entry
@@ -73,13 +74,13 @@ const formatBib = (bib) => {
 		}
 
 		if(divStyle) {
-			div.setAttribute('style', divStyle);
+			cslEntry.setAttribute('style', divStyle);
 		}
 	}
 
 	// div.csl-left-margin
-	for (let div of leftMarginDivs) {
-		let divStyle = div.getAttribute('style') || '';
+	for (let leftMarginDiv of leftMarginDivs) {
+		let divStyle = leftMarginDiv.getAttribute('style') || '';
 
 		divStyle = 'float: left; padding-right: ' + rightPadding + 'em;';
 
@@ -90,24 +91,24 @@ const formatBib = (bib) => {
 			divStyle += 'text-align: right; width: ' + maxOffset + 'em;';
 		}
 
-		div.setAttribute('style', divStyle);
+		leftMarginDiv.setAttribute('style', divStyle);
 	}
 
 	// div.csl-right-inline
-	for (let div of rightInlineDivs) {
-		let divStyle = div.getAttribute('style') || '';
+	for (let rightInlineDiv of rightInlineDivs) {
+		let divStyle = rightInlineDiv.getAttribute('style') || '';
 		divStyle = 'margin: 0 .4em 0 ' + (secondFieldAlign ? maxOffset + rightPadding : '0') + 'em;';
 
 		if (hangingIndent) {
 			divStyle += 'padding-left: ' + hangingIndent + 'em; text-indent:-' + hangingIndent + 'em;';
 		}
 
-		div.setAttribute('style', divStyle);
+		rightInlineDiv.setAttribute('style', divStyle);
 	}
 
 	// div.csl-indent
-	for (let div of indentDivs) {
-		div.setAttribute('style', 'margin: .5em 0 0 2em; padding: 0 0 .2em .5em; border-left: 5px solid #ccc;');
+	for (let indentDiv of indentDivs) {
+		indentDiv.setAttribute('style', 'margin: .5em 0 0 2em; padding: 0 0 .2em .5em; border-left: 5px solid #ccc;');
 	}
 
 	return container.innerHTML;
