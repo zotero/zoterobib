@@ -21,6 +21,8 @@ const { fetchFromPermalink,
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
+const formatBib = require('../cite');
+
 const scroll = new SmoothScroll();
 var msgId = 0;
 
@@ -215,10 +217,8 @@ class Container extends React.Component {
 	handleCopy(ev) {
 		if(this.copyDataInclude) {
 			const formattedMime = exportFormats[this.copyDataInclude].mime;
-			const bibliography = this.getExportData(this.copyDataInclude);
-			const formattedValue = `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
-			ev.clipboardData.setData('text/plain', ev.target.value);
-			ev.clipboardData.setData(formattedMime, formattedValue);
+			ev.clipboardData.setData('text/plain', this.getCopyData('text'));
+			ev.clipboardData.setData(formattedMime, this.getCopyData(this.copyDataInclude));
 			ev.preventDefault();
 			delete this.copyDataInclude;
 		}
@@ -670,7 +670,11 @@ class Container extends React.Component {
 				this.copyDataInclude = exportFormats[format].include;
 			}
 		}
-		return `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
+		if(format === 'html') {
+			return formatBib(bibliography);
+		} else {
+			return `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
+		}
 	}
 
 	async getFileData(format) {
