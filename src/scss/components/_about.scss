@@ -10,13 +10,20 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	.container {
-		max-width: 972px;
+		@media(min-width: $bp-md) {
+			width: auto; // Reset
+			max-width: 640px;
+		}
+
+		@media(min-width: $bp-lg) {
+			max-width: 972px;
+		}
 	}
 
 	.column {
-		flex: 0 0 50%;
+		@media (min-width: $bp-lg) {
+			flex: 0 0 50%;
 
-		@media (min-width: $bp-md) {
 			&:nth-child(1) {
 				padding-right: 40px;
 			}
@@ -63,9 +70,12 @@
 		margin-bottom: $space-xxxl - 7px;
 
 		@media (min-width: $bp-md) {
-			display: flex;
 			margin-top: 120px - 20px;
 			margin-bottom: $space-max - 7px;
+		}
+
+		@media (min-width: $bp-lg) {
+			display: flex;
 		}
 	}
 
@@ -76,7 +86,9 @@
 
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-max - 17px;
+		}
 
+		@media (min-width: $bp-lg) {
 			&:last-child {
 				margin-bottom: 0;
 			}
