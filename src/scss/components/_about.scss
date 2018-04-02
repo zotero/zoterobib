@@ -10,12 +10,12 @@
 	-moz-osx-font-smoothing: grayscale;
 
 	.container {
-		@media(min-width: $bp-md) {
+		@media (min-width: $bp-md) {
 			width: auto; // Reset
 			max-width: 640px;
 		}
 
-		@media(min-width: $bp-lg) {
+		@media (min-width: $bp-lg) {
 			max-width: 972px;
 		}
 	}
