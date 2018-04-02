@@ -7,6 +7,10 @@
 	opacity: 1; // Set opacity for Firefox
 }
 
+::-ms-clear {
+	display: none; // Hide non-standard clear button in IE and Edge
+}
+
 .form-control {
 	display: block;
 	width: 100%;
