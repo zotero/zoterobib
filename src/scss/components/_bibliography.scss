@@ -30,7 +30,7 @@
 			}
 
 			&:focus {
-				.keyboard-user & {
+				@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
 					outline-offset: -3px;
 
 					& + .citation {
