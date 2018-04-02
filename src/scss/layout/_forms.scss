@@ -4,6 +4,7 @@
 
 ::placeholder {
 	color: $placeholder-color;
+	opacity: 1; // Set opacity for Firefox
 }
 
 .form-control {
