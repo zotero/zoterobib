@@ -67,16 +67,14 @@
 
 	.close {
 		flex: 0 0 auto;
-		margin: -$modal-header-padding-mobile;
+		margin: -$space-xs;
 		margin-left: auto;
-		width: $space-xxxl;
-		height: $space-xxxl;
+		width: 3 * $modal-header-padding-mobile;
+		height: 3 * $modal-header-padding-mobile;
 
 		@media (min-width: $bp-md) {
-			margin: -$modal-header-padding-md;
-			margin-left: auto;
-			width: $space-xl + 2 * $space-lg;
-			height: $space-xl + 2 * $space-lg;
+			width: $space-xxl;
+			height: $space-xxl;
 		}
 
 		.icon {
@@ -138,10 +136,10 @@
 			padding: $modal-header-padding-lg;
 
 			.close {
-				margin: -$modal-header-padding-lg;
+				margin: -$space-md;
 				margin-left: auto;
-				width: 3 * $modal-header-padding-lg;
-				height: 3 * $modal-header-padding-lg;
+				width: 2 * $modal-header-padding-lg;
+				height: 2 * $modal-header-padding-lg;
 			}
 		}
 	}

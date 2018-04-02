@@ -33,6 +33,13 @@
 			align-items: center;
 			padding: $space-sm;
 		}
+
+		.btn {
+			flex: 0 0 auto;
+			align-self: center; // In column
+			margin-left: $space-sm;
+			min-width: $space-max - $space-xs;
+		}
 	}
 
 	.style-title {
@@ -42,12 +49,5 @@
 		@media (min-width: $bp-sm) {
 			margin-bottom: 0;
 		}
-	}
-
-	.btn {
-		flex: 0 0 auto;
-		align-self: center; // In column
-		margin-left: $space-sm;
-		min-width: $space-max - $space-xs;
 	}
 }
