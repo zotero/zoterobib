@@ -620,7 +620,7 @@ class Container extends React.Component {
 		this.handleClearMessage(id);
 	}
 
-	handleHelpClick() {
+	handleHelpClick(event) {
 		const target = document.querySelector('.section-about');
 		scroll.animateScroll(target, event.target);
 	}
