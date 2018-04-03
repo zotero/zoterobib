@@ -37,6 +37,10 @@ class ZBib extends React.PureComponent {
 		this.props.onClearMessage(message);
 	}
 
+	handleHelp(event) {
+		this.props.handleHelpClick(event);
+	}
+
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
@@ -59,6 +63,12 @@ class ZBib extends React.PureComponent {
 							{
 								!this.props.isReadOnly && (
 									<section className="section section-cite">
+										<a
+											className="help-link"
+											onClick={ this.handleHelp.bind(this) }
+										>
+											Help
+										</a>
 										<div className="container">
 											<Brand />
 											<CiteTools { ...this.props } />

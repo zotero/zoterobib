@@ -620,6 +620,11 @@ class Container extends React.Component {
 		this.handleClearMessage(id);
 	}
 
+	handleHelpClick() {
+		const target = document.querySelector('.section-about');
+		scroll.animateScroll(target, event.target);
+	}
+
 	handleGetStartedClick() {
 		const target = document.querySelector('.zotero-bib-container');
 		scroll.animateScroll(target);
@@ -758,6 +763,7 @@ class Container extends React.Component {
 			onTitleChanged = { this.handleTitleChange.bind(this) }
 			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
+			handleHelpClick = { this.handleHelpClick.bind(this) }
 			{ ...this.state }
 		/>;
 	}

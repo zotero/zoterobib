@@ -5,9 +5,17 @@
 .section-cite {
 	border-top: none;
 	padding-top: $section-padding-mobile - 4px;
+	position: relative;
 
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 4px;
+	}
+
+	.help-link {
+		position: absolute;
+		right: $grid-gutter-width / 2;
+		top: $grid-gutter-width / 2;
+		cursor: pointer;
 	}
 
 	.brand-subhead {
