@@ -763,7 +763,7 @@ class Container extends React.Component {
 			onTitleChanged = { this.handleTitleChange.bind(this) }
 			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
-			handleHelpClick = { this.handleHelpClick.bind(this) }
+			onHelpClick = { this.handleHelpClick.bind(this) }
 			{ ...this.state }
 		/>;
 	}

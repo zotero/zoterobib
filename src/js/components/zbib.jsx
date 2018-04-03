@@ -38,7 +38,7 @@ class ZBib extends React.PureComponent {
 	}
 
 	handleHelp(event) {
-		this.props.handleHelpClick(event);
+		this.props.onHelpClick(event);
 	}
 
 	render() {
