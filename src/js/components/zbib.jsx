@@ -154,6 +154,7 @@ class ZBib extends React.PureComponent {
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
 		onUndoDelete: PropTypes.func.isRequired,
+		onHelpClick: PropTypes.func.isRequired,
 	}
 }
 

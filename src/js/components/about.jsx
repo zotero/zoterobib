@@ -1,8 +1,8 @@
 'use strict';
 
 const React = require('react');
+const PropTypes = require('prop-types');
 const Button = require('zotero-web-library/lib/component/ui/button');
-const SmoothScroll = require('smooth-scroll');
 
 class About extends React.PureComponent {
 	handleClick(event) {
@@ -181,6 +181,10 @@ class About extends React.PureComponent {
 				</div>
 			</section>
 		);
+	}
+
+	static propTypes = {
+		onGetStartedClick: PropTypes.func.isRequired,
 	}
 }
 
