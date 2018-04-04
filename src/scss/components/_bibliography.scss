@@ -9,10 +9,16 @@
 
 	// CSL styles only work correctly with content-box
 	.csl-entry {
+		word-wrap: break-word; // Break long URLs
+
 		&,
 		* {
 			box-sizing: content-box;
 		}
+	}
+
+	.csl-left-margin {
+		word-wrap: normal;
 	}
 
 	.write & {
@@ -51,7 +57,6 @@
 				flex: 1 1 0;
 				margin-right: ($space-md - 5px);
 				min-width: 0; // Enable word-wrap for long URLs
-				word-wrap: break-word;
 			}
 
 			.csl-entry {
