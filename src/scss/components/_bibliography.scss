@@ -46,6 +46,10 @@
 				word-wrap: break-word;
 			}
 
+			.csl-entry {
+				margin: 0 !important; // Override entry-spacing defined in CSL
+			}
+
 			.btn-icon {
 				flex: 0 0 auto;
 				margin: (-$space-lg) 0;
