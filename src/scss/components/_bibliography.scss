@@ -7,6 +7,14 @@
 	list-style: none;
 	text-align: left;
 
+	// CSL styles only work correctly with content-box
+	.csl-entry {
+		&,
+		* {
+			box-sizing: content-box;
+		}
+	}
+
 	.write & {
 		margin: $space-lg (-$grid-gutter-width / 2);
 
