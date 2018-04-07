@@ -12,7 +12,7 @@ const Dropdown = require('reactstrap/lib/Dropdown').default;
 const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
 const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
 const DropdownItem = require('reactstrap/lib/DropdownItem').default;
-const formatsInDropdown = ['html', 'rtf', 'ris'];
+const formatsInDropdown = ['html', 'rtf', 'ris', 'zotero'];
 const Button = require('zotero-web-library/lib/component/ui/button');
 
 class ExportDialog extends React.Component {
@@ -54,6 +54,14 @@ class ExportDialog extends React.Component {
 
 	async handleDownloadFile(format) {
 		try {
+			if (format == 'zotero') {
+				// TEMP: Replace with modal alert
+				alert('Once you’ve installed Zotero and the Zotero Connector for your browser, '
+					+ 'you can export your bibliography to Zotero by clicking the “Save to Zotero” '
+					+ 'button in your browser’s toolbar.');
+				return;
+			}
+			
 			const file = await this.props.getFileData(format);
 			saveAs(file);
 		} finally {

@@ -27,5 +27,10 @@ module.exports = {
 		label: 'Download RIS',
 		isDownloadable: true,
 		isCopyable: false
+	},
+	'zotero': {
+		label: 'Save to Zotero',
+		isDownloadable: true,
+		isCopyable: false
 	}
 };
