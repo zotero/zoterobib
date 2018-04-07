@@ -22,11 +22,14 @@ class About extends React.PureComponent {
 					/>
 					<h1>Cite anything</h1>
 					<p className="lead">
-						Brought to you by the team behind <a href="https://www.zotero.org/">Zotero</a>,
-						ZBib helps you build a bibliography instantly, without downloading or
-						installing any software. If you need to reuse your research sources across
-						multiple projects or build a shared research library, we recommend using
-						Zotero instead.
+						ZBib helps you build a bibliography instantly from any computer or device,
+						without creating an account or installing any software. It’s brought to you
+						by the team behind <a href="https://www.zotero.org/">Zotero</a>, the
+						powerful open-source research tool recommended by thousands of universities
+						worldwide, so you can trust it to help you seamlessly add sources and
+						produce perfect bibliographies. If you need to reuse your research sources
+						across multiple projects or build a shared research library, we recommend
+						using Zotero instead.
 					</p>
 					<section className="features">
 						<div className="column">
@@ -40,7 +43,7 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Adding a bibliography entry</h2>
 								<p>
-									Simply type or paste in a URL, DOI, ISBN, or PMID, and ZBib
+									Simply paste or type in a URL, DOI, ISBN, or PMID, and ZBib
 									will automatically import the reference and add it to your
 									bibliography.
 								</p>
@@ -69,7 +72,9 @@ class About extends React.PureComponent {
 									alt=""
 								/>
 								<h2 className="h4">Bibliography title</h2>
-								<p>To rename your bibliography, just click its title.</p>
+								<p>To rename your bibliography, just click its title. A title
+								   can be useful if you’re switching between multiple
+								   projects or sharing a bibliography with others.</p>
 							</section>
 							<section className="feature">
 								<img
@@ -175,9 +180,9 @@ class About extends React.PureComponent {
 						Awesome! Let’s start!
 					</Button>
 					<p className="support">
-						<span className="d-xs-block d-sm-inline">Need help?</span>
+						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
-						Visit our <a href="">support pages</a>.</p>
+						Check the <a href="">FAQ</a>.</p>
 				</div>
 			</section>
 		);
