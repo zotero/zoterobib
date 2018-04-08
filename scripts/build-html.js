@@ -24,7 +24,7 @@ const Handlebars = require('handlebars');
 	await fs.ensureDir(path.dirname(dstFile))
 	template = Handlebars.compile(faqTemplate.toString());
 	var faqHTML = marked(faqMarkdown.toString(), { smartypants: true })
-		// Remove "-" at end of id attributes, which marked uses substitutes for question marks
+		// Remove "-" at end of id attributes, which marked substitutes for question marks
 		.replace(/(id="[^"]+)-"/g, '$1"');
 	output = await template({ faq: faqHTML });
 	await fs.writeFile(dstFile, output);
