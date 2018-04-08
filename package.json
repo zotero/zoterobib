@@ -93,6 +93,7 @@
     "http-server": "^0.10.0",
     "json": "^9.0.6",
     "mapstraction": "^1.0.1",
+    "marked": "^0.3.19",
     "minimist": "^1.2.0",
     "node-sass": "^4.7.2",
     "nodemon": "^1.12.1",

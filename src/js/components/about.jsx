@@ -182,7 +182,7 @@ class About extends React.PureComponent {
 					<p className="support">
 						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
-						Check the <a href="">FAQ</a>.</p>
+						Check the <a href="/faq">FAQ</a>.</p>
 				</div>
 			</section>
 		);
