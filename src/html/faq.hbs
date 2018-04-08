@@ -6,6 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="/static/bib.css">
 	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+	<script>
+		window.onload = function () {
+			var headers = document.querySelectorAll('h2, h3');
+			for (let header of headers) {
+				let a = document.createElement('a');
+				a.href = '#' + header.id;
+				a.textContent = '#';
+				header.appendChild(a);
+			}
+		};
+	</script>
 </head>
 <body>
 	<nav><a href="/">Back to ZBib</a></nav>
