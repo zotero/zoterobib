@@ -111,7 +111,7 @@ While ZBib is able to extract high-quality metadata from a wide variety of sourc
 
 If there's a site for which ZBib consistently returns incorrect metadata, <a href="#help">let us know</a> and we'll do our best to fix it.
 
-<h3 id#"sentence-case">Why are all the proper nouns in my entries in lowercase when I use APA style?</h3>
+<h3 id="sentence-case">Why are all the proper nouns in my entries in lowercase when I use APA style?</h3>
 
 APA style requires titles to be in sentence case rather than title case. When you use APA style, ZBib will partially convert the titles of entries to sentence case for you, but you'll need to manually edit some entries to capitalize proper nouns:
 
