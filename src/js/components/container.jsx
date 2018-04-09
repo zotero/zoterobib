@@ -614,15 +614,23 @@ class Container extends React.Component {
 		});
 	}
 
+	calcOffset() {
+		var md = window.matchMedia('(min-width: 768px)');
+		return md.matches ? -72 : -56; // Results in 48px and 24px offset to the illustration
+	}
+
 	handleReadMoreClick(id, event) {
 		const target = document.querySelector('.section-about');
-		scroll.animateScroll(target, event.target, { header: '.message' });
+		scroll.animateScroll(target, event.target, {
+			header: '.message',
+			offset: this.calcOffset()
+		});
 		this.handleClearMessage(id);
 	}
 
 	handleHelpClick(event) {
 		const target = document.querySelector('.section-about');
-		scroll.animateScroll(target, event.target);
+		scroll.animateScroll(target, event.target, {offset: this.calcOffset()});
 	}
 
 	handleGetStartedClick() {
