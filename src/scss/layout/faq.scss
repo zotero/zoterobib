@@ -10,17 +10,29 @@
 
 .faq {
 	height: auto;
-	overflow: hidden;
+	margin-bottom: $section-padding-mobile;
+	font-size: 18px;
 
-	h1,
+	@media (min-width: $bp-md) {
+		margin-bottom: $section-padding;
+	}
+
 	h2,
 	h3 {
-		margin: 1em 0 ($font-size-base * $line-height-base);
+		margin: 1em 0 27px;
 	}
 
 	h1 {
-		font-size: 56px;
 		text-align: center;
+		margin-top: 62px;
+	}
+
+	h2 {
+		margin-top: 1.8em;
+	}
+
+	h3 {
+		margin-top: 1.5em;
 	}
 
 	.z,
@@ -34,22 +46,27 @@
 
 	nav {
 		text-align: center;
-		font-weight: 300;
+		margin-bottom: 80px;
 
 		ul {
 			padding: 0;
+			margin: 0;
 			list-style: none;
-			//font-size: $lead-font-size-mobile;
+		}
+
+		li {
+			margin-bottom: 1em;
 		}
 
 		@media (min-width: $bp-md) {
+			margin-bottom: 120px;
+
 			ul {
 				display: inline-flex;
-				font-size: $lead-font-size;
 			}
 
 			li {
-				display: inline;
+				margin-bottom: 0;
 
 				& + li {
 					margin-left: $space-xl;
@@ -58,12 +75,17 @@
 		}
 	}
 
-	.url {
+	.anchor-link {
 		margin-left: $space-xs;
-		font-size: $font-size-base;
+		opacity: 0;
+		transition: opacity $link-transition;
 
 		&:hover {
 			text-decoration: none;
 		}
+	}
+
+	*:hover > .anchor-link {
+		opacity: 1;
 	}
 }
