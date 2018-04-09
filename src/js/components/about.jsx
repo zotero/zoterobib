@@ -72,9 +72,11 @@ class About extends React.PureComponent {
 									alt=""
 								/>
 								<h2 className="h4">Bibliography title</h2>
-								<p>To rename your bibliography, just click its title. A title
-								   can be useful if you’re switching between multiple
-								   projects or sharing a bibliography with others.</p>
+								<p>
+									To rename your bibliography, just click its title. A title
+									can be useful if you’re switching between multiple projects or
+									sharing a bibliography with others.
+								</p>
 							</section>
 							<section className="feature">
 								<img
