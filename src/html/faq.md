@@ -30,14 +30,15 @@ If you just need to create a one-off bibliography for a paper, ZBib is the quick
 
 If you're working on a longer-term project, want to build up a research library to use across multiple projects, or need to collaborate with others, [Zotero] offers many more features:
 
-  * Browser extensions for Chrome, Firefox, and Safari to help you save items with one-click
+  * Browser extensions for Chrome, Firefox, and Safari to help you save items with one click
   * Automatic downloading of PDFs and webpage snapshots
   * Word processor plugins to help you insert in-text citations and automatically generate a bibliography from the citations in your document
   * Organization and tagging
   * Note-taking
   * Advanced sorting and searching
   * Group libraries for easy collaboration and sharing
-  * Automatic syncing across your devices and an online library
+  * Automatic syncing across your devices
+  * Web access to your data, notes, and files
 
 ### What citation styles can I use?
 
@@ -109,7 +110,7 @@ In a pinch, you can always enter metadata manually, though that should rarely be
 
 While ZBib is able to extract high-quality metadata from a wide variety of sources, you should always check your entries to make sure they're correct. In some cases it may be necessary to manually edit an entry to clean up what's there or add additional fields.
 
-If there's a site for which ZBib consistently returns incorrect metadata, <a href="#help">let us know</a> and we'll do our best to fix it.
+If there's a site for which ZBib consistently returns incorrect results, <a href="#help">let us know</a> and we'll do our best to fix it.
 
 <h3 id="sentence-case">Why are all the proper nouns in my entries in lowercase when I use APA style?</h3>
 
