@@ -15,6 +15,13 @@
 				a.textContent = '#';
 				header.appendChild(a);
 			}
+
+			var cssFile = window.navigator.platform.includes('Win') ? 'fonts-win.css' : 'fonts-mac.css';
+			var element = document.createElement('link');
+			element.setAttribute('rel', 'stylesheet');
+			element.setAttribute('type', 'text/css');
+			element.setAttribute('href', `/static/${cssFile}`);
+			document.getElementsByTagName('head')[0].appendChild(element);
 		};
 	</script>
 </head>
