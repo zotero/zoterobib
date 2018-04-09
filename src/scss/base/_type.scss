@@ -25,7 +25,9 @@ h5,
 h1,
 .h1,
 h2,
-.h2 {
+.h2,
+h3,
+.h3 {
 	letter-spacing: -0.025em;
 }
 
@@ -50,6 +52,15 @@ h2,
 	@media (min-width: $bp-md) {
 		font-size: $h2-font-size;
 		margin-bottom: ($space-xxl - 9px);
+	}
+}
+
+h3,
+.h3 {
+	font-size: $h3-font-size-mobile;
+
+	@media (min-width: $bp-md) {
+		font-size: $h3-font-size;
 	}
 }
 

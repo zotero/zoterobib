@@ -1,10 +1,12 @@
-# ZBib FAQ
+# <span class="z">Z</span><span class="b">B</span>ib FAQ
 
-<ul>
-	<li><a href="#general">General</a></li>
-	<li><a href="#usage">Usage</a></li>
-	<li><a href="#troubleshooting">Troubleshooting</a></li>
-</ul>
+<nav>
+  <ul>
+  	<li><a href="#general">General</a></li>
+  	<li><a href="#usage">Usage</a></li>
+  	<li><a href="#troubleshooting">Troubleshooting</a></li>
+  </ul>
+</nav>
 
 ## General
 

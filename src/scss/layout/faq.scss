@@ -1,0 +1,69 @@
+//
+// FAQ
+//
+
+.back-link {
+	position: absolute;
+	left: $grid-gutter-width / 2;
+	top: $grid-gutter-width / 2;
+}
+
+.faq {
+	height: auto;
+	overflow: hidden;
+
+	h1,
+	h2,
+	h3 {
+		margin: 1em 0 ($font-size-base * $line-height-base);
+	}
+
+	h1 {
+		font-size: 56px;
+		text-align: center;
+	}
+
+	.z,
+	.b {
+		text-transform: lowercase;
+	}
+
+	.z {
+		color: $primary;
+	}
+
+	nav {
+		text-align: center;
+		font-weight: 300;
+
+		ul {
+			padding: 0;
+			list-style: none;
+			//font-size: $lead-font-size-mobile;
+		}
+
+		@media (min-width: $bp-md) {
+			ul {
+				display: inline-flex;
+				font-size: $lead-font-size;
+			}
+
+			li {
+				display: inline;
+
+				& + li {
+					margin-left: $space-xl;
+				}
+			}
+		}
+	}
+
+	.url {
+		margin-left: $space-xs;
+		font-size: $font-size-base;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
