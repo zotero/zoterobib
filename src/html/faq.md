@@ -1,4 +1,4 @@
-# <span class="z">Z</span><span class="b">B</span>ib FAQ
+# ZBib FAQ
 
 <nav>
   <ul>
