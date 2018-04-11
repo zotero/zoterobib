@@ -53,15 +53,11 @@ class ExportDialog extends React.Component {
 	}
 
 	async handleDownloadFile(format) {
+		if (format == 'zotero') {
+			this.props.onSaveToZoteroShow();
+			return;
+		}
 		try {
-			if (format == 'zotero') {
-				// TEMP: Replace with modal alert
-				alert('Once you’ve installed Zotero and the Zotero Connector for your browser, '
-					+ 'you can export your bibliography to Zotero by clicking the “Save to Zotero” '
-					+ 'button in your browser’s toolbar.');
-				return;
-			}
-			
 			const file = await this.props.getFileData(format);
 			saveAs(file);
 		} finally {
@@ -167,6 +163,7 @@ class ExportDialog extends React.Component {
 		itemsCount: PropTypes.number,
 		match: PropTypes.object,
 		onExported: PropTypes.func,
+		onSaveToZoteroShow: PropTypes.func.isRequired,
 	}
 }
 

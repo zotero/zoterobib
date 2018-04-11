@@ -18,6 +18,9 @@ const Confirmation = require('./confirmation');
 const Editor = require('./editor');
 const StyleInstaller = require('./style-installer');
 const About = require('./about');
+const Modal = require('./modal');
+const Button = require('zotero-web-library/lib/component/ui/button');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -121,17 +124,38 @@ class ZBib extends React.PureComponent {
 								onCancel={ this.props.onStyleSwitchCancel }
 								title="Converting Titles to Sentence Case"
 								confirmLabel="OK, I’ll Edit Them"
-								>
-									<p>APA style requires titles to be in sentence case rather than
-									title case. When you use APA style, ZBib will partially
-									convert the titles of entries to sentence case for you, but
-									you’ll need to manually edit some entries to capitalize proper
-									nouns:</p>
+							>
+								<p>APA style requires titles to be in sentence case rather than
+								title case. When you use APA style, ZBib will partially
+								convert the titles of entries to sentence case for you, but
+								you’ll need to manually edit some entries to capitalize proper
+								nouns:</p>
 
-									<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
-									<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
-									<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
+								<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
+								<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
+								<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
+							<Modal
+								isOpen={ this.props.isSaveToZoteroVisible }
+								onRequestClose={ () => this.props.onSaveToZoteroHide() }
+							>
+								<div className="modal-content" tabIndex={ -1 }>
+									<div className="modal-header">
+										<h4 className="modal-title text-truncate">
+											Save to Zotero
+										</h4>
+										<Button
+											className="close"
+											onClick={ this.props.onSaveToZoteroHide.bind(this) }
+										>
+											<Icon type={ '24/remove' } width="24" height="24" />
+										</Button>
+									</div>
+									<div className="modal-body">
+										<p>Once you’ve installed Zotero and the Zotero Connector for your browser you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
+									</div>
+								</div>
+							</Modal>
 							<MultipleChoiceDialog { ...this.props } />
 							<StyleInstaller { ...this.props } />
 							<Editor { ...this.props } />
@@ -146,15 +170,17 @@ class ZBib extends React.PureComponent {
 		isKeyboardUser: PropTypes.bool,
 		isMouseUser: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
+		isSaveToZoteroVisible: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
 		lastDeletedItem: PropTypes.object,
 		messages: PropTypes.array.isRequired,
 		onClearMessage: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,
+		onHelpClick: PropTypes.func.isRequired,
+		onSaveToZoteroHide: PropTypes.func.isRequired,
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,
 		onUndoDelete: PropTypes.func.isRequired,
-		onHelpClick: PropTypes.func.isRequired,
 	}
 }
 

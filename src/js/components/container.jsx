@@ -46,6 +46,7 @@ class Container extends React.Component {
 		isLoadingCitations: true,
 		isPickingItem: false,
 		isReadOnly: undefined,
+		isSaveToZoteroVisible: false,
 		isSaving: false,
 		isStylesDataLoading: false,
 		isTranslating: false,
@@ -639,6 +640,13 @@ class Container extends React.Component {
 		document.querySelector('.id-input').focus();
 	}
 
+	handleSaveToZoteroShow() {
+		this.setState({ isSaveToZoteroVisible: true });
+	}
+	handleSaveToZoteroHide() {
+		this.setState({ isSaveToZoteroVisible: false });
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
 		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
 		// Make URLs and DOIs clickable on permalink pages
@@ -756,12 +764,15 @@ class Container extends React.Component {
 			onEditorOpen = { this.handleOpenEditor.bind(this) }
 			onError = { this.handleError.bind(this) }
 			onGetStartedClick = { this.handleGetStartedClick.bind(this) }
+			onHelpClick = { this.handleHelpClick.bind(this) }
 			onItemCreated = { this.handleItemCreated.bind(this) }
 			onItemUpdate = { this.handleItemUpdate.bind(this) }
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onOverride = { this.handleOverride.bind(this) }
 			onSave = { this.handleSave.bind(this) }
+			onSaveToZoteroHide = { this.handleSaveToZoteroHide.bind(this) }
+			onSaveToZoteroShow = { this.handleSaveToZoteroShow.bind(this) }
 			onStyleInstallerCancel = { this.handleStyleInstallerCancel.bind(this) }
 			onStyleInstallerDelete = { this.handleStyleInstallerDelete.bind(this) }
 			onStyleInstallerInstall = { this.handleStyleInstallerInstall.bind(this) }
@@ -771,7 +782,6 @@ class Container extends React.Component {
 			onTitleChanged = { this.handleTitleChange.bind(this) }
 			onTranslationRequest = { this.handleTranslateIdentifier.bind(this) }
 			onUndoDelete = { this.handleUndoDelete.bind(this) }
-			onHelpClick = { this.handleHelpClick.bind(this) }
 			{ ...this.state }
 		/>;
 	}
