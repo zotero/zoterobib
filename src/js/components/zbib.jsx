@@ -152,7 +152,7 @@ class ZBib extends React.PureComponent {
 										</Button>
 									</div>
 									<div className="modal-body">
-										<p>Once you’ve installed Zotero and the Zotero Connector for your browser you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
+										<p>Once you’ve installed Zotero and the Zotero Connector for your browser, you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
 									</div>
 								</div>
 							</Modal>
