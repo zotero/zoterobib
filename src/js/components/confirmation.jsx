@@ -8,19 +8,8 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const Modal = require('./modal');
 
 class Confirmation extends React.Component {
-	handleEscapeKey(ev) {
-		ev.preventDefault();
-		this.props.onCancel();
-	}
-
 	render() {
-		return [
-			<KeyHandler
-				key="key-handler-escape"
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ () => this.props.onCancel() }
-			/>,
+		return (
 			<Modal
 				key="react-modal"
 				className="modal modal-centered"
@@ -28,32 +17,44 @@ class Confirmation extends React.Component {
 				contentLabel={ this.props.title }
 				onRequestClose={ () => this.props.onCancel() }
 			>
-				<div className="modal-content" tabIndex={ -1 }>
-					<div className="modal-header">
-						<h4 className="modal-title text-truncate">
-							{ this.props.title }
-						</h4>
-					</div>
-					<div className="modal-body">
-						{ this.props.children }
-					</div>
-					<div className="modal-footer">
-						<div className="buttons">
-							<Button
-								className="btn-outline-secondary"
-								onClick={ () => this.props.onCancel() }>
-								{ this.props.cancelLabel }
-							</Button>
-							<Button
-								className="btn-secondary"
-								onClick={ () => this.props.onConfirm() }>
-								{ this.props.confirmLabel }
-							</Button>
+				<React.Fragment>
+					<KeyHandler
+						keyEventName={ KEYDOWN }
+						keyValue="Escape"
+						onKeyHandle={ () => this.props.onCancel() }
+					/>
+					<KeyHandler
+						keyEventName={ KEYDOWN }
+						keyValue="Enter"
+						onKeyHandle={ () => this.props.onConfirm() }
+					/>
+					<div className="modal-content" tabIndex={ -1 }>
+						<div className="modal-header">
+							<h4 className="modal-title text-truncate">
+								{ this.props.title }
+							</h4>
+						</div>
+						<div className="modal-body">
+							{ this.props.children }
+						</div>
+						<div className="modal-footer">
+							<div className="buttons">
+								<Button
+									className="btn-outline-secondary"
+									onClick={ () => this.props.onCancel() }>
+									{ this.props.cancelLabel }
+								</Button>
+								<Button
+									className="btn-secondary"
+									onClick={ () => this.props.onConfirm() }>
+									{ this.props.confirmLabel }
+								</Button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</React.Fragment>
 			</Modal>
-		];
+		);
 	}
 
 	static propTypes = {
