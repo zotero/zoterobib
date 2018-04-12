@@ -1,0 +1,72 @@
+//
+// Fonts
+//
+
+/**
+ * @license
+ * MyFonts Webfont Build ID 3557064, 2018-04-12T09:12:25-0400
+ *
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are
+ * explicitly restricted from using the Licensed Webfonts(s).
+ *
+ * You may obtain a valid license at the URLs below.
+ *
+ * Webfont: AvenirLTPro-Light by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-35-light-115678/
+ *
+ * Webfont: AvenirLTPro-Book by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-45-book-115678/
+ *
+ * Webfont: AvenirLTPro-BookOblique by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-45-book-oblique-115678/
+ *
+ *
+ * License: https://www.myfonts.com/viewlicense?type=web&buildid=3557064
+ * Licensed pageviews: 250,000
+ * Webfonts copyright: Copyright &#x00A9; 2014 Monotype GmbH. All rights reserved.
+ *
+ * © 2018 MyFonts Inc
+*/
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/3646c8");
+
+@font-face {
+	font-family: 'AvenirLTPro';
+	font-weight: 300;
+	font-style: normal;
+	src: font-url('3646C8_0_0.eot');
+	src:
+		font-url('3646C8_0_0.eot?#iefix') format('embedded-opentype'),
+		font-url('3646C8_0_0.woff2') format('woff2'),
+		font-url('3646C8_0_0.woff') format('woff'),
+		font-url('3646C8_0_0.ttf') format('truetype'),
+		font-url('3646C8_0_0.svg#wf') format('svg');
+}
+
+@font-face {
+	font-family: 'AvenirLTPro';
+	font-weight: 400;
+	font-style: normal;
+	src: font-url('3646C8_1_0.eot');
+	src:
+		font-url('3646C8_1_0.eot?#iefix') format('embedded-opentype'),
+		font-url('3646C8_1_0.woff2') format('woff2'),
+		font-url('3646C8_1_0.woff') format('woff'),
+		font-url('3646C8_1_0.ttf') format('truetype'),
+		font-url('3646C8_1_0.svg#wf') format('svg');
+}
+
+@font-face {
+	font-family: 'AvenirLTPro';
+	font-weight: 400;
+	font-style: italic;
+	src: font-url('3646C8_2_0.eot');
+	src:
+		font-url('3646C8_2_0.eot?#iefix') format('embedded-opentype'),
+		font-url('3646C8_2_0.woff2') format('woff2'),
+		font-url('3646C8_2_0.woff') format('woff'),
+		font-url('3646C8_2_0.ttf') format('truetype'),
+		font-url('3646C8_2_0.svg#wf') format('svg');
+}

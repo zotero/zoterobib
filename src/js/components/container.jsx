@@ -101,15 +101,6 @@ class Container extends React.Component {
 		});
 	}
 
-	componentWillMount() {
-		let cssFile = window.navigator.platform.includes('Win') ? 'fonts-win.css' : 'fonts-mac.css';
-		let element = document.createElement('link');
-		element.setAttribute('rel', 'stylesheet');
-		element.setAttribute('type', 'text/css');
-		element.setAttribute('href', `/static/${cssFile}`);
-		document.getElementsByTagName('head')[0].appendChild(element);
-	}
-
 	async componentDidMount() {
 		if(!localStorage.getItem('zotero-bib-visited')) {
 			localStorage.setItem('zotero-bib-visited', 'true');
