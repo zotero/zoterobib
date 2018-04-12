@@ -2,8 +2,9 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-
 const ReactModal = require('react-modal');
+
+var initialPadding;
 
 class Modal extends React.PureComponent {
 	componentWillReceiveProps(props) {
@@ -30,14 +31,12 @@ class Modal extends React.PureComponent {
 	}
 
 	setScrollbar() {
-		this.previousPadding = parseFloat(document.body.style.paddingRight);
-		this.previousPadding = Number.isNaN(this.previousPadding) ? 0 : this.previousPadding;
-		const calculatedPadding = this.previousPadding + this.getScrollbarWidth();
+		const calculatedPadding = this.initialPadding + this.getScrollbarWidth();
 		document.body.style.paddingRight = `${calculatedPadding}px`;
 	}
 
 	resetScrollbar() {
-		document.body.style.paddingRight = `${this.previousPadding}px`;
+		document.body.style.paddingRight = `${this.initialPadding}px`;
 	}
 
 	handleModalOpen() {
@@ -48,6 +47,14 @@ class Modal extends React.PureComponent {
 		// remove maxHeight hack that prevents scroll on focus
 		this.contentRef.style.maxHeight = null;
 		this.contentRef.style.overflowY = null;
+	}
+
+	get initialPadding() {
+		if(typeof initialPadding === 'undefined') {
+			initialPadding = parseFloat(document.body.style.paddingRight);
+			initialPadding = Number.isNaN(initialPadding) ? 0 : initialPadding;
+		}
+		return initialPadding;
 	}
 
 	render() {
