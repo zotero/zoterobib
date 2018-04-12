@@ -56,7 +56,7 @@ class Editor extends React.PureComponent {
 		try {
 			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
 		} catch(e) {
-			this.props.onError('Failed to obtain metadata. Please check your connection and try again.');
+			this.props.onError('Failed to obtain metadata. Please check your connection and try again.', e);
 			this.setState({
 				isLoading: false
 			});

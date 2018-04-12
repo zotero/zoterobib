@@ -155,7 +155,7 @@ class Container extends React.Component {
 					bibliography: this.bibliography
 				});
 			} catch(e) {
-				this.handleError('Failed to obtain selected citation style');
+				this.handleError('Failed to obtain selected citation style', e);
 				this.setState({
 					citationStyle: state.citationStyle
 				});
@@ -261,7 +261,7 @@ class Container extends React.Component {
 				}
 			} catch(e) {
 				props.history.push('/');
-				this.handleError('Failed to load citations by id');
+				this.handleError('Failed to load citations by id', e);
 			}
 		}
 
@@ -296,7 +296,7 @@ class Container extends React.Component {
 			permalink = `${window.location.origin}/${key}`;
 		} catch(e) {
 			this.props.history.push('/');
-			this.handleError('Failed to save citations.');
+			this.handleError('Failed to save citations.', e);
 		}
 		this.setState({ permalink });
 	}
@@ -400,7 +400,7 @@ class Container extends React.Component {
 					stylesData
 				});
 			} catch(e) {
-				this.handleError(e.message);
+				this.handleError(e.message, e);
 				this.setState({
 					isStylesDataLoading: false,
 					isInstallingStyle: false
@@ -425,7 +425,7 @@ class Container extends React.Component {
 		try {
 			await validateItem(updatedItem);
 		} catch(e) {
-			this.handleError('Failed to obtain metadata. Please check your connection and try again.');
+			this.handleError('Failed to obtain metadata. Please check your connection and try again.', e);
 			return;
 		}
 
@@ -504,7 +504,7 @@ class Container extends React.Component {
 				}
 			}
 			catch(e) {
-				this.handleError('An error occurred while citing this source.');
+				this.handleError('An error occurred while citing this source.', e);
 				this.setState({ isTranslating: false });
 			}
 		} else {
@@ -522,7 +522,7 @@ class Container extends React.Component {
 		this.setState({ isReadOnly: false });
 	}
 
-	handleError(errorMessage) {
+	handleError(errorMessage, errorData = null) {
 		const message = {
 			id: getNextMessageId(),
 			kind: 'error',
@@ -531,6 +531,9 @@ class Container extends React.Component {
 		this.setState({
 			messages: [...this.state.messages, message]
 		});
+		if(errorData) {
+			console.error(errorData);
+		}
 	}
 
 	handleClearMessage(message) {
