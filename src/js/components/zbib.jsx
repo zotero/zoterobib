@@ -10,6 +10,7 @@ const BibliographySection = require('./bibliographySection');
 const CiteTools = require('./cite-tools');
 const Message = require('./message');
 const ExportTools = require('./export-tools');
+const WhatsThis = require('./whats-this');
 const PermalinkTools = require('./permalink-tools');
 const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
@@ -95,7 +96,10 @@ class ZBib extends React.PureComponent {
 								!this.props.isReadOnly && (
 									<section className="section section-link">
 										<div className="container">
-											<h2>Link to this version</h2>
+											<h2>
+												Link to this version
+												<WhatsThis />
+											</h2>
 											<PermalinkTools { ...this.props } />
 										</div>
 									</section>

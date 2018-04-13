@@ -9,4 +9,51 @@
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 11px;
 	}
+
+	.whats-this {
+		display: inline-block;
+		width: $space-md;
+		height: $space-md;
+		text-indent: -9999px;
+		overflow: hidden;
+		vertical-align: $space-sm;
+		margin-left: 7px;
+		border-radius: 50%;
+		transition: box-shadow $link-transition;
+		position: relative;
+
+		.icon-question-mark {
+			position: absolute;
+			left: 0;
+			top: 0;
+
+			.circle-small,
+			.character {
+				transition: fill $link-transition;
+			}
+
+			.circle-large,
+			.character {
+				fill: $secondary;
+			}
+
+			.circle-small {
+				fill: $shade-0;
+			}
+		}
+
+		&:hover {
+			box-shadow: 0 2px 4px $btn-box-shadow-color;
+
+			.icon-question-mark {
+				.circle-small {
+					fill: $secondary;
+				}
+
+				.character {
+					fill: $shade-0;
+				}
+			}
+		}
+	}
 }
