@@ -724,8 +724,33 @@ class Container extends React.Component {
 		this.citeproc.updateItems(items);
 		const bibliography = this.citeproc.makeBibliography();
 		if(bibliography) {
-			return bibliography;
+			return {
+				isFallback: false,
+				bibliography
+			};
 		}
+
+		//@NOTE: this is deprecated but seems to be the only way to reset registry
+		//       otherwise previous calls to appendCitationCluster aggregate incorrectly
+		//		 Alternatively we could do even more hackier:
+		//		 this.citeproc.registry = new CSL.Registry(this.citeproc)
+		this.citeproc.restoreProcessorState();
+		this.citeproc.updateItems(items);
+		const citations = [];
+		bib.itemsRaw.forEach(item => {
+			let outList = this.citeproc
+				.appendCitationCluster({
+					'citationItems': [{ 'id': item.key }],
+					'properties': {}
+				}, true);
+			outList.forEach(listItem => {
+				citations[listItem[0]] = listItem[1];
+			});
+		});
+		return {
+			isFallback: true,
+			citations
+		};
 	}
 
 	render() {

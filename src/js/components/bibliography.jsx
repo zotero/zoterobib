@@ -57,30 +57,20 @@ class Bibliography extends React.PureComponent {
 		];
 	}
 
-	renderBibliographyItem(child, i) {
-		let [ itemId ] = this.props.bibliography[0]['entry_ids'][i];
-		let { Tag, attrs } = parseTagAndAttrsFromNode(child);
-		let rawItem = this.props.items.find(i => i.key === itemId);
+	renderBibliographyItem(rawItem, content) {
 		return (
-			<li key={ itemId }
+			<li key={ rawItem.key }
 				className="citation"
-				onFocus={ this.handleFocus.bind(this, itemId) }
-				onClick={ () => this.handleEditCitation(itemId) }
+				onFocus={ this.handleFocus.bind(this, rawItem.key) }
+				onClick={ () => this.handleEditCitation(rawItem.key) }
 				tabIndex={ 0 }
 			>
 				<div className="csl-entry-container">
-					<Tag
-						dangerouslySetInnerHTML={ { __html: child.innerHTML } }
-						{ ...attrs }
-					/>
+					{ content }
 				</div>
-				{
-					!this.props.isReadOnly && (
-						<Button onClick={ this.handleDeleteCitation.bind(this, itemId) }>
-							<Icon type={ '16/remove-sm' } width="16" height="16" />
-						</Button>
-					)
-				}
+				<Button onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>
+					<Icon type={ '16/remove-sm' } width="16" height="16" />
+				</Button>
 				<script type="application/vnd.zotero.data+json">
 					{ JSON.stringify(rawItem) }
 				</script>
@@ -89,11 +79,14 @@ class Bibliography extends React.PureComponent {
 	}
 
 	render() {
-		if(this.props.bibliography.length === 0) {
+		const { citations, bibliography, isFallback } = this.props.bibliography;
+		if(this.props.items.length === 0) {
 			return null;
 		}
 
-		let html = formatBib(this.props.bibliography);
+		let html = isFallback ?
+			`<ol><li>${citations.join('</li><li>')}</li></ol>` :
+			formatBib(bibliography);
 		let div = document.createElement('div');
 		div.innerHTML = html;
 
@@ -116,8 +109,24 @@ class Bibliography extends React.PureComponent {
 				...this.keyHandlers,
 				<ul className="bibliography" key="bibliography">
 						{
-							Array.from(div.firstChild.children)
-								.map(this.renderBibliographyItem.bind(this))
+							isFallback ? this.props.items.map((item, i) => {
+								return this.renderBibliographyItem(
+									item,
+									<span dangerouslySetInnerHTML={ { __html: citations[i] } } />
+								);
+							}) : Array.from(div.firstChild.children).map((child, i) => {
+								let [ itemId ] = bibliography[0]['entry_ids'][i];
+								let { Tag, attrs } = parseTagAndAttrsFromNode(child);
+								let item = this.props.items.find(i => i.key === itemId);
+
+								return this.renderBibliographyItem(
+									item,
+									<Tag
+										dangerouslySetInnerHTML={ { __html: child.innerHTML } }
+										{ ...attrs }
+									/>
+								);
+							})
 						}
 				</ul>
 			];
@@ -129,7 +138,7 @@ class Bibliography extends React.PureComponent {
 	}
 
 	static propTypes = {
-		bibliography: PropTypes.array,
+		bibliography: PropTypes.object,
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
 		match: PropTypes.object,
