@@ -6,6 +6,11 @@
 	position: absolute;
 	left: $grid-gutter-width / 2;
 	top: $grid-gutter-width / 2;
+
+	@media (max-width: $bp-md - 1px) {
+		left: 50%;
+		transform: translateX(-50%);
+	}
 }
 
 .faq {
@@ -25,6 +30,10 @@
 	h1 {
 		text-align: center;
 		margin-top: 62px;
+
+		@media (max-width: $bp-md - 1px) {
+			margin-top: 83px; // $section-padding-mobile to back-line baseline
+		}
 	}
 
 	h2 {
@@ -37,7 +46,9 @@
 
 	nav {
 		text-align: center;
-		margin-bottom: 80px;
+		border-bottom: 1px solid $shade-2;
+		padding-bottom: $section-padding-mobile;
+		margin-bottom: $section-padding-mobile;
 
 		ul {
 			padding: 0;
@@ -46,23 +57,28 @@
 		}
 
 		li {
-			margin-bottom: 1em;
+			margin-top: 1em;
 		}
 
 		@media (min-width: $bp-md) {
-			margin-bottom: 120px;
+			padding-bottom: $section-padding;
+			margin-bottom: $section-padding;
 
 			ul {
 				display: inline-flex;
 			}
 
 			li {
-				margin-bottom: 0;
+				margin-top: 0;
 
 				& + li {
 					margin-left: $space-xl;
 				}
 			}
+		}
+
+		& + h2 {
+			margin-top: 0;
 		}
 	}
 
