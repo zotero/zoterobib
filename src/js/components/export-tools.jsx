@@ -129,7 +129,7 @@ class ExportDialog extends React.Component {
 					className={ cx('btn-group', { 'success': isCopied}) }
 				>
 					<Button
-						disabled={ this.props.itemsCount === 0 }
+						disabled={ this.props.items.length === 0 }
 						className='btn btn-secondary btn-xl copy-to-clipboard'
 						onClick={ this.handleCopyToClipboardClick.bind(this) }
 					>
@@ -139,7 +139,7 @@ class ExportDialog extends React.Component {
 						</span>
 					</Button>
 					<DropdownToggle
-						disabled={ this.props.itemsCount === 0 }
+						disabled={ this.props.items.length === 0 }
 						className="btn btn-secondary btn-xl dropdown-toggle"
 						>
 						<span className="dropdown-caret" />
@@ -160,7 +160,7 @@ class ExportDialog extends React.Component {
 		getCopyData: PropTypes.func.isRequired,
 		getFileData: PropTypes.func.isRequired,
 		isReadOnly: PropTypes.bool,
-		itemsCount: PropTypes.number,
+		items: PropTypes.array,
 		match: PropTypes.object,
 		onExported: PropTypes.func,
 		onSaveToZoteroShow: PropTypes.func.isRequired,

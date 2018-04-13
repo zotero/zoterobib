@@ -32,7 +32,6 @@ class Container extends React.Component {
 	state = {
 		//@TODO: bibliography, citations & items should probably be a single variable
 		bibliography: [],
-		citations: {},
 		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
 		citationStyles: [],
 		config: {
@@ -151,7 +150,6 @@ class Container extends React.Component {
 				);
 				localStorage.setItem('zotero-bib-citation-style', this.state.citationStyle);
 				this.setState({
-					citations: this.citations,
 					bibliography: this.bibliography
 				});
 			} catch(e) {
@@ -221,7 +219,6 @@ class Container extends React.Component {
 			this.bib.reloadItems();
 			this.setState({
 				bibliography: this.bibliography,
-				citations: this.citations,
 				items: this.bib.items,
 			});
 		}
@@ -305,7 +302,6 @@ class Container extends React.Component {
 		this.bib.clearItems();
 		this.setState({
 			bibliography: this.bibliography,
-			citations: this.citations,
 			items: this.bib.itemsRaw,
 			permalink: null,
 			title: null
@@ -317,7 +313,6 @@ class Container extends React.Component {
 		this.bib.addItem(item);
 		this.setState({
 			bibliography: this.bibliography,
-			citations: this.citations,
 			items: this.bib.itemsRaw,
 			editorItem: this.bib.itemsRaw.find(i => i.key === item.key)
 		});
@@ -355,7 +350,6 @@ class Container extends React.Component {
 			};
 			this.setState({
 				bibliography: this.bibliography,
-				citations: this.citations,
 				items: this.bib.itemsRaw,
 				lastDeletedItem: { ...item },
 				messages: [
@@ -432,7 +426,6 @@ class Container extends React.Component {
 		this.bib.updateItem(index, updatedItem);
 		this.setState({
 			bibliography: this.bibliography,
-			citations: this.citations,
 			items: this.bib.itemsRaw,
 			editorItem: this.bib.itemsRaw.find(i => i.key === itemKey)
 		});
@@ -480,7 +473,6 @@ class Container extends React.Component {
 							identifier: '',
 							isTranslating: false,
 							bibliography: this.bibliography,
-							citations: this.citations,
 							items: this.bib.itemsRaw,
 							permalink: null,
 						});
@@ -730,25 +722,16 @@ class Container extends React.Component {
 				.filter(item => item.key)
 				.map(item => item.key);
 		this.citeproc.updateItems(items);
-		return this.citeproc.makeBibliography();
+		const bibliography = this.citeproc.makeBibliography();
+		if(bibliography) {
+			return bibliography;
+		}
 	}
-
-	get citations() {
-		let bibliography = this.bibliography;
-		return bibliography[0].entry_ids.reduce(
-			(obj, key, id) => ({
-				...obj,
-				[key]: bibliography[1][id]
-			}), {}
-		);
-	}
-
 
 	render() {
 		return <ZBib
 			getCopyData = { this.getCopyData.bind(this) }
 			getFileData = { this.getFileData.bind(this) }
-			itemsCount = { this.bib ? this.bib.items.filter(i => !!i.key).length : null }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
 			onClearMessage = { this.handleClearMessage.bind(this) }
 			onDeleteCitations = { this.handleDeleteCitations.bind(this) }

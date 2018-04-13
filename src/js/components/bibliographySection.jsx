@@ -55,7 +55,7 @@ class BibliographySection extends React.PureComponent {
 	}
 
 	renderBibliography() {
-		if (Object.keys(this.props.citations).length === 0) {
+		if (this.props.items.length === 0) {
 			return (
 				<React.Fragment>
 					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
@@ -126,7 +126,7 @@ class BibliographySection extends React.PureComponent {
 			'section': true,
 			'section-bibliography': true,
 			'loading': this.props.isLoadingCitations,
-			'empty': Object.keys(this.props.citations).length === 0
+			'empty': this.props.items.length === 0
 		};
 	}
 
@@ -150,11 +150,11 @@ class BibliographySection extends React.PureComponent {
 	}
 
 	static defaultProps = {
-		citations: {},
+		items: [],
 	}
 
 	static propTypes = {
-		citations: PropTypes.object,
+		items: PropTypes.array,
 		isLoadingCitations: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		localCitationsCount: PropTypes.number,

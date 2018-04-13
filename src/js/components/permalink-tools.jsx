@@ -83,7 +83,7 @@ class PermalinkTools extends React.Component {
 			</div>
 			) : (
 			<Button
-				disabled={ Object.keys(this.props.citations).length === 0 }
+				disabled={ this.props.items.length === 0 }
 				className="btn-lg btn-outline-secondary"
 				onClick={ this.handleCreateLink.bind(this) }
 			>
@@ -93,11 +93,11 @@ class PermalinkTools extends React.Component {
 	}
 
 	static defaultProps = {
-		citations: {}
+		items: []
 	}
 
 	static propTypes = {
-		citations: PropTypes.object,
+		items: PropTypes.array,
 		onSave: PropTypes.func.isRequired,
 		permalink: PropTypes.string,
 	}

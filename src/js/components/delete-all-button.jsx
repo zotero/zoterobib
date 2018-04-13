@@ -25,7 +25,7 @@ class DeleteAllButton extends React.Component {
 	}
 
 	render() {
-		const entriesCount = Object.keys(this.props.citations).length;
+		const entriesCount = this.props.items.length;
 		return [
 			<Button
 				key="delete-all-button"
@@ -55,7 +55,7 @@ class DeleteAllButton extends React.Component {
 	}
 
 	static propTypes = {
-		citations: PropTypes.object,
+		items: PropTypes.array,
 		onDeleteCitations: PropTypes.func.isRequired,
 	}
 }
