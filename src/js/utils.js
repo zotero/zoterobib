@@ -271,14 +271,17 @@ const whitelist = [
 	'shortTitle',
 ];
 
-// adapted from
-// https://github.com/zotero/zotero/blob/d5dd5c5100a0656eba217033cf3f294c9aed01f2/chrome/content/zotero/bindings/itembox.xml#L2031
 const processSentenceCaseAPAField = val => {
-	var newVal = val.toLowerCase().replace(/\s*:/, ':');
-	newVal = newVal.replace(/(([\?!]\s*|^)([\'\"¡¿“‘„«\s]+)?[^\s])/g, function (x) {
-		return x.replace(/\s+/m, ' ').toUpperCase();
-	});
-	return newVal;
+	let retVal = val.match(/(([^\.!\?]+)[\.!\?]+)|([^\.!\?]+$)/g)
+		.map(s => {
+			// skip special characters at the beginning of the sentence
+			// eslint-disable-next-line no-unused-vars
+			const [ _, pre, sentence ] = s.trim().match(/^([\'\"¡¿“‘„«\(]*)(.*)$/);
+			// uppercase first actual letter of the sentence, lowercase rest
+			return pre + sentence[0].toUpperCase() + sentence.slice(1).toLowerCase();
+		})
+		.join(' ');
+	return retVal;
 };
 
 const processSentenceCaseAPAItems = items => {
