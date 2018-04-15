@@ -22,7 +22,7 @@ Nothing! ZBib is completely free and ad-free.
 
 We created ZBib because we thought there should be a bibliography tool that was free, easier and more pleasant to use, and much more accurate.
 
-Unlike other tools, we don't bombard you with ads or try to charge you to save your data or cite using more advanced citation styles. And since it's built by the team behind Zotero and is based on the same technology, you can be sure you're getting the same seamless experience and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
+Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or more advanced citation styles. And since it's built by the team behind Zotero and is based on the same technology, you can be sure you're getting the same seamless experience and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
 
 ### Should I use ZBib or Zotero?
 
