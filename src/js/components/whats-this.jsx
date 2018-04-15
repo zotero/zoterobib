@@ -6,7 +6,7 @@ class WhatsThis extends React.PureComponent {
 	render() {
 		return (
 			<React.Fragment>
-				<a href="/faq#where-is-my-bibliography-stored" className="whats-this">
+				<a href="/faq#where-is-my-bibliography-stored" title="What’s this?" className="whats-this">
 					What’s this?
 					<svg className="icon-question-mark" viewBox="0 0 16 16" width="16" height="16">
 						<path className="circle-large"d="M8,0a8,8,0,1,0,8,8A8,8,0,0,0,8,0Z" />
