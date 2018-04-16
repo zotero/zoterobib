@@ -4,7 +4,7 @@
 
 /**
  * @license
- * MyFonts Webfont Build ID 3557064, 2018-04-12T09:12:25-0400
+ * MyFonts Webfont Build ID 3559435, 2018-04-16T14:10:36-0400
  *
  * The fonts listed in this notice are subject to the End User License
  * Agreement(s) entered into by the website owner. All other parties are
@@ -12,61 +12,114 @@
  *
  * You may obtain a valid license at the URLs below.
  *
- * Webfont: AvenirLTPro-Light by Linotype
- * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-35-light-115678/
+ * Webfont: AvenirNextLTPro-DemiIt by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-demi-italic/
+ * Copyright: Copyright &#x00A9; 2004 - 2017 Monotype GmbH. All rights reserved.
  *
- * Webfont: AvenirLTPro-Book by Linotype
- * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-45-book-115678/
+ * Webfont: AvenirNextLTPro-Demi by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-demi/
+ * Copyright: Copyright &#x00A9; 2004 - 2017 Monotype GmbH. All rights reserved.
  *
- * Webfont: AvenirLTPro-BookOblique by Linotype
- * URL: https://www.myfonts.com/fonts/linotype/avenir/pro-45-book-oblique-115678/
+ * Webfont: AvenirNextLTPro-It by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-italic/
+ * Copyright: Copyright &#x00A9; 2004 - 2017 Monotype GmbH. All rights reserved.
+ *
+ * Webfont: AvenirNextLTPro-LightIt by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-light-italic/
+ * Copyright: Copyright &#x00A9; 2012 - 2017 Monotype GmbH. All rights reserved.
+ *
+ * Webfont: AvenirNextLTPro-Light by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-light/
+ * Copyright: Copyright &#x00A9; 2012 - 2017 Monotype GmbH. All rights reserved.
+ *
+ * Webfont: AvenirNextLTPro-Regular by Linotype
+ * URL: https://www.myfonts.com/fonts/linotype/avenir-next-pro/pro-regular/
+ * Copyright: Copyright &#x00A9; 2004 - 2017 Monotype GmbH. All rights reserved.
  *
  *
- * License: https://www.myfonts.com/viewlicense?type=web&buildid=3557064
+ * License: https://www.myfonts.com/viewlicense?type=web&buildid=3559435
  * Licensed pageviews: 250,000
- * Webfonts copyright: Copyright &#x00A9; 2014 Monotype GmbH. All rights reserved.
  *
  * © 2018 MyFonts Inc
 */
 
 /* @import must be at top of file, otherwise CSS will not work */
-@import url("//hello.myfonts.net/count/3646c8");
+@import url("//hello.myfonts.net/count/36500b");
 
 @font-face {
-	font-family: 'AvenirLTPro';
-	font-weight: 300;
-	font-style: normal;
-	src: font-url('3646C8_0_0.eot');
+	font-family: 'AvenirNextLTPro';
+	font-weight: 600;
+	font-style: italic;
+	src: font-url('36500B_0_0.eot');
 	src:
-		font-url('3646C8_0_0.eot?#iefix') format('embedded-opentype'),
-		font-url('3646C8_0_0.woff2') format('woff2'),
-		font-url('3646C8_0_0.woff') format('woff'),
-		font-url('3646C8_0_0.ttf') format('truetype'),
-		font-url('3646C8_0_0.svg#wf') format('svg');
+		font-url('36500B_0_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_0_0.woff2') format('woff2'),
+		font-url('36500B_0_0.woff') format('woff'),
+		font-url('36500B_0_0.ttf') format('truetype'),
+		font-url('36500B_0_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirLTPro';
-	font-weight: 400;
+	font-family: 'AvenirNextLTPro';
+	font-weight: 600;
 	font-style: normal;
-	src: font-url('3646C8_1_0.eot');
+	src: font-url('36500B_1_0.eot');
 	src:
-		font-url('3646C8_1_0.eot?#iefix') format('embedded-opentype'),
-		font-url('3646C8_1_0.woff2') format('woff2'),
-		font-url('3646C8_1_0.woff') format('woff'),
-		font-url('3646C8_1_0.ttf') format('truetype'),
-		font-url('3646C8_1_0.svg#wf') format('svg');
+		font-url('36500B_1_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_1_0.woff2') format('woff2'),
+		font-url('36500B_1_0.woff') format('woff'),
+		font-url('36500B_1_0.ttf') format('truetype'),
+		font-url('36500B_1_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirLTPro';
+	font-family: 'AvenirNextLTPro';
 	font-weight: 400;
 	font-style: italic;
-	src: font-url('3646C8_2_0.eot');
+	src: font-url('36500B_2_0.eot');
 	src:
-		font-url('3646C8_2_0.eot?#iefix') format('embedded-opentype'),
-		font-url('3646C8_2_0.woff2') format('woff2'),
-		font-url('3646C8_2_0.woff') format('woff'),
-		font-url('3646C8_2_0.ttf') format('truetype'),
-		font-url('3646C8_2_0.svg#wf') format('svg');
+		font-url('36500B_2_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_2_0.woff2') format('woff2'),
+		font-url('36500B_2_0.woff') format('woff'),
+		font-url('36500B_2_0.ttf') format('truetype'),
+		font-url('36500B_2_0.svg#wf') format('svg');
+}
+
+@font-face {
+	font-family: 'AvenirNextLTPro';
+	font-weight: 300;
+	font-style: italic;
+	src: font-url('36500B_3_0.eot');
+	src:
+		font-url('36500B_3_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_3_0.woff2') format('woff2'),
+		font-url('36500B_3_0.woff') format('woff'),
+		font-url('36500B_3_0.ttf') format('truetype'),
+		font-url('36500B_3_0.svg#wf') format('svg');
+}
+
+@font-face {
+	font-family: 'AvenirNextLTPro';
+	font-weight: 300;
+	font-style: normal;
+	src: font-url('36500B_4_0.eot');
+	src:
+		font-url('36500B_4_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_4_0.woff2') format('woff2'),
+		font-url('36500B_4_0.woff') format('woff'),
+		font-url('36500B_4_0.ttf') format('truetype'),
+		font-url('36500B_4_0.svg#wf') format('svg');
+}
+
+@font-face {
+	font-family: 'AvenirNextLTPro';
+	font-weight: 400;
+	font-style: normal;
+	src: font-url('36500B_5_0.eot');
+	src:
+		font-url('36500B_5_0.eot?#iefix') format('embedded-opentype'),
+		font-url('36500B_5_0.woff2') format('woff2'),
+		font-url('36500B_5_0.woff') format('woff'),
+		font-url('36500B_5_0.ttf') format('truetype'),
+		font-url('36500B_5_0.svg#wf') format('svg');
 }

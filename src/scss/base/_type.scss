@@ -92,8 +92,14 @@ a {
 	}
 }
 
-em {
+em,
+i {
 	font-style: italic;
+}
+
+strong,
+b {
+	font-weight: 600;
 }
 
 .lead {
