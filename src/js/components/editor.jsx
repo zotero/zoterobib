@@ -18,7 +18,8 @@ class Editor extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isLoading: true
+			isLoading: true,
+			hasCreatedItem: false
 		};
 	}
 
@@ -116,6 +117,7 @@ class Editor extends React.PureComponent {
 				...this.state.item,
 				[fieldKey]: newValue
 			});
+			this.setState({ hasCreatedItem: true });
 			return;
 		}
 
@@ -184,7 +186,7 @@ class Editor extends React.PureComponent {
 					</h4>
 					<Button
 						className="btn-outline-inverse-blue-dark"
-						onClick={ () => this.props.onEditorClose() }
+						onClick={ () => this.props.onEditorClose(this.state.hasCreatedItem) }
 					>
 						Done
 					</Button>
@@ -208,7 +210,7 @@ class Editor extends React.PureComponent {
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
 				className={ cx('editor-container modal modal-lg', { loading: this.state.isLoading })}
-				onRequestClose={ () => this.props.onEditorClose() }
+				onRequestClose={ () => this.props.onEditorClose(this.state.hasCreatedItem) }
 			>
 				{ this.state.isLoading ? <Spinner /> : this.renderModalContent() }
 			</Modal>

@@ -86,7 +86,7 @@ class Container extends React.Component {
 		});
 	}
 
-	displayFirstTranslationMessage() {
+	displayFirstCitationMessage() {
 		const id = getNextMessageId();
 		const message = {
 			action: 'Read More',
@@ -326,11 +326,17 @@ class Container extends React.Component {
 		});
 	}
 
-	handleCloseEditor() {
+	handleCloseEditor(hasCreatedItem = false) {
 		this.setState({
 			isEditorOpen: false,
 			editorItem: null
 		});
+		if(hasCreatedItem) {
+			if(!localStorage.getItem('zotero-bib-translated')) {
+				localStorage.setItem('zotero-bib-translated', 'true');
+				this.displayFirstCitationMessage();
+			}
+		}
 	}
 
 	handleDeleteEntry(itemId) {
@@ -467,7 +473,7 @@ class Container extends React.Component {
 						}
 						if(!localStorage.getItem('zotero-bib-translated')) {
 							localStorage.setItem('zotero-bib-translated', 'true');
-							this.displayFirstTranslationMessage();
+							this.displayFirstCitationMessage();
 						}
 						this.setState({
 							identifier: '',
