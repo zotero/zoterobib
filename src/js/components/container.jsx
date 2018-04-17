@@ -93,7 +93,7 @@ class Container extends React.Component {
 			id,
 			kind: 'success',
 			message: 'Your first citation has been added. Citations are stored locally in your browser.',
-			onAction: this.handleReadMoreClick.bind(this, id),
+			href: '/faq#where-is-my-bibliography-stored'
 		};
 		this.setState({
 			messages: [...this.state.messages, message]

@@ -50,12 +50,22 @@ class Message extends React.Component {
 
 	renderButton() {
 		return (
-			<Button
-				className={ `btn-outline-inverse-${this.props.kind}` }
-				onClick={ this.handleAction.bind(this) }
-			>
-				{ this.props.action }
-			</Button>
+			this.props.href ? (
+				<a
+				className={ `btn btn-outline-inverse-${this.props.kind}` }
+				href={ this.props.href }
+				>
+					{ this.props.action }
+				</a>
+			): (
+				<Button
+					className={ `btn-outline-inverse-${this.props.kind}` }
+					onClick={ this.handleAction.bind(this) }
+				>
+					{ this.props.action }
+				</Button>
+			)
+
 		);
 	}
 
@@ -83,6 +93,7 @@ class Message extends React.Component {
 	static propTypes = {
 		action: PropTypes.string,
 		autoDismiss: PropTypes.bool,
+		href: PropTypes.string,
 		kind: PropTypes.oneOf(['info', 'success', 'warning', 'error']).isRequired,
 		location: PropTypes.object,
 		message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
