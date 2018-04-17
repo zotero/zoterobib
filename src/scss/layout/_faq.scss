@@ -5,7 +5,7 @@
 .back-link {
 	position: absolute;
 	left: $grid-gutter-width / 2;
-	top: $grid-gutter-width / 2;
+	top: $space-sm;
 
 	@media (max-width: $bp-md - 1px) {
 		left: 50%;
@@ -29,10 +29,10 @@
 
 	h1 {
 		text-align: center;
-		margin-top: 62px;
+		margin-top: 67px; // Like optical padding-bottom on nav
 
 		@media (max-width: $bp-md - 1px) {
-			margin-top: 83px; // $section-padding-mobile to back-line baseline
+			margin-top: 78px; // Like optical padding-bottom on nav
 		}
 	}
 
