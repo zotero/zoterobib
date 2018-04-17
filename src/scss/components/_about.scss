@@ -54,24 +54,24 @@
 		position: relative;
 		left: 11px;
 		display: block;
-		margin: 0 auto (96px - 25px);
+		margin: 0 auto (96px - 27px);
 
 		@media (max-width: ($bp-md - 1px)) {
 			left: 6px;
 			width: 156px;
 			height: auto;
-			margin: 0 auto ($space-xxxl - 16px);
+			margin: 0 auto ($space-xxxl - 17px);
 		}
 	}
 
 	.features {
 		text-align: left;
 		margin-top: 80px - 17px;
-		margin-bottom: $space-xxxl - 7px;
+		margin-bottom: $space-xxxl - 6px;
 
 		@media (min-width: $bp-md) {
 			margin-top: 120px - 20px;
-			margin-bottom: $space-max - 7px;
+			margin-bottom: $space-max - 6px;
 		}
 
 		@media (min-width: $bp-lg) {
@@ -82,10 +82,10 @@
 	.feature {
 		padding-left: 66px + $space-md;
 		position: relative;
-		margin-bottom: $space-xxxl - 16px;
+		margin-bottom: $space-xxxl - 15px;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $space-max - 17px;
+			margin-bottom: $space-max - 16px;
 		}
 
 		@media (min-width: $bp-lg) {

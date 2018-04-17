@@ -46,10 +46,10 @@
 
 	.write & {
 		&:not(.empty) {
-			padding-top: $section-padding-mobile - 16px;
+			padding-top: $section-padding-mobile - 17px;
 
 			@media (min-width: $bp-md) {
-				padding-top: $section-padding - 21px;
+				padding-top: $section-padding - 22px;
 			}
 		}
 
@@ -58,10 +58,10 @@
 			align-items: center;
 			transition: background-color $input-transition;
 			border-radius: $border-radius-sm;
-			margin-bottom: $space-xl - 13px;
+			margin-bottom: $space-xl - 12px;
 
 			@media (min-width: $bp-md) {
-				margin-bottom: $space-xxl - 19px;
+				margin-bottom: $space-xxl - 18px;
 
 				&:hover {
 					background-color: $shade-1;
@@ -91,11 +91,11 @@
 				box-shadow: 0 0 0 2px $secondary;
 				line-height: normal; // Heading line-height would clip decenders
 				margin: 0;
-				padding: 4px $space-md;
+				padding: 4px $space-md 3px;
 				text-align: left;
 
 				@media (min-width: $bp-md) {
-					padding: 7px $space-lg 8px;
+					padding: 6px $space-lg 7px;
 					text-align: inherit;
 				}
 			}
@@ -190,10 +190,10 @@
 
 	.read-only & {
 		border-top: none;
-		padding-top: $section-padding-mobile - 9px;
+		padding-top: $section-padding-mobile - 10px; // t height
 
 		@media (min-width: $bp-md) {
-			padding-top: $section-padding - 11px;
+			padding-top: $section-padding - 12px; // t height
 		}
 
 		.h2 {

@@ -47,11 +47,11 @@ h2,
 .h2 {
 	margin-top: 0;
 	font-size: $h2-font-size-mobile;
-	margin-bottom: ($space-xl - 7px);
+	margin-bottom: ($space-xl - 6px);
 
 	@media (min-width: $bp-md) {
 		font-size: $h2-font-size;
-		margin-bottom: ($space-xxl - 9px);
+		margin-bottom: ($space-xxl - 8px);
 	}
 }
 

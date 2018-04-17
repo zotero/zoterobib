@@ -31,7 +31,7 @@
 		.citation {
 			display: flex;
 			align-items: center;
-			padding: ($space-lg - 7px) ($space-md - 5px) ($space-lg - 7px) $space-md; // Middle between caps and x-height
+			padding: ($space-lg - 7px) ($space-md - 5px) ($space-lg - 7px) $space-md; // Caps height
 			border-top: 1px solid $shade-2;
 			cursor: pointer;
 
@@ -71,10 +71,10 @@
 	}
 
 	.read-only & {
-		margin-bottom: $space-xl - 7px;
+		margin-bottom: $space-xl - 5px;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 7px;
+			margin-bottom: $space-xxl - 5px;
 		}
 	}
 }
