@@ -28,7 +28,7 @@ h2,
 .h2,
 h3,
 .h3 {
-	letter-spacing: -0.025em;
+	letter-spacing: -0.035em;
 }
 
 h1,
@@ -68,6 +68,7 @@ h4,
 .h4 {
 	font-size: $h4-font-size-mobile;
 	margin: 0;
+	letter-spacing: -0.01em;
 	// todo: letter-spacing
 
 	@media (min-width: $bp-md) {
@@ -106,6 +107,7 @@ b {
 	font-size: $lead-font-size-mobile;
 	font-weight: $lead-font-weight;
 	margin-top: 0;
+	letter-spacing: -0.01em;
 	// todo: letter-spacing
 
 	@media (min-width: $bp-md) {
