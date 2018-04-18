@@ -54,19 +54,6 @@ const parseIdentifier = identifier => {
 	return identifier;
 };
 
-const isIdentifier = identifier => {
-	identifier = identifier.trim();
-	return (
-		// DOI
-		identifier.match(/^10(?:\.[0-9]{4,})?\/[^\s]*[^\s\.,]$/)
-		// ISBN
-		|| identifier.replace(/[\u002D\u00AD\u2010-\u2015\u2212]+/g, '')
-			.match(/^(?:\D|^)(97[89]\d{10}|\d{9}[\dX])(?!\d)$/)
-		// PMID
-		|| identifier.match(/^(?:\D|^)(\d{1,9})(?!\d)$/)
-	);
-};
-
 const isLikeUrl = identifier => {
 	return !!identifier
 		.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?/gi);
@@ -330,7 +317,6 @@ module.exports = {
 	getItemTypeMeta,
 	getItemTypes,
 	isApa,
-	isIdentifier,
 	isLikeUrl,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
