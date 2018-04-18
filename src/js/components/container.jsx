@@ -8,16 +8,18 @@ const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
 const { fetchFromPermalink,
- saveToPermalink,
- getCiteproc,
- validateItem,
- validateUrl,
- isIdentifier,
- parseIdentifier,
- getBibliographyFormatParameters,
- retrieveStylesData,
- processSentenceCaseAPAItems,
- isApa } = require('../utils');
+	getBibliographyFormatParameters,
+	getCiteproc,
+	getItemTypes,
+	isApa,
+	isIdentifier,
+	isLikeUrl,
+	parseIdentifier,
+	processSentenceCaseAPAItems,
+	retrieveStylesData,
+	saveToPermalink,
+	validateItem,
+	validateUrl, } = require('../utils');
 const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
@@ -438,6 +440,7 @@ class Container extends React.Component {
 	}
 
 	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
+		var itemTypes;
 		identifier = parseIdentifier(identifier);
 
 		this.setState({
@@ -446,7 +449,7 @@ class Container extends React.Component {
 			messages: []
 		});
 
-		let isUrl = !!multipleSelectedItems || !isIdentifier(identifier);
+		let isUrl = !!multipleSelectedItems || isLikeUrl(identifier);
 		if(identifier || isUrl) {
 			try {
 				var translationResponse;
@@ -484,14 +487,21 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.MULTIPLE_ITEMS:
+						itemTypes = await getItemTypes();
 						this.clearMessages();
 						this.setState({
 							isTranslating: false,
 							isPickingItem: true,
-							multipleChoiceItems: Object.keys(translationResponse.items)
-							.map(key => ({
+							multipleChoiceItems: Object.entries(translationResponse.items)
+							.map(([key, value]) => ({
 								key,
-								value: translationResponse.items[key]
+								value: typeof value === 'string' ? {
+									title: value
+								} : {
+									...value,
+									itemType: (itemTypes.find(it => it.itemType == value.itemType) || {}).localized
+								},
+								source: isUrl ? 'url' : 'identifier'
 							}))
 						});
 					break;
@@ -548,18 +558,19 @@ class Container extends React.Component {
 		});
 	}
 
-	async handleMultipleChoiceSelect(multipleSelectedItems) {
+	async handleMultipleChoiceSelect(selectedItem) {
 		this.setState({
 			isPickingItem: false,
 			multipleChoiceItems: []
 		});
-		return await this.handleTranslateIdentifier(
-			this.state.identifier,
-			multipleSelectedItems.reduce((aggr, item) => {
-				aggr[item.key] = item.value;
-				return aggr;
-			}, {})
-		);
+		if(selectedItem.source === 'url') {
+			return await this.handleTranslateIdentifier(
+				this.state.identifier,
+				{ [selectedItem.key]: selectedItem.value.title }
+			);
+		} else {
+			return await this.handleTranslateIdentifier(selectedItem.key);
+		}
 	}
 
 	handleStyleInstallerCancel() {

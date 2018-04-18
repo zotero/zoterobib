@@ -17,26 +17,35 @@ class MultipleChoiceDialog extends React.Component {
 
 	renderItem(item) {
 		let badges = [];
-		let value = item.value;
-		let matches = value.match(/^\[([A-Z]*)\]/);
-		while(matches) {
-			let badge = matches[1]
-				.split(' ')
-				.map(w => w.substring(0, 1).toUpperCase() + w.substring(1).toLowerCase())
-				.join(' ');
-			badges.push(badge);
-			value = value.substring(matches[0].length);
-			matches = value.match(/^\[([A-Z]*)\]/);
+		let title = item.value.title;
+		if(item.source === 'url') {
+			let matches = title.match(/^\[([A-Z]*)\]/);
+			while(matches) {
+				let badge = matches[1]
+					.split(' ')
+					.map(w => w.substring(0, 1).toUpperCase() + w.substring(1).toLowerCase())
+					.join(' ');
+				badges.push(badge);
+				title = title.substring(matches[0].length);
+				matches = title.match(/^\[([A-Z]*)\]/);
+			}
+			badges = [ ...new Set(badges) ];
+		} else if(item.value.itemType) {
+			badges = [item.value.itemType];
 		}
-		badges = [ ...new Set(badges) ];
 		return (
 			<li
 				className="result"
 				key={ item.key }
-				onClick={ () => this.props.onMultipleChoiceSelect([item]) }
+				onClick={ () => this.props.onMultipleChoiceSelect(item) }
 			>
 				{ badges.map(this.renderBadge.bind(this)) }
-				{ value }
+				{ title }
+				{ item.value.description && (
+					<small>
+						{item.value.description}
+					</small>
+				)}
 			</li>
 		);
 	}

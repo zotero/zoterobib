@@ -67,6 +67,11 @@ const isIdentifier = identifier => {
 	);
 };
 
+const isLikeUrl = identifier => {
+	return !!identifier
+		.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.,~#?&//=]*)?/gi);
+};
+
 const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
 
 const validateUrl = url => {
@@ -157,6 +162,10 @@ const retrieveStylesData = async (url, stylesCacheTime) => {
 		}
 	}
 	return stylesData;
+};
+
+const getItemTypes = async () => {
+	return (await cachedApi.itemTypes().get()).getData();
 };
 
 const getItemTypeMeta = async (itemType) => {
@@ -319,8 +328,10 @@ module.exports = {
 	getCiteproc,
 	getCSL,
 	getItemTypeMeta,
+	getItemTypes,
 	isApa,
 	isIdentifier,
+	isLikeUrl,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
 	processSentenceCaseAPAField,
