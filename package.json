@@ -39,8 +39,7 @@
     "lint": "run-p stylelint eslint",
     "watch:stylelint": "nodemon -q -w src/scss --ext 'scss' --exec 'npm run stylelint'",
     "watch:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
-    "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'",
-    "preshrinkwrap": "rimraf ./node_modules/reactstrap/node_modules/react-popper && npm-run json -I -f ./package-lock.json -e 'delete this.dependencies.reactstrap.requires[\"react-popper\"]' -e 'this.dependencies.reactstrap.dependencies[\"react-popper\"] = { version: \"0.8.2\" }'"
+    "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'"
   },
   "dependencies": {
     "array-equal": "^1.0.0",
@@ -59,11 +58,9 @@
     "react-key-handler": "^1.0.1",
     "react-modal": "^3.3.2",
     "react-popover": "^0.5.4",
-    "react-popper": "0.8.2",
     "react-router-dom": "^4.2.2",
     "react-select": "^1.2.1",
-    "react-transition-group": "<2.0.0",
-    "reactstrap": "^5.0.0-beta.2",
+    "reactstrap": "^5.0.0-beta.3",
     "smooth-scroll": "^12.1.5",
     "zotero-api-client": "^0.11.1",
     "zotero-api-client-cache": "^0.4.3",
