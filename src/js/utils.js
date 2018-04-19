@@ -1,5 +1,6 @@
 'use strict';
 
+const balanced = require('balanced-match');
 const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
@@ -267,9 +268,11 @@ const whitelist = [
 	'shortTitle',
 ];
 
-const processSentenceCaseAPAField = val => {
-	let retVal = val.match(/(([^\.!\?]+)[\.!\?]+)|([^\.!\?]+$)/g)
-		.map(s => {
+const processSentenceCase = val => {
+	let matches = val.match(/(([^\.!\?]+)[\.!\?]+)|([^\.!\?]+$)/g);
+	if(matches) {
+		return matches.map(s => {
+			// console.log(s);
 			// skip special characters at the beginning of the sentence
 			// eslint-disable-next-line no-unused-vars
 			const [ _, pre, sentence ] = s.trim().match(/^([\'\"¡¿“‘„«\(]*)(.*)$/);
@@ -277,7 +280,37 @@ const processSentenceCaseAPAField = val => {
 			return pre + sentence[0].toUpperCase() + sentence.slice(1).toLowerCase();
 		})
 		.join(' ');
-	return retVal;
+	} else {
+		return val;
+	}
+};
+
+const processSentenceCaseAPAField = value => {
+	var match;
+	var sentencesInBrackets = [];
+	var rootSentences = '';
+	// extract all content in balanced parentheses
+	while((match = balanced('(', ')', value))) {
+		match.body = processSentenceCase(match.body);
+		// process sentences within parentheses
+		sentencesInBrackets.push(match);
+		rootSentences += match.pre;
+		value = match.post;
+	}
+	rootSentences += value;
+	// process "root" sentences separately
+	rootSentences = processSentenceCase(rootSentences);
+
+	// re-insert content from parentheses at correct indexes
+	var pointer = 0;
+	sentencesInBrackets.forEach(sentenceInBrackets => {
+		let pre = rootSentences.substr(0, pointer + sentenceInBrackets.start);
+		let post = rootSentences.substr(pointer + sentenceInBrackets.start);
+
+		rootSentences = `${pre}(${sentenceInBrackets.body})${post}`;
+		pointer += sentenceInBrackets.end + 1;
+	});
+	return rootSentences;
 };
 
 const processSentenceCaseAPAItems = items => {
