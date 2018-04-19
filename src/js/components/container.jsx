@@ -430,6 +430,22 @@ class Container extends React.Component {
 			return;
 		}
 
+		if(isApa(this.state.citationStyle)) {
+			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
+
+			if(!(itemKey in itemsMetaData)) {
+				itemsMetaData[itemKey] = {};
+			}
+
+			itemsMetaData[itemKey]['apaEditedKeys'] = [
+				...(new Set([
+					...(itemsMetaData[itemKey]['apaEditedKeys'] || []),
+					...Object.keys(patch)
+				]))
+			];
+			localStorage.setItem('zotero-bib-items-metadata', JSON.stringify(itemsMetaData));
+		}
+
 		this.bib.updateItem(index, updatedItem);
 		this.setState({
 			bibliography: this.bibliography,

@@ -281,10 +281,16 @@ const processSentenceCaseAPAField = val => {
 };
 
 const processSentenceCaseAPAItems = items => {
-	items.forEach(i => {
-		Object.keys(i).forEach(k => {
-			if(typeof(i[k]) === 'string' && whitelist.includes(k)) {
-				i[k] = processSentenceCaseAPAField(i[k]);
+	const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
+	items.forEach(item => {
+		Object.keys(item).forEach(k => {
+			if(typeof(item[k]) === 'string' && whitelist.includes(k)) {
+				if(!(item.key in itemsMetaData &&
+					'apaEditedKeys' in itemsMetaData[item.key] &&
+					itemsMetaData[item.key]['apaEditedKeys'].includes(k)
+				)) {
+					item[k] = processSentenceCaseAPAField(item[k]);
+				}
 			}
 		});
 	});
