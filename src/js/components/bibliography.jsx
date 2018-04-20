@@ -72,7 +72,7 @@ class Bibliography extends React.PureComponent {
 			<li key={ rawItem.key }
 				className="citation"
 				onFocus={ this.handleFocus.bind(this, rawItem.key) }
-				onMouseUp={ ev => this.handleEditCitation(rawItem.key, ev) }
+				onClick={ ev => this.handleEditCitation(rawItem.key, ev) }
 				tabIndex={ 0 }
 			>
 				<div className="csl-entry-container">
