@@ -4,6 +4,8 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
 const deepEqual = require('deep-equal');
+const KeyHandler = require('react-key-handler').default;
+const { KEYDOWN } = require('react-key-handler');
 
 const Button = require('zotero-web-library/lib/component/ui/button');
 const ItemBox = require('zotero-web-library/lib/component/item/box');
@@ -168,6 +170,10 @@ class Editor extends React.PureComponent {
 		});
 	}
 
+	handleClose() {
+		this.props.onEditorClose(this.state.hasCreatedItem);
+	}
+
 	get itemTitle() {
 		let item = this.state.item;
 		if(item) {
@@ -210,8 +216,13 @@ class Editor extends React.PureComponent {
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
 				className={ cx('editor-container modal modal-lg', { loading: this.state.isLoading })}
-				onRequestClose={ () => this.props.onEditorClose(this.state.hasCreatedItem) }
+				onRequestClose={ this.handleClose.bind(this) }
 			>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ this.handleClose.bind(this) }
+				/>
 				{ this.state.isLoading ? <Spinner /> : this.renderModalContent() }
 			</Modal>
 		);
