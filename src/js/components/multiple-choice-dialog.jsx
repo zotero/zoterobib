@@ -36,6 +36,7 @@ class MultipleChoiceDialog extends React.Component {
 				className="result"
 				key={ item.key }
 				onClick={ () => this.props.onMultipleChoiceSelect(item) }
+				tabIndex={ 0 }
 			>
 				{ badge && <span key={badge} className="badge badge-light d-sm-none">{ badge }</span> }
 				<h5 className="title">

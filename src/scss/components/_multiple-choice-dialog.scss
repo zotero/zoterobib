@@ -27,6 +27,16 @@
 			}
 		}
 
+		&:focus {
+			.keyboard-user & {
+				outline-offset: -3px;
+
+				& + .result {
+					border-top-color: transparent;
+				}
+			}
+		}
+
 		.badge {
 			margin-bottom: 6px;
 
