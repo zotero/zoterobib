@@ -37,12 +37,17 @@ class MultipleChoiceDialog extends React.Component {
 				key={ item.key }
 				onClick={ () => this.props.onMultipleChoiceSelect(item) }
 			>
-				{ badge && <span key={badge} className="badge badge-light">{ badge }</span> }
-				{ title }
+				{ badge && <span key={badge} className="badge badge-light d-sm-none">{ badge }</span> }
+				<h5 className="title">
+					<span className="title-container">
+						{ title }
+					</span>
+					{ badge && <span key={badge} className="badge badge-light d-xs-none d-sm-inline-block">{ badge }</span> }
+				</h5>
 				{ item.value.description && (
-					<small>
+					<p className="description">
 						{item.value.description}
-					</small>
+					</p>
 				)}
 			</li>
 		);

@@ -4,11 +4,19 @@
 
 @each $key, $value in $grid-breakpoints {
 	@media (min-width: $value) {
+		.d-#{$key}-none {
+			display: none !important;
+		}
+
 		.d-#{$key}-block {
 			display: block !important;
 		}
 
 		.d-#{$key}-inline {
+			display: inline !important;
+		}
+
+		.d-#{$key}-inline-block {
 			display: inline !important;
 		}
 	}

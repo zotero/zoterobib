@@ -4,45 +4,51 @@
 
 .multiple-choice-dialog {
 	.results {
-		margin: 0;
+		margin: 0 -$modal-inner-padding-mobile;
 		padding: 0;
 		list-style: none;
+
+		@media (min-width: $bp-sm) {
+			margin: 0;
+		}
 	}
 
 	.result {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
 		border-top: 1px solid $result-border-color;
 		padding: $result-padding;
 		cursor: pointer;
 
-		@media (min-width: $bp-sm) {
-			flex-direction: row;
+		&:hover {
+			background-color: $result-hover-bg;
 
 			.badge {
-				margin-bottom: 7px; // Like line-height
+				background-color: $result-hover-bg;
+				border-color: darken($badge-light-border-color, 4%);
 			}
 		}
 
 		.badge {
-			flex: 0 0 auto;
-			margin-bottom: 7px;
-			background: transparent;
+			margin-bottom: 6px;
 
 			@media (min-width: $bp-sm) {
-				margin: $space-min $space-min 0 0;
+				vertical-align: 2px;
+				margin-bottom: 0;
 			}
 		}
 
-		&:hover {
-			color: $result-hover-color;
-			background-color: $result-hover-bg;
-			border-top-color: $result-hover-bg;
+		.title {
+			margin: 0;
+			font-size: 18px;
+			line-height: 1.5rem;
+			font-weight: 600;
+		}
 
-			& + .result {
-				border-top-color: $result-hover-bg;
-			}
+		.title-container {
+			margin-right: $space-min + $space-min / 2;
+		}
+
+		.description {
+			margin: 0;
 		}
 	}
 }

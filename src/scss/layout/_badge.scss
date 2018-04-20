@@ -5,6 +5,7 @@
 .badge {
 	display: inline-block;
 	font-size: $badge-font-size;
+	font-weight: 400;
 	line-height: 1;
 	padding: $badge-padding-y $badge-padding-x;
 	border-radius: $border-radius-sm;
