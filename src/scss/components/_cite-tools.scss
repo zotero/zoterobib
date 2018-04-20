@@ -22,7 +22,8 @@
 		transition: border $input-transition, box-shadow $input-transition, padding $input-transition;
 
 		&:focus {
-			padding: ($input-padding-y-lg - 2px) $input-padding-x-lg;
+			padding-top: ($input-padding-y-lg - 2px);
+			padding-bottom: ($input-padding-y-lg - 2px);
 		}
 	}
 }
