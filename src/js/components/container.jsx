@@ -104,7 +104,7 @@ class Container extends React.Component {
 		const message = {
 			id: getNextMessageId(),
 			kind: 'info',
-			message: `Your search "${identifier}" did not match any documents.`,
+			message: 'No results found',
 		};
 		this.setState({
 			messages: [...this.state.messages, message]
