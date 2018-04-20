@@ -100,7 +100,7 @@ class Container extends React.Component {
 		});
 	}
 
-	displayNoResultsMessage(identifier) {
+	displayNoResultsMessage() {
 		const message = {
 			id: getNextMessageId(),
 			kind: 'info',
@@ -495,7 +495,7 @@ class Container extends React.Component {
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
 						if(translationResponse.items.length === 0) {
-							this.displayNoResultsMessage(identifier);
+							this.displayNoResultsMessage();
 							this.setState({ isTranslating: false });
 							return;
 						}
