@@ -88,13 +88,23 @@ class Container extends React.Component {
 	}
 
 	displayFirstCitationMessage() {
-		const id = getNextMessageId();
 		const message = {
 			action: 'Read More',
-			id,
+			id: getNextMessageId(),
 			kind: 'success',
 			message: 'Your first citation has been added. Citations are stored locally in your browser.',
 			href: '/faq#where-is-my-bibliography-stored'
+		};
+		this.setState({
+			messages: [...this.state.messages, message]
+		});
+	}
+
+	displayNoResultsMessage(identifier) {
+		const message = {
+			id: getNextMessageId(),
+			kind: 'info',
+			message: `Your search "${identifier}" did not match any documents.`,
 		};
 		this.setState({
 			messages: [...this.state.messages, message]
@@ -484,6 +494,11 @@ class Container extends React.Component {
 
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
+						if(translationResponse.items.length === 0) {
+							this.displayNoResultsMessage(identifier);
+							this.setState({ isTranslating: false });
+							return;
+						}
 						if(isApa(this.state.citationStyle)) {
 							this.bib.addItem(processSentenceCaseAPAItems(translationResponse.items)[0]);
 						} else {
