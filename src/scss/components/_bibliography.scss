@@ -71,10 +71,11 @@
 	}
 
 	.read-only & {
-		margin-bottom: $space-xl - 5px;
+		font-size: 18px;
+		margin-bottom: $space-xl - 7px;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 5px;
+			margin-bottom: $space-xxl - 7px;
 		}
 	}
 }
