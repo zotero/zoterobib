@@ -268,14 +268,47 @@ const whitelist = [
 	'shortTitle',
 ];
 
+const isSentenceCase = val => {
+	// sanity check, at this point CSL should always be present
+	if(!('CSL' in window)) {
+		return false;
+	}
+
+	let matches = val.match(/^\W*(\w+)(.*?)$/);
+	if(matches && matches.length > 2) {
+		let [_, firstWord, remainingWords] = matches; // eslint-disable-line no-unused-vars
+		let firstLetter = firstWord.substr(0, 1);
+		if(firstLetter.toUpperCase() !== firstLetter) {
+			// first letter of first word is not uppercase
+			return false;
+		}
+		// count how many words are lowercased, ignoring short words and SKIP_WORDS
+		remainingWords = remainingWords.match(/(\w+)/g);
+		let lowerCaseWords = 0;
+		let totalWords = 0;
+		remainingWords
+			.filter(word => word.length >= 4 || !window.CSL.SKIP_WORDS.includes(word))
+			.forEach(word => {
+				totalWords++;
+				let firstLetter = word.substr(0, 1);
+				if(firstLetter.toLowerCase() === firstLetter) {
+					lowerCaseWords++;
+				}
+			});
+		let ratio = lowerCaseWords / totalWords;
+		return ratio >= 0.5;
+	}
+};
+
 const processSentenceCase = val => {
+	if(isSentenceCase(val)) {
+		return val;
+	}
 	let matches = val.match(/(([^\.!\?]+)[\.!\?]+)|([^\.!\?]+$)/g);
 	if(matches) {
 		return matches.map(s => {
-			// console.log(s);
 			// skip special characters at the beginning of the sentence
-			// eslint-disable-next-line no-unused-vars
-			const [ _, pre, sentence ] = s.trim().match(/^([\'\"¡¿“‘„«\(]*)(.*)$/);
+			const [ _, pre, sentence ] = s.trim().match(/^([\'\"¡¿“‘„«\(]*)(.*)$/); // eslint-disable-line no-unused-vars
 			// uppercase first actual letter of the sentence, lowercase rest
 			return pre + sentence[0].toUpperCase() + sentence.slice(1).toLowerCase();
 		})
