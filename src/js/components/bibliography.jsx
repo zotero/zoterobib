@@ -16,7 +16,17 @@ class Bibliography extends React.PureComponent {
 		focusedItem: null
 	}
 
-	handleEditCitation(itemId) {
+	handleEditCitation(itemId, ev) {
+		let selection = window.getSelection();
+		if(selection.toString().length) {
+			try {
+				if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
+					return;
+				}
+			} catch(_) {
+				// selection.anchorNode.parentNode might fail in which case we open the editor
+			}
+		}
 		if(!this.props.isReadOnly) {
 			this.props.onEditorOpen(itemId);
 		}
@@ -62,7 +72,7 @@ class Bibliography extends React.PureComponent {
 			<li key={ rawItem.key }
 				className="citation"
 				onFocus={ this.handleFocus.bind(this, rawItem.key) }
-				onClick={ () => this.handleEditCitation(rawItem.key) }
+				onMouseUp={ ev => this.handleEditCitation(rawItem.key, ev) }
 				tabIndex={ 0 }
 			>
 				<div className="csl-entry-container">
