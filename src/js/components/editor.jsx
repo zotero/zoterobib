@@ -46,14 +46,14 @@ class Editor extends React.PureComponent {
 
 		if(!props.editorItem) {
 			item = {
-				'version': 0,
-				'itemType': 'book',
-				'title': '(No Title)',
+				version: 0,
+				itemType: 'book',
+				title: '(No Title)',
 				tags: [],
 				creators: []
 			};
 		} else {
-			item = props.editorItem;
+			item = { ...props.editorItem };
 		}
 
 		try {
@@ -95,7 +95,7 @@ class Editor extends React.PureComponent {
 		if(['book', 'bookSection'].includes(item.itemType)) {
 			let dateIndex = fields.findIndex(f => f.field === 'date');
 			fields.splice(dateIndex + 1, 0, { field: 'original-date', localized: 'Original Date' });
-			let matches = item.extra.match(/^original-date:\s*(.*?)$/);
+			let matches = 'extra' in item && item.extra.match(/^original-date:\s*(.*?)$/);
 			if(matches) {
 				item['original-date'] = matches[1];
 				item.extra = item.extra.replace(/^original-date:\s*.*?$/, '');
@@ -125,6 +125,23 @@ class Editor extends React.PureComponent {
 	}
 
 	async handleItemUpdate(fieldKey, newValue) {
+		// Add Original Date field to book and bookSection #188
+		if(fieldKey === 'original-date') {
+			let extra = 'extra' in this.state.item ? this.state.item.extra : '';
+			let matches = extra.match(/^original-date:\s*(.*?)$/);
+			if(matches) {
+				extra = extra.replace(/^original-date:\s*(.*?)$/, `original-date: ${newValue}`);
+			} else {
+				if(extra.length > 0) {
+					extra += `\noriginal-date: ${newValue}`;
+				} else {
+					extra = `original-date: ${newValue}`;
+				}
+			}
+			fieldKey = 'extra';
+			newValue = extra;
+		}
+
 		if(!('key' in this.state.item)) {
 			this.state.item.key = Math.random().toString(36).substr(2, 8).toUpperCase();
 			this.props.onItemCreated({
@@ -133,23 +150,6 @@ class Editor extends React.PureComponent {
 			});
 			this.setState({ hasCreatedItem: true });
 			return;
-		}
-
-		// Add Original Date field to book and bookSection #188
-		if(fieldKey === 'original-date') {
-			let matches = this.state.item.extra.match(/^original-date:\s*(.*?)$/);
-			let extra = this.state.item.extra;
-			if(matches) {
-				extra = extra.replace(/^original-date:\s*(.*?)$/, `original-date: ${newValue}`);
-			} else {
-				if(this.state.item.extra.length > 0) {
-					extra += `\noriginal-date: ${newValue}`;
-				} else {
-					extra = `original-date: ${newValue}`;
-				}
-			}
-			fieldKey = 'extra';
-			newValue = extra;
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);

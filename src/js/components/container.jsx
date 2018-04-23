@@ -455,7 +455,6 @@ class Container extends React.Component {
 			];
 			localStorage.setItem('zotero-bib-items-metadata', JSON.stringify(itemsMetaData));
 		}
-
 		this.bib.updateItem(index, updatedItem);
 		this.setState({
 			bibliography: this.bibliography,
