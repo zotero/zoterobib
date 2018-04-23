@@ -65,7 +65,7 @@
     "zotero-api-client": "^0.11.1",
     "zotero-api-client-cache": "^0.4.3",
     "zotero-bib": "github:zotero/bib#v0.7.1-release",
-    "zotero-web-library": "^0.9.47-alpha"
+    "zotero-web-library": "^0.9.48-alpha"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
