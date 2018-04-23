@@ -84,13 +84,25 @@ class Editor extends React.PureComponent {
 
 		const titleField = item.itemType in baseMappings && baseMappings[item.itemType]['title'] || 'title';
 
-		const fields = [
+		var fields = [
 			{ field: 'itemType', localized: 'Item Type' },
 			itemTypeFields.find(itf => itf.field === titleField),
 			{ field: 'creators', localized: 'Creators' },
 			...itemTypeFields.filter(itf => itf.field !== titleField)
-		]
-			.filter(f => f && !hiddenFields.includes(f.field))
+		];
+
+		// Add Original Date field to book and bookSection #188
+		if(['book', 'bookSection'].includes(item.itemType)) {
+			let dateIndex = fields.findIndex(f => f.field === 'date');
+			fields.splice(dateIndex + 1, 0, { field: 'original-date', localized: 'Original Date' });
+			let matches = item.extra.match(/^original-date:\s*(.*?)$/);
+			if(matches) {
+				item['original-date'] = matches[1];
+				item.extra = item.extra.replace(/^original-date:\s*.*?$/, '');
+			}
+		}
+
+		fields = fields.filter(f => f && !hiddenFields.includes(f.field))
 			.concat([
 				itemTypeFields.find(itf => itf.field === 'abstractNote'),
 				itemTypeFields.find(itf => itf.field === 'extra'),
@@ -121,6 +133,23 @@ class Editor extends React.PureComponent {
 			});
 			this.setState({ hasCreatedItem: true });
 			return;
+		}
+
+		// Add Original Date field to book and bookSection #188
+		if(fieldKey === 'original-date') {
+			let matches = this.state.item.extra.match(/^original-date:\s*(.*?)$/);
+			let extra = this.state.item.extra;
+			if(matches) {
+				extra = extra.replace(/^original-date:\s*(.*?)$/, `original-date: ${newValue}`);
+			} else {
+				if(this.state.item.extra.length > 0) {
+					extra += `\noriginal-date: ${newValue}`;
+				} else {
+					extra = `original-date: ${newValue}`;
+				}
+			}
+			fieldKey = 'extra';
+			newValue = extra;
 		}
 
 		let fieldIndex = this.state.fields.findIndex(field => field.key == fieldKey);
