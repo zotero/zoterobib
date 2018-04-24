@@ -545,7 +545,7 @@ class Container extends React.Component {
 				this.setState({ isTranslating: false });
 			}
 		} else {
-			this.handleError('Value entered doesn\'t appear to be a valid URL, ISBN, DOI, or PMID');
+			this.handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			this.setState({ isTranslating: false });
 		}
 	}

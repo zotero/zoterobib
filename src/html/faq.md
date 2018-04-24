@@ -22,7 +22,7 @@ Nothing! ZBib is completely free and ad-free.
 
 We created ZBib because we thought there should be a bibliography tool that was free, easier and more pleasant to use, and much more accurate.
 
-Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or more advanced citation styles. And since it's built by the team behind Zotero and is based on the same technology, you can be sure you're getting the same seamless experience and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
+Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or more advanced citation styles. And since it's built by the team behind Zotero and based on the same open-source technology, you can count on the same expertise and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
 
 ### Should I use ZBib or Zotero?
 
@@ -82,9 +82,7 @@ Other than the web requests necessary to complete your search, which contain the
 
 The easiest way to add an item to ZBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZBib. ZBib can automatically extract metadata from newspaper and magazine articles, journal articles, database results, webpages, and more.
 
-If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), or [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back.
-
-You can also locate many books and journal articles by typing in the title, author, and/or year.
+If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
 
 If all else fails, you can enter item details by hand, though that's rarely necessary.
 
