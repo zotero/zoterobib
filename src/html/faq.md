@@ -64,7 +64,7 @@ Bibliographies are stored in your local browser storage until you delete them or
 
 If you're worried about losing your bibliography, use <i>Link to this version</i> to upload a copy to zbib.org, and then save the link. Each uploaded version is stored for at least six months from when it was created or last viewed.
 
-### Is my data private?
+<h3 id="privacy">Is my data private?</h3>
 
 ZBib and Zotero were created with the philosophy that your research data belongs to you and should be kept secure and private by default.
 
