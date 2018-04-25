@@ -9,6 +9,20 @@ const Modal = require('./modal');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class MultipleChoiceDialog extends React.Component {
+	handleSelect(item = this.focusedItem) {
+		if(item) {
+			this.props.onMultipleChoiceSelect(item);
+		}
+	}
+
+	handleFocus(item) {
+		this.focusedItem = item;
+	}
+
+	handleCancel() {
+		this.props.onMultipleChoiceCancel();
+	}
+
 	renderItem(item) {
 		let badge = null;
 		let title = item.value.title;
@@ -35,7 +49,8 @@ class MultipleChoiceDialog extends React.Component {
 			<li
 				className="result"
 				key={ item.key }
-				onClick={ () => this.props.onMultipleChoiceSelect(item) }
+				onFocus={ this.handleFocus.bind(this, item) }
+				onClick={ this.handleSelect.bind(this, item) }
 				tabIndex={ 0 }
 			>
 				{ badge && <span key={badge} className="badge badge-light d-sm-none">{ badge }</span> }
@@ -55,20 +70,24 @@ class MultipleChoiceDialog extends React.Component {
 	}
 
 	render() {
-		return [
-			<KeyHandler
-				key="key-handler"
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ () => this.props.onMultipleChoiceCancel() }
-			/>,
+		return (
 			<Modal
 				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal modal-lg modal-centered"
-				onRequestClose={ () => this.props.onMultipleChoiceCancel() }
+				onRequestClose={ this.handleCancel.bind(this) }
 			>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ this.handleCancel.bind(this) }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Enter"
+					onKeyHandle={ this.handleSelect.bind(this, undefined) }
+				/>
 				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
@@ -76,19 +95,21 @@ class MultipleChoiceDialog extends React.Component {
 						</h4>
 						<Button
 							className="close"
-							onClick={ () => this.props.onMultipleChoiceCancel() }
+							onClick={ this.handleCancel.bind(this) }
 						>
 							<Icon type={ '24/remove' } width="24" height="24" />
 						</Button>
 					</div>
 					<div className="modal-body">
 						<ul className="results">
-							{ this.props.multipleChoiceItems.map(this.renderItem.bind(this)) }
+							{ this.props.multipleChoiceItems.map(
+								this.renderItem.bind(this)
+							) }
 						</ul>
 					</div>
 				</div>
 			</Modal>
-		];
+		);
 	}
 
 	static defaultProps = {
