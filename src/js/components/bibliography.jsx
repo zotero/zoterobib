@@ -124,7 +124,7 @@ class Bibliography extends React.PureComponent {
 				<Dropdown
 					isOpen={ this.state.dropdownsOpen.includes(rawItem.key) }
 					toggle={ this.handleToggleDropdown.bind(this, rawItem.key) }
-					className="btn-group"
+					className="btn-group d-md-none"
 				>
 					<DropdownToggle>
 						...
@@ -165,13 +165,16 @@ class Bibliography extends React.PureComponent {
 				</Dropdown>
 				{ this.props.isAuthorStyle && (
 					<Button
-						className={ cx({ success: this.state.clipboardConfirmations.includes(rawItem.key) })}
+						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
 						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
-				<Button onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>
+				<Button
+					className="d-xs-none d-md-block"
+					onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
+				>
 					<Icon type={ '16/remove-sm' } width="16" height="16" />
 				</Button>
 				<script type="application/vnd.zotero.data+json">
