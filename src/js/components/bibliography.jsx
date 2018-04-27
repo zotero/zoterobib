@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const cx = require('classnames');
 const { withRouter } = require('react-router-dom');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
@@ -13,7 +14,18 @@ const { parseTagAndAttrsFromNode } =require('../utils') ;
 
 class Bibliography extends React.PureComponent {
 	state = {
+		clipboardConfirmations: [],
 		focusedItem: null
+	}
+
+	constructor(props) {
+		super(props);
+		this.timeouts = {};
+	}
+
+	componentWillUnmount() {
+		Object.values(this.timeouts).forEach(t => clearTimeout(t));
+		this.timeouts = {};
 	}
 
 	handleEditCitation(itemId, ev) {
@@ -40,6 +52,17 @@ class Bibliography extends React.PureComponent {
 	handleCitationCopy(itemId, ev) {
 		ev.stopPropagation();
 		this.props.onCitationCopy(itemId);
+		this.setState({
+			clipboardConfirmations: [ ...this.state.clipboardConfirmations, itemId ]
+		});
+		this.timeouts[itemId] = setTimeout(() => {
+			delete this.timeouts[itemId];
+			this.setState({
+				clipboardConfirmations: this.state.clipboardConfirmations.filter(
+					c => c !== itemId
+				)
+			});
+		}, 1000);
 	}
 
 	handleFocus(itemId) {
@@ -84,7 +107,9 @@ class Bibliography extends React.PureComponent {
 					{ content }
 				</div>
 				{ this.props.isAuthorStyle && (
-					<Button className="btn-icon" onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
+					<Button
+						className={ cx({ success: this.state.clipboardConfirmations.includes(rawItem.key) })}
+						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
