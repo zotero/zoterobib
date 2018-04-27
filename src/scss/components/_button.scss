@@ -152,12 +152,12 @@ a.btn {
 		}
 	}
 
-	> .btn:not(:first-child) {
+	> .btn:not(:first-of-type) {
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
 	}
 
-	> .btn:not(:last-child):not(.dropdown-toggle) {
+	> .btn:not(:last-of-type) {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
