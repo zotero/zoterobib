@@ -31,7 +31,7 @@
 		.citation {
 			display: flex;
 			align-items: center;
-			padding: ($space-lg - 7px) ($space-md - 5px) ($space-lg - 7px) $space-md; // Caps height
+			padding: ($space-lg - 7px) ($space-md - $space-xs) ($space-lg - 7px) $space-md; // Caps height
 			border-top: 1px solid $shade-2;
 			cursor: pointer;
 
@@ -55,7 +55,7 @@
 
 			.csl-entry-container {
 				flex: 1 1 0;
-				margin-right: ($space-md - 5px);
+				margin-right: ($space-md - $space-xs);
 				min-width: 0; // Enable word-wrap for long URLs
 			}
 
