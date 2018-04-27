@@ -127,7 +127,7 @@ class Bibliography extends React.PureComponent {
 					className="btn-group d-md-none"
 				>
 					<DropdownToggle>
-						...
+						<Icon type={ '28/dots' } width="28" height="28" />
 					</DropdownToggle>
 					<DropdownMenu className="dropdown-menu">
 						<DropdownItem
