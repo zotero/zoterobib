@@ -15,6 +15,7 @@
 	background-color: $modal-backdrop-bg;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch; // Momentum scrolling for iOS
+	z-index: $zindex-modal;
 }
 
 .modal {
