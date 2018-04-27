@@ -77,24 +77,32 @@ class Bibliography extends React.PureComponent {
 			<li key={ rawItem.key }
 				className="citation"
 				onFocus={ this.handleFocus.bind(this, rawItem.key) }
-				onClick={ ev => this.handleEditCitation(rawItem.key, ev) }
 				tabIndex={ 0 }
 			>
-				<div className="csl-entry-container">
-					{ content }
-				</div>
+				<Button className="remove" onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>
+					<Icon type={ '16/remove-sm' } width="16" height="16" />
+				</Button>
 				{ this.props.isAuthorStyle && (
-					<Button className="btn-icon" onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
+					<Button className="copy">
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
-				<Button onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>
-					<Icon type={ '16/remove-sm' } width="16" height="16" />
-				</Button>
-				<script type="application/vnd.zotero.data+json">
-					{ JSON.stringify(rawItem) }
-				</script>
+
+				<div
+					className="citation-container"
+					onClick={ ev => this.handleEditCitation(rawItem.key, ev) }
+				>
+					<div className="csl-entry-container">
+						{ content }
+					</div>
+					<Button className="btn-icon dots">
+						<Icon type={ '16/dots' } width="16" height="16" />
+					</Button>
+					<script type="application/vnd.zotero.data+json">
+						{ JSON.stringify(rawItem) }
+					</script>
+				</div>
 			</li>
 		);
 	}
