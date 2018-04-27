@@ -119,11 +119,12 @@
 				&.remove {
 					background-color: $secondary;
 					position: absolute;
-					right: 8px;
+					right: 44px;
 					top: 50%;
 					transform: translateY(-50%);
 					margin: 0;
 					z-index: 1;
+					transition: transform 0.3s ease-in;
 
 					.icon {
 						color: $shade-0;
@@ -132,7 +133,6 @@
 
 				&.remove {
 					background-color: $primary;
-					transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 				}
 			}
 
@@ -148,14 +148,23 @@
 				}
 
 				.citation-container {
-					transform: translateX(-44px);
+					transform: translate3d(-44px, 0, 0);
 					position: relative;
 					background-color: $shade-1;
 				}
 
 				.btn-icon {
+					&.copy,
 					&.remove {
-						transform: translate(36px, -50%);
+						transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+					}
+
+					&.copy {
+						transform: translate3d(36px, -50%, 0);
+					}
+
+					&.remove {
+						transform: translate3d(72px, -50%, 0);
 					}
 				}
 			}
