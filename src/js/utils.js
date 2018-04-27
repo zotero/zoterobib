@@ -283,18 +283,20 @@ const isSentenceCase = val => {
 			return false;
 		}
 		// count how many words are lowercased, ignoring short words and SKIP_WORDS
-		remainingWords = remainingWords.match(/(\w+)/g);
 		let lowerCaseWords = 0;
 		let totalWords = 0;
-		remainingWords
-			.filter(word => word.length >= 4 || !window.CSL.SKIP_WORDS.includes(word))
-			.forEach(word => {
-				totalWords++;
-				let firstLetter = word.substr(0, 1);
-				if(firstLetter.toLowerCase() === firstLetter) {
-					lowerCaseWords++;
-				}
-			});
+		remainingWords = remainingWords.match(/(\w+)/g);
+		if(remainingWords) {
+			remainingWords
+				.filter(word => word.length >= 4 || !window.CSL.SKIP_WORDS.includes(word))
+				.forEach(word => {
+					totalWords++;
+					let firstLetter = word.substr(0, 1);
+					if(firstLetter.toLowerCase() === firstLetter) {
+						lowerCaseWords++;
+					}
+				});
+		}
 		let ratio = lowerCaseWords / totalWords;
 		return ratio >= 0.5;
 	}
