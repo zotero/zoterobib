@@ -132,7 +132,7 @@ class Bibliography extends React.PureComponent {
 					>
 						<Icon type={ '28/dots' } width="28" height="28" />
 					</DropdownToggle>
-					<DropdownMenu className="dropdown-menu">
+					<DropdownMenu right className="dropdown-menu">
 						<DropdownItem
 							onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
 							className="btn"
