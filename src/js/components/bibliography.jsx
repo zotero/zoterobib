@@ -124,7 +124,7 @@ class Bibliography extends React.PureComponent {
 				<Dropdown
 					isOpen={ this.state.dropdownsOpen.includes(rawItem.key) }
 					toggle={ this.handleToggleDropdown.bind(this, rawItem.key) }
-					className="btn-group d-md-none"
+					className="d-md-none"
 				>
 					<DropdownToggle>
 						<Icon type={ '28/dots' } width="28" height="28" />

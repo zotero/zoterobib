@@ -35,6 +35,10 @@
 			border-top: 1px solid $shade-2;
 			cursor: pointer;
 
+			@media (max-width: $bp-md - 1px) {
+				padding-right: $space-md - 2px;
+			}
+
 			&:last-child {
 				border-bottom: 1px solid $shade-2;
 			}
@@ -63,9 +67,13 @@
 				margin: 0 !important; // Override entry-spacing defined in CSL
 			}
 
+			> .btn-icon,
+			.dropdown {
+				margin: (-$space-lg) 0;
+			}
+
 			.btn-icon {
 				flex: 0 0 auto;
-				margin: (-$space-lg) 0;
 
 				&.success {
 					background: $btn-success-color;
