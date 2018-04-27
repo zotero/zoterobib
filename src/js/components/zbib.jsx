@@ -5,23 +5,24 @@ const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
 const cx = require('classnames');
 
-const Brand = require('./brand');
+const About = require('./about');
 const BibliographySection = require('./bibliographySection');
+const Brand = require('./brand');
+const Button = require('zotero-web-library/lib/component/ui/button');
 const CiteTools = require('./cite-tools');
-const Message = require('./message');
-const ExportTools = require('./export-tools');
-const WhatsThis = require('./whats-this');
-const PermalinkTools = require('./permalink-tools');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
-const MultipleChoiceDialog = require('./multiple-choice-dialog');
 const Confirmation = require('./confirmation');
 const Editor = require('./editor');
-const StyleInstaller = require('./style-installer');
-const About = require('./about');
-const Modal = require('./modal');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const ExportTools = require('./export-tools');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Message = require('./message');
+const Modal = require('./modal');
+const MultipleChoiceDialog = require('./multiple-choice-dialog');
+const PermalinkTools = require('./permalink-tools');
+const Review = require('./review');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const StyleInstaller = require('./style-installer');
+const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
+const WhatsThis = require('./whats-this');
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -81,6 +82,9 @@ class ZBib extends React.PureComponent {
 								)
 							}
 
+							{ this.props.itemUnderReviewBibliography && (
+								<Review { ...this.props} />
+							)}
 							<BibliographySection { ...this.props} />
 
 							{

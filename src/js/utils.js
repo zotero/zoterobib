@@ -260,6 +260,42 @@ const getBibliographyFormatParameters = bib => {
 		return bibStyle;
 };
 
+const getBibliographyOrFallback = (bib, citeproc) => {
+	const items = bib.itemsRaw
+				.filter(item => item.key)
+				.map(item => item.key);
+	citeproc.updateItems(items);
+	const bibliography = citeproc.makeBibliography();
+	if(bibliography) {
+		return {
+			isFallback: false,
+			bibliography
+		};
+	}
+
+	//@NOTE: this is deprecated but seems to be the only way to reset registry
+	//       otherwise previous calls to appendCitationCluster aggregate incorrectly
+	//		 Alternatively we could do even more hackier:
+	//		 citeproc.registry = new CSL.Registry(citeproc)
+	citeproc.restoreProcessorState();
+	citeproc.updateItems(items);
+	const citations = [];
+	bib.itemsRaw.forEach(item => {
+		let outList = citeproc
+			.appendCitationCluster({
+				'citationItems': [{ 'id': item.key }],
+				'properties': {}
+			}, true);
+		outList.forEach(listItem => {
+			citations[listItem[0]] = listItem[1];
+		});
+	});
+	return {
+		isFallback: true,
+		citations
+	};
+};
+
 const whitelist = [
 	...(Object.keys(baseMappings).reduce((agg, itemType) => {
 		'title' in baseMappings[itemType] && agg.push(baseMappings[itemType]['title']);
@@ -387,6 +423,7 @@ const parseTagAndAttrsFromNode = node => {
 module.exports = {
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
+	getBibliographyOrFallback,
 	getCiteproc,
 	getCSL,
 	getItemTypeMeta,

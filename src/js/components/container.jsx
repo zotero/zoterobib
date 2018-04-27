@@ -3,6 +3,7 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const copy = require('copy-to-clipboard');
+const deepEqual = require('deep-equal');
 const SmoothScroll = require('smooth-scroll');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
@@ -10,6 +11,7 @@ const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
 const { fetchFromPermalink,
 	getBibliographyFormatParameters,
+	getBibliographyOrFallback,
 	getCiteproc,
 	getItemTypes,
 	isApa,
@@ -53,6 +55,8 @@ class Container extends React.Component {
 		isSaving: false,
 		isStylesDataLoading: false,
 		isTranslating: false,
+		itemUnderReview: null,
+		itemUnderReviewBibliography: null,
 		lastDeletedItem: null,
 		messages: [],
 		multipleChoiceItems: [],
@@ -210,6 +214,22 @@ class Container extends React.Component {
 			const stylesRemoved = state.citationStyles.filter(cs => !this.state.citationStyles.includes(cs));
 			// actually remove style data from local storage
 			stylesRemoved.forEach(s => localStorage.removeItem(`style-${s.name}`));
+		}
+
+		if(this.state.itemUnderReview &&
+			!deepEqual(this.state.itemUnderReview, state.itemUnderReview)) {
+				const reviewBib = new ZoteroBib({
+					...this.state.config,
+					persist: false,
+					initialItems: [this.state.itemUnderReview]
+				});
+				const reviewCiteproc = await getCiteproc(this.state.citationStyle, reviewBib);
+				reviewCiteproc.opt.development_extensions.wrap_url_and_doi = false;
+				reviewCiteproc.updateItems([this.state.itemUnderReview.key]);
+				const itemUnderReviewBibliography = getBibliographyOrFallback(reviewBib, reviewCiteproc);
+				this.setState({ itemUnderReviewBibliography });
+		} else if(this.state.itemUnderReviewBibliography && !this.state.itemUnderReview) {
+			this.setState({ itemUnderReviewBibliography: null });
 		}
 	}
 
@@ -462,8 +482,12 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			items: this.bib.itemsRaw,
-			editorItem: this.bib.itemsRaw.find(i => i.key === itemKey)
+			editorItem: updatedItem
 		});
+		// if edited item is itemUnderReview, update it as well
+		if(this.state.itemUnderReview && this.state.itemUnderReview.key === itemKey) {
+			this.setState({ itemUnderReview: updatedItem });
+		}
 	}
 
 	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
@@ -515,6 +539,7 @@ class Container extends React.Component {
 							isTranslating: false,
 							bibliography: this.bibliography,
 							items: this.bib.itemsRaw,
+							itemUnderReview: translationResponse.items[0],
 							permalink: null,
 						});
 					break;
@@ -697,8 +722,21 @@ class Container extends React.Component {
 		copy(text);
 	}
 
+	handleReviewDelete() {
+		this.handleDeleteEntry(this.state.itemUnderReview.key);
+		this.setState({ itemUnderReview: null });
+	}
+
+	handleReviewDismiss() {
+		this.setState({ itemUnderReview: null });
+	}
+
+	handleReviewEdit() {
+		this.handleOpenEditor(this.state.itemUnderReview.key);
+	}
+
 	async prepareCiteproc(style, bib, isReadOnly) {
-		this.citeproc = await getCiteproc(style, bib, this.state.citationStyles);
+		this.citeproc = await getCiteproc(style, bib);
 		// Make URLs and DOIs clickable on permalink pages
 		this.citeproc.opt.development_extensions.wrap_url_and_doi = isReadOnly;
 	}
@@ -790,39 +828,7 @@ class Container extends React.Component {
 		if(!bib) {
 			return {};
 		}
-		const items = bib.itemsRaw
-				.filter(item => item.key)
-				.map(item => item.key);
-		this.citeproc.updateItems(items);
-		const bibliography = this.citeproc.makeBibliography();
-		if(bibliography) {
-			return {
-				isFallback: false,
-				bibliography
-			};
-		}
-
-		//@NOTE: this is deprecated but seems to be the only way to reset registry
-		//       otherwise previous calls to appendCitationCluster aggregate incorrectly
-		//		 Alternatively we could do even more hackier:
-		//		 this.citeproc.registry = new CSL.Registry(this.citeproc)
-		this.citeproc.restoreProcessorState();
-		this.citeproc.updateItems(items);
-		const citations = [];
-		bib.itemsRaw.forEach(item => {
-			let outList = this.citeproc
-				.appendCitationCluster({
-					'citationItems': [{ 'id': item.key }],
-					'properties': {}
-				}, true);
-			outList.forEach(listItem => {
-				citations[listItem[0]] = listItem[1];
-			});
-		});
-		return {
-			isFallback: true,
-			citations
-		};
+		return getBibliographyOrFallback(bib, this.citeproc);
 	}
 
 	render() {
@@ -845,6 +851,9 @@ class Container extends React.Component {
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onOverride = { this.handleOverride.bind(this) }
+			onReviewDelete = { this.handleReviewDelete.bind(this) }
+			onReviewDismiss = { this.handleReviewDismiss.bind(this) }
+			onReviewEdit = { this.handleReviewEdit.bind(this) }
 			onSave = { this.handleSave.bind(this) }
 			onSaveToZoteroHide = { this.handleSaveToZoteroHide.bind(this) }
 			onSaveToZoteroShow = { this.handleSaveToZoteroShow.bind(this) }
