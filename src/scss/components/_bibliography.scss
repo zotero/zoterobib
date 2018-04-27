@@ -80,6 +80,18 @@
 				}
 			}
 
+			.dropdown {
+				display: none;
+
+				@at-root #{selector-replace(&, ".write", ".write.touch-user")} {
+					display: block;
+				}
+
+				.dropdown-menu {
+					z-index: $zindex-dropdown;
+				}
+			}
+
 			.icon-tick {
 				display: none;
 				color: $shade-0;

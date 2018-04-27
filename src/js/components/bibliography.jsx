@@ -6,7 +6,10 @@ const cx = require('classnames');
 const { withRouter } = require('react-router-dom');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
-
+const Dropdown = require('reactstrap/lib/Dropdown').default;
+const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
+const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
+const DropdownItem = require('reactstrap/lib/DropdownItem').default;
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const formatBib = require('../cite');
@@ -15,6 +18,7 @@ const { parseTagAndAttrsFromNode } =require('../utils') ;
 class Bibliography extends React.PureComponent {
 	state = {
 		clipboardConfirmations: [],
+		dropdownsOpen: [],
 		focusedItem: null
 	}
 
@@ -78,6 +82,17 @@ class Bibliography extends React.PureComponent {
 		}
 	}
 
+	handleToggleDropdown(itemId, ev) {
+		const isOpen = this.state.dropdownsOpen.includes(itemId);
+		const dropdownsOpen = isOpen ?
+			this.state.dropdownsOpen.filter(i => i !== itemId) :
+			[ ...this.state.dropdownsOpen, itemId];
+
+		this.setState({ dropdownsOpen });
+		ev.preventDefault();
+		ev.stopPropagation();
+	}
+
 	get keyHandlers() {
 		return [
 			<KeyHandler
@@ -106,6 +121,48 @@ class Bibliography extends React.PureComponent {
 				<div className="csl-entry-container">
 					{ content }
 				</div>
+				<Dropdown
+					isOpen={ this.state.dropdownsOpen.includes(rawItem.key) }
+					toggle={ this.handleToggleDropdown.bind(this, rawItem.key) }
+					className="btn-group"
+				>
+					<DropdownToggle>
+						...
+					</DropdownToggle>
+					<DropdownMenu className="dropdown-menu">
+						<DropdownItem
+							onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
+							className="btn"
+						>
+							<span className={ cx('inline-feedback', {
+								'active': this.state.clipboardConfirmations.includes(rawItem.key)
+							}) }>
+								<span
+								className="default-text"
+								aria-hidden={ !this.state.clipboardConfirmations.includes(rawItem.key) }>
+									Copy
+								</span>
+								<span
+								className="shorter feedback"
+								aria-hidden={ this.state.clipboardConfirmations.includes(rawItem.key) }>
+									Copied!
+								</span>
+							</span>
+						</DropdownItem>
+						<DropdownItem
+							onClick={ this.handleEditCitation.bind(this, rawItem.key) }
+							className="btn"
+						>
+							Edit
+						</DropdownItem>
+						<DropdownItem
+							onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
+							className="btn"
+						>
+							Delete
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
 				{ this.props.isAuthorStyle && (
 					<Button
 						className={ cx({ success: this.state.clipboardConfirmations.includes(rawItem.key) })}
