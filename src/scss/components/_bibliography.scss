@@ -68,7 +68,7 @@
 				margin: (-$space-lg) 0;
 
 				&.success {
-					background: $success;
+					background: $btn-success-color;
 
 					.icon-copy {
 						display: none;
@@ -77,6 +77,10 @@
 					.icon-tick {
 						display: block;
 					}
+				}
+
+				& + .btn-icon {
+					margin-left: $space-min;
 				}
 			}
 
