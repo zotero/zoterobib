@@ -62,6 +62,8 @@ const isLikeUrl = identifier => {
 
 const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
 
+const isAuthorStyle = cslData => !!cslData.match(/citation-format="author.*?"/);
+
 const validateUrl = url => {
 		try {
 			url = new URL(url);
@@ -103,7 +105,6 @@ const retrieveStyle = async styleIdOrUrl => {
 				throw new Error('Failed to load style');
 			}
 		}
-
 	}
 	// return parent style for dependent citation styles
 	style = await getParentStyle(style);
@@ -391,6 +392,7 @@ module.exports = {
 	getItemTypeMeta,
 	getItemTypes,
 	isApa,
+	isAuthorStyle,
 	isLikeUrl,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,

@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const copy = require('copy-to-clipboard');
 const SmoothScroll = require('smooth-scroll');
 const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
@@ -12,9 +13,11 @@ const { fetchFromPermalink,
 	getCiteproc,
 	getItemTypes,
 	isApa,
+	isAuthorStyle,
 	isLikeUrl,
 	parseIdentifier,
 	processSentenceCaseAPAItems,
+	retrieveStyle,
 	retrieveStylesData,
 	saveToPermalink,
 	validateItem,
@@ -131,8 +134,6 @@ class Container extends React.Component {
 		document.addEventListener('copy', this.handleCopy);
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		await this.handleIdChanged(this.props);
-
-
 	}
 
 	async componentWillReceiveProps(props) {
@@ -154,6 +155,7 @@ class Container extends React.Component {
 				}
 			}
 			try {
+				const cslData = await retrieveStyle(this.state.citationStyle);
 				await this.prepareCiteproc(
 					this.state.citationStyle,
 					this.state.isReadOnly ? this.bibRemote : this.bib,
@@ -161,6 +163,7 @@ class Container extends React.Component {
 				);
 				localStorage.setItem('zotero-bib-citation-style', this.state.citationStyle);
 				this.setState({
+					isAuthorStyle: isAuthorStyle(cslData),
 					bibliography: this.bibliography
 				});
 			} catch(e) {
@@ -217,9 +220,9 @@ class Container extends React.Component {
 
 	handleCopy(ev) {
 		if(this.copyDataInclude) {
-			const formattedMime = exportFormats[this.copyDataInclude].mime;
-			ev.clipboardData.setData('text/plain', this.getCopyData('text'));
-			ev.clipboardData.setData(formattedMime, this.getCopyData(this.copyDataInclude));
+			this.copyDataInclude.forEach(copyDataFormat => {
+				ev.clipboardData.setData(copyDataFormat.mime, copyDataFormat.data);
+			});
 			ev.preventDefault();
 			delete this.copyDataInclude;
 		}
@@ -675,8 +678,23 @@ class Container extends React.Component {
 	handleSaveToZoteroShow() {
 		this.setState({ isSaveToZoteroVisible: true });
 	}
+
 	handleSaveToZoteroHide() {
 		this.setState({ isSaveToZoteroVisible: false });
+	}
+
+	async handleCitationCopy(itemId) {
+		const citation = {
+			citationItems: [{ id: itemId }],
+			properties: {}
+		};
+		const text = this.citeproc.previewCitationCluster(citation, [], [], 'text');
+		const html = this.citeproc.previewCitationCluster(citation, [], [], 'html');
+		this.copyDataInclude = [
+			{ mime: 'text/plain', data: text },
+			{ mime: 'text/html', data: html },
+		];
+		copy(text);
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
@@ -717,17 +735,25 @@ class Container extends React.Component {
 
 	getCopyData(format) {
 		const bibliography = this.getExportData(format);
+		const copyData = format === 'html' ?
+			formatBib(bibliography) :
+			`${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
 
 		if(bibliography) {
 			if(exportFormats[format].include) {
-				this.copyDataInclude = exportFormats[format].include;
+				this.copyDataInclude = [
+				{
+					mime: exportFormats[format].mime,
+					data: copyData
+				},
+				{
+					mime: exportFormats[exportFormats[format].include].mime,
+					data: this.getCopyData(exportFormats[format].include)
+				}];
 			}
 		}
-		if(format === 'html') {
-			return formatBib(bibliography);
-		} else {
-			return `${bibliography[0].bibstart}${bibliography[1].join('')}${bibliography[0].bibend}`;
-		}
+
+		return copyData;
 	}
 
 	async getFileData(format) {
@@ -803,6 +829,7 @@ class Container extends React.Component {
 		return <ZBib
 			getCopyData = { this.getCopyData.bind(this) }
 			getFileData = { this.getFileData.bind(this) }
+			onCitationCopy = { this.handleCitationCopy.bind(this) }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
 			onClearMessage = { this.handleClearMessage.bind(this) }
 			onDeleteCitations = { this.handleDeleteCitations.bind(this) }

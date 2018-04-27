@@ -37,6 +37,11 @@ class Bibliography extends React.PureComponent {
 		this.props.onDeleteEntry(itemId);
 	}
 
+	handleCitationCopy(itemId, ev) {
+		ev.stopPropagation();
+		this.props.onCitationCopy(itemId);
+	}
+
 	handleFocus(itemId) {
 		this.setState({
 			focusedItem: itemId
@@ -78,6 +83,11 @@ class Bibliography extends React.PureComponent {
 				<div className="csl-entry-container">
 					{ content }
 				</div>
+				{ this.props.isAuthorStyle && (
+					<Button className="btn-icon" onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
+						…
+					</Button>
+				) }
 				<Button onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>
 					<Icon type={ '16/remove-sm' } width="16" height="16" />
 				</Button>
@@ -149,9 +159,11 @@ class Bibliography extends React.PureComponent {
 
 	static propTypes = {
 		bibliography: PropTypes.object,
+		isAuthorStyle: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
 		match: PropTypes.object,
+		onCitationCopy:  PropTypes.func.isRequired,
 		onDeleteEntry: PropTypes.func.isRequired,
 		onEditorOpen:  PropTypes.func.isRequired,
 	}
