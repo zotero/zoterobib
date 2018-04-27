@@ -84,8 +84,9 @@ class Bibliography extends React.PureComponent {
 					{ content }
 				</div>
 				{ this.props.isAuthorStyle && (
-					<Button className="btn-icon" onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
-						…
+					<Button className="btn-icon success" onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
+						<Icon type={ '16/copy' } width="16" height="16" />
+						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
 				<Button onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }>

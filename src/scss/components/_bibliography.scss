@@ -66,6 +66,23 @@
 			.btn-icon {
 				flex: 0 0 auto;
 				margin: (-$space-lg) 0;
+
+				&.success {
+					background: $success;
+
+					.icon-copy {
+						display: none;
+					}
+
+					.icon-tick {
+						display: block;
+					}
+				}
+			}
+
+			.icon-tick {
+				display: none;
+				color: $shade-0;
 			}
 		}
 	}

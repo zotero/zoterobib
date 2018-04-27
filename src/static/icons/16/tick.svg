@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<symbol id="tick" viewBox="0 0 16 16">
+		<path fill="currentColor" d="M6,14.75a.752.752,0,0,1-.585-.281l-4-5a.75.75,0,1,1,1.17-.938l3.36,4.2L13.376,1.584a.75.75,0,0,1,1.248.832l-8,12a.75.75,0,0,1-.591.333Z"/>
+	</symbol>
+	<use xlink:href="#tick" viewBox="0 0 16 16"/>
+</svg>
