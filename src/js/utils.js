@@ -62,7 +62,7 @@ const isLikeUrl = identifier => {
 
 const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
 
-const isAuthorStyle = cslData => !!cslData.match(/citation-format="author.*?"/);
+const isNumericStyle = cslData => !!cslData.match(/citation-format="numeric.*?"/);
 
 const validateUrl = url => {
 		try {
@@ -429,7 +429,7 @@ module.exports = {
 	getItemTypeMeta,
 	getItemTypes,
 	isApa,
-	isAuthorStyle,
+	isNumericStyle,
 	isLikeUrl,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,

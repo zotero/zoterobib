@@ -15,7 +15,7 @@ const { fetchFromPermalink,
 	getCiteproc,
 	getItemTypes,
 	isApa,
-	isAuthorStyle,
+	isNumericStyle,
 	isLikeUrl,
 	parseIdentifier,
 	processSentenceCaseAPAItems,
@@ -167,7 +167,7 @@ class Container extends React.Component {
 				);
 				localStorage.setItem('zotero-bib-citation-style', this.state.citationStyle);
 				this.setState({
-					isAuthorStyle: isAuthorStyle(cslData),
+					isNumericStyle: isNumericStyle(cslData),
 					bibliography: this.bibliography
 				});
 			} catch(e) {

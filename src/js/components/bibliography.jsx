@@ -166,7 +166,7 @@ class Bibliography extends React.PureComponent {
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>
-				{ this.props.isAuthorStyle && (
+				{ !this.props.isNumericStyle && (
 					<Button
 						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
 						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
@@ -248,7 +248,7 @@ class Bibliography extends React.PureComponent {
 
 	static propTypes = {
 		bibliography: PropTypes.object,
-		isAuthorStyle: PropTypes.bool,
+		isNumericStyle: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
 		match: PropTypes.object,
