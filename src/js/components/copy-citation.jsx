@@ -11,18 +11,22 @@ const Modal = require('./modal');
 class CopyCitation extends React.Component {
 	defaultState = {
 		locator: '',
-		label: 'page'
+		label: 'page',
+		suppressAuthor: false
 	};
 
 	constructor(props) {
 		super(props);
 
 		this.state = this.defaultState;
+
+		this.handleChange = this.handleChange.bind(this);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.locator == this.state.locator
-				&& prevState.label == this.state.label) {
+				&& prevState.label == this.state.label
+				&& prevState.suppressAuthor == this.state.suppressAuthor) {
 			return;
 		}
 		this.handleDataChange();
@@ -31,7 +35,7 @@ class CopyCitation extends React.Component {
 	handleChange(event) {
 		const target = event.target;
 		const name = target.name;
-		const value = target.value;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
 		this.setState({
 			[name]: value
 		});
@@ -41,9 +45,8 @@ class CopyCitation extends React.Component {
 		this.props.onCitationModifierChange(this.state);
 	}
 
-	handleClose() {
+	reset() {
 		this.setState(this.defaultState);
-		this.props.onCancel();
 	}
 
 	renderLocators() {
@@ -88,18 +91,18 @@ class CopyCitation extends React.Component {
 				className="modal modal-centered"
 				isOpen={ this.props.isOpen }
 				contentLabel={ this.props.title }
-				onRequestClose={ this.handleClose.bind(this) }
+				onRequestClose={ () => { this.props.onCancel(); this.reset(); } }
 			>
 				<React.Fragment>
 					<KeyHandler
 						keyEventName={ KEYDOWN }
 						keyValue="Escape"
-						onKeyHandle={ () => this.props.onCancel() }
+						onKeyHandle={ () => { this.props.onCancel(); this.reset(); } }
 					/>
 					<KeyHandler
 						keyEventName={ KEYDOWN }
 						keyValue="Enter"
-						onKeyHandle={ () => this.props.onConfirm() }
+						onKeyHandle={ () => { this.props.onConfirm(); this.reset(); } }
 					/>
 					<div className="modal-content" tabIndex={ -1 }>
 						<div className="modal-body">
@@ -108,8 +111,19 @@ class CopyCitation extends React.Component {
 								{' '}
 								<input
 									name="locator"
-									onKeyUp={ this.handleChange.bind(this) }
+									onKeyUp={ this.handleChange }
 								/>
+							</div>
+							<div>
+								<label>
+									<input
+										name="suppressAuthor"
+										type="checkbox"
+										checked={ this.state.suppressAuthor }
+										onChange={ this.handleChange }
+									/>
+									Suppress Author
+								</label>
 							</div>
 							<div>
 								<p>Preview:</p>
@@ -120,13 +134,13 @@ class CopyCitation extends React.Component {
 							<div className="buttons">
 								<Button
 									className="btn-outline-secondary"
-									onClick={ () => this.props.onCancel() }
+									onClick={ () => { this.props.onCancel(); this.reset(); } }
 								>
 									Cancel
 								</Button>
 								<Button
 									className="btn-secondary"
-									onClick={ () => this.props.onConfirm() }
+									onClick={ () => { this.props.onConfirm(); this.reset(); } }
 								>
 									{ this.props.confirmLabel }
 								</Button>

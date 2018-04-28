@@ -727,6 +727,7 @@ class Container extends React.Component {
 		this.setState({
 			citationLocator: modifiers.locator,
 			citationLabel: modifiers.label,
+			citationSuppressAuthor: modifiers.suppressAuthor,
 			citationHtml: this.getCitation(this.state.citationToCopy, modifiers, ['html']).html
 		});
 	}
@@ -738,6 +739,7 @@ class Container extends React.Component {
 			{
 				locator: this.state.citationLocator,
 				label: this.state.citationLabel,
+				suppressAuthor: this.state.citationSuppressAuthor
 			},
 			['text']
 		).text;
@@ -755,6 +757,7 @@ class Container extends React.Component {
 			citationToCopy: null,
 			citationLocator: null,
 			citationLabel: null,
+			citationSuppressAuthor: null,
 			citationText: null,
 			citationHtml: null
 		});
@@ -805,8 +808,10 @@ class Container extends React.Component {
 			properties: {}
 		};
 		if (modifiers) {
-			citation.citationItems[0].locator = modifiers.locator;
-			citation.citationItems[0].label = modifiers.label;
+			for (let i in modifiers) {
+				let prop = i == 'suppressAuthor' ? 'suppress-author' : i;
+				citation.citationItems[0][prop] = modifiers[i];
+			}
 		}
 		var output = {};
 		var validFormats = ['text', 'html']
