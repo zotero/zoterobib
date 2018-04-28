@@ -133,25 +133,27 @@ class Bibliography extends React.PureComponent {
 						<Icon type={ '28/dots' } width="28" height="28" />
 					</DropdownToggle>
 					<DropdownMenu right className="dropdown-menu">
-						<DropdownItem
-							onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
-							className="btn"
-						>
-							<span className={ cx('inline-feedback', {
-								'active': this.state.clipboardConfirmations.includes(rawItem.key)
-							}) }>
-								<span
-								className="default-text"
-								aria-hidden={ !this.state.clipboardConfirmations.includes(rawItem.key) }>
-									Copy
+						{ !this.props.isNumericStyle && (
+							<DropdownItem
+								onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
+								className="btn"
+							>
+								<span className={ cx('inline-feedback', {
+									'active': this.state.clipboardConfirmations.includes(rawItem.key)
+								}) }>
+									<span
+									className="default-text"
+									aria-hidden={ !this.state.clipboardConfirmations.includes(rawItem.key) }>
+										{this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
+									</span>
+									<span
+									className="shorter feedback"
+									aria-hidden={ this.state.clipboardConfirmations.includes(rawItem.key) }>
+										Copied!
+									</span>
 								</span>
-								<span
-								className="shorter feedback"
-								aria-hidden={ this.state.clipboardConfirmations.includes(rawItem.key) }>
-									Copied!
-								</span>
-							</span>
-						</DropdownItem>
+							</DropdownItem>
+						) }
 						<DropdownItem
 							onClick={ this.handleEditCitation.bind(this, rawItem.key) }
 							className="btn"
@@ -169,7 +171,8 @@ class Bibliography extends React.PureComponent {
 				{ !this.props.isNumericStyle && (
 					<Button
 						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
-						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }>
+						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
+					>
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
@@ -248,6 +251,7 @@ class Bibliography extends React.PureComponent {
 
 	static propTypes = {
 		bibliography: PropTypes.object,
+		isNoteStyle: PropTypes.bool,
 		isNumericStyle: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
