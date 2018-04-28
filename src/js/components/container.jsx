@@ -710,19 +710,56 @@ class Container extends React.Component {
 		this.setState({ isSaveToZoteroVisible: false });
 	}
 
-	async handleCitationCopy(itemId) {
-		const citation = {
-			citationItems: [{ id: itemId }],
-			properties: {}
-		};
-		const text = this.citeproc.previewCitationCluster(citation, [], [], 'text');
-		const html = this.citeproc.previewCitationCluster(citation, [], [], 'html');
+	//
+	// Copy Citation
+	//
+	handleCitationCopyClick(ev, itemId) {
+		ev.stopPropagation();
+		this.setState({
+			citationToCopy: itemId,
+			citationHtml: this.getCitation(itemId, null, ['html']).html
+		});
+	}
+
+	handleCitationModifierChange(modifiers) {
+		if (!this.state.citationToCopy) return;
+
+		this.setState({
+			citationLocator: modifiers.locator,
+			citationLabel: modifiers.label,
+			citationHtml: this.getCitation(this.state.citationToCopy, modifiers, ['html']).html
+		});
+	}
+
+	handleCitationCopy() {
+		// HTML is generated for the dialog, but we need a text version too for the clipboard
+		var text = this.getCitation(
+			this.state.citationToCopy,
+			{
+				locator: this.state.citationLocator,
+				label: this.state.citationLabel,
+			},
+			['text']
+		).text;
+		var html = this.state.citationHtml;
 		this.copyDataInclude = [
 			{ mime: 'text/plain', data: text },
 			{ mime: 'text/html', data: html },
 		];
 		copy(text);
+		this.handleCitationCopyCancel();
 	}
+
+	handleCitationCopyCancel() {
+		this.setState({
+			citationToCopy: null,
+			citationLocator: null,
+			citationLabel: null,
+			citationText: null,
+			citationHtml: null
+		});
+	}
+
 
 	handleReviewDelete() {
 		this.handleDeleteEntry(this.state.itemUnderReview.key);
@@ -760,6 +797,26 @@ class Container extends React.Component {
 
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 		return citationStyles;
+	}
+
+	getCitation(itemId, modifiers, formats) {
+		const citation = {
+			citationItems: [{ id: itemId }],
+			properties: {}
+		};
+		if (modifiers) {
+			citation.citationItems[0].locator = modifiers.locator;
+			citation.citationItems[0].label = modifiers.label;
+		}
+		var output = {};
+		var validFormats = ['text', 'html']
+		if (!formats || !formats.length) {
+			formats = validFormats;
+		}
+		for (let format of formats.filter(f => validFormats.includes(f))) {
+			output[format] = this.citeproc.previewCitationCluster(citation, [], [], format);
+		}
+		return output;
 	}
 
 	getExportData(format) {
@@ -837,8 +894,11 @@ class Container extends React.Component {
 		return <ZBib
 			getCopyData = { this.getCopyData.bind(this) }
 			getFileData = { this.getFileData.bind(this) }
-			onCitationCopy = { this.handleCitationCopy.bind(this) }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
+			onCitationCopyClick = { this.handleCitationCopyClick.bind(this) }
+			onCitationModifierChange = { this.handleCitationModifierChange.bind(this) }
+			onCitationCopy = { this.handleCitationCopy.bind(this) }
+			onCitationCopyCancel = { this.handleCitationCopyCancel.bind(this) }
 			onClearMessage = { this.handleClearMessage.bind(this) }
 			onDeleteCitations = { this.handleDeleteCitations.bind(this) }
 			onDeleteEntry = { this.handleDeleteEntry.bind(this) }

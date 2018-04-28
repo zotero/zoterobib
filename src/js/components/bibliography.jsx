@@ -53,22 +53,6 @@ class Bibliography extends React.PureComponent {
 		this.props.onDeleteEntry(itemId);
 	}
 
-	handleCitationCopy(itemId, ev) {
-		ev.stopPropagation();
-		this.props.onCitationCopy(itemId);
-		this.setState({
-			clipboardConfirmations: [ ...this.state.clipboardConfirmations, itemId ]
-		});
-		this.timeouts[itemId] = setTimeout(() => {
-			delete this.timeouts[itemId];
-			this.setState({
-				clipboardConfirmations: this.state.clipboardConfirmations.filter(
-					c => c !== itemId
-				)
-			});
-		}, 1000);
-	}
-
 	handleFocus(itemId) {
 		this.setState({
 			focusedItem: itemId
@@ -135,7 +119,7 @@ class Bibliography extends React.PureComponent {
 					<DropdownMenu right className="dropdown-menu">
 						{ !this.props.isNumericStyle && (
 							<DropdownItem
-								onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
+								onClick={ (ev) => this.props.onCitationCopyClick(ev, rawItem.key) }
 								className="btn"
 							>
 								<span className={ cx('inline-feedback', {
@@ -172,7 +156,7 @@ class Bibliography extends React.PureComponent {
 					<Button
 						tooltip={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
 						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
-						onClick={ this.handleCitationCopy.bind(this, rawItem.key) }
+						onClick={ (ev) => this.props.onCitationCopyClick(ev, rawItem.key) }
 					>
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
@@ -258,7 +242,7 @@ class Bibliography extends React.PureComponent {
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
 		match: PropTypes.object,
-		onCitationCopy:  PropTypes.func.isRequired,
+		onCitationCopyClick:  PropTypes.func.isRequired,
 		onDeleteEntry: PropTypes.func.isRequired,
 		onEditorOpen:  PropTypes.func.isRequired,
 	}
