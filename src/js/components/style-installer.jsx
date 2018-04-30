@@ -254,7 +254,6 @@ class StyleInstaller extends React.Component {
 	render() {
 		return (
 			<Modal
-				key="react-modal"
 				isOpen={ this.props.isInstallingStyle }
 				contentLabel="Citation Style Picker"
 				className={ cx(this.className) }

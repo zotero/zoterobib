@@ -38,6 +38,16 @@ class Editor extends React.PureComponent {
 		this.prepareState(nextProps);
 	}
 
+	componentDidUpdate({ isEditorOpen }) {
+		if(this.props.isEditorOpen && !isEditorOpen) {
+			this.isRecentlyOpen = true;
+		}
+		if(this.isRecentlyOpen && this.itemBox) {
+			this.itemBox.focusField('itemType');
+			this.isRecentlyOpen = false;
+		}
+	}
+
 	async prepareState(props) {
 		var item;
 		if(!props.isEditorOpen) {
@@ -230,8 +240,10 @@ class Editor extends React.PureComponent {
 					<div className={ cx('editor', this.props.className ) }>
 						<ItemBox
 							{ ...this.state }
+							ref={ ref => this.itemBox = ref}
 							isForm={ true }
-							onSave={ this.handleItemUpdate.bind(this) } />
+							onSave={ this.handleItemUpdate.bind(this) }
+						/>
 					</div>
 				</div>
 			</div>
@@ -241,7 +253,6 @@ class Editor extends React.PureComponent {
 	render() {
 		return (
 			<Modal
-				key="react-modal"
 				isOpen={ this.props.isEditorOpen }
 				contentLabel="Item Editor"
 				className={ cx('editor-container modal modal-lg', { loading: this.state.isLoading })}

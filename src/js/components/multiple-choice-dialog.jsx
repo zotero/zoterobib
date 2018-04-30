@@ -72,7 +72,6 @@ class MultipleChoiceDialog extends React.Component {
 	render() {
 		return (
 			<Modal
-				key="react-modal"
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal modal-lg modal-centered"

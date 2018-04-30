@@ -40,10 +40,6 @@ class Modal extends React.PureComponent {
 	}
 
 	handleModalOpen() {
-		if('focus' in this.contentRef.firstChild) {
-			// EDGE...
-			this.contentRef.firstChild.focus();
-		}
 		// remove maxHeight hack that prevents scroll on focus
 		this.contentRef.style.maxHeight = null;
 		this.contentRef.style.overflowY = null;
@@ -73,7 +69,7 @@ class Modal extends React.PureComponent {
 	}
 
 	static propTypes = {
-		isOpen: PropTypes.bool,
+		isOpen: PropTypes.bool
 	}
 }
 

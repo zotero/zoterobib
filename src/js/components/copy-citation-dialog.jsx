@@ -52,7 +52,6 @@ class CopyCitationDialog extends React.PureComponent {
 		const title = this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation';
 		return (
 			<Modal
-				key="react-modal"
 				className="modal modal-centered"
 				isOpen={ this.props.isCitationCopyDialogOpen }
 				contentLabel={ title }
@@ -88,6 +87,7 @@ class CopyCitationDialog extends React.PureComponent {
 									onCommit={ this.handleChange.bind(this, 'label') }
 								/>
 								<Input
+									autoFocus
 									onChange={ this.handleChange.bind(this, 'locator') }
 									tabIndex={ 0 }
 									value={ this.props.citationCopyModifiers.citationLocator }
