@@ -42,7 +42,6 @@ class IdInput extends React.PureComponent {
 					onCommit={ this.handleCite.bind(this) }
 					placeholder="Paste or type in a URL, ISBN, DOI, PMID, or arXiv ID"
 					ref = { i => this.inputField = i }
-					selectOnFocus
 					tabIndex={ 0 }
 					type="text"
 					value={ this.state.identifier }
