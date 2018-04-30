@@ -297,6 +297,30 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 	};
 };
 
+const getCitation = (itemId, modifiers, formats, citeproc) => {
+	const citation = {
+		citationItems: [{ id: itemId }],
+		properties: {}
+	};
+	const output = {};
+	const validFormats = ['text', 'html'];
+
+	if (modifiers) {
+		for (let i in modifiers) {
+			let prop = i == 'suppressAuthor' ? 'suppress-author' : i;
+			citation.citationItems[0][prop] = modifiers[i];
+		}
+	}
+
+	if (!formats || !formats.length) {
+		formats = validFormats;
+	}
+	for (let format of formats.filter(f => validFormats.includes(f))) {
+		output[format] = citeproc.previewCitationCluster(citation, [], [], format);
+	}
+	return output;
+};
+
 const whitelist = [
 	...(Object.keys(baseMappings).reduce((agg, itemType) => {
 		'title' in baseMappings[itemType] && agg.push(baseMappings[itemType]['title']);
@@ -425,14 +449,15 @@ module.exports = {
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
 	getBibliographyOrFallback,
+	getCitation,
 	getCiteproc,
 	getCSL,
 	getItemTypeMeta,
 	getItemTypes,
 	isApa,
+	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
-	isLikeUrl,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
 	processSentenceCaseAPAField,

@@ -10,8 +10,8 @@ const BibliographySection = require('./bibliographySection');
 const Brand = require('./brand');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const CiteTools = require('./cite-tools');
-const CopyCitation = require('./copy-citation');
 const Confirmation = require('./confirmation');
+const CopyCitationDialog = require('./copy-citation-dialog');
 const Editor = require('./editor');
 const ExportTools = require('./export-tools');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
@@ -144,14 +144,6 @@ class ZBib extends React.PureComponent {
 								<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
 								<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
-							<CopyCitation
-								isOpen={ !!this.props.citationToCopy }
-								confirmLabel={ this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation' }
-								citationPreview={ this.props.citationHtml }
-								onCitationModifierChange={ this.props.onCitationModifierChange }
-								onConfirm={ this.props.onCitationCopy }
-								onCancel={ this.props.onCitationCopyCancel }
-							/>
 							<Modal
 								isOpen={ this.props.isSaveToZoteroVisible }
 								onRequestClose={ () => this.props.onSaveToZoteroHide() }
@@ -174,29 +166,31 @@ class ZBib extends React.PureComponent {
 									</div>
 								</div>
 							</Modal>
+							<CopyCitationDialog { ...this.props} />
+							<Editor { ...this.props } />
 							<MultipleChoiceDialog { ...this.props } />
 							<StyleInstaller { ...this.props } />
-							<Editor { ...this.props } />
 						</div>
 					</div>
 		);
 	}
 
 	static propTypes = {
+		citationHtml: PropTypes.string,
+		citationToCopy: PropTypes.string,
 		errorMessage: PropTypes.string,
 		isConfirmingStyleSwitch: PropTypes.bool,
 		isKeyboardUser: PropTypes.bool,
 		isMouseUser: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
-		citationToCopy: PropTypes.string,
-		citationHtml: PropTypes.string,
-		onCitationModifierChange: PropTypes.func.isRequired,
-		onCitationCopy: PropTypes.func.isRequired,
-		onCitationCopyCancel: PropTypes.func.isRequired,
 		isSaveToZoteroVisible: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
+		itemUnderReviewBibliography: PropTypes.object,
 		lastDeletedItem: PropTypes.object,
 		messages: PropTypes.array.isRequired,
+		onCitationCopy: PropTypes.func.isRequired,
+		onCitationCopyCancel: PropTypes.func.isRequired,
+		onCitationModifierChange: PropTypes.func.isRequired,
 		onClearMessage: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,
 		onHelpClick: PropTypes.func.isRequired,

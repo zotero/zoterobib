@@ -77,6 +77,12 @@ class Bibliography extends React.PureComponent {
 		ev.stopPropagation();
 	}
 
+	handleCopyCitationDialogOpen(itemId, ev) {
+		ev.stopPropagation();
+		ev.preventDefault();
+		this.props.onCitationCopyDialogOpen(itemId);
+	}
+
 	get keyHandlers() {
 		return [
 			<KeyHandler
@@ -119,7 +125,7 @@ class Bibliography extends React.PureComponent {
 					<DropdownMenu right className="dropdown-menu">
 						{ !this.props.isNumericStyle && (
 							<DropdownItem
-								onClick={ (ev) => this.props.onCitationCopyClick(ev, rawItem.key) }
+								onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 								className="btn"
 							>
 								<span className={ cx('inline-feedback', {
@@ -156,7 +162,7 @@ class Bibliography extends React.PureComponent {
 					<Button
 						tooltip={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
 						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
-						onClick={ (ev) => this.props.onCitationCopyClick(ev, rawItem.key) }
+						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 					>
 						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
@@ -242,7 +248,7 @@ class Bibliography extends React.PureComponent {
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
 		match: PropTypes.object,
-		onCitationCopyClick:  PropTypes.func.isRequired,
+		onCitationCopyDialogOpen:  PropTypes.func.isRequired,
 		onDeleteEntry: PropTypes.func.isRequired,
 		onEditorOpen:  PropTypes.func.isRequired,
 	}

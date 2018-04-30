@@ -45,6 +45,13 @@ class Review extends React.PureComponent {
 			</div>
 		);
 	}
+
+	static propTypes = {
+		itemUnderReviewBibliography: PropTypes.object,
+		onReviewDelete: PropTypes.func.isRequired,
+		onReviewDismiss: PropTypes.func.isRequired,
+		onReviewEdit: PropTypes.func.isRequired,
+	}
 }
 
 module.exports = Review;
