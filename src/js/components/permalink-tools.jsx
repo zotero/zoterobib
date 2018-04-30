@@ -84,7 +84,7 @@ class PermalinkTools extends React.Component {
 			) : (
 			<Button
 				disabled={ this.props.items.length === 0 }
-				className="btn-lg btn-outline-secondary"
+				className="btn-lg btn-outline-secondary btn-min-width"
 				onClick={ this.handleCreateLink.bind(this) }
 			>
 				Create

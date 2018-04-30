@@ -1,0 +1,41 @@
+//
+// Review
+//
+
+.section-review {
+	padding-top: $space-xl - 7px;
+	padding-bottom: $space-xl;
+
+	@media (min-width: $bp-md) {
+		padding-top: $space-xxl - 7px; // Caps height
+		padding-bottom: $space-xxl;
+	}
+}
+
+.review {
+	font-size: 20px;
+	background: $review-bg;
+	border-top-color: $review-border-color;
+
+	.actions {
+		text-align: center;
+		margin-top: $space-xl - 8px;
+
+		@media (min-width: $bp-md) {
+			margin-top: $space-xxl - 8px;
+		}
+	}
+
+	.btn {
+		& + .btn {
+			margin-left: $space-sm;
+		}
+	}
+
+	// Dev only
+	.csl-bib-body {
+		line-height: inherit !important;
+		margin-left: 0 !important;
+		text-indent: 0 !important;
+	}
+}

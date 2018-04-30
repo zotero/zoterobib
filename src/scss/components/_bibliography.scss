@@ -7,20 +7,6 @@
 	list-style: none;
 	text-align: left;
 
-	// CSL styles only work correctly with content-box
-	.csl-entry {
-		word-wrap: break-word; // Break long URLs
-
-		&,
-		* {
-			box-sizing: content-box;
-		}
-	}
-
-	.csl-left-margin {
-		word-wrap: normal;
-	}
-
 	.write & {
 		margin: $space-lg (-$grid-gutter-width / 2);
 
@@ -61,10 +47,6 @@
 				flex: 1 1 0;
 				margin-right: ($space-md - $space-xs);
 				min-width: 0; // Enable word-wrap for long URLs
-			}
-
-			.csl-entry {
-				margin: 0 !important; // Override entry-spacing defined in CSL
 			}
 
 			> .btn-icon,

@@ -139,8 +139,8 @@ $menu-item-hover-bg: $shade-1;
 // Z-index master list
 //
 
-$zindex-menu: 1000;
-$zindex-messages:    1010;
+$zindex-menu:     1000;
+$zindex-messages: 1010;
 
 
 //
@@ -340,6 +340,13 @@ $permalink-spinner-size: $space-xl;
 
 $dropdown-menu-bg: $body-bg;
 
+
+//
+// Review
+//
+
+$review-bg: mix($secondary, $shade-0, 7%);
+$review-border-color: mix($secondary, $shade-0, 14%);
 
 //
 // About

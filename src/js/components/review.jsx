@@ -27,22 +27,27 @@ class Review extends React.PureComponent {
 		div.innerHTML = html;
 
 		return (
-			<div className="review">
-				<div className="bibliography read-only"
-					dangerouslySetInnerHTML={ { __html: div.innerHTML } }
-				/>
-				<div className="actions">
-					<Button onClick={ this.handleDismiss.bind(this) }>
-						Dismiss
-					</Button>
-					<Button onClick={ this.handleDelete.bind(this) }>
-						Delete
-					</Button>
-					<Button onClick={ this.handleEdit.bind(this) }>
-						Edit
-					</Button>
+			<section className="section section-review review">
+				<div className="container">
+					<div
+						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
+					/>
+					<div className="actions">
+						<Button
+							className="btn-outline-secondary btn-min-width"
+							onClick={ this.handleDelete.bind(this) }
+						>
+							Delete
+						</Button>
+						<Button
+							className="btn-secondary btn-min-width"
+							onClick={ this.handleEdit.bind(this) }
+						>
+							Edit
+						</Button>
+					</div>
 				</div>
-			</div>
+			</section>
 		);
 	}
 

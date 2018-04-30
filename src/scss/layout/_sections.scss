@@ -9,4 +9,8 @@
 	@media (min-width: $bp-md) {
 		padding: $section-padding 0;
 	}
+
+	.review + & {
+		border-top-color: $review-border-color;
+	}
 }
