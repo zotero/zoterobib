@@ -39,6 +39,7 @@ class Review extends React.PureComponent {
 		div.innerHTML = html;
 		return (
 			<section className="section section-review review">
+				<h2 className="sr-only">New item …</h2>
 				<div className="container">
 					<div
 						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
