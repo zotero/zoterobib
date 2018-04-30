@@ -164,7 +164,7 @@ class Bibliography extends React.PureComponent {
 						className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
 						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 					>
-						<Icon type={ '16/quote' } width="16" height="16" />
+						<Icon type={ '16/copy' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
