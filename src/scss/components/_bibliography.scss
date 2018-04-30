@@ -20,9 +20,20 @@
 			padding: ($space-lg - 7px) ($space-md - $space-xs) ($space-lg - 7px) $space-md; // Caps height
 			border-top: 1px solid $shade-2;
 			cursor: pointer;
+			position: relative;
 
 			@media (max-width: $bp-md - 1px) {
 				padding-right: $space-md - 2px;
+			}
+
+			@media (min-width: $bp-md) {
+				&::before {
+					content: "";
+					position: absolute;
+					left: 100%;
+					width: 36px;
+					height: 100%;
+				}
 			}
 
 			&:last-child {
@@ -30,7 +41,17 @@
 			}
 
 			&:hover {
-				background-color: $shade-1;
+				@media (min-width: $bp-md) {
+					box-shadow: 0 2px 4px $btn-box-shadow-color;
+
+					.btn-remove {
+						opacity: 1;
+					}
+
+					& + .citation {
+						border-top-color: transparent;
+					}
+				}
 			}
 
 			&:focus {
@@ -51,11 +72,13 @@
 
 			> .btn-icon,
 			.dropdown {
-				margin: (-$space-lg) 0;
+				margin-top: -$space-lg;
+				margin-bottom: -$space-lg;
 			}
 
-			.btn-icon {
+			> .btn-icon {
 				flex: 0 0 auto;
+				transition: opacity $btn-transition;
 
 				&.success {
 					background: $btn-success-color;
@@ -67,6 +90,60 @@
 					.icon-tick {
 						display: block;
 					}
+				}
+			}
+
+			.btn-copy {
+				border-color: transparent;
+
+				&:active {
+					.icon {
+						color: $shade-0;
+					}
+				}
+			}
+
+			.btn-remove {
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				top: 50%;
+				right: -28px;
+				margin: -10px 0 0 0;
+				border-radius: 50%;
+				display: none;
+
+				@include button-variant($btn-primary-color);
+
+				&:not(:hover):not(:active):not(:focus) {
+					background-color: #ddd;
+				}
+
+				@media (min-width: $bp-md) {
+					display: block;
+					opacity: 0;
+
+					&:focus {
+						opacity: 1;
+
+						@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+							box-shadow: 0 0 0 $input-btn-focus-width $btn-primary-color;
+
+							&:hover {
+								box-shadow:
+									0 0 0 $input-btn-focus-width $btn-primary-color,
+									0 4px 4px $btn-box-shadow-color;
+							}
+
+							&:active {
+								box-shadow: 0 0 0 $input-btn-focus-width darken($btn-primary-color, 8%);
+							}
+						}
+					}
+				}
+
+				.icon {
+					color: #fff;
 				}
 			}
 

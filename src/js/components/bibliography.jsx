@@ -161,16 +161,16 @@ class Bibliography extends React.PureComponent {
 				{ !this.props.isNumericStyle && (
 					<Button
 						tooltip={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
-						className={ cx('d-xs-none d-md-block', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
+						className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
 						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 					>
-						<Icon type={ '16/copy' } width="16" height="16" />
+						<Icon type={ '16/quote' } width="16" height="16" />
 						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
 				<Button
 					tooltip="Delete Entry"
-					className="d-xs-none d-md-block"
+					className="btn-primary btn-remove"
 					onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
 				>
 					<Icon type={ '16/remove-sm' } width="16" height="16" />

@@ -6,28 +6,44 @@
 	$btn-color: if($inverse, $shade-0, $color);
 	$shade-0: if($inverse, $color, $shade-0);
 
-	color: if($outline, $btn-color, $shade-0);
 	background-color: if($outline, transparent, $btn-color);
 	border-color: if($outline, $btn-color, transparent);
 
+	&,
+	.icon {
+		color: if($outline, $btn-color, $shade-0);
+	}
+
 	&:hover {
-		color: $shade-0;
 		background-color: $btn-color;
 		box-shadow: 0 2px 4px $btn-box-shadow-color;
+
+		&,
+		.icon {
+			color: $shade-0;
+		}
 	}
 
 	&:active {
-		color: $shade-0;
 		background-color: darken($btn-color, 8%);
 		border-color: if($outline, darken($btn-color, 8%), transparent);
 		box-shadow: none;
+
+		&,
+		.icon {
+			color: $shade-0;
+		}
 	}
 
 	&:disabled {
-		color: if($outline, $btn-color, $shade-0);
 		background-color: if($outline, transparent, $btn-color);
 		border-color: if($outline, $btn-color, transparent);
 		box-shadow: none;
+
+		&,
+		.icon {
+			color: if($outline, $btn-color, $shade-0);
+		}
 	}
 
 	&:focus {
@@ -37,7 +53,7 @@
 			&:hover {
 				box-shadow:
 					0 0 0 $input-btn-focus-width $btn-color,
-					0px 4px 4px $btn-box-shadow-color;
+					0 4px 4px $btn-box-shadow-color;
 			}
 
 			&:active {
