@@ -170,7 +170,7 @@ class Bibliography extends React.PureComponent {
 				) }
 				<Button
 					tooltip="Delete Entry"
-					className="btn-primary btn-remove"
+					className="btn-outline-secondary btn-remove"
 					onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
 				>
 					<Icon type={ '16/remove-sm' } width="16" height="16" />

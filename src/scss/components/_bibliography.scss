@@ -41,19 +41,11 @@
 			}
 
 			&:hover {
-				@media (min-width: $bp-md) {
-					box-shadow: 0 2px 4px $btn-box-shadow-color;
+				background-color: $shade-1;
 
+				@media (min-width: $bp-md) {
 					.btn-remove {
 						opacity: 1;
-					}
-
-					& + .citation {
-						border-top-color: transparent;
-					}
-
-					&:last-child {
-						border-bottom-color: transparent;
 					}
 				}
 			}
@@ -98,7 +90,14 @@
 			}
 
 			.btn-copy {
+				@include button-variant($btn-secondary-color, $outline: true);
 				border-color: transparent;
+
+				&:focus {
+					@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+						border-color: $btn-secondary-color;
+					}
+				}
 
 				&:active {
 					.icon {
@@ -117,10 +116,10 @@
 				border-radius: 50%;
 				display: none;
 
-				@include button-variant($btn-primary-color);
+				@include button-variant($btn-secondary-color, $outline: true);
 
-				&:not(:hover):not(:active):not(:focus) {
-					background-color: #ddd;
+				&:active {
+					opacity: 1;
 				}
 
 				@media (min-width: $bp-md) {
@@ -128,26 +127,25 @@
 					opacity: 0;
 
 					&:focus {
-						opacity: 1;
-
 						@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
-							box-shadow: 0 0 0 $input-btn-focus-width $btn-primary-color;
+							opacity: 1;
+							box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
+
+							.icon {
+								color: $btn-secondary-color;
+							}
 
 							&:hover {
 								box-shadow:
-									0 0 0 $input-btn-focus-width $btn-primary-color,
+									0 0 0 $input-btn-focus-width $btn-secondary-color,
 									0 4px 4px $btn-box-shadow-color;
 							}
 
 							&:active {
-								box-shadow: 0 0 0 $input-btn-focus-width darken($btn-primary-color, 8%);
+								box-shadow: 0 0 0 $input-btn-focus-width darken($btn-secondary-color, 8%);
 							}
 						}
 					}
-				}
-
-				.icon {
-					color: #fff;
 				}
 			}
 
