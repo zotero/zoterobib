@@ -12,7 +12,11 @@
 	background: $review-bg;
 	border-top-color: $review-border-color;
 	position: relative;
-	min-height: 184px; // dev
+	min-height: 143px; // Dev
+
+	@media (min-width: $bp-md) {
+		min-height: 184px; // Dev
+	}
 
 	.container {
 		padding-top: $space-xl - 7px;
@@ -29,7 +33,7 @@
 		left: 0;
 		top: 50%;
 		width: 100%;
-		transform: translateY(-50%);
+		transform: translateY(calc(-50% - 2px));
 		text-align: center;
 		margin: 0;
 		color: $secondary;
