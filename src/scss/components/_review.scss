@@ -19,10 +19,10 @@
 
 	.actions {
 		text-align: center;
-		margin-top: $space-xl - 8px;
+		margin-top: $space-lg - 8px;
 
 		@media (min-width: $bp-md) {
-			margin-top: $space-xxl - 8px;
+			margin-top: $space-xl - 8px;
 		}
 	}
 
