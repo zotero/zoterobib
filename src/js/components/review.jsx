@@ -19,16 +19,26 @@ class Review extends React.PureComponent {
 	}
 
 	render() {
+		if(this.props.isTranslating) {
+			return (
+				<section className="section section-review review">
+					<h2>New item …</h2>
+				</section>
+			);
+		}
+
+		if(!this.props.itemUnderReviewBibliography) {
+			return null;
+		}
+
 		const { citations, bibliography, isFallback } = this.props.itemUnderReviewBibliography;
 		const html = isFallback ?
 			`<ol><li>${citations.join('</li><li>')}</li></ol>` :
 			formatBib(bibliography);
 		const div = document.createElement('div');
 		div.innerHTML = html;
-
 		return (
 			<section className="section section-review review">
-				<h2>New item …</h2>
 				<div className="container">
 					<div
 						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
@@ -53,6 +63,7 @@ class Review extends React.PureComponent {
 	}
 
 	static propTypes = {
+		isTranslating: PropTypes.bool,
 		itemUnderReviewBibliography: PropTypes.object,
 		onReviewDelete: PropTypes.func.isRequired,
 		onReviewDismiss: PropTypes.func.isRequired,

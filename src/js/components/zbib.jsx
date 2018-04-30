@@ -82,10 +82,7 @@ class ZBib extends React.PureComponent {
 									</section>
 								)
 							}
-
-							{ this.props.itemUnderReviewBibliography && (
-								<Review { ...this.props} />
-							)}
+							<Review { ...this.props} />
 							<BibliographySection { ...this.props} />
 
 							{
