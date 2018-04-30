@@ -51,6 +51,10 @@
 					& + .citation {
 						border-top-color: transparent;
 					}
+
+					&:last-child {
+						border-bottom-color: transparent;
+					}
 				}
 			}
 
