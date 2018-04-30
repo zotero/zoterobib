@@ -3,19 +3,38 @@
 //
 
 .section-review {
-	padding-top: $space-xl - 7px;
-	padding-bottom: $space-xl;
-
-	@media (min-width: $bp-md) {
-		padding-top: $space-xxl - 7px; // Caps height
-		padding-bottom: $space-xxl;
-	}
+	padding: 0;
+	overflow: hidden;
 }
 
 .review {
 	font-size: 20px;
 	background: $review-bg;
 	border-top-color: $review-border-color;
+	position: relative;
+	min-height: 184px; // dev
+
+	.container {
+		padding-top: $space-xl - 7px;
+		padding-bottom: $space-xl;
+
+		@media (min-width: $bp-md) {
+			padding-top: $space-xxl - 7px; // Caps height
+			padding-bottom: $space-xxl;
+		}
+	}
+
+	h2 {
+		position: absolute;
+		left: 0;
+		top: 50%;
+		width: 100%;
+		transform: translateY(-50%);
+		text-align: center;
+		margin: 0;
+		color: $secondary;
+		opacity: 0.5;
+	}
 
 	.actions {
 		text-align: center;
