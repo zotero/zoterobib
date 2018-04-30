@@ -40,6 +40,7 @@ class Container extends React.Component {
 	state = {
 		//@TODO: bibliography, citations & items should probably be a single variable
 		bibliography: [],
+		citationCopyModifiers: {},
 		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
 		citationStyles: [],
 		config: {
@@ -719,18 +720,12 @@ class Container extends React.Component {
 		});
 	}
 
-	handleCitationModifierChange(modifiers) {
-		if (!this.state.citationToCopy) {
-			return;
-		}
-
+	handleCitationModifierChange(citationCopyModifiers) {
 		this.setState({
-			citationLocator: modifiers.locator,
-			citationLabel: modifiers.label,
-			citationSuppressAuthor: modifiers.suppressAuthor,
+			citationCopyModifiers,
 			citationHtml: getCitation(
 					this.state.citationToCopy,
-					modifiers,
+					citationCopyModifiers,
 					['html'],
 					this.citeproc
 				).html
@@ -741,11 +736,7 @@ class Container extends React.Component {
 		// HTML is generated for the dialog, but we need a text version too for the clipboard
 		var text = getCitation(
 			this.state.citationToCopy,
-			{
-				locator: this.state.citationLocator,
-				label: this.state.citationLabel,
-				suppressAuthor: this.state.citationSuppressAuthor
-			},
+			this.state.citationCopyModifiers,
 			['text'],
 			this.citeproc
 		).text;
@@ -762,10 +753,7 @@ class Container extends React.Component {
 		this.setState({
 			isCitationCopyDialogOpen: false,
 			citationToCopy: null,
-			citationLocator: null,
-			citationLabel: null,
-			citationSuppressAuthor: null,
-			citationText: null,
+			citationCopyModifiers: {},
 			citationHtml: null
 		});
 	}

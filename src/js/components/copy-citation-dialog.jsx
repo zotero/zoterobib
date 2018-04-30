@@ -32,24 +32,10 @@ const locators = [
 	label: locator[0].toUpperCase() + locator.slice(1)
 }));
 
-class CopyCitationDialog extends React.Component {
-	state = {
-		locator: '',
-		label: 'page',
-		suppressAuthor: false
-	};
-
-	componentDidUpdate(prevProps, prevState) {
-		if (prevState.locator === this.state.locator
-				&& prevState.label === this.state.label
-				&& prevState.suppressAuthor === this.state.suppressAuthor) {
-			return;
-		}
-		this.props.onCitationModifierChange(this.state);
-	}
-
+class CopyCitationDialog extends React.PureComponent {
 	handleChange(name, value) {
-		this.setState({
+		this.props.onCitationModifierChange({
+			...this.props.citationCopyModifiers,
 			[name]: value
 		});
 	}
@@ -60,11 +46,6 @@ class CopyCitationDialog extends React.Component {
 
 	handleConfirm() {
 		this.props.onCitationCopy();
-	}
-
-
-	reset() {
-		this.setState(this.defaultState);
 	}
 
 	render() {
@@ -101,18 +82,22 @@ class CopyCitationDialog extends React.Component {
 									tabIndex={ 0 }
 									clearable={ false }
 									searchable={ false}
-									value={ this.state.label }
+									value={ this.props.citationCopyModifiers.citationLabel || 'page' }
 									options={ locators }
 									onChange={ () => true }
 									onCommit={ this.handleChange.bind(this, 'label') }
 								/>
-								<Input tabIndex={ 0 } onChange={ this.handleChange.bind(this, 'locator') } />
+								<Input
+									onChange={ this.handleChange.bind(this, 'locator') }
+									tabIndex={ 0 }
+									value={ this.props.citationCopyModifiers.citationLocator }
+								/>
 							</div>
 							<div>
 								<label>
 									<input
 										type="checkbox"
-										checked={ this.state.suppressAuthor }
+										checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
 										onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
 									/>
 									Suppress Author
@@ -149,8 +134,8 @@ class CopyCitationDialog extends React.Component {
 	}
 
 	static propTypes = {
+		citationCopyModifiers: PropTypes.object,
 		citationHtml: PropTypes.string,
-		confirmLabel: PropTypes.string,
 		isCitationCopyDialogOpen: PropTypes.bool,
 		isNoteStyle: PropTypes.bool,
 		onCitationCopy: PropTypes.func.isRequired,
