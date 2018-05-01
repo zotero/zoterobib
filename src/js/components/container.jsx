@@ -341,22 +341,29 @@ class Container extends React.Component {
 		this.setState({
 			bibliography: this.bibliography,
 			items: this.bib.itemsRaw,
+			itemUnderReview: null,
 			permalink: null,
-			title: null
+			title: null,
 		});
 	}
 
 	handleItemCreated(item) {
-		this.setState({ permalink: null });
 		this.bib.addItem(item);
 		this.setState({
 			bibliography: this.bibliography,
+			editorItem: this.bib.itemsRaw.find(i => i.key === item.key),
 			items: this.bib.itemsRaw,
-			editorItem: this.bib.itemsRaw.find(i => i.key === item.key)
+			permalink: null,
 		});
 	}
 
 	handleOpenEditor(itemId = null) {
+		if(itemId != this.state.itemUnderReview.key) {
+			this.setState({
+				itemUnderReview: null,
+			});
+		}
+
 		this.clearMessages();
 		this.setState({
 			isEditorOpen: true,
@@ -378,9 +385,11 @@ class Container extends React.Component {
 	}
 
 	handleDeleteEntry(itemId) {
-		this.setState({ permalink: null });
+		this.setState({
+			itemUnderReview: null,
+			permalink: null,
+		});
 		const item = this.bib.itemsRaw.find(item => item.key == itemId);
-
 		if(this.bib.removeItem(item)) {
 			const message = {
 				id: getNextMessageId(),
@@ -425,6 +434,9 @@ class Container extends React.Component {
 		if(citationStyle === this.state.citationStyle) {
 			return;
 		}
+		this.setState({
+			itemUnderReview: null
+		});
 		if(citationStyle === 'install') {
 			this.clearMessages();
 			this.setState({
@@ -674,6 +686,7 @@ class Container extends React.Component {
 
 	handleTitleChange(title) {
 		this.setState({
+			itemUnderReview: null,
 			permalink: null,
 			title
 		});
@@ -714,9 +727,10 @@ class Container extends React.Component {
 
 	handleCitationCopyDialogOpen(itemId) {
 		this.setState({
-			isCitationCopyDialogOpen: true,
+			citationHtml: getCitation(itemId, null, ['html'], this.citeproc).html,
 			citationToCopy: itemId,
-			citationHtml: getCitation(itemId, null, ['html'], this.citeproc).html
+			isCitationCopyDialogOpen: true,
+			itemUnderReview: null,
 		});
 	}
 
@@ -761,7 +775,6 @@ class Container extends React.Component {
 
 	handleReviewDelete() {
 		this.handleDeleteEntry(this.state.itemUnderReview.key);
-		this.setState({ itemUnderReview: null });
 	}
 
 	handleReviewDismiss() {
