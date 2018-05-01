@@ -331,7 +331,7 @@ class Container extends React.Component {
 			permalink = `${window.location.origin}/${key}`;
 		} catch(e) {
 			this.props.history.push('/');
-			this.handleError('Failed to save citations.', e);
+			this.handleError('Failed to upload bibliography', e);
 		}
 		this.setState({ permalink });
 	}
