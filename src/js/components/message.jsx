@@ -3,6 +3,8 @@
 const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
+const KeyHandler = require('react-key-handler').default;
+const { KEYDOWN } = require('react-key-handler');
 const { withRouter } = require('react-router-dom');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 const Button = require('zotero-web-library/lib/component/ui/button');
@@ -82,6 +84,11 @@ class Message extends React.Component {
 				>
 					<Icon type={ '24/remove' } width="24" height="24" />
 				</button>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ this.handleDismiss.bind(this) }
+				/>
 			</div>
 		) : null;
 	}
