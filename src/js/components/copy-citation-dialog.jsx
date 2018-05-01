@@ -48,6 +48,13 @@ class CopyCitationDialog extends React.PureComponent {
 		this.props.onCitationCopy();
 	}
 
+	handleInputCommit(_val, _hasChanged, ev) {
+		if(ev.type === 'keydown') {
+			this.props.onCitationCopy();
+			ev.preventDefault();
+		}
+	}
+
 	render() {
 		const title = this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation';
 		return (
@@ -89,6 +96,7 @@ class CopyCitationDialog extends React.PureComponent {
 								<Input
 									autoFocus
 									onChange={ this.handleChange.bind(this, 'locator') }
+									onCommit={ this.handleInputCommit.bind(this) }
 									tabIndex={ 0 }
 									value={ this.props.citationCopyModifiers.citationLocator }
 								/>
