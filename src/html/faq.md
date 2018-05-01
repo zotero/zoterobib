@@ -82,7 +82,7 @@ Other than the web requests necessary to complete your search, which contain the
 
 The easiest way to add an item to ZBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZBib. ZBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
 
-If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
+If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
 
 If all else fails, you can enter item details by hand by clicking <i>Manual Entry</i>.
 
