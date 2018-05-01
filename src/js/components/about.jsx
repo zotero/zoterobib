@@ -44,10 +44,11 @@ class About extends React.PureComponent {
 								<h2 className="h4">Adding a bibliography entry</h2>
 								<p>
 									Simply find what you’re looking for in another browser tab
-									and copy the page URL to the ZBib search bar. ZBib will
-									automatically import the reference and add it to your
-									bibliography. You can also paste or type in a DOI, ISBN, PMID,
-									or arXiv ID.
+									and copy the page URL to the ZBib search bar. ZBib can
+									automatically pull in data from newspaper and magazine
+									articles, library catalogs, journal articles, sites like Amazon
+									and Google Books, and much more. You can also paste or type in
+									an ISBN, DOI, PMID, or arXiv ID.
 								</p>
 							</section>
 							<section className="feature">

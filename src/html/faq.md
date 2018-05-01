@@ -80,11 +80,11 @@ Other than the web requests necessary to complete your search, which contain the
 
 ### How do I add entries to my bibliography?
 
-The easiest way to add an item to ZBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZBib. ZBib can automatically extract metadata from newspaper and magazine articles, journal articles, database results, webpages, and more.
+The easiest way to add an item to ZBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZBib. ZBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
 
-If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
+If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
 
-If all else fails, you can enter item details by hand, though that's rarely necessary.
+If all else fails, you can enter item details by hand by clicking <i>Manual Entry</i>.
 
 ### How do I add parenthetical citations or notes to my paper?
 
@@ -108,7 +108,7 @@ Select <i>Download RIS</i> to download a data file that can be imported into any
 
 ### I'm getting an error trying to add an item. What do I do?
 
-Some sites have restrictions that prevent ZBib from working. If you're adding an item by URL, try pasting in a DOI, ISBN, or PMID instead, or enter the exact title into the search bar.
+Some sites have restrictions that prevent ZBib from working, or they're designed in such a way that a URL can't be used to retrieve a given page. Try a different site, or paste in a ISBN, DOI, or other identifier instead.
 
 In a pinch, you can always enter metadata manually, though that should rarely be necessary.
 
@@ -142,7 +142,7 @@ If you still think there's a mistake, you can report it in the [Zotero Forums] o
 
 <h3 id="help">Something else isn't working. How can I get help?</h3>
 
-Sorry about that! You can post to the [Zotero Forums] and we'll be happy to help. (You'll need to create a Zotero account first.) Since these forums are shared with Zotero, it's best to put "\[ZBib\]" in the title so it's clear that's what you're referring to.
+Sorry about that! You can post to the [Zotero Forums] and we'll be happy to help. (You'll need to create a Zotero account first.) Since these forums are shared with Zotero, it's best to put "\[ZBib\]" in the title so it's clear what you're referring to.
 
 [Zotero]: https://www.zotero.org
 [Zotero Forums]: https://forums.zotero.org
