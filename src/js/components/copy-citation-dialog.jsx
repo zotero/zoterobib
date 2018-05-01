@@ -93,16 +93,18 @@ class CopyCitationDialog extends React.PureComponent {
 									value={ this.props.citationCopyModifiers.citationLocator }
 								/>
 							</div>
-							<div>
-								<label>
-									<input
-										type="checkbox"
-										checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
-										onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
-									/>
-									Suppress Author
-								</label>
-							</div>
+							{ !this.props.isNoteStyle && (
+								<div>
+									<label>
+										<input
+											type="checkbox"
+											checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
+											onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
+										/>
+										Omit Author
+									</label>
+								</div>
+							) }
 							<div>
 								<p>Preview:</p>
 								<p
