@@ -1,9 +1,14 @@
 {
 	"indexConfig": {
-		"storeUrl": null,
-		"stylesUrl": null,
-		"translationServerPrefix": "",
-		"translationServerUrl": null,
-		"stylesCacheTime": null
+		// this config is used during the build to configure Zotero Bib
+		// component both during development and in production. Values
+		// listed below can be overriden in local.json and/or using
+		// env variables. See https://www.npmjs.com/package/config
+		// 
+		// "storeUrl": undefined,
+		// "stylesUrl": undefined,
+		// "translationServerPrefix": "",
+		// "translationServerUrl": undefined,
+		// "stylesCacheTime": undefined
 	}
 }

@@ -8,19 +8,10 @@
 	<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
 </head>
 <body>
-	<main data-widget="zotero-bib"></main>
-	<script src="/static/bib-component.js"></script>
-	<script>
-		ZoteroBibComponent.init(
-			document.querySelector('[data-widget=zotero-bib]'),
-			{
-				{{#each indexConfig}}
-					{{#if this}}
-						{{@key}}: '{{this}}',
-					{{/if}}
-				{{/each}}
-			}
-		);
+	<main id="zotero-bib"></main>
+	<script id="zotero-bib-config" type="application/json">
+		{{{json indexConfig}}}
 	</script>
+	<script src="/static/main.js"></script>
 </body>
 </html>

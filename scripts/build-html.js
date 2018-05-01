@@ -6,6 +6,8 @@ const config = require('config');
 const marked = require('marked');
 const Handlebars = require('handlebars');
 
+Handlebars.registerHelper('json', context => JSON.stringify(context));
+
 (async () => {
 	// Index
 	var indexConfig = config.get('indexConfig');
