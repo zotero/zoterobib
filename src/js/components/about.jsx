@@ -127,6 +127,21 @@ class About extends React.PureComponent {
 							</section>
 							<section className="feature">
 								<img
+									src="/static/images/about/copy-citation.svg"
+									className="feature-icon"
+									width="66"
+									height="66"
+									alt=""
+								/>
+								<h2 className="h4">Copy Citation/Note</h2>
+								<p>
+									As you’re writing, you can quickly generate parenthetical
+									citations or footnotes/endnotes to paste into your document
+									without typing names or dates by hand.
+								</p>
+							</section>
+							<section className="feature">
+								<img
 									src="/static/images/about/export.svg"
 									className="feature-icon"
 									width="66"

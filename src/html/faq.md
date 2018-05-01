@@ -22,7 +22,7 @@ Nothing! ZBib is completely free and ad-free.
 
 We created ZBib because we thought there should be a bibliography tool that was free, easier and more pleasant to use, and much more accurate.
 
-Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or more advanced citation styles. And since it's built by the team behind Zotero and based on the same open-source technology, you can count on the same expertise and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
+Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or additional citation styles. And since it's built by the team behind Zotero and based on the same open-source technology, you can count on the same expertise and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
 
 ### Should I use ZBib or Zotero?
 
@@ -34,7 +34,7 @@ If you're working on a longer-term project, want to build up a research library 
 
   * Browser extensions for Chrome, Firefox, and Safari to help you save items with one click
   * Automatic downloading of PDFs and webpage snapshots
-  * Word processor plugins to help you insert in-text citations and automatically generate a bibliography from the citations in your document
+  * Word processor plugins to help you quickly insert citations and automatically generate a bibliography from the citations in your document, with support for subsequent citations, given name disambiguation, ordered numeric styles, and other advanced features
   * Organization and tagging
   * Note-taking
   * Advanced sorting and searching
@@ -85,6 +85,12 @@ The easiest way to add an item to ZBib is by pasting in a URL. Just open a new b
 If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in a [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
 
 If all else fails, you can enter item details by hand, though that's rarely necessary.
+
+### How do I add parenthetical citations or notes to my paper?
+
+As you write, ZBib can help you quickly generate parenthetical citations (APA, MLA) or footnotes/endnotes (Chicago, Turabian) for the specific quotes, facts, or ideas you're including into your paper. Just click the copy icon next to an entry in your bibliography, enter the relevant page range or section of the source that you're citing, and click Copy Citation or Copy Note. You can then paste the citation into your paper.
+
+For styles such as APA and MLA, if you incorporate an author's name into a sentence ("As Smith writes…"), you can use the "Omit Author" option to include only a date and/or page number in the parenthetical citation ("(2015, pp. 12–13)").
 
 ### How do I add a completed bibliography to my paper?
 
