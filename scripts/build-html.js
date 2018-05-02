@@ -10,8 +10,8 @@ const path = require('path');
 Handlebars.registerHelper('json', context => JSON.stringify(context));
 
 const addAnchors = html => {
-	var $ = cheerio.load(html);
-	var headers = $('h2, h3');
+	const $ = cheerio.load(html);
+	const headers = $('h2, h3');
 	headers.map((_, element) => {
 		const id = element.attribs.id;
 		$('<a>')
@@ -28,12 +28,10 @@ const buildFaqPage = async () => {
 	const faqTemplate = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'faq.hbs'));
 	const dstFile = path.join(__dirname, '..', 'build', 'faq');
 	const template = Handlebars.compile(faqTemplate.toString());
-	const faqHTML = addAnchors(
-		marked(faqMarkdown.toString(), { smartypants: true })
-		// Remove "-" at end of id attributes, which marked substitutes for question marks
-		.replace(/(id="[^"]+)-"/g, '$1"')
-	);
-	const output = await template({ faq: faqHTML });
+	const faqHTML = marked(faqMarkdown.toString(), { smartypants: true })
+					// Remove "-" at end of id attributes, which marked substitutes for question marks
+						.replace(/(id="[^"]+)-"/g, '$1"');
+	const output = addAnchors(await template({ faq: faqHTML }));
 	await fs.writeFile(dstFile, output);
 	console.log('faq page generated');
 };
