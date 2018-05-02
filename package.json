@@ -82,6 +82,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "babelify": "^8.0.0",
     "browserify": "^14.5.0",
+    "cheerio": "^1.0.0-rc.2",
     "config": "^1.28.1",
     "eslint": "^4.15.0",
     "eslint-plugin-react": "^7.5.1",
