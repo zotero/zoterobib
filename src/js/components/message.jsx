@@ -11,19 +11,6 @@ const Button = require('zotero-web-library/lib/component/ui/button');
 const { noop } = require('zotero-web-library/lib/utils');
 
 class Message extends React.Component {
-	componentDidMount() {
-		if(this.props.autoDismiss) {
-			this.timeout = setTimeout(this.props.onDismiss, 5000);
-		}
-	}
-
-	componentWillUnmount() {
-		if(this.timeout) {
-			clearTimeout(this.timeout);
-			delete this.timeout;
-		}
-	}
-
 	componentWillReceiveProps(nextProps) {
 		if('location' in nextProps &&
 			nextProps.location.pathname !== this.props.location.pathname) {
@@ -32,14 +19,10 @@ class Message extends React.Component {
 	}
 
 	handleDismiss() {
-		clearTimeout(this.timeout);
-		delete this.timeout;
 		this.props.onDismiss();
 	}
 
 	handleAction(event) {
-		clearTimeout(this.timeout);
-		delete this.timeout;
 		this.props.onAction(event);
 	}
 
@@ -99,7 +82,6 @@ class Message extends React.Component {
 
 	static propTypes = {
 		action: PropTypes.string,
-		autoDismiss: PropTypes.bool,
 		href: PropTypes.string,
 		kind: PropTypes.oneOf(['info', 'success', 'warning', 'error']).isRequired,
 		location: PropTypes.object,

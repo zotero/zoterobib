@@ -200,7 +200,6 @@ class Container extends React.Component {
 			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
 		) {
 			if(isApa(this.state.citationStyle)) {
-				this.clearMessages();
 				this.setState({
 					citationStyle: state.citationStyle,
 					unconfirmedCitationStyle: this.state.citationStyle,
@@ -338,6 +337,7 @@ class Container extends React.Component {
 
 	handleDeleteCitations() {
 		this.bib.clearItems();
+		this.clearMessages();
 		this.setState({
 			bibliography: this.bibliography,
 			items: this.bib.itemsRaw,
@@ -395,7 +395,6 @@ class Container extends React.Component {
 				id: getNextMessageId(),
 				action: 'Undo',
 				isUndoMessage: true,
-				autoDismiss: true,
 				kind: 'warning',
 				message: 'Item Deleted',
 				onAction: this.handleUndoDelete.bind(this),
@@ -434,11 +433,11 @@ class Container extends React.Component {
 		if(citationStyle === this.state.citationStyle) {
 			return;
 		}
+		this.clearMessages();
 		this.setState({
 			itemUnderReview: null
 		});
 		if(citationStyle === 'install') {
-			this.clearMessages();
 			this.setState({
 				isStylesDataLoading: true,
 				isInstallingStyle: true
@@ -510,6 +509,7 @@ class Container extends React.Component {
 		var itemTypes;
 		identifier = parseIdentifier(identifier);
 
+		this.clearMessages();
 		this.setState({
 			isTranslating: true,
 			identifier,
@@ -561,7 +561,6 @@ class Container extends React.Component {
 					break;
 					case ZoteroBib.MULTIPLE_ITEMS:
 						itemTypes = await getItemTypes();
-						this.clearMessages();
 						this.setState({
 							isTranslating: false,
 							isPickingItem: true,
@@ -685,6 +684,7 @@ class Container extends React.Component {
 	}
 
 	handleTitleChange(title) {
+		this.clearMessages();
 		this.setState({
 			itemUnderReview: null,
 			permalink: null,
@@ -726,6 +726,7 @@ class Container extends React.Component {
 	}
 
 	handleCitationCopyDialogOpen(itemId) {
+		this.clearMessages();
 		this.setState({
 			citationHtml: getCitation(itemId, null, ['html'], this.citeproc).html,
 			citationToCopy: itemId,
