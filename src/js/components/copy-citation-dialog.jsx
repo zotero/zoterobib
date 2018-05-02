@@ -58,7 +58,7 @@ class CopyCitationDialog extends React.PureComponent {
 
 	render() {
 		const title = this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation';
-		const isCopied = false;
+		const isCopied = true;
 		return (
 			<Modal
 				className="modal modal-centered"
@@ -121,7 +121,7 @@ class CopyCitationDialog extends React.PureComponent {
 									Cancel
 								</Button>
 								<Button
-									className="btn-secondary"
+									className={ cx('btn-secondary', { 'success': isCopied}) }
 									onClick={ this.handleConfirm.bind(this) }
 								>
 									<span className={ cx('inline-feedback', { 'active': isCopied }) }>

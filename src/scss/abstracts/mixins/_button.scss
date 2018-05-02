@@ -61,4 +61,28 @@
 			}
 		}
 	}
+
+	&.success {
+		background-color: $btn-success-color;
+
+		&:active {
+			background-color: darken($btn-success-color, 8%);
+		}
+
+		&:focus {
+			.keyboard-user & {
+				box-shadow: 0 0 0 $input-btn-focus-width $btn-success-color;
+
+				&:hover {
+					box-shadow:
+						0 0 0 $input-btn-focus-width $btn-success-color,
+						0 4px 4px $btn-box-shadow-color;
+				}
+
+				&:active {
+					box-shadow: 0 0 0 $input-btn-focus-width darken($btn-success-color, 8%);
+				}
+			}
+		}
+	}
 }

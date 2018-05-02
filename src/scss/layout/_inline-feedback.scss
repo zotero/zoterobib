@@ -10,7 +10,12 @@
 		position: absolute;
 		left: 0;
 		top: 0;
+		width: 100%;
 		visibility: hidden;
+	}
+
+	.feedback {
+		font-style: italic;
 	}
 
 	&.active {
