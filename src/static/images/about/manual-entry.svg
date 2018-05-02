@@ -1,12 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66">
-  <title>Zeichenfläche 60 Kopie</title>
-  <g id="Ebene_1" data-name="Ebene 1">
+  <g>
     <g>
-      <circle cx="33" cy="33" r="33" fill="#386bf0"/>
+      <circle cx="33" cy="33" r="33" fill="#346df4"/>
       <g>
         <g>
           <rect x="15" y="11" width="36" height="36" fill="none"/>
-          <rect x="16" y="28" width="35" height="19" rx="1" ry="1" fill="#88a6f6"/>
+          <rect x="16" y="28" width="35" height="19" rx="1" ry="1" fill="#85a7f8"/>
           <rect x="18" y="30" width="3" height="3" fill="#fff"/>
           <rect x="22" y="30" width="3" height="3" fill="#fff"/>
           <rect x="26" y="30" width="3" height="3" fill="#fff"/>
@@ -35,7 +34,7 @@
           <rect x="38" y="42" width="3" height="3" fill="#fff"/>
           <rect x="46" y="42" width="3" height="3" fill="#fff"/>
         </g>
-        <path d="M32.888,28.5c-5-10,12.98-5,7.98-13" fill="none" stroke="#88a6f6" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
+        <path d="M32.888,28.5c-5-10,12.98-5,7.98-13" fill="none" stroke="#85a7f8" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.5"/>
       </g>
     </g>
   </g>

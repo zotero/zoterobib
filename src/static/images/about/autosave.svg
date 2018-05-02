@@ -1,17 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66">
-  <title>Zeichenfläche 60 Kopie 6</title>
-  <g id="Ebene_1" data-name="Ebene 1">
-    <circle cx="33" cy="33" r="33" fill="#8f4f99"/>
-    <path d="M15,38H51a0,0,0,0,1,0,0v7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V38A0,0,0,0,1,15,38Z" fill="#fff"/>
-    <path d="M19,19H47a2,2,0,0,1,2,2v6a0,0,0,0,1,0,0H17a0,0,0,0,1,0,0V21A2,2,0,0,1,19,19Z" fill="#c7a7cc"/>
+  <g>
     <g>
-      <circle cx="21" cy="23" r="1" fill="#fff"/>
-      <circle cx="24" cy="23" r="1" fill="#fff"/>
-      <circle cx="27" cy="23" r="1" fill="#fff"/>
+      <circle cx="33" cy="33" r="33" fill="#8054a9"/>
+      <path d="M15,38H51a0,0,0,0,1,0,0v7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V38A0,0,0,0,1,15,38Z" fill="#fff"/>
+      <path d="M19,19H47a2,2,0,0,1,2,2v6a0,0,0,0,1,0,0H17a0,0,0,0,1,0,0V21A2,2,0,0,1,19,19Z" fill="#bfa9d4"/>
+      <g>
+        <circle cx="21" cy="23" r="1" fill="#fff"/>
+        <circle cx="24" cy="23" r="1" fill="#fff"/>
+        <circle cx="27" cy="23" r="1" fill="#fff"/>
+      </g>
+      <path d="M28,38H38a0,0,0,0,1,0,0v1.5A1.5,1.5,0,0,1,36.5,41h-7A1.5,1.5,0,0,1,28,39.5V38A0,0,0,0,1,28,38Z" fill="#bfa9d4"/>
+      <polygon points="51 38 15 38 17 36 49 36 51 38" fill="#bfa9d4"/>
+      <rect x="17" y="27" width="32" height="9" fill="#fff"/>
+      <path d="M28,27H38a0,0,0,0,1,0,0v1.5A1.5,1.5,0,0,1,36.5,30h-7A1.5,1.5,0,0,1,28,28.5V27A0,0,0,0,1,28,27Z" fill="#bfa9d4"/>
     </g>
-    <path d="M28,38H38a0,0,0,0,1,0,0v1.5A1.5,1.5,0,0,1,36.5,41h-7A1.5,1.5,0,0,1,28,39.5V38A0,0,0,0,1,28,38Z" fill="#c7a7cc"/>
-    <polygon points="51 38 15 38 17 36 49 36 51 38" fill="#c7a7cc"/>
-    <rect x="17" y="27" width="32" height="9" fill="#fff"/>
-    <path d="M28,27H38a0,0,0,0,1,0,0v1.5A1.5,1.5,0,0,1,36.5,30h-7A1.5,1.5,0,0,1,28,28.5V27A0,0,0,0,1,28,27Z" fill="#c7a7cc"/>
   </g>
 </svg>
