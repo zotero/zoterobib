@@ -358,7 +358,7 @@ class Container extends React.Component {
 	}
 
 	handleOpenEditor(itemId = null) {
-		if(itemId != this.state.itemUnderReview.key) {
+		if(itemId && itemId != this.state.itemUnderReview.key) {
 			this.setState({
 				itemUnderReview: null,
 			});
