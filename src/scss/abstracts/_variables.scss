@@ -205,6 +205,8 @@ $btn-transition: 0.15s ease;
 // Forms
 //
 
+$form-gutter-width: $space-md;
+
 $input-line-height: $line-height-base;
 
 $input-padding-x-lg: $space-md;
@@ -347,6 +349,15 @@ $dropdown-menu-bg: $body-bg;
 
 $review-bg: mix($secondary, $shade-0, 7%);
 $review-border-color: mix($secondary, $shade-0, 14%);
+
+
+//
+// Copy citation dialog
+//
+
+$preview-bg: $review-bg;
+$preview-border-color: $review-border-color;
+
 
 //
 // About

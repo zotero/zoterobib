@@ -1,0 +1,22 @@
+//
+// Copy citation dialog
+//
+
+.copy-citation-dialog {
+	h5 {
+		font-size: $font-size-base;
+		font-weight: 600;
+		line-height: $line-height-base;
+		padding: ($input-btn-padding-y-sm + 1px) 0;
+		margin-bottom: $space-sm;
+	}
+
+	.preview {
+		background-color: $preview-bg;
+		border: 1px solid $preview-border-color;
+		padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
+		margin: 0;
+		border-radius: $border-radius-sm;
+		word-wrap: break-word;
+	}
+}

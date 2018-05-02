@@ -82,6 +82,12 @@
 		max-width: 100%;
 		overflow: hidden;
 
+		&:empty {
+			&::before {
+				content: "\00a0";
+			}
+		}
+
 		> input {
 			border: none;
 			background: none;

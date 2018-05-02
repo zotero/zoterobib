@@ -11,6 +11,62 @@
 	display: none; // Hide non-standard clear button in IE and Edge
 }
 
+.form-row {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 (-$form-gutter-width / 2);
+
+	> [class*=col-] {
+		padding: 0 ($form-gutter-width / 2);
+	}
+
+	.col-xs-6 {
+		flex: 0 0 50%;
+		max-width: 50%;
+	}
+}
+
+.form-group {
+	margin-bottom: $space-sm;
+
+	&.compact {
+		margin-bottom: $space-min;
+	}
+}
+
+.input-group {
+	position: relative;
+	min-width: 0; // Needed for react-select inside
+
+	.icon-spin {
+		position: absolute;
+	}
+
+	.form-control-lg + .icon-spin {
+		width: $space-lg;
+		height: $space-lg;
+		top: $space-sm;
+		right: $space-md + $input-border-width;
+	}
+
+	.form-control-sm {
+		& + .icon-spin {
+			width: $space-md;
+			height: $space-md;
+			top: $space-xs;
+			right: $input-btn-padding-x-sm + $input-border-width;
+		}
+
+		&.Select + .icon-spin {
+			right:
+				$input-btn-padding-x-sm
+				+ $input-border-width
+				+ $space-md
+				+ $space-min;
+		}
+	}
+}
+
 .form-control {
 	display: block;
 	width: 100%;
@@ -78,38 +134,19 @@ textarea {
 
 label {
 	display: inline-block;
-	color: $label-color;
 }
 
-.input-group {
-	position: relative;
-	min-width: 0; // Needed for react-select inside
+.checkbox,
+.radio {
+	padding: ($input-btn-padding-y-sm + 1px) 0;
 
-	.icon-spin {
-		position: absolute;
+	label {
+		display: flex;
 	}
 
-	.form-control-lg + .icon-spin {
-		width: $space-lg;
-		height: $space-lg;
-		top: $space-sm;
-		right: $space-md + $input-border-width;
-	}
-
-	.form-control-sm {
-		& + .icon-spin {
-			width: $space-md;
-			height: $space-md;
-			top: $space-xs;
-			right: $input-btn-padding-x-sm + $input-border-width;
-		}
-
-		&.Select + .icon-spin {
-			right:
-				$input-btn-padding-x-sm
-				+ $input-border-width
-				+ $space-md
-				+ $space-min;
-		}
+	[type] {
+		font-size: inherit;
+		margin: $space-min ($space-min + $space-min / 2) 0 0;
 	}
 }
+

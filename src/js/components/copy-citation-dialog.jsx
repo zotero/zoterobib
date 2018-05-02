@@ -7,7 +7,6 @@ const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const Modal = require('./modal');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
 const Input = require('zotero-web-library/lib/component/form/input');
 const Select = require('zotero-web-library/lib/component/form/select');
 
@@ -93,7 +92,7 @@ class CopyCitationDialog extends React.PureComponent {
 		const { isCopied } = this.state;
 		return (
 			<Modal
-				className="modal modal-centered"
+				className="modal modal-centered copy-citation-dialog"
 				isOpen={ this.props.isCitationCopyDialogOpen }
 				contentLabel={ title }
 				onRequestClose={ () => { this.props.onCitationCopyCancel(); } }
@@ -106,41 +105,50 @@ class CopyCitationDialog extends React.PureComponent {
 					/>
 					<div className="modal-content" tabIndex={ -1 }>
 						<div className="modal-body">
-							<div>
-								<Select
-									clearable={ false }
-									isDisabled={ isCopied }
-									onChange={ () => true }
-									onCommit={ this.handleChange.bind(this, 'label') }
-									options={ locators }
-									searchable={ false}
-									tabIndex={ 0 }
-									value={ this.props.citationCopyModifiers.citationLabel || 'page' }
-								/>
-								<Input
-									autoFocus
-									isDisabled={ isCopied }
-									onChange={ this.handleChange.bind(this, 'locator') }
-									onCommit={ this.handleInputCommit.bind(this) }
-									tabIndex={ 0 }
-									value={ this.props.citationCopyModifiers.citationLocator }
-								/>
+							<div className="form-row form-group">
+								<div className="col-xs-6">
+									<Select
+										clearable={ false }
+										isDisabled={ isCopied }
+										onChange={ () => true }
+										onCommit={ this.handleChange.bind(this, 'label') }
+										options={ locators }
+										searchable={ false}
+										tabIndex={ 0 }
+										value={ this.props.citationCopyModifiers.citationLabel || 'page' }
+										className="form-control-sm"
+									/>
+									</div>
+								<div className="col-xs-6">
+									<Input
+										autoFocus
+										isDisabled={ isCopied }
+										onChange={ this.handleChange.bind(this, 'locator') }
+										onCommit={ this.handleInputCommit.bind(this) }
+										tabIndex={ 0 }
+										value={ this.props.citationCopyModifiers.citationLocator }
+										className="form-control-sm"
+										placeholder="Number"
+									/>
+								</div>
 							</div>
 							{ !this.props.isNoteStyle && (
-								<div>
-									<label>
-										<input
-											disabled={ isCopied }
-											type="checkbox"
-											checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
-											onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
-										/>
-										Omit Author
-									</label>
+								<div className="form-group">
+									<div className="checkbox">
+										<label>
+											<input
+												disabled={ isCopied }
+												type="checkbox"
+												checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
+												onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
+											/>
+											Omit Author
+										</label>
+									</div>
 								</div>
 							) }
 							<div>
-								<p>Preview:</p>
+								<h5>Preview:</h5>
 								<p
 									className="preview"
 									dangerouslySetInnerHTML={ { __html: this.props.citationHtml } }
