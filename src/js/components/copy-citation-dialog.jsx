@@ -71,17 +71,6 @@ class CopyCitationDialog extends React.PureComponent {
 						onKeyHandle={ this.handleCancel.bind(this) }
 					/>
 					<div className="modal-content" tabIndex={ -1 }>
-						<div className="modal-header">
-							<h4 className="modal-title text-truncate">
-								{ title }
-							</h4>
-							<Button
-								className="close"
-								onClick={ this.handleCancel.bind(this) }
-							>
-								<Icon type={ '24/remove' } width="24" height="24" />
-							</Button>
-						</div>
 						<div className="modal-body">
 							<div>
 								<Select
@@ -133,7 +122,7 @@ class CopyCitationDialog extends React.PureComponent {
 									className="btn-secondary"
 									onClick={ this.handleConfirm.bind(this) }
 								>
-									Copy
+									{ title }
 								</Button>
 							</div>
 						</div>
