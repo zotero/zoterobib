@@ -31,7 +31,7 @@
 					content: "";
 					position: absolute;
 					left: 100%;
-					width: 36px;
+					width: 32px;
 					height: 100%;
 				}
 			}
@@ -107,11 +107,11 @@
 
 			.btn-remove {
 				position: absolute;
-				width: 20px;
-				height: 20px;
+				width: $space-md;
+				height: $space-md;
 				top: 50%;
-				right: -28px;
-				margin: -10px 0 0 0;
+				right: -24px;
+				margin: -8px 0 0 0;
 				border-radius: 50%;
 				display: none;
 
