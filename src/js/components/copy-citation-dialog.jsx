@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const cx = require('classnames');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Button = require('zotero-web-library/lib/component/ui/button');
@@ -57,6 +58,7 @@ class CopyCitationDialog extends React.PureComponent {
 
 	render() {
 		const title = this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation';
+		const isCopied = false;
 		return (
 			<Modal
 				className="modal modal-centered"
@@ -122,7 +124,10 @@ class CopyCitationDialog extends React.PureComponent {
 									className="btn-secondary"
 									onClick={ this.handleConfirm.bind(this) }
 								>
-									{ title }
+									<span className={ cx('inline-feedback', { 'active': isCopied }) }>
+										<span className="default-text" aria-hidden={ !isCopied }>{ title }</span>
+										<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
+									</span>
 								</Button>
 							</div>
 						</div>
