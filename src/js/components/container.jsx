@@ -760,8 +760,7 @@ class Container extends React.Component {
 			{ mime: 'text/plain', data: text },
 			{ mime: 'text/html', data: html },
 		];
-		copy(text);
-		this.handleCitationCopyCancel();
+		return copy(text);
 	}
 
 	handleCitationCopyCancel() {

@@ -34,6 +34,31 @@ const locators = [
 }));
 
 class CopyCitationDialog extends React.PureComponent {
+	state = {
+		isCopied: false
+	}
+
+	componentWillUnmount() {
+		if(this.timeout) {
+			this.cleanUp();
+			delete this.timeout;
+		}
+	}
+
+	componentWillReceiveProps({ isCitationCopyDialogOpen }) {
+		if(this.props.isCitationCopyDialogOpen != isCitationCopyDialogOpen) {
+			this.cleanUp();
+			this.setState({ isCopied: false });
+		}
+	}
+
+	cleanUp() {
+		if(this.timeout) {
+			clearTimeout(this.timeout);
+			delete this.timeout;
+		}
+	}
+
 	handleChange(name, value) {
 		this.props.onCitationModifierChange({
 			...this.props.citationCopyModifiers,
@@ -42,23 +67,30 @@ class CopyCitationDialog extends React.PureComponent {
 	}
 
 	handleCancel() {
+		this.cleanUp();
 		this.props.onCitationCopyCancel();
 	}
 
 	handleConfirm() {
-		this.props.onCitationCopy();
+		if(this.props.onCitationCopy()) {
+			this.setState({ isCopied: true });
+			this.timeout = setTimeout(() => {
+				this.props.onCitationCopyCancel();
+				this.setState({ isCopied: false });
+			}, 1000);
+		}
 	}
 
 	handleInputCommit(_val, _hasChanged, ev) {
 		if(ev.type === 'keydown') {
-			this.props.onCitationCopy();
+			this.handleConfirm();
 			ev.preventDefault();
 		}
 	}
 
 	render() {
 		const title = this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation';
-		const isCopied = true;
+		const { isCopied } = this.state;
 		return (
 			<Modal
 				className="modal modal-centered"
@@ -76,16 +108,18 @@ class CopyCitationDialog extends React.PureComponent {
 						<div className="modal-body">
 							<div>
 								<Select
-									tabIndex={ 0 }
 									clearable={ false }
-									searchable={ false}
-									value={ this.props.citationCopyModifiers.citationLabel || 'page' }
-									options={ locators }
+									isDisabled={ isCopied }
 									onChange={ () => true }
 									onCommit={ this.handleChange.bind(this, 'label') }
+									options={ locators }
+									searchable={ false}
+									tabIndex={ 0 }
+									value={ this.props.citationCopyModifiers.citationLabel || 'page' }
 								/>
 								<Input
 									autoFocus
+									isDisabled={ isCopied }
 									onChange={ this.handleChange.bind(this, 'locator') }
 									onCommit={ this.handleInputCommit.bind(this) }
 									tabIndex={ 0 }
@@ -96,6 +130,7 @@ class CopyCitationDialog extends React.PureComponent {
 								<div>
 									<label>
 										<input
+											disabled={ isCopied }
 											type="checkbox"
 											checked={ 'suppressAuthor' in this.props.citationCopyModifiers ? this.props.citationCopyModifiers.suppressAuthor : false }
 											onChange={ ev => this.handleChange('suppressAuthor', ev.target.checked) }
