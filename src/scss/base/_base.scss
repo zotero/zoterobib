@@ -6,12 +6,16 @@
 	box-sizing: border-box;
 }
 
-:focus {
-	outline: none;
-	outline-offset: $outline-offset;
+// Do not remove the outline from checkboxes and radios
+a,
+li[tabindex] {
+	&:focus {
+		outline: none;
+		outline-offset: $outline-offset;
 
-	.keyboard-user & {
-		outline: $outline-width solid $outline-color;
+		.keyboard-user & {
+			outline: $outline-width solid $outline-color;
+		}
 	}
 }
 
