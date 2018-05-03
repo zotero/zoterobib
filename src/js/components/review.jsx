@@ -58,7 +58,10 @@ class Review extends React.PureComponent {
 						>
 							Edit
 						</Button>
-						<Button className="btn-close">
+						<Button
+							className="btn-close"
+							onClick={ this.handleDismiss.bind(this) }
+						>
 							<Icon type={ '24/remove' } width="24" height="24" />
 						</Button>
 					</div>
