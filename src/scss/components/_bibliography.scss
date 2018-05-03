@@ -89,12 +89,15 @@
 			}
 
 			.btn-copy {
-				@include button-variant($btn-secondary-color, $outline: true);
 				border-color: transparent;
 
 				&:focus {
 					@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
 						border-color: $btn-secondary-color;
+
+						&:active {
+							border-color: darken($btn-secondary-color, 8%);
+						}
 					}
 				}
 
@@ -115,8 +118,6 @@
 				border-radius: 50%;
 				display: none;
 
-				@include button-variant($btn-secondary-color, $outline: true);
-
 				&:active {
 					opacity: 1;
 				}
@@ -128,21 +129,12 @@
 					&:focus {
 						@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
 							opacity: 1;
-							box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
+						}
+					}
 
-							.icon {
-								color: $btn-secondary-color;
-							}
-
-							&:hover {
-								box-shadow:
-									0 0 0 $input-btn-focus-width $btn-secondary-color,
-									0 4px 4px $btn-box-shadow-color;
-							}
-
-							&:active {
-								box-shadow: 0 0 0 $input-btn-focus-width darken($btn-secondary-color, 8%);
-							}
+					&:active {
+						.icon {
+							color: $shade-0;
 						}
 					}
 				}

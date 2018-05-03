@@ -123,6 +123,10 @@ a.btn {
 		.keyboard-user & {
 			border-color: $btn-secondary-color;
 			box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
+
+			&:active {
+				border-color: darken($btn-secondary-color, 8%);
+			}
 		}
 	}
 
