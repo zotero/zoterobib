@@ -25,8 +25,10 @@ class BibliographySection extends React.PureComponent {
 		});
 	}
 
-	handleTitleCommit(newValue) {
-		this.props.onTitleChanged(newValue);
+	handleTitleCommit(newValue, hasChanged) {
+		if(hasChanged) {
+			this.props.onTitleChanged(newValue);
+		}
 		this.setState({
 			isEditingTitle: false
 		});
