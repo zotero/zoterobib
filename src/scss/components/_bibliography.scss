@@ -74,18 +74,6 @@
 
 			> .btn-icon {
 				flex: 0 0 auto;
-
-				&.success {
-					background: $btn-success-color;
-
-					.icon-copy {
-						display: none;
-					}
-
-					.icon-tick {
-						display: block;
-					}
-				}
 			}
 
 			.btn-copy {
@@ -138,11 +126,6 @@
 						}
 					}
 				}
-			}
-
-			.icon-tick {
-				display: none;
-				color: $shade-0;
 			}
 		}
 	}

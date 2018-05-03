@@ -165,7 +165,6 @@ class Bibliography extends React.PureComponent {
 						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 					>
 						<Icon type={ '16/copy' } width="16" height="16" />
-						<Icon type={ '16/tick' } width="16" height="16" />
 					</Button>
 				) }
 				<Button
