@@ -19,10 +19,10 @@
 	}
 
 	.container {
-		padding-top: $space-xl - 7px;
+		padding-top: 52px;
 		padding-bottom: $space-xl;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: $bp-lg) {
 			padding-top: $space-xxl - 7px; // Caps height
 			padding-bottom: $space-xxl;
 		}
@@ -50,8 +50,31 @@
 	}
 
 	.btn {
-		& + .btn {
+		& + .btn:not(:last-child) {
 			margin-left: $space-sm;
+		}
+	}
+
+	.btn-close {
+		$btn-size:
+			$font-size-base * $line-height-base
+			+ 2 * $btn-padding-y
+			+ 2 * $input-border-width;
+
+		position: absolute;
+		left: 50%;
+		top: $space-sm;
+		margin-left: -$btn-size / 2;
+		width: $btn-size;
+		height: $btn-size;
+
+		@media (min-width: $bp-lg) {
+			width: $space-xxxl;
+			height: $space-xxxl;
+			left: auto;
+			top: 50%;
+			margin-top: (-$space-xxxl / 2);
+			right: ($space-xxl - (($space-xxxl - $space-lg) / 2));
 		}
 	}
 

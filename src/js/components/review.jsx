@@ -4,6 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const formatBib = require('../cite');
+const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class Review extends React.PureComponent {
 	handleDismiss() {
@@ -56,6 +57,9 @@ class Review extends React.PureComponent {
 							onClick={ this.handleEdit.bind(this) }
 						>
 							Edit
+						</Button>
+						<Button className="btn-close">
+							<Icon type={ '24/remove' } width="24" height="24" />
 						</Button>
 					</div>
 				</div>
