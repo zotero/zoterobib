@@ -18,5 +18,9 @@
 		margin: 0;
 		border-radius: $border-radius-sm;
 		word-wrap: break-word;
+		min-height:
+			$font-size-base * $line-height-base
+			+ 2 * $input-btn-padding-y-sm
+			+ 2 * $input-border-width;
 	}
 }
