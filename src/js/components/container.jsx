@@ -511,8 +511,9 @@ class Container extends React.Component {
 
 		this.clearMessages();
 		this.setState({
-			isTranslating: true,
 			identifier,
+			isTranslating: true,
+			itemUnderReview: null,
 			messages: []
 		});
 
