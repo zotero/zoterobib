@@ -300,9 +300,11 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 	};
 };
 
-const getCitation = (bib, itemId, modifiers, formats, citeproc) => {
-	// reset & build citations registry
-	getCitations(bib, citeproc);
+const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
+	if(!isWarm) {
+		// reset & build citations registry. Takes ~10ms per entry.
+		getCitations(bib, citeproc);
+	}
 
 	const items = bib.itemsRaw.map(item => item.key);
 	const index = items.indexOf(itemId);

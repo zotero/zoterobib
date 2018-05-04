@@ -744,7 +744,8 @@ class Container extends React.Component {
 					this.state.citationToCopy,
 					citationCopyModifiers,
 					['html'],
-					this.citeproc
+					this.citeproc,
+					true
 				).html
 		});
 	}
@@ -756,7 +757,8 @@ class Container extends React.Component {
 			this.state.citationToCopy,
 			this.state.citationCopyModifiers,
 			['text'],
-			this.citeproc
+			this.citeproc,
+			true
 		).text;
 		var html = this.state.citationHtml;
 		this.copyDataInclude = [
