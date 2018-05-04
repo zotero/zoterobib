@@ -729,7 +729,7 @@ class Container extends React.Component {
 	handleCitationCopyDialogOpen(itemId) {
 		this.clearMessages();
 		this.setState({
-			citationHtml: getCitation(itemId, null, ['html'], this.citeproc).html,
+			citationHtml: getCitation(this.bib, itemId, null, ['html'], this.citeproc).html,
 			citationToCopy: itemId,
 			isCitationCopyDialogOpen: true,
 			itemUnderReview: null,
@@ -740,6 +740,7 @@ class Container extends React.Component {
 		this.setState({
 			citationCopyModifiers,
 			citationHtml: getCitation(
+					this.bib,
 					this.state.citationToCopy,
 					citationCopyModifiers,
 					['html'],
@@ -751,6 +752,7 @@ class Container extends React.Component {
 	handleCitationCopy() {
 		// HTML is generated for the dialog, but we need a text version too for the clipboard
 		var text = getCitation(
+			this.bib,
 			this.state.citationToCopy,
 			this.state.citationCopyModifiers,
 			['text'],

@@ -261,10 +261,30 @@ const getBibliographyFormatParameters = bib => {
 		return bibStyle;
 };
 
+const getCitations = (bib, citeproc) => {
+	const items = bib.itemsRaw.map(item => item.key);
+	const citations = [];
+	//@NOTE: this is deprecated but seems to be the only way to reset registry
+	//       otherwise previous calls to appendCitationCluster aggregate incorrectly
+	//		 Alternatively we could do even more hackier:
+	//		 citeproc.registry = new CSL.Registry(citeproc)
+	citeproc.restoreProcessorState();
+	citeproc.updateItems(items);
+
+	bib.itemsRaw.forEach(item => {
+		let outList = citeproc.appendCitationCluster({
+			'citationItems': [{ 'id': item.key }],
+			'properties': {}
+		}, true);
+		outList.forEach(listItem => {
+			citations[listItem[0]] = listItem[1];
+		});
+	});
+	return citations;
+}
+
 const getBibliographyOrFallback = (bib, citeproc) => {
-	const items = bib.itemsRaw
-				.filter(item => item.key)
-				.map(item => item.key);
+	const items = bib.itemsRaw.map(item => item.key);
 	citeproc.updateItems(items);
 	const bibliography = citeproc.makeBibliography();
 	if(bibliography) {
@@ -274,49 +294,45 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 		};
 	}
 
-	//@NOTE: this is deprecated but seems to be the only way to reset registry
-	//       otherwise previous calls to appendCitationCluster aggregate incorrectly
-	//		 Alternatively we could do even more hackier:
-	//		 citeproc.registry = new CSL.Registry(citeproc)
-	citeproc.restoreProcessorState();
-	citeproc.updateItems(items);
-	const citations = [];
-	bib.itemsRaw.forEach(item => {
-		let outList = citeproc
-			.appendCitationCluster({
-				'citationItems': [{ 'id': item.key }],
-				'properties': {}
-			}, true);
-		outList.forEach(listItem => {
-			citations[listItem[0]] = listItem[1];
-		});
-	});
 	return {
 		isFallback: true,
-		citations
+		citations: getCitations(bib, citeproc)
 	};
 };
 
-const getCitation = (itemId, modifiers, formats, citeproc) => {
-	const citation = {
-		citationItems: [{ id: itemId }],
-		properties: {}
-	};
-	const output = {};
-	const validFormats = ['text', 'html'];
+const getCitation = (bib, itemId, modifiers, formats, citeproc) => {
+	// reset & build citations registry
+	getCitations(bib, citeproc);
 
-	if (modifiers) {
-		for (let i in modifiers) {
+	const items = bib.itemsRaw.map(item => item.key);
+	const index = items.indexOf(itemId);
+	const pre = items.slice(0, index).map((key, i) => (
+		[citeproc.registry.citationreg.citationsByItemId[key][0].citationID, i])
+	);
+	const post = items.slice(index + 1).map((key, i) => (
+		[citeproc.registry.citationreg.citationsByItemId[key][0].citationID, i])
+	);
+	const citation = {
+		'citationItems': [{ 'id': itemId }],
+		'properties': {}
+	};
+
+	if(modifiers) {
+		for(let i in modifiers) {
 			let prop = i == 'suppressAuthor' ? 'suppress-author' : i;
 			citation.citationItems[0][prop] = modifiers[i];
 		}
 	}
 
+	const output = {};
+	const validFormats = ['text', 'html'];
+
 	if (!formats || !formats.length) {
 		formats = validFormats;
 	}
+
 	for (let format of formats.filter(f => validFormats.includes(f))) {
-		output[format] = citeproc.previewCitationCluster(citation, [], [], format);
+		output[format] = citeproc.previewCitationCluster(citation, pre, post, format);
 	}
 	return output;
 };
