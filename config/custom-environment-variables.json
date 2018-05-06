@@ -1,9 +1,9 @@
 {
 	"indexConfig": {
-		"storeUrl": "STORE_URL",
-		"stylesUrl": "STYLES_URL",
+		"storeURL": "STORE_URL",
+		"stylesURL": "STYLES_URL",
 		"translationServerPrefix": "TRANSLATION_SERVER_PREFIX",
-		"translationServerUrl": "TRANSLATION_SERVER_URL",
+		"translationServerURL": "TRANSLATION_SERVER_URL",
 		"stylesCacheTime": "STYLES_CACHE_TIME"
 	}
 }

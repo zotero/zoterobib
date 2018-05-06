@@ -53,17 +53,17 @@ Configuration options
 
 The following configuration options are accepted:
 
-**storeUrl**
+**storeURL**
 Specifies url for the *bib-server* api where bibliographies are stored. 
 
-**stylesUrl**
+**stylesURL**
 Specifies url for the *styles-repo* website. When left empty, default will be used which is https://www.zotero.org/styles-files/styles.json
 
 **translationServerPrefix**
-Specifies an additional prefix for where translation server request should be send. Useful in cases where `translationServerUrl` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
+Specifies an additional prefix for where translation server request should be send. Useful in cases where `translationServerURL` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
 
-**translationServerUrl**
+**translationServerURL**
 Specifies url for the *translation-server*. By default current host is assumed to proxy request to the translation server.
 
 **stylesCacheTime**
-Specifies how many ms before styles data from stylesUrl is considered outdated and should be re-downloaded.
+Specifies how many ms before styles data from stylesURL is considered outdated and should be re-downloaded.

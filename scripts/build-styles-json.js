@@ -24,8 +24,8 @@ const defaultStyle = 'modern-language-association';
 			throw new Error();
 		}
 	} catch(e) {
-		console.log(`Downloading ${appDefaults.stylesUrl}`);
-		stylesMeta = await (await fetch(appDefaults.stylesUrl)).json();
+		console.log(`Downloading ${appDefaults.stylesURL}`);
+		stylesMeta = await (await fetch(appDefaults.stylesURL)).json();
 		await fs.outputJson(stylesJsonPath, stylesMeta);
 	}
 	const coreCitationStyles = styles.map(style => {

@@ -5,10 +5,10 @@
 		// listed below can be overriden in local.json and/or using
 		// env variables. See https://www.npmjs.com/package/config
 		// 
-		// "storeUrl": undefined,
-		// "stylesUrl": undefined,
+		// "storeURL": undefined,
+		// "stylesURL": undefined,
 		// "translationServerPrefix": "",
-		// "translationServerUrl": undefined,
+		// "translationServerURL": undefined,
 		// "stylesCacheTime": undefined
 	}
 }

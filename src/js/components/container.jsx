@@ -274,13 +274,13 @@ class Container extends React.Component {
 		if(props.match.params.id) {
 			try {
 				const id = props.match.params.id;
-				const remoteData = await fetchFromPermalink(`${props.config.storeUrl}/${id}`);
+				const remoteData = await fetchFromPermalink(`${props.config.storeURL}/${id}`);
 				if(remoteData && 'items' in remoteData) {
 					citationStyle = remoteData.citationStyle || citationStyle;
 					title = 'title' in remoteData && remoteData.title || null;
 					var citationStyleMeta = this.state.citationStyles.find(cs => cs.name === citationStyle);
 					if(!citationStyleMeta) {
-						const stylesData = await retrieveStylesData(this.state.config.stylesUrl, this.props.config.stylesCacheTime);
+						const stylesData = await retrieveStylesData(this.state.config.stylesURL, this.props.config.stylesCacheTime);
 						citationStyleMeta = stylesData.find(sd => sd.name === citationStyle);
 						this.setState({
 							citationStyles: this.getExpandedCitationStyles(citationStyleMeta)
@@ -322,7 +322,7 @@ class Container extends React.Component {
 		let permalink = null;
 		this.setState({ isSaving: true });
 		try {
-			const key = await saveToPermalink(this.state.config.storeUrl, {
+			const key = await saveToPermalink(this.state.config.storeURL, {
 				title: this.state.title,
 				citationStyle: this.state.citationStyle,
 				items: this.bib.itemsRaw
@@ -443,7 +443,7 @@ class Container extends React.Component {
 				isInstallingStyle: true
 			});
 			try {
-				const stylesData = await retrieveStylesData(this.state.config.stylesUrl, this.props.config.stylesCacheTime);
+				const stylesData = await retrieveStylesData(this.state.config.stylesURL, this.props.config.stylesCacheTime);
 				this.setState({
 					isStylesDataLoading: false,
 					stylesData
