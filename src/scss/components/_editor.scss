@@ -211,5 +211,20 @@
 		@include text-truncate;
 		flex: 1 1 0;
 		padding: ($input-btn-padding-y-sm + 1px) 0;
+
+		&[for="DOI"],
+		&[for="url"] {
+			overflow: inherit;
+			text-overflow: inherit;
+			white-space: inherit;
+			min-width: 0;
+
+			a {
+				@include text-truncate;
+				display: inline-block;
+				vertical-align: top; // Overflow hidden inline-block elements align with bottom margin
+				max-width: 100%;
+			}
+		}
 	}
 }
