@@ -281,7 +281,7 @@ const getCitations = (bib, citeproc) => {
 		});
 	});
 	return citations;
-}
+};
 
 const getBibliographyOrFallback = (bib, citeproc) => {
 	const items = bib.itemsRaw.map(item => item.key);
