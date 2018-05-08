@@ -26,6 +26,7 @@
 		display: flex;
 		color: $label-color;
 		margin-bottom: $space-min;
+		min-width: 0; // Fix truncation
 
 		@media (min-width: $bp-md) {
 			flex: 0 0 33%;
@@ -70,6 +71,7 @@
 
 			.input-group {
 				flex: 0 0 auto;
+				max-width: 100%; // Fix truncation
 			}
 
 			// Select
@@ -109,12 +111,14 @@
 
 				.Select-multi-value-wrapper {
 					flex: 0 0 auto;
+					max-width: 100%; // Fix truncation
 				}
 
 				.Select-value {
 					flex: 0 0 auto;
 					position: static;
 					padding: 0;
+					max-width: 100%; // Fix truncation
 				}
 
 				.Select-input {
@@ -204,6 +208,7 @@
 	// Dev
 
 	label {
+		@include text-truncate;
 		flex: 1 1 0;
 		padding: ($input-btn-padding-y-sm + 1px) 0;
 	}
