@@ -3,6 +3,23 @@ footer {
 	text-align: center;
 	border-top: 1px solid $shade-2;
 	font-size: $font-size-sm;
+
+	&.faq-footer {
+		border-top-color: transparent;
+		max-width: $container-width;
+		margin: auto;
+		position: relative;
+
+		&:before {
+			content: "";
+			position: absolute;
+			left: $grid-gutter-width / 2;
+			right: $grid-gutter-width / 2;
+			top: -1px;
+			height: 1px;
+			background-color: $shade-2;
+		}
+	}
 }
 
 .zotero-bib-container {
