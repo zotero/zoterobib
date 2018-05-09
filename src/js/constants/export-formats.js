@@ -17,7 +17,7 @@ module.exports = {
 	'rtf': {
 		extension: 'rtf',
 		mime: 'text/rtf',
-		label: 'Download RTF',
+		label: 'Download RTF document',
 		isDownloadable: true,
 		isCopyable: false
 	},

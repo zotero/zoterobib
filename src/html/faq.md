@@ -96,7 +96,7 @@ For styles such as APA and MLA, if you incorporate an author's name into a sente
 
 If you're using a word processor, you can simply click <i>Copy to Clipboard</i> and paste the formatted bibliography into your document.
 
-With certain combinations of citation styles and word processors (e.g., LibreOffice), some of the formatting may become mangled when you export via the clipboard. In those cases, select <i>Download RTF</i> from the Export drop-down to download a formatted document that you can open in your word processor.
+With certain combinations of citation styles and word processors (e.g., LibreOffice), some of the formatting may become mangled when you export via the clipboard. In those cases, select <i>Download RTF document</i> from the Export drop-down to download a formatted document that you can open in your word processor.
 
 If you're adding your bibliography to a webpage, you can use <i>Copy HTML</i> to copy HTML markup that you can embed in the page.
 
