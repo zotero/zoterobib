@@ -102,7 +102,7 @@ If you're adding your bibliography to a webpage, you can use <i>Copy HTML</i> to
 
 ### How can I export my bibliography to a reference manager?
 
-Select <i>Download RIS</i> to download a data file that can be imported into any reference manager. If you're using Zotero and the Zotero Connector (which we recommend!), just click the <i>Save to Zotero</i> button in your browser's toolbar.
+Select <i>Download RIS</i> or <i>Download BibTeX</i> to download a data file that can be imported into any reference manager. If you're using Zotero and the Zotero Connector (which we recommend!), just click the <i>Save to Zotero</i> button in your browser's toolbar.
 
 ## Troubleshooting
 

@@ -861,6 +861,13 @@ class Container extends React.Component {
 				this.handleError(e.message);
 				return;
 			}
+		} else if(format === 'bibtex') {
+			try {
+				fileContents = await this.bib.exportItems('bibtex');
+			} catch(e) {
+				this.handleError(e.message);
+				return;
+			}
 		} else {
 			const bibliography = this.getExportData(format);
 			if(format === 'rtf') {

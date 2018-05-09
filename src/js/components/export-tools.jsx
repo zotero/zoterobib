@@ -12,7 +12,7 @@ const Dropdown = require('reactstrap/lib/Dropdown').default;
 const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
 const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
 const DropdownItem = require('reactstrap/lib/DropdownItem').default;
-const formatsInDropdown = ['html', 'rtf', 'ris', 'zotero'];
+const formatsInDropdown = ['html', 'rtf', 'ris', 'bibtex', 'zotero'];
 const Button = require('zotero-web-library/lib/component/ui/button');
 
 class ExportDialog extends React.Component {
