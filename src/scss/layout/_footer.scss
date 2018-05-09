@@ -1,14 +1,34 @@
 footer {
-	padding: 0 0 1em;
+	padding: ($space-xxl - 6px) ($grid-gutter-width / 2);
 	text-align: center;
+	border-top: 1px solid $shade-2;
+	font-size: $font-size-sm;
 }
 
-.zotero-bib-container.write footer {
-	background: $about-bg;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+.zotero-bib-container {
+	&.write {
+		footer {
+			border-top-color: rgba(0, 0, 0, 0.2);
+			background: $about-bg;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
 
-	&, a {
-		color: $shade-0;
+			&,
+			a {
+				color: $shade-0;
+			}
+		}
+	}
+
+	&.read-only {
+		footer {
+			border-top: none;
+			padding-top: 0;
+			padding-bottom: $section-padding-mobile - 6px;
+
+			@media (min-width: $bp-md) {
+				padding-bottom: $section-padding - 6px;
+			}
+		}
 	}
 }
