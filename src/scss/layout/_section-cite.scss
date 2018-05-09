@@ -4,11 +4,11 @@
 
 .section-cite {
 	border-top: none;
-	padding-top: $section-padding-mobile - 4px;
+	padding-top: $section-padding-mobile - 9px;
 	position: relative;
 
 	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 4px;
+		padding-top: $section-padding - 9px;
 	}
 
 	.help-link {
@@ -18,11 +18,11 @@
 		cursor: pointer;
 	}
 
-	.brand-subhead {
-		margin-bottom: $space-xl - 3px;
+	.brand {
+		margin-bottom: $space-xl - 1px;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 3px;
+			margin-bottom: $space-xxl - 1px;
 		}
 	}
 }

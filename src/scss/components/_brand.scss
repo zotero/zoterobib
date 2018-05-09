@@ -2,8 +2,9 @@
 // Brand
 //
 
-.brand,
-.brand-subhead {
+.brand {
+	width: 191px;
+	height: 38px;
 	margin: auto;
 
 	a {
@@ -17,30 +18,6 @@
 			position: absolute;
 			left: 0;
 			top: 0;
-		}
-	}
-}
-
-.brand {
-	width: 100px;
-	height: 46px;
-}
-
-.brand-subhead {
-	width: 54px;
-	height: 14px;
-
-	a {
-		left: 2px;
-
-		path {
-			transition: fill $link-transition;
-		}
-
-		&:hover {
-			path {
-				fill: $primary;
-			}
 		}
 	}
 }

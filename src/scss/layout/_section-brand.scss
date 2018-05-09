@@ -3,11 +3,11 @@
 //
 
 .section-brand {
-	padding-top: $section-padding-mobile - 4px;
-	padding-bottom: $section-padding-mobile - 3px;
+	padding-top: $section-padding-mobile - 9px;
+	padding-bottom: $section-padding-mobile - 1px;
 
 	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 4px;
-		padding-bottom: $section-padding - 3px;
+		padding-top: $section-padding - 9px;
+		padding-bottom: $section-padding - 1px;
 	}
 }
