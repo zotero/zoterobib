@@ -132,13 +132,13 @@ class ZBib extends React.PureComponent {
 								confirmLabel="OK, I’ll Edit Them"
 							>
 								<p>APA style requires titles to be in sentence case rather than
-								title case. When you use APA style, ZBib will partially
+								title case. When you use APA style, ZoteroBib will partially
 								convert the titles of entries to sentence case for you, but
 								you’ll need to manually edit some entries to capitalize proper
 								nouns:</p>
 
 								<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
-								<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
+								<p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
 								<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
 							<Modal

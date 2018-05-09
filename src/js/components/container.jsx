@@ -89,7 +89,7 @@ class Container extends React.Component {
 			id,
 			isWelcomeMessage: true,
 			kind: 'info',
-			message: 'ZBib is a free service that helps you quickly create a bibliography in any citation style.',
+			message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
 			onAction: this.handleReadMoreClick.bind(this, id),
 		};
 		this.setState({

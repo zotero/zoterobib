@@ -9,7 +9,7 @@ class Brand extends React.PureComponent {
 			<React.Fragment>
 				<h1 className="brand">
 					<Link to="/">
-						ZBib
+						ZoteroBib
 
 						<svg width="100" height="46" viewBox="0 0 100 46">
 							<g>

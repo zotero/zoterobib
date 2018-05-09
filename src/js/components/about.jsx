@@ -18,11 +18,11 @@ class About extends React.PureComponent {
 						className="zbib-illustration"
 						width="312"
 						height="400"
-						alt="ZBib"
+						alt="ZoteroBib"
 					/>
 					<h1>Cite anything</h1>
 					<p className="lead">
-						ZBib helps you build a bibliography instantly from any computer or device,
+						ZoteroBib helps you build a bibliography instantly from any computer or device,
 						without creating an account or installing any software. It’s brought to you
 						by the team behind <a href="https://www.zotero.org/">Zotero</a>, the
 						powerful open-source research tool recommended by thousands of universities
@@ -44,7 +44,7 @@ class About extends React.PureComponent {
 								<h2 className="h4">Adding a bibliography entry</h2>
 								<p>
 									Simply find what you’re looking for in another browser tab
-									and copy the page URL to the ZBib search bar. ZBib can
+									and copy the page URL to the ZoteroBib search bar. ZoteroBib can
 									automatically pull in data from newspaper and magazine
 									articles, library catalogs, journal articles, sites like Amazon
 									and Google Books, and much more. You can also paste or type in
@@ -168,7 +168,7 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Autosave</h2>
 								<p>
-									ZBib automatically saves your bibliography to your browser’s
+									ZoteroBib automatically saves your bibliography to your browser’s
 									local storage — you can close the page and return to it
 									anytime. (If you’re using private / incognito mode in your
 									browser, your bibliography will be cleared when you close the

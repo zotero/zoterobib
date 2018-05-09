@@ -1,4 +1,4 @@
-# ZBib FAQ
+# ZoteroBib FAQ
 
 <nav>
   <ul>
@@ -10,25 +10,25 @@
 
 ## General
 
-### What is ZBib?
+### What is ZoteroBib?
 
-ZBib is a free service that helps you build a bibliography instantly from any computer or device, without creating an account or installing any software. It's brought to you by the team behind [Zotero], the powerful open-source research tool recommended by thousands of universities worldwide, so you can trust it to help you seamlessly add sources and produce perfect bibliographies.
+ZoteroBib is a free service that helps you build a bibliography instantly from any computer or device, without creating an account or installing any software. It's brought to you by the team behind [Zotero], the powerful open-source research tool recommended by thousands of universities worldwide, so you can trust it to help you seamlessly add sources and produce perfect bibliographies.
 
 ### How much does it cost?
 
-Nothing! ZBib is completely free and ad-free.
+Nothing! ZoteroBib is completely free and ad-free.
 
-### I already use another site to generate bibliographies. Why should I use ZBib?
+### I already use another site to generate bibliographies. Why should I use ZoteroBib?
 
-We created ZBib because we thought there should be a bibliography tool that was free, easier and more pleasant to use, and much more accurate.
+We created ZoteroBib because we thought there should be a bibliography tool that was free, easier and more pleasant to use, and much more accurate.
 
-Unlike other tools, ZBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or additional citation styles. And since it's built by the team behind Zotero and based on the same open-source technology, you can count on the same expertise and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
+Unlike other tools, ZoteroBib doesn't bombard you with ads or try to charge you (or your school) money for full functionality or additional citation styles. And since it's built by the team behind Zotero and based on the same open-source technology, you can count on the same expertise and attention to detail that people rely on when they write dissertations and scholarly papers in Zotero.
 
-### Should I use ZBib or Zotero?
+### Should I use ZoteroBib or Zotero?
 
-ZBib and Zotero are both free, [open-source](https://github.com/zotero) tools created with the goal of helping people manage their research. Use whichever one is right for you!
+ZoteroBib and Zotero are both free, [open-source](https://github.com/zotero) tools created with the goal of helping people manage their research. Use whichever one is right for you!
 
-If you just need to create a one-off bibliography for a paper, ZBib is the quickest and easiest way to do it.
+If you just need to create a one-off bibliography for a paper, ZoteroBib is the quickest and easiest way to do it.
 
 If you're working on a longer-term project, want to build up a research library to use across multiple projects, or need to collaborate with others, [Zotero] offers many more features:
 
@@ -44,7 +44,7 @@ If you're working on a longer-term project, want to build up a research library 
 
 ### What citation styles can I use?
 
-ZBib supports over 9,000 [CSL](http://citationstyles.org/) styles, including popular styles such as APA, MLA, and Chicago/Turabian. These are the same styles used in Zotero, and we work hard to make sure they stay up to date with style guide recommendations and publisher requirements.
+ZoteroBib supports over 9,000 [CSL](http://citationstyles.org/) styles, including popular styles such as APA, MLA, and Chicago/Turabian. These are the same styles used in Zotero, and we work hard to make sure they stay up to date with style guide recommendations and publisher requirements.
 
 ### Where is my bibliography stored?
 
@@ -66,9 +66,9 @@ If you're worried about losing your bibliography, use <i>Link to this version</i
 
 <h3 id="privacy">Is my data private?</h3>
 
-ZBib and Zotero were created with the philosophy that your research data belongs to you and should be kept secure and private by default.
+ZoteroBib and Zotero were created with the philosophy that your research data belongs to you and should be kept secure and private by default.
 
-Your ZBib bibliography is stored on your own computer and isn't accessible to others by default.
+Your ZoteroBib bibliography is stored on your own computer and isn't accessible to others by default.
 
 If you use <i>Link to this version</i>, your current bibliography will be uploaded to zbib.org and be available to anyone you choose to share the link with. No identifying information about you is stored with the bibliography. If you view an uploaded bibliography, the URL may be stored in your browser's history.
 
@@ -80,7 +80,7 @@ Other than the web requests necessary to complete your search, which contain the
 
 ### How do I add entries to my bibliography?
 
-The easiest way to add an item to ZBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZBib. ZBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
+The easiest way to add an item to ZoteroBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZoteroBib. ZoteroBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
 
 If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
 
@@ -88,7 +88,7 @@ If all else fails, you can enter item details by hand by clicking <i>Manual Entr
 
 ### How do I add parenthetical citations or notes to my paper?
 
-As you write, ZBib can help you quickly generate parenthetical citations (APA, MLA) or footnotes/endnotes (Chicago, Turabian) for the specific quotes, facts, or ideas you're including into your paper. Just click the copy icon next to an entry in your bibliography, enter the relevant page range or section of the source that you're citing, and click Copy Citation or Copy Note. You can then paste the citation into your paper.
+As you write, ZoteroBib can help you quickly generate parenthetical citations (APA, MLA) or footnotes/endnotes (Chicago, Turabian) for the specific quotes, facts, or ideas you're including into your paper. Just click the copy icon next to an entry in your bibliography, enter the relevant page range or section of the source that you're citing, and click Copy Citation or Copy Note. You can then paste the citation into your paper.
 
 For styles such as APA and MLA, if you incorporate an author's name into a sentence ("As Smith writes…"), you can use the "Omit Author" option to include only a date and/or page number in the parenthetical citation ("(2015, pp. 12–13)").
 
@@ -108,29 +108,29 @@ Select <i>Download RIS</i> to download a data file that can be imported into any
 
 ### I'm getting an error trying to add an item. What do I do?
 
-Some sites have restrictions that prevent ZBib from working, or they're designed in such a way that a URL can't be used to retrieve a given page. Try a different site, or paste in a ISBN, DOI, or other identifier instead.
+Some sites have restrictions that prevent ZoteroBib from working, or they're designed in such a way that a URL can't be used to retrieve a given page. Try a different site, or paste in a ISBN, DOI, or other identifier instead.
 
 In a pinch, you can always enter metadata manually, though that should rarely be necessary.
 
 ### I added an item but the data is wrong or incomplete. How can I correct it?
 
-While ZBib is able to extract high-quality metadata from a wide variety of sources, you should always check your entries to make sure they're correct. In some cases it may be necessary to manually edit an entry to clean up what's there or add additional fields.
+While ZoteroBib is able to extract high-quality metadata from a wide variety of sources, you should always check your entries to make sure they're correct. In some cases it may be necessary to manually edit an entry to clean up what's there or add additional fields.
 
-If there's a site for which ZBib consistently returns incorrect results, <a href="#help">let us know</a> and we'll do our best to fix it.
+If there's a site for which ZoteroBib consistently returns incorrect results, <a href="#help">let us know</a> and we'll do our best to fix it.
 
 <h3 id="sentence-case">Why are all the proper nouns in my entries in lowercase when I use APA style?</h3>
 
-APA style requires titles to be in sentence case rather than title case. When you use APA style, ZBib will partially convert the titles of entries to sentence case for you, but you'll need to manually edit some entries to capitalize proper nouns:
+APA style requires titles to be in sentence case rather than title case. When you use APA style, ZoteroBib will partially convert the titles of entries to sentence case for you, but you'll need to manually edit some entries to capitalize proper nouns:
 
 <p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
-<p><b>ZBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
+<p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
 <p><b>Sentence case:</b> <i>Circadian mood variations in <span style="color: #e52e3d; font-weight: bold;">T</span>witter content</i></p>
 
 (We know this is annoying, but we think it's less annoying than manually lowercasing all the other words in titles. Some other tools simply ignore this requirement and generate incorrect, title-cased "APA" bibliographies, but we assume that when you say you want APA you mean it.)
 
 ### What if I can't find a style that I need?
 
-If you can't find what you need just by searching, you can browse the [Zotero Styles Page](https://www.zotero.org/styles) or the [CSL visual editor](http://editor.citationstyles.org/searchByExample/) for style previews and then return to ZBib to install the style.
+If you can't find what you need just by searching, you can browse the [Zotero Styles Page](https://www.zotero.org/styles) or the [CSL visual editor](http://editor.citationstyles.org/searchByExample/) for style previews and then return to ZoteroBib to install the style.
 
 If you're still not able to find what you're looking for, you can [request a new style](https://github.com/citation-style-language/styles/wiki/Requesting-Styles).
 
@@ -142,7 +142,7 @@ If you still think there's a mistake, you can report it in the [Zotero Forums] o
 
 <h3 id="help">Something else isn't working. How can I get help?</h3>
 
-Sorry about that! You can post to the [Zotero Forums] and we'll be happy to help. (You'll need to create a Zotero account first.) Since these forums are shared with Zotero, it's best to put "\[ZBib\]" in the title so it's clear what you're referring to.
+Sorry about that! You can post to the [Zotero Forums] and we'll be happy to help. (You'll need to create a Zotero account first.) Since these forums are shared with Zotero, it's best to put "\[ZoteroBib\]" in the title so it's clear what you're referring to.
 
 [Zotero]: https://www.zotero.org
 [Zotero Forums]: https://forums.zotero.org
