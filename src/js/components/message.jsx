@@ -37,14 +37,14 @@ class Message extends React.Component {
 		return (
 			this.props.href ? (
 				<a
-				className={ `btn btn-outline-inverse-${this.props.kind}` }
+				className={ `btn btn-sm btn-outline-inverse-${this.props.kind}` }
 				href={ this.props.href }
 				>
 					{ this.props.action }
 				</a>
 			): (
 				<Button
-					className={ `btn-outline-inverse-${this.props.kind}` }
+					className={ `btn-sm btn-outline-inverse-${this.props.kind}` }
 					onClick={ this.handleAction.bind(this) }
 				>
 					{ this.props.action }

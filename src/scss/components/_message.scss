@@ -18,7 +18,8 @@
 	@media (min-width: $bp-md) {
 		flex-direction: row;
 		font-size: $message-font-size;
-		padding: ($space-xxl - 10px) ($grid-gutter-width / 2) ($space-xxl - 10px) 92px;
+		line-height: $line-height-base + 0.1;
+		padding: ($space-xxl - 11px) ($grid-gutter-width / 2) ($space-xxl - 11px) 92px;
 
 		&::before {
 			content: ""; // Center/right justification hack
