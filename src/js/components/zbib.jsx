@@ -24,6 +24,7 @@ const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const StyleInstaller = require('./style-installer');
 const UserTypeDetector = require('zotero-web-library/lib/enhancers/user-type-detector');
 const WhatsThis = require('./whats-this');
+const Footer = require('./footer');
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -121,6 +122,8 @@ class ZBib extends React.PureComponent {
 									<About { ...this.props } />
 								)
 							}
+
+							<Footer />
 
 							<Confirmation
 								isOpen={ this.props.isConfirmingStyleSwitch }

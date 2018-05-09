@@ -1,0 +1,14 @@
+footer {
+	padding: 0 0 1em;
+	text-align: center;
+}
+
+.zotero-bib-container.write footer {
+	background: $about-bg;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	&, a {
+		color: $shade-0;
+	}
+}
