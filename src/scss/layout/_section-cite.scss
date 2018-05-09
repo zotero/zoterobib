@@ -4,18 +4,22 @@
 
 .section-cite {
 	border-top: none;
-	padding-top: $section-padding-mobile - 9px;
+	padding-top: $section-padding-mobile + 21px; // Distance to baseline meta-nav
 	position: relative;
 
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 9px;
 	}
 
-	.help-link {
+	.meta-nav {
 		position: absolute;
 		right: $grid-gutter-width / 2;
 		top: $space-sm;
 		cursor: pointer;
+
+		a + a {
+			margin-left: $space-md;
+		}
 	}
 
 	.brand {

@@ -69,12 +69,10 @@ class ZBib extends React.PureComponent {
 							{
 								!this.props.isReadOnly && (
 									<section className="section section-cite">
-										<a
-											className="help-link"
-											onClick={ this.handleHelp.bind(this) }
-										>
-											Help
-										</a>
+										<nav className="meta-nav">
+											<a onClick={ this.handleHelp.bind(this) }>Help</a>
+											<a href="https://www.zotero.org">Zotero</a>
+										</nav>
 										<div className="container">
 											<Brand />
 											<CiteTools { ...this.props } />
