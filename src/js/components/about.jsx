@@ -154,8 +154,8 @@ class About extends React.PureComponent {
 									When you’re done, you can copy a formatted bibliography to the
 									clipboard and paste it into your document. You can also
 									export HTML to add to a webpage, an RTF document to open
-									in a word processor, or a RIS file to import into a reference
-									manager.
+									in a word processor, or a RIS or BibTeX file to import into a
+									reference manager.
 								</p>
 							</section>
 							<section className="feature">
