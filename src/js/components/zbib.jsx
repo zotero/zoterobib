@@ -145,6 +145,7 @@ class ZBib extends React.PureComponent {
 							<Modal
 								isOpen={ this.props.isSaveToZoteroVisible }
 								onRequestClose={ () => this.props.onSaveToZoteroHide() }
+								className={ cx('modal modal-centered') }
 							>
 								<div className="modal-content" tabIndex={ -1 }>
 									<div className="modal-header">
