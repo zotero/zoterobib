@@ -143,25 +143,17 @@ const retrieveLocaleSync = lang => {
 	return locales;
 };
 
-const retrieveStylesData = async (url, stylesCacheTime) => {
-	var stylesData = JSON.parse(localStorage.getItem('zotero-styles-data'));
-	var stylesDataTimestamp = localStorage.getItem('zotero-styles-data-timestamp');
-	if(!stylesData
-		|| !stylesDataTimestamp
-		|| Date.now() - stylesDataTimestamp > stylesCacheTime
-	) {
-		try {
-			const response = await fetch(url);
-			if(!response.ok) {
-				throw new Error();
-			}
-			stylesData = await response.json();
-			localStorage.setItem('zotero-styles-data', JSON.stringify(stylesData));
-			localStorage.setItem('zotero-styles-data-timestamp', Date.now());
-		} catch(e) {
-			if(!stylesData) {
-				throw new Error('Failed to load styles data');
-			}
+const retrieveStylesData = async url => {
+	var stylesData;
+	try {
+		const response = await fetch(url);
+		if(!response.ok) {
+			throw new Error();
+		}
+		stylesData = await response.json();
+	} catch(e) {
+		if(!stylesData) {
+			throw new Error('Failed to load styles data');
 		}
 	}
 	return stylesData;

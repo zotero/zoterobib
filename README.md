@@ -64,6 +64,3 @@ Specifies an additional prefix for where translation server request should be se
 
 **translationServerURL**
 Specifies url for the *translation-server*. By default current host is assumed to proxy request to the translation server.
-
-**stylesCacheTime**
-Specifies how many ms before styles data from stylesURL is considered outdated and should be re-downloaded.

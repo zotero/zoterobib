@@ -1,9 +1,12 @@
 'use strict';
 
+const appDefaults = require('../src/js/constants/defaults');
+const argv = require('minimist')(process.argv.slice(2));
 const fetch = require('isomorphic-fetch');
 const fs = require('fs-extra');
 const path = require('path');
-const appDefaults = require('../src/js/constants/defaults');
+
+const stylesCacheTime = argv['stylesCacheTime'] || 0;
 
 const styles = [
 	'apa',
@@ -20,7 +23,7 @@ const defaultStyle = 'modern-language-association';
 	try {
 		stylesMeta = await fs.readJson(stylesJsonPath);
 		var stat = await fs.stat(stylesJsonPath);
-		if(new Date() - new Date(stat.mtime) > appDefaults.stylesCacheTime) {
+		if(new Date() - new Date(stat.mtime) > stylesCacheTime) {
 			throw new Error();
 		}
 	} catch(e) {

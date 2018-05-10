@@ -300,7 +300,7 @@ class Container extends React.Component {
 					title = 'title' in remoteData && remoteData.title || null;
 					var citationStyleMeta = this.state.citationStyles.find(cs => cs.name === citationStyle);
 					if(!citationStyleMeta) {
-						const stylesData = await retrieveStylesData(this.state.config.stylesURL, this.props.config.stylesCacheTime);
+						const stylesData = await retrieveStylesData(this.state.config.stylesURL);
 						citationStyleMeta = stylesData.find(sd => sd.name === citationStyle);
 						this.setState({
 							citationStyles: this.getExpandedCitationStyles(citationStyleMeta)
@@ -463,7 +463,7 @@ class Container extends React.Component {
 				isInstallingStyle: true
 			});
 			try {
-				const stylesData = await retrieveStylesData(this.state.config.stylesURL, this.props.config.stylesCacheTime);
+				const stylesData = await retrieveStylesData(this.state.config.stylesURL);
 				this.setState({
 					isStylesDataLoading: false,
 					stylesData
