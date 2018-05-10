@@ -301,8 +301,8 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 };
 
 const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
+	const items = bib.itemsRaw.map(item => item.key);
 	if(!isWarm) {
-		const items = bib.itemsRaw.map(item => item.key);
 		citeproc.restoreProcessorState(items.map((key, i) => {
 			return {
 				citationID: key,
@@ -314,7 +314,6 @@ const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) 
 		}));
 	}
 
-	const items = bib.itemsRaw.map(item => item.key);
 	const index = items.indexOf(itemId);
 	const pre = items.slice(0, index).map((key, i) => ([key, i]));
 	const post = items.slice(index + 1).map((key, i) => ([key, i]));
