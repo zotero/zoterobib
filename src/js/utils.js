@@ -302,18 +302,22 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 
 const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
 	if(!isWarm) {
-		// reset & build citations registry. Takes ~10ms per entry.
-		getCitations(bib, citeproc);
+		const items = bib.itemsRaw.map(item => item.key);
+		citeproc.restoreProcessorState(items.map((key, i) => {
+			return {
+				citationID: key,
+				citationItems: [{ 'id': key }],
+				properties: {
+					index: i
+				}
+			};
+		}));
 	}
 
 	const items = bib.itemsRaw.map(item => item.key);
 	const index = items.indexOf(itemId);
-	const pre = items.slice(0, index).map((key, i) => (
-		[citeproc.registry.citationreg.citationsByItemId[key][0].citationID, i])
-	);
-	const post = items.slice(index + 1).map((key, i) => (
-		[citeproc.registry.citationreg.citationsByItemId[key][0].citationID, i])
-	);
+	const pre = items.slice(0, index).map((key, i) => ([key, i]));
+	const post = items.slice(index + 1).map((key, i) => ([key, i]));
 	const citation = {
 		'citationItems': [{ 'id': itemId }],
 		'properties': {}

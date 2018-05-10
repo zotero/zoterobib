@@ -234,6 +234,26 @@ class Container extends React.Component {
 		} else if(this.state.itemUnderReviewBibliography && !this.state.itemUnderReview) {
 			this.setState({ itemUnderReviewBibliography: null });
 		}
+
+		if(this.state.citationToCopy && this.state.isCitationCopyDialogOpen && !state.isCitationCopyDialogOpen) {
+			// @TODO: ideally getCitation this would be handled by a Worker however
+			// 		  it's impossible to make a structured clone of citeproc
+
+			// for large libraries (above 50 items) add 50ms timeout in order to ensure that
+			// browser will render spinner first, before blocking main thread with getCitation()
+			const timeout = this.bib.itemsRaw.length > 50 ? 50 : 0;
+			setTimeout(() => {
+				this.setState({
+					citationHtml: getCitation(
+						this.bib,
+						this.state.citationToCopy,
+						null,
+						['html'],
+						this.citeproc
+					).html,
+				});
+			}, timeout);
+		}
 	}
 
 	componentWillUnmount() {
@@ -729,7 +749,6 @@ class Container extends React.Component {
 	handleCitationCopyDialogOpen(itemId) {
 		this.clearMessages();
 		this.setState({
-			citationHtml: getCitation(this.bib, itemId, null, ['html'], this.citeproc).html,
 			citationToCopy: itemId,
 			isCitationCopyDialogOpen: true,
 			itemUnderReview: null,
