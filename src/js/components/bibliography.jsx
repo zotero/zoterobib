@@ -192,6 +192,9 @@ class Bibliography extends React.PureComponent {
 			formatBib(bibliography);
 		let div = document.createElement('div');
 		div.innerHTML = html;
+		div.querySelectorAll('a').forEach(link => {
+			link.setAttribute('rel', 'nofollow');
+		});
 
 		if(this.props.isReadOnly) {
 			return (
