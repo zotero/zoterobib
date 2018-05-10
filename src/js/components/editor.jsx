@@ -58,7 +58,6 @@ class Editor extends React.PureComponent {
 			item = {
 				version: 0,
 				itemType: 'book',
-				title: '(No Title)',
 				tags: [],
 				creators: []
 			};

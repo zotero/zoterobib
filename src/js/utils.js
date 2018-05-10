@@ -33,7 +33,20 @@ const getCiteproc = async (citationStyle, bib) => {
 
 	return new CSL.Engine({
 		retrieveLocale: retrieveLocaleSync,
-		retrieveItem: itemId => bib.itemsCSL.find(item => item.id === itemId)
+		retrieveItem: itemId => {
+			const item = bib.itemsCSL.find(item => item.id === itemId);
+			if(!('author' in item) && !('title' in item) && !('issued' in item)) {
+				// there is a risk of this item being skipped by citeproc
+				// in makeBibliography so we inject title to make sure it
+				// can be edited in bib-web
+				return {
+					...item,
+					title: 'Untitled'
+				};
+			} else {
+				return item;
+			}
+		}
 	}, style, lang);
 };
 
