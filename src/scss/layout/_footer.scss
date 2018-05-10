@@ -10,7 +10,7 @@ footer {
 		margin: auto;
 		position: relative;
 
-		&:before {
+		&::before {
 			content: "";
 			position: absolute;
 			left: $grid-gutter-width / 2;
