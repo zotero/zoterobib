@@ -186,9 +186,12 @@ class CopyCitationDialog extends React.PureComponent {
 				contentLabel={ this.title }
 				onRequestClose={ () => { this.props.onCitationCopyCancel(); } }
 			>
-				<React.Fragment>
-					{ this.props.citationHtml ? this.renderModalContent() : <Spinner /> }
-				</React.Fragment>
+				{ this.props.citationHtml ? this.renderModalContent() : <Spinner /> }
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ this.handleCancel.bind(this) }
+				/>
 			</Modal>
 		);
 	}
