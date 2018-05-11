@@ -151,8 +151,11 @@ const retrieveStylesData = async url => {
 			throw new Error();
 		}
 		stylesData = await response.json();
-	} catch(e) {
-		if(!stylesData) {
+	} catch(_) {
+		try {
+			const response = await fetch(url, { 'cache': 'force-cache' });
+			stylesData = await response.json();
+		} catch(_) {
 			throw new Error('Failed to load styles data');
 		}
 	}
