@@ -1,8 +1,17 @@
 footer {
-	padding: ($space-xxl - 6px) ($grid-gutter-width / 2);
+	padding: ($space-xl - 2px) ($grid-gutter-width / 2) (43px - 5px);
 	text-align: center;
 	border-top: 1px solid $shade-2;
-	font-size: $font-size-sm;
+
+	@media (min-width: $bp-md) {
+		padding-top: ($space-xxl - 2px);
+		padding-bottom: ($space-xxxl - 5px);
+	}
+
+	&,
+	a {
+		color: inherit;
+	}
 
 	&.faq-footer {
 		border-top-color: transparent;
@@ -19,6 +28,21 @@ footer {
 			height: 1px;
 			background-color: $shade-2;
 		}
+	}
+
+	.social-nav {
+		margin-bottom: $space-lg - 10px;
+	}
+
+	.twitter-icon {
+		vertical-align: top;
+		margin-bottom: $space-lg - 12px;
+	}
+
+	.copyright {
+		display: block;
+		font-size: 12px;
+		opacity: 0.4;
 	}
 }
 
@@ -41,10 +65,10 @@ footer {
 		footer {
 			border-top: none;
 			padding-top: 0;
-			padding-bottom: $section-padding-mobile - 6px;
+			padding-bottom: $section-padding-mobile - 5px;
 
 			@media (min-width: $bp-md) {
-				padding-bottom: $section-padding - 6px;
+				padding-bottom: $section-padding - 5px;
 			}
 		}
 	}
