@@ -7,7 +7,7 @@
 		// 
 		// "storeURL": undefined,
 		// "stylesURL": undefined,
-		// "translationServerPrefix": "",
-		// "translationServerURL": undefined,
+		// "translatePrefix": "",
+		// "translateURL": undefined,
 	}
 }

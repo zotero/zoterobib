@@ -64,7 +64,7 @@
     "smooth-scroll": "^12.1.5",
     "zotero-api-client": "^0.11.2",
     "zotero-api-client-cache": "^0.4.3",
-    "zotero-bib": "github:zotero/bib#v0.10.0-release",
+    "zotero-bib": "github:zotero/bib#v0.11.0-release",
     "zotero-web-library": "^0.9.51-alpha"
   },
   "devDependencies": {

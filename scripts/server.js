@@ -6,7 +6,7 @@ const http = require('http');
 const serveStatic = require('serve-static');
 const httpProxy = require('http-proxy');
 const argv = require('minimist')(process.argv.slice(2));
-const translationServerURL = argv['t'] || 'http://localhost:1969';
+const translateURL = argv['t'] || 'http://localhost:1969';
 const port = argv['p'] || 8001;
 
 const serve = serveStatic(path.join(__dirname, '..', 'build'), { 'index': false });
@@ -23,7 +23,7 @@ const handler = (req, resp) => {
 	if(req.url.startsWith('/web') || req.url.startsWith('/search') || req.url.startsWith('/export')) {
 		proxy.web(req, resp, {
 			changeOrigin: true,
-			target: `${translationServerURL}`,
+			target: `${translateURL}`,
 			secure: false
 		});
 		proxy.on('error', () => {

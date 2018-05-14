@@ -59,8 +59,8 @@ Specifies url for the *bib-server* api where bibliographies are stored.
 **stylesURL**
 Specifies url for the *styles-repo* website. When left empty, default will be used which is https://www.zotero.org/styles-files/styles.json
 
-**translationServerPrefix**
-Specifies an additional prefix for where translation server request should be send. Useful in cases where `translationServerURL` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
+**translatePrefix**
+Specifies an additional prefix for where translation server request should be send. Useful in cases where `translateURL` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
 
-**translationServerURL**
+**translateURL**
 Specifies url for the *translation-server*. By default current host is assumed to proxy request to the translation server.
