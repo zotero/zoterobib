@@ -18,7 +18,7 @@
     "clean": "rimraf build",
     "clean:data": "rimraf data",
     "build": "npm run build:styles-json && run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:static -s' && npm run build:postprocess",
-    "browserify": "NODE_ENV=browser browserify -s ZoteroBibComponent --extension=.jsx src/js/main.js -t [babelify] -o build/static/main.js",
+    "browserify": "NODE_ENV=production browserify -s ZoteroBibComponent --extension=.jsx src/js/main.js -t [babelify] -o build/static/main.js",
     "minify": "minify build/static/main.js --mangle --simplify --builtIns --mergeVars --removeConsole --removeDebugger -o build/static/main.js",
     "build:js": "run-s browserify minify",
     "build:scss": "for f in src/scss/*.scss; do node-sass $f --output-style compressed --output build/static/; done;",
