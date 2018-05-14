@@ -6,6 +6,7 @@ class Footer extends React.PureComponent {
 	render() {
 		return (
 			<footer>
+				<nav className="social-nav">
 				Stay in touch! Follow <a href="https://twitter.com/zotero">@zotero</a> on Twitter.
 				</nav>
 				<small className="copyright">
