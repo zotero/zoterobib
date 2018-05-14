@@ -27,9 +27,9 @@ class About extends React.PureComponent {
 						by the team behind <a href="https://www.zotero.org/">Zotero</a>, the
 						powerful open-source research tool recommended by thousands of universities
 						worldwide, so you can trust it to help you seamlessly add sources and
-						produce perfect bibliographies. If you need to reuse your research sources
-						across multiple projects or build a shared research library, we recommend
-						using Zotero instead.
+						produce perfect bibliographies. If you need to reuse sources across
+						multiple projects or build a shared research library, we recommend using
+						Zotero instead.
 					</p>
 					<section className="features">
 						<div className="column">
@@ -48,7 +48,8 @@ class About extends React.PureComponent {
 									automatically pull in data from newspaper and magazine
 									articles, library catalogs, journal articles, sites like Amazon
 									and Google Books, and much more. You can also paste or type in
-									an ISBN, DOI, PMID, or arXiv ID.
+									an ISBN, DOI, PMID, or arXiv ID or enter search terms such as
+									title, author, and year.
 								</p>
 							</section>
 							<section className="feature">

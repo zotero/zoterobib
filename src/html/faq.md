@@ -80,9 +80,11 @@ Other than the web requests necessary to complete your search, which contain the
 
 ### How do I add entries to my bibliography?
 
-The easiest way to add an item to ZoteroBib is by pasting in a URL. Just open a new browser tab, search for what you're looking for, open the page, and copy the URL from your browser's address bar into ZoteroBib. ZoteroBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
+The easiest way to add an item to ZoteroBib is by pasting in a URL. Just open a new browser tab, find what you're looking for, and copy the page's URL from your browser's address bar into ZoteroBib. ZoteroBib can automatically extract bibliographic data from newspaper and magazine articles, library catalogs, journal articles, sites like Amazon and Google Books, and much more.
 
-If saving from a URL doesn't work, or you have a PDF, printout, or book that you can't easily find online, you can copy or type in an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Most recent published papers will include a DOI in the article listing and on the first page, and nearly all books include an ISBN on the back or in the first few pages.
+If saving from a URL doesn't work, or you have a book, printout, or PDF that you can't easily find online, you can copy or type in an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Nearly all books include an ISBN on the back cover or in the first few pages, and most recent published articles will include a DOI in the online listing and on the first page. Adding by identifier helps ensure that you're adding the correct version, which is particularly helpful for books with multiple editions.
+
+You can also search for books and articles by title (and optionally author and year) — just be sure to review the results to make sure you're adding the right version.
 
 If all else fails, you can enter item details by hand by clicking <i>Manual Entry</i>.
 
@@ -130,7 +132,7 @@ APA style requires titles to be in sentence case rather than title case. When yo
 
 ### What if I can't find a style that I need?
 
-If you can't find what you need just by searching, you can browse the [Zotero Styles Page](https://www.zotero.org/styles) or the [CSL visual editor](http://editor.citationstyles.org/searchByExample/) for style previews and then return to ZoteroBib to install the style.
+If you can't find the style you need just by searching, you can browse the [Zotero Styles Page](https://www.zotero.org/styles) or the [CSL visual editor](http://editor.citationstyles.org/searchByExample/) for style previews and then return to ZoteroBib to install the style.
 
 If you're still not able to find what you're looking for, you can [request a new style](https://github.com/citation-style-language/styles/wiki/Requesting-Styles).
 

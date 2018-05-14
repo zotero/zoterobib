@@ -40,7 +40,7 @@ class IdInput extends React.PureComponent {
 					onBlur={ () => true /* do not commit on blur */ }
 					onChange={ this.handleChange.bind(this) }
 					onCommit={ this.handleCite.bind(this) }
-					placeholder="Paste or type in a URL, ISBN, DOI, PMID, or arXiv ID"
+					placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title/author/year"
 					ref = { i => this.inputField = i }
 					tabIndex={ 0 }
 					type="text"
