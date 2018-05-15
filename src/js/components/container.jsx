@@ -124,11 +124,6 @@ class Container extends React.Component {
 	}
 
 	async componentDidMount() {
-		if(!localStorage.getItem('zotero-bib-visited')) {
-			localStorage.setItem('zotero-bib-visited', 'true');
-			this.displayWelcomeMessage();
-		}
-
 		const citationStyles = [
 			...coreCitationStyles.map(cs => ({
 				...cs,
@@ -338,6 +333,10 @@ class Container extends React.Component {
 			isLoading: false,
 		});
 
+		if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
+			localStorage.setItem('zotero-bib-visited', 'true');
+			this.displayWelcomeMessage();
+		}
 	}
 
 	async handleSave() {
