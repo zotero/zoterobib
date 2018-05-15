@@ -84,7 +84,7 @@ The easiest way to add an item to ZoteroBib is by pasting in a URL. Just open a 
 
 If saving from a URL doesn't work, or you have a book, printout, or PDF that you can't easily find online, you can copy or type in an [ISBN](https://en.wikipedia.org/wiki/International_Standard_Book_Number), [DOI](https://en.wikipedia.org/wiki/Digital_object_identifier), [PubMed ID](https://en.wikipedia.org/wiki/PubMed#PubMed_identifier), or [arXiv ID](https://arxiv.org/help/arxiv_identifier). Nearly all books include an ISBN on the back cover or in the first few pages, and most recent published articles will include a DOI in the online listing and on the first page. Adding by identifier helps ensure that you're adding the correct version, which is particularly helpful for books with multiple editions.
 
-You can also search for books and articles by title (and optionally author and year) — just be sure to review the results to make sure you're adding the right version.
+You can also search for books and articles by title (and optionally author, year, and publisher) — just be sure to review the results to make sure you're adding the right version.
 
 If all else fails, you can enter item details by hand by clicking <i>Manual Entry</i>.
 

@@ -48,8 +48,7 @@ class About extends React.PureComponent {
 									automatically pull in data from newspaper and magazine
 									articles, library catalogs, journal articles, sites like Amazon
 									and Google Books, and much more. You can also paste or type in
-									an ISBN, DOI, PMID, or arXiv ID or enter search terms such as
-									title, author, and year.
+									an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
 								</p>
 							</section>
 							<section className="feature">
@@ -64,7 +63,7 @@ class About extends React.PureComponent {
 								<p>
 									If automatic import doesn’t find what you’re looking for or
 									you’re entering something without a URL or identifier, you can
-									always enter the reference information by hand.
+									enter the reference information by hand.
 								</p>
 							</section>
 							<section className="feature">
