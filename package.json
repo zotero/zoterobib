@@ -9,7 +9,7 @@
   "config": {
     "styles_cache_time": "86400000",
     "port": "8001",
-    "translation_server": "http://localhost:1969"
+    "translation_server": "https://cdycrfqrjwarndv3xvdolavpds.zotero.org"
   },
   "browserslist": "last 2 versions",
   "scripts": {
