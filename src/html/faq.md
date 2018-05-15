@@ -110,7 +110,7 @@ Select <i>Download RIS</i> or <i>Download BibTeX</i> to download a data file tha
 
 ### I'm getting an error trying to add an item. What do I do?
 
-Some sites have restrictions that prevent ZoteroBib from working, or they're designed in such a way that a URL can't be used to retrieve a given page. Try a different site, or paste in a ISBN, DOI, or other identifier instead.
+Some sites have restrictions that prevent ZoteroBib from working, or they're designed in such a way that a URL can't be used to retrieve a given page. Try a different site, or paste in an ISBN, DOI, or other identifier instead.
 
 In a pinch, you can always enter metadata manually, though that should rarely be necessary.
 
