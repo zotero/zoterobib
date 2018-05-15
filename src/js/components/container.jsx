@@ -14,12 +14,12 @@ const { fetchFromPermalink,
 	getBibliographyOrFallback,
 	getCitation,
 	getCiteproc,
-	getItemTypes,
 	isApa,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
 	parseIdentifier,
+	processMultipleChoiceItems,
 	processSentenceCaseAPAItems,
 	retrieveStyle,
 	retrieveStylesData,
@@ -58,10 +58,12 @@ class Container extends React.Component {
 		isSaving: false,
 		isStylesDataLoading: false,
 		isTranslating: false,
+		isTranslatingMore: false,
 		itemUnderReview: null,
 		itemUnderReviewBibliography: null,
 		lastDeletedItem: null,
 		messages: [],
+		moreItemsLink: null,
 		multipleChoiceItems: [],
 		permalink: null,
 		stylesData: null,
@@ -526,7 +528,6 @@ class Container extends React.Component {
 	}
 
 	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
-		var itemTypes;
 		identifier = parseIdentifier(identifier);
 
 		this.clearMessages();
@@ -547,12 +548,12 @@ class Container extends React.Component {
 						this.setState({ identifier: url });
 					}
 					if(multipleSelectedItems) {
-						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, false);
+						translationResponse = await this.bib.translateUrlItems(url, multipleSelectedItems, { add: false });
 					} else {
-						translationResponse = await this.bib.translateUrl(url, false);
+						translationResponse = await this.bib.translateUrl(url, { add: false });
 					}
 				} else {
-					translationResponse = await this.bib.translateIdentifier(identifier, false);
+					translationResponse = await this.bib.translateIdentifier(identifier, { add: false });
 				}
 
 				switch(translationResponse.result) {
@@ -581,21 +582,11 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.MULTIPLE_ITEMS:
-						itemTypes = await getItemTypes();
 						this.setState({
 							isTranslating: false,
 							isPickingItem: true,
-							multipleChoiceItems: Object.entries(translationResponse.items)
-							.map(([key, value]) => ({
-								key,
-								value: typeof value === 'string' ? {
-									title: value
-								} : {
-									...value,
-									itemType: (itemTypes.find(it => it.itemType == value.itemType) || {}).localized
-								},
-								source: isUrl ? 'url' : 'identifier'
-							}))
+							moreItemsLink: 'next' in translationResponse.links ? translationResponse.links.next : null,
+							multipleChoiceItems: await processMultipleChoiceItems(translationResponse.items, isUrl)
 						});
 					break;
 					case ZoteroBib.FAILED:
@@ -663,6 +654,40 @@ class Container extends React.Component {
 			);
 		} else {
 			return await this.handleTranslateIdentifier(selectedItem.key);
+		}
+	}
+
+	async handleMultipleChoiceMore() {
+		this.setState({
+			isTranslatingMore: true
+		});
+		try {
+			let { result, items, links } = await this.bib.translateIdentifier(
+				this.state.identifier, {
+					endpoint: this.state.moreItemsLink.url,
+					add: false
+			});
+			switch(result) {
+				case ZoteroBib.COMPLETE:
+				case ZoteroBib.MULTIPLE_ITEMS:
+					this.setState({
+						isTranslatingMore: false,
+						isPickingItem: true,
+						moreItemsLink: 'next' in links ? links.next : null,
+						multipleChoiceItems: [
+							...this.state.multipleChoiceItems,
+							...(await processMultipleChoiceItems(items))
+						]
+					});
+				break;
+				case ZoteroBib.FAILED:
+					this.handleError('An error occurred while fetching more items.');
+					this.setState({ isTranslatingMore: false });
+				break;
+			}
+		} catch(e) {
+			this.handleError('An error occurred while fetching more items.', e);
+			this.setState({ isTranslatingMore: false });
 		}
 	}
 
@@ -935,6 +960,7 @@ class Container extends React.Component {
 			onItemCreated = { this.handleItemCreated.bind(this) }
 			onItemUpdate = { this.handleItemUpdate.bind(this) }
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
+			onMultipleChoiceMore = { this.handleMultipleChoiceMore.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
 			onOverride = { this.handleOverride.bind(this) }
 			onReviewDelete = { this.handleReviewDelete.bind(this) }

@@ -5,6 +5,7 @@ const PropTypes = require('prop-types');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const Button = require('zotero-web-library/lib/component/ui/button');
+const Spinner = require('zotero-web-library/lib/component/ui/spinner');
 const Modal = require('./modal');
 const Icon = require('zotero-web-library/lib/component/ui/icon');
 
@@ -21,6 +22,10 @@ class MultipleChoiceDialog extends React.Component {
 
 	handleCancel() {
 		this.props.onMultipleChoiceCancel();
+	}
+
+	handleMore() {
+		this.props.onMultipleChoiceMore();
 	}
 
 	renderItem(item) {
@@ -69,6 +74,22 @@ class MultipleChoiceDialog extends React.Component {
 		);
 	}
 
+	renderMoreSection() {
+		const { isTranslatingMore, moreItemsLink } = this.props;
+		if(isTranslatingMore) {
+			return <Spinner />;
+		} else if(moreItemsLink !== null) {
+			return (
+				<Button
+					className="btn-secondary"
+					onClick={ this.handleMore.bind(this) }
+				>
+					More…
+				</Button>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<Modal
@@ -105,6 +126,9 @@ class MultipleChoiceDialog extends React.Component {
 								this.renderItem.bind(this)
 							) }
 						</ul>
+						<div className="more-items-action">
+							{ this.renderMoreSection() }
+						</div>
 					</div>
 				</div>
 			</Modal>
@@ -117,8 +141,11 @@ class MultipleChoiceDialog extends React.Component {
 
 	static propTypes = {
 		isPickingItem: PropTypes.bool,
+		isTranslatingMore: PropTypes.bool,
+		moreItemsLink: PropTypes.object,
 		multipleChoiceItems: PropTypes.array,
 		onMultipleChoiceCancel: PropTypes.func.isRequired,
+		onMultipleChoiceMore: PropTypes.func.isRequired,
 		onMultipleChoiceSelect: PropTypes.func.isRequired,
 	}
 }

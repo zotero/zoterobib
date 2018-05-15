@@ -61,4 +61,11 @@
 			margin: 0;
 		}
 	}
+
+	.more-items-action {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		padding: $space-md;
+	}
 }

@@ -483,6 +483,21 @@ const parseTagAndAttrsFromNode = node => {
 	return { Tag, attrs };
 };
 
+const processMultipleChoiceItems = async (items, isUrl = false) => {
+	const itemTypes = await getItemTypes();
+	return Object.entries(items)
+		.map(([key, value]) => ({
+			key,
+			value: typeof value === 'string' ? {
+				title: value
+			} : {
+				...value,
+				itemType: (itemTypes.find(it => it.itemType == value.itemType) || {}).localized
+			},
+			source: isUrl ? 'url' : 'identifier'
+		}));
+};
+
 module.exports = {
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
@@ -498,6 +513,7 @@ module.exports = {
 	isNumericStyle,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
+	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
 	retrieveLocaleSync,
