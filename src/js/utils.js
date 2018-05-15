@@ -35,6 +35,15 @@ const getCiteproc = async (citationStyle, bib) => {
 		retrieveLocale: retrieveLocaleSync,
 		retrieveItem: itemId => {
 			const item = bib.itemsCSL.find(item => item.id === itemId);
+
+			// Don't return URL or accessed information for journal, newspaper, or magazine
+			// articles if there's a page number. Equivalent to export.citePaperJournalArticleURL
+			// being set in Zotero (as it is by default)
+			if (item.type.startsWith('article-') && item.page) {
+				delete item.URL;
+				delete item.accessed;
+			}
+
 			if(!('author' in item) && !('title' in item) && !('issued' in item)) {
 				// there is a risk of this item being skipped by citeproc
 				// in makeBibliography so we inject title to make sure it
