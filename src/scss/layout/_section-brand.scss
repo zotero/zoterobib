@@ -4,10 +4,10 @@
 
 .section-brand {
 	padding-top: $section-padding-mobile - 9px;
-	padding-bottom: $space-xl - 6px;
+	padding-bottom: $space-xl - 7px;
 
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 9px;
-		padding-bottom: $space-xxl - 3px;
+		padding-bottom: $space-xxl - 7px;
 	}
 }

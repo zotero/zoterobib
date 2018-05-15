@@ -1,10 +1,10 @@
 footer {
-	padding: ($space-xl - 2px) ($grid-gutter-width / 2) (43px - 5px);
+	padding: (43px - 6px) ($grid-gutter-width / 2) (43px - 5px);
 	text-align: center;
 	border-top: 1px solid $shade-2;
 
 	@media (min-width: $bp-md) {
-		padding-top: ($space-xxl - 2px);
+		padding-top: ($space-xxxl - 6px);
 		padding-bottom: ($space-xxxl - 5px);
 	}
 
@@ -32,11 +32,6 @@ footer {
 
 	.social-nav {
 		margin-bottom: $space-lg - 10px;
-	}
-
-	.twitter-icon {
-		vertical-align: top;
-		margin-bottom: $space-lg - 12px;
 	}
 
 	.copyright {
