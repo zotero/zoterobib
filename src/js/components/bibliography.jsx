@@ -160,7 +160,7 @@ class Bibliography extends React.PureComponent {
 				</Dropdown>
 				{ !this.props.isNumericStyle && (
 					<Button
-						tooltip={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
+						title={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
 						className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
 						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
 					>
@@ -168,7 +168,7 @@ class Bibliography extends React.PureComponent {
 					</Button>
 				) }
 				<Button
-					tooltip="Delete Entry"
+					title="Delete Entry"
 					className="btn-outline-secondary btn-remove"
 					onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
 				>
