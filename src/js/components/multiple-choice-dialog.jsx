@@ -81,7 +81,7 @@ class MultipleChoiceDialog extends React.Component {
 		} else if(moreItemsLink !== null) {
 			return (
 				<Button
-					className="btn-secondary"
+					className="btn-outline-secondary"
 					onClick={ this.handleMore.bind(this) }
 				>
 					More…
