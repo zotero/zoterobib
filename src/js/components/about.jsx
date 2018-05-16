@@ -105,8 +105,17 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Deleting items</h2>
 								<p>
-									Click the × next to a bibliography entry to delete it. To start
-									a new bibliography, click <i>Delete All</i> to remove all entries.
+									Click the
+									{ ' ' }
+									<img
+										src="/static/images/about/remove-xs.svg"
+										className="remove-icon"
+										width="14"
+										height="14"
+										alt="Remove icon"/>
+									{ ' ' }
+									next to a bibliography entry to delete it. To start a new
+									bibliography, click <i>Delete All</i> to remove all entries.
 								</p>
 							</section>
 						</div>
