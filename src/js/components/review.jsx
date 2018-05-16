@@ -4,7 +4,6 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const Button = require('zotero-web-library/lib/component/ui/button');
 const formatBib = require('../cite');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
 
 class Review extends React.PureComponent {
 	handleDismiss() {
@@ -48,6 +47,12 @@ class Review extends React.PureComponent {
 					<div className="actions">
 						<Button
 							className="btn-outline-secondary btn-min-width"
+							onClick={ this.handleDismiss.bind(this) }
+						>
+							Close
+						</Button>
+						<Button
+							className="btn-outline-secondary btn-min-width"
 							onClick={ this.handleDelete.bind(this) }
 						>
 							Delete
@@ -57,12 +62,6 @@ class Review extends React.PureComponent {
 							onClick={ this.handleEdit.bind(this) }
 						>
 							Edit
-						</Button>
-						<Button
-							className="btn-close"
-							onClick={ this.handleDismiss.bind(this) }
-						>
-							<Icon type={ '24/remove' } width="24" height="24" />
 						</Button>
 					</div>
 				</div>
