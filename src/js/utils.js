@@ -498,7 +498,29 @@ const processMultipleChoiceItems = async (items, isUrl = false) => {
 		}));
 };
 
+const removeDuplicatesBy = (fn, array) => {
+	var unique = new Set();
+	return array.filter(element => {
+		const key = fn(element);
+		const isNew = !unique.has(key);
+		if(isNew) {
+			unique.add(key);
+		}
+		return isNew;
+	});
+};
+
+const dedupMultipleChoiceItems = items => {
+	items.forEach(item => {
+		const { title, description, itemType } = item.value;
+		const signature = item.key + title + description + itemType;
+		item.signature = signature;
+	});
+	return removeDuplicatesBy(i => i.signature, items);
+};
+
 module.exports = {
+	dedupMultipleChoiceItems,
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
 	getBibliographyOrFallback,

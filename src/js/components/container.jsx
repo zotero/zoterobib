@@ -9,7 +9,8 @@ const ZoteroBib = require('zotero-bib');
 const exportFormats = require('../constants/export-formats');
 const { withRouter } = require('react-router-dom');
 const arrayEquals = require('array-equal');
-const { fetchFromPermalink,
+const {  dedupMultipleChoiceItems,
+	fetchFromPermalink,
 	getBibliographyFormatParameters,
 	getBibliographyOrFallback,
 	getCitation,
@@ -585,7 +586,9 @@ class Container extends React.Component {
 							isTranslating: false,
 							isPickingItem: true,
 							moreItemsLink: 'next' in translationResponse.links ? translationResponse.links.next : null,
-							multipleChoiceItems: await processMultipleChoiceItems(translationResponse.items, isUrl)
+							multipleChoiceItems: dedupMultipleChoiceItems(
+								await processMultipleChoiceItems(translationResponse.items, isUrl)
+							)
 						});
 					break;
 					case ZoteroBib.FAILED:
@@ -673,10 +676,10 @@ class Container extends React.Component {
 						isTranslatingMore: false,
 						isPickingItem: true,
 						moreItemsLink: 'next' in links ? links.next : null,
-						multipleChoiceItems: [
+						multipleChoiceItems: dedupMultipleChoiceItems([
 							...this.state.multipleChoiceItems,
 							...(await processMultipleChoiceItems(items))
-						]
+						])
 					});
 				break;
 				case ZoteroBib.FAILED:

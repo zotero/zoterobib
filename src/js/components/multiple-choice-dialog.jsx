@@ -53,7 +53,7 @@ class MultipleChoiceDialog extends React.Component {
 		return (
 			<li
 				className="result"
-				key={ item.key }
+				key={ item.signature }
 				onFocus={ this.handleFocus.bind(this, item) }
 				onClick={ this.handleSelect.bind(this, item) }
 				tabIndex={ 0 }
