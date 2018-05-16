@@ -206,7 +206,7 @@ class StyleInstaller extends React.Component {
 						<Button
 							className="btn btn-sm btn-outline-secondary"
 							onClick={ this.handleInstall.bind(this, style) }>
-							Install
+							Add
 						</Button>
 					)
 				}
