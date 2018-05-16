@@ -51,6 +51,11 @@ class Editor extends React.PureComponent {
 	async prepareState(props) {
 		var item;
 		if(!props.isEditorOpen) {
+			this.setState({
+				fields: [],
+				isLoading: true,
+				item: null,
+			});
 			return;
 		}
 
