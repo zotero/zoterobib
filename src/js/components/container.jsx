@@ -937,7 +937,7 @@ class Container extends React.Component {
 
 	get bibliography() {
 		const bib = this.state.isReadOnly ? this.bibRemote : this.bib;
-		if(!bib) {
+		if(!bib || !this.citeproc) {
 			return {};
 		}
 		return getBibliographyOrFallback(bib, this.citeproc);
