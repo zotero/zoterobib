@@ -81,7 +81,7 @@ class MultipleChoiceDialog extends React.Component {
 		} else if(moreItemsLink !== null) {
 			return (
 				<Button
-					className="btn-outline-secondary"
+					className="btn-outline-secondary btn-min-width"
 					onClick={ this.handleMore.bind(this) }
 				>
 					More…
@@ -95,7 +95,7 @@ class MultipleChoiceDialog extends React.Component {
 			<Modal
 				isOpen={ this.props.isPickingItem }
 				contentLabel="Select the entry to add:"
-				className="multiple-choice-dialog modal modal-lg modal-centered"
+				className="multiple-choice-dialog modal modal-lg"
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
 				<KeyHandler
@@ -126,9 +126,11 @@ class MultipleChoiceDialog extends React.Component {
 								this.renderItem.bind(this)
 							) }
 						</ul>
-						<div className="more-items-action">
-							{ this.renderMoreSection() }
-						</div>
+						{ this.props.moreItemsLink && (
+							<div className="more-items-action">
+								{ this.renderMoreSection() }
+							</div>
+						)}
 					</div>
 				</div>
 			</Modal>
