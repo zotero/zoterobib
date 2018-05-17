@@ -1,3 +1,5 @@
+/* eslint-disable react/no-deprecated */
+// @TODO: migrate to getDerivedStateFromProps()
 'use strict';
 
 const React = require('react');
@@ -626,7 +628,7 @@ class Container extends React.Component {
 			messages: [...this.state.messages, message]
 		});
 		if(errorData) {
-			console.error(errorData);
+			console.error(errorData); //eslint-disable-line no-console
 		}
 	}
 

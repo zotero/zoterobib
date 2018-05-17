@@ -1,3 +1,5 @@
+/* eslint-disable react/no-deprecated */
+// @TODO: migrate to getDerivedStateFromProps()
 'use strict';
 
 const React = require('react');

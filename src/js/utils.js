@@ -70,7 +70,7 @@ const parseIdentifier = identifier => {
 	identifier = identifier.trim();
 
 	//attemt to extract DOI from doi url:
-	const matches = identifier.match(/^https?:\/\/doi.org\/(10(?:\.[0-9]{4,})?\/[^\s]*[^\s\.,])$/);
+	const matches = identifier.match(/^https?:\/\/doi.org\/(10(?:\.[0-9]{4,})?\/[^\s]*[^\s.,])$/);
 	if(matches) {
 		return matches[1];
 	}
@@ -79,7 +79,7 @@ const parseIdentifier = identifier => {
 
 const isLikeUrl = identifier => {
 	return !!identifier
-		.match(/^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,63}\b(\S*)$/i);
+		.match(/^https?:\/\/[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,63}\b(\S*)$/i);
 };
 
 const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
@@ -102,10 +102,10 @@ const validateUrl = url => {
 };
 
 const getParentStyle = async styleXml => {
-	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w\.\-\/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
+	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
 	if(matches) {
 		// try to extract style id, fallback using url as id
-		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w\-]*)/i);
+		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w-]*)/i);
 		return await retrieveStyle(idMatches ? idMatches[1] : matches[1]);
 	}
 	return styleXml;
@@ -115,7 +115,7 @@ const retrieveStyle = async styleIdOrUrl => {
 	let cacheId = `style-${styleIdOrUrl}`;
 	let style = localStorage.getItem(cacheId);
 	if(!style) {
-		let url = styleIdOrUrl.match(/https?:\/\/[\w\.\-\/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
+		let url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
 		try {
 			let response = await fetch(url);
 			if(!response.ok) {
@@ -406,11 +406,11 @@ const processSentenceCase = val => {
 	if(isSentenceCase(val)) {
 		return val;
 	}
-	let matches = val.match(/(([^\.!\?]+)[\.!\?]+)|([^\.!\?]+$)/g);
+	let matches = val.match(/(([^.!?]+)[.!?]+)|([^.!?]+$)/g);
 	if(matches) {
 		return matches.map(s => {
 			// skip special characters at the beginning of the sentence
-			const [ _, pre, sentence ] = s.trim().match(/^([\'\"¡¿“‘„«\(]*)(.*)$/); // eslint-disable-line no-unused-vars
+			const [ _, pre, sentence ] = s.trim().match(/^(['"¡¿“‘„«(]*)(.*)$/); // eslint-disable-line no-unused-vars
 			// uppercase first actual letter of the sentence, lowercase rest
 			return pre + sentence[0].toUpperCase() + sentence.slice(1).toLowerCase();
 		})
