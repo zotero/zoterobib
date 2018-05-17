@@ -88,7 +88,7 @@
 		}
 	}
 
-	[class^="btn-outline-inverse"] {
+	[class*="btn-outline-inverse"] {
 		flex: 0 0 auto;
 		margin: -1em 0 -1em $space-md;
 
