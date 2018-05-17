@@ -79,6 +79,7 @@ class Container extends React.Component {
 		super(props);
 		this.handleCopy = this.handleCopy.bind(this);
 		this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+		this.handleScroll = this.handleScroll.bind(this);
 	}
 
 	clearMessages() {
@@ -140,6 +141,7 @@ class Container extends React.Component {
 		this.setState({ citationStyles });
 		document.addEventListener('copy', this.handleCopy);
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
+		document.addEventListener('scroll', this.handleScroll);
 		await this.handleIdChanged(this.props);
 	}
 
@@ -259,6 +261,7 @@ class Container extends React.Component {
 	componentWillUnmount() {
 		document.removeEventListener('copy', this.handleCopy);
 		document.removeEventListener('visibilityChange', this.handleVisibilityChange);
+		document.removeEventListener('scroll', this.handleScroll);
 	}
 
 	handleCopy(ev) {
@@ -836,6 +839,19 @@ class Container extends React.Component {
 
 	handleReviewEdit() {
 		this.handleOpenEditor(this.state.itemUnderReview.key);
+	}
+
+	handleScroll() {
+		if(!this.state.messages.find(m => m.isWelcomeMessage)) {
+			return;
+		}
+		const target = document.querySelector('.zbib-illustration');
+		const isScrolledToIllustration = window.pageYOffset > target.offsetTop;
+		if(isScrolledToIllustration) {
+			this.setState({
+				messages: this.state.messages.filter(m => !m.isWelcomeMessage)
+			})
+		}
 	}
 
 	async prepareCiteproc(style, bib, isReadOnly) {
