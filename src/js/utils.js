@@ -78,8 +78,7 @@ const parseIdentifier = identifier => {
 };
 
 const isLikeUrl = identifier => {
-	return !!identifier
-		.match(/^https?:\/\/[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,63}\b(\S*)$/i);
+	return !!identifier.match(/^(https?:\/\/)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b(\S*)$/i);
 };
 
 const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
