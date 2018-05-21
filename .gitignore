@@ -7,3 +7,4 @@ build
 data
 config/local*.json
 .npmrc
+.nyc_output
