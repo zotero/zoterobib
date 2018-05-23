@@ -141,6 +141,12 @@ const retrieveLocaleSync = lang => {
 	const cacheId = `zotero-style-locales-${lang}`;
 	var locales = localStorage.getItem(cacheId);
 
+	// fix in place for scenarios where potentially bad locales have been cached
+	// see issue #236
+	if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
+		locales = false;
+	}
+
 	if(!locales) {
 		const url = `/static/locales/locales-${lang}.xml`;
 		try {
