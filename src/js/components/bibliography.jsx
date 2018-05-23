@@ -10,8 +10,8 @@ const Dropdown = require('reactstrap/lib/Dropdown').default;
 const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
 const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
 const DropdownItem = require('reactstrap/lib/DropdownItem').default;
-const Button = require('zotero-web-library/lib/component/ui/button');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const Icon = require('zotero-web-library/src/js/component/ui/icon');
 const formatBib = require('../cite');
 const { parseTagAndAttrsFromNode } =require('../utils') ;
 

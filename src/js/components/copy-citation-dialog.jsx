@@ -4,13 +4,13 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const Button = require('zotero-web-library/src/js/component/ui/button');
 const cx = require('classnames');
-const Input = require('zotero-web-library/lib/component/form/input');
+const Input = require('zotero-web-library/src/js/component/form/input');
 const KeyHandler = require('react-key-handler').default;
 const Modal = require('./modal');
-const Select = require('zotero-web-library/lib/component/form/select');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Select = require('zotero-web-library/src/js/component/form/select');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
 const { KEYDOWN } = require('react-key-handler');
 
 const locators = [

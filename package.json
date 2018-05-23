@@ -12,6 +12,11 @@
     "translation_server": "https://cdycrfqrjwarndv3xvdolavpds.zotero.org"
   },
   "browserslist": "last 2 versions",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "scripts": {
     "serve": "node scripts/server.js -p $npm_package_config_port -t $npm_package_config_translation_server",
     "prebuild": "npm run clean -s && mkdir -p build/static/",
@@ -66,7 +71,7 @@
     "zotero-api-client": "^0.12.0",
     "zotero-api-client-cache": "^0.5.0",
     "zotero-translation-client": "^1.0.1",
-    "zotero-web-library": "^0.9.52-alpha"
+    "zotero-web-library": "^0.10.0"
   },
   "devDependencies": {
     "autoprefixer": "^8.5.0",

@@ -8,9 +8,9 @@ const cx = require('classnames');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 const { withRouter } = require('react-router-dom');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
-const Button = require('zotero-web-library/lib/component/ui/button');
-const { noop } = require('zotero-web-library/lib/utils');
+const Icon = require('zotero-web-library/src/js/component/ui/icon');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const { noop } = require('zotero-web-library/src/js/utils');
 
 class Message extends React.Component {
 	componentWillReceiveProps(nextProps) {

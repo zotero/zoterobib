@@ -7,8 +7,8 @@ const PropTypes = require('prop-types');
 const copy = require('copy-to-clipboard');
 const cx = require('classnames');
 
-const Button = require('zotero-web-library/lib/component/ui/button');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
 
 class PermalinkTools extends React.Component {
 	state = {

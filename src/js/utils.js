@@ -5,7 +5,7 @@ const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
 const load = require('load-script');
-const { baseMappings } = require('zotero-web-library/lib/constants/item');
+const { baseMappings } = require('zotero-web-library/src/js/constants/item');
 
 const getCSL = () => {
 	if('CSL' in window) {

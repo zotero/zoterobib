@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const Button = require('zotero-web-library/src/js/component/ui/button');
 
 class About extends React.PureComponent {
 	handleClick(event) {

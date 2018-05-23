@@ -4,13 +4,13 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const cx = require('classnames');
 
-const Editable = require('zotero-web-library/lib/component/editable');
-const Button = require('zotero-web-library/lib/component/ui/button');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Editable = require('zotero-web-library/src/js/component/editable');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const Icon = require('zotero-web-library/src/js/component/ui/icon');
 const StyleSelector = require('./style-selector');
 const Bibliography = require('./bibliography');
 const DeleteAllButton = require('./delete-all-button');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
 const Confirmation = require('./confirmation');
 
 class BibliographySection extends React.PureComponent {

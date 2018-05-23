@@ -4,7 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const Button = require('zotero-web-library/src/js/component/ui/button');
 const Modal = require('./modal');
 
 class Confirmation extends React.Component {

@@ -6,10 +6,10 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const Button = require('zotero-web-library/lib/component/ui/button');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
-const Input = require('zotero-web-library/lib/component/form/input');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const Icon = require('zotero-web-library/src/js/component/ui/icon');
+const Input = require('zotero-web-library/src/js/component/form/input');
 const cx = require('classnames');
 const Modal = require('./modal');
 

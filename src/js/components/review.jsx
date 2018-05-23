@@ -2,7 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/lib/component/ui/button');
+const Button = require('zotero-web-library/src/js/component/ui/button');
 const formatBib = require('../cite');
 
 class Review extends React.PureComponent {

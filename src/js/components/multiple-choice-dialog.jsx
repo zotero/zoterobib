@@ -4,10 +4,10 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
-const Button = require('zotero-web-library/lib/component/ui/button');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
 const Modal = require('./modal');
-const Icon = require('zotero-web-library/lib/component/ui/icon');
+const Icon = require('zotero-web-library/src/js/component/ui/icon');
 
 class MultipleChoiceDialog extends React.Component {
 	handleSelect(item = this.focusedItem) {

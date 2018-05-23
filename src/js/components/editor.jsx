@@ -9,13 +9,13 @@ const deepEqual = require('deep-equal');
 const KeyHandler = require('react-key-handler').default;
 const { KEYDOWN } = require('react-key-handler');
 
-const Button = require('zotero-web-library/lib/component/ui/button');
-const ItemBox = require('zotero-web-library/lib/component/item/box');
-const Spinner = require('zotero-web-library/lib/component/ui/spinner');
-const { baseMappings } = require('zotero-web-library/lib/constants/item');
+const Button = require('zotero-web-library/src/js/component/ui/button');
+const ItemBox = require('zotero-web-library/src/js/component/item/box');
+const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
+const { baseMappings } = require('zotero-web-library/src/js/constants/item');
 const { getItemTypeMeta } = require('../utils');
-const { hideFields, noEditFields } = require('zotero-web-library/lib/constants/item');
-const { reverseMap } = require('zotero-web-library/lib/utils');
+const { hideFields, noEditFields } = require('zotero-web-library/src/js/constants/item');
+const { reverseMap } = require('zotero-web-library/src/js/utils');
 const Modal = require('./modal');
 
 class Editor extends React.PureComponent {
