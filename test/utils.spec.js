@@ -43,7 +43,7 @@ describe('Zotero Bib utils.js', () => {
 		});
 	});
 	describe('retrieveLocaleSync()', () => {
-		const localeXml = '<xml>locale</xml>';
+		const localeXml = '<?xml>locale</xml>';
 		var storage;
 		var fakeServer;
 
