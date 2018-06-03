@@ -70,7 +70,7 @@ ZoteroBib and Zotero were created with the philosophy that your research data be
 
 Your ZoteroBib bibliography is stored on your own computer and isn't accessible to others by default.
 
-If you use <i>Link to this version</i>, your current bibliography will be uploaded to zbib.org and be available to anyone you choose to share the link with. No identifying information about you is stored with the bibliography. If you view an uploaded bibliography, the URL may be stored in your browser's history.
+If you use <i>Link to this version</i>, your current bibliography will be uploaded to zbib.org and be available to anyone you choose to share the link with <a href="#how-long-is-my-bibliography-stored">for at least six months</a>. No identifying information about you is stored with the bibliography. If you view an uploaded bibliography, the URL may be stored in your browser's history.
 
 When you add items using the search bar, your search is sent to zbib.org for processing. We log your IP address, browser version, and search terms for a short period of time in order to maintain the service and prevent abuse.
 
