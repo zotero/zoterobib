@@ -5,7 +5,6 @@ const PropTypes = require('prop-types');
 const cx = require('classnames');
 const Select = require('react-select').default;
 const { citationStylesCount } = require('../../../data/citation-styles-data.json');
-const { withRouter } = require('react-router-dom');
 
 class StyleSelector extends React.Component {
 	render() {
@@ -40,4 +39,4 @@ class StyleSelector extends React.Component {
 }
 
 
-module.exports = withRouter(StyleSelector);
+module.exports = StyleSelector;
