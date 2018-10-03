@@ -9,7 +9,7 @@
   "config": {
     "styles_cache_time": "86400000",
     "port": "8001",
-    "translation_server": "https://cdycrfqrjwarndv3xvdolavpds.zotero.org"
+    "translation_server": ""
   },
   "browserslist": "last 2 versions",
   "browserify": {
@@ -70,7 +70,7 @@
     "smooth-scroll": "^12.1.5",
     "zotero-api-client": "^0.12.0",
     "zotero-api-client-cache": "^0.5.0",
-    "zotero-translation-client": "^1.0.1",
+    "zotero-translation-client": "^2.0.0",
     "zotero-web-library": "^0.10.0"
   },
   "devDependencies": {
