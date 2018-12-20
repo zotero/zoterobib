@@ -6,6 +6,7 @@ const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
 const load = require('load-script');
 const { baseMappings } = require('zotero-web-library/src/js/constants/item');
+const stylesCache = {};
 
 const getCSL = () => {
 	if('CSL' in window) {
@@ -115,25 +116,22 @@ const getParentStyle = async styleXml => {
 };
 
 const retrieveStyle = async styleIdOrUrl => {
-	let cacheId = `style-${styleIdOrUrl}`;
-	let style = localStorage.getItem(cacheId);
-	if(!style) {
-		let url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
-		try {
-			let response = await fetch(url);
-			if(!response.ok) {
-				throw new Error();
-			}
-			style = await response.text();
-			localStorage.setItem(cacheId, style);
-		} catch(e) {
-			if(!style) {
-				throw new Error('Failed to load style');
-			}
+	var style;
+	// cache styles in memory to avoid going for the disk cache on each call
+	if(styleIdOrUrl in stylesCache) { return stylesCache[styleIdOrUrl]; }
+	const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
+	try {
+		const response = await fetchWithCachedFallback(url);
+		if(!response.ok) { throw new Error(); }
+		style = await response.text();
+	} catch(_) {
+		if(!style) {
+			throw new Error('Failed to load style');
 		}
 	}
 	// return parent style for dependent citation styles
 	style = await getParentStyle(style);
+	stylesCache[styleIdOrUrl] = style;
 	return style;
 };
 
@@ -162,23 +160,23 @@ const retrieveLocaleSync = lang => {
 };
 
 const retrieveStylesData = async url => {
-	var stylesData;
 	try {
-		const response = await fetch(url);
-		if(!response.ok) {
-			throw new Error();
-		}
-		stylesData = await response.json();
+		const response = await fetchWithCachedFallback(url);
+		if(!response.ok) { throw new Error(); }
+		return await response.json();
 	} catch(_) {
-		try {
-			const response = await fetch(url, { 'cache': 'force-cache' });
-			stylesData = await response.json();
-		} catch(_) {
-			throw new Error('Failed to load styles data');
-		}
+		throw new Error('Failed to load styles data');
 	}
-	return stylesData;
 };
+
+const fetchWithCachedFallback = async url => {
+	try {
+		return await fetch(url);
+	} catch(_) {
+		// try to fallback for a cached version
+		return await fetch(url, { 'cache': 'force-cache' });
+	}
+}
 
 const getItemTypes = async () => {
 	return (await cachedApi.itemTypes().get()).getData();

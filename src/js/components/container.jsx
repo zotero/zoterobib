@@ -163,6 +163,7 @@ class Container extends React.Component {
 					this.bib.updateItem(index, item);
 				}
 			}
+
 			try {
 				const cslData = await retrieveStyle(this.state.citationStyle);
 				await this.prepareCiteproc(
@@ -216,9 +217,6 @@ class Container extends React.Component {
 				'zotero-bib-extra-citation-styles',
 				JSON.stringify(this.state.citationStyles.filter(cs => !cs.isCore))
 			);
-			const stylesRemoved = state.citationStyles.filter(cs => !this.state.citationStyles.includes(cs));
-			// actually remove style data from local storage
-			stylesRemoved.forEach(s => localStorage.removeItem(`style-${s.name}`));
 		}
 
 		if(this.state.itemUnderReview &&
