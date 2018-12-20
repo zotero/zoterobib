@@ -119,9 +119,10 @@ const retrieveStyle = async styleIdOrUrl => {
 	var style;
 	// cache styles in memory to avoid going for the disk cache on each call
 	if(styleIdOrUrl in stylesCache) { return stylesCache[styleIdOrUrl]; }
-	const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
+	const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl :
+		`https://www.zotero.org/styles/${styleIdOrUrl}`;
 	try {
-		const response = await fetchWithCachedFallback(url);
+		const response = await fetchWithCacheSupportAndFallback(url);
 		if(!response.ok) { throw new Error(); }
 		style = await response.text();
 	} catch(_) {
@@ -161,7 +162,7 @@ const retrieveLocaleSync = lang => {
 
 const retrieveStylesData = async url => {
 	try {
-		const response = await fetchWithCachedFallback(url);
+		const response = await fetchWithCacheSupportAndFallback(url);
 		if(!response.ok) { throw new Error(); }
 		return await response.json();
 	} catch(_) {
@@ -169,9 +170,25 @@ const retrieveStylesData = async url => {
 	}
 };
 
-const fetchWithCachedFallback = async url => {
+const fetchWithCacheSupportAndFallback = async url => {
+	var modifiedDates;
 	try {
-		return await fetch(url);
+		modifiedDates = JSON.parse(localStorage.getItem('zotero-bib-modified-dates'));
+	} finally {
+		modifiedDates = modifiedDates || {};
+	}
+	const headers = {};
+	if(url in modifiedDates) {
+		headers['If-Modified-Since'] = modifiedDates[url];
+	}
+	try {
+		const response = await fetch(url, { headers });
+		const lastModified = response.headers.get('Last-Modified');
+		if(lastModified) {
+			modifiedDates[url] = lastModified;
+			localStorage.setItem('zotero-bib-modified-dates', JSON.stringify(modifiedDates));
+		}
+		return response;
 	} catch(_) {
 		// try to fallback for a cached version
 		return await fetch(url, { 'cache': 'force-cache' });
