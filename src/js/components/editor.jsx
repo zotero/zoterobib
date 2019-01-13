@@ -118,6 +118,17 @@ class Editor extends React.PureComponent {
 			}
 		}
 
+		// Add Publisher to webpage
+		if(['webpage'].includes(item.itemType)) {
+			let beforeIndex = fields.findIndex(f => f.field === 'websiteType');
+			fields.splice(beforeIndex + 1, 0, { field: 'publisher', localized: 'Publisher' });
+			let matches = 'extra' in item && item.extra.match(/^publisher:\s*(.*?)$/i);
+			if (matches) {
+				item['publisher'] = matches[1];
+				item.extra = item.extra.replace(/^publisher:\s*.*?$/, '');
+			}
+		}
+
 		fields = fields.filter(f => f && !hiddenFields.includes(f.field))
 			.concat([
 				itemTypeFields.find(itf => itf.field === 'abstractNote'),
@@ -152,6 +163,25 @@ class Editor extends React.PureComponent {
 					extra += `\noriginal-date: ${newValue}`;
 				} else {
 					extra = `original-date: ${newValue}`;
+				}
+			}
+			fieldKey = 'extra';
+			newValue = extra;
+		}
+
+		// Add Publisher to webpage
+		if (fieldKey === 'publisher') {
+			let extra = 'extra' in this.state.item ? this.state.item.extra : '';
+			let matches = extra.match(/^publisher:\s*(.*?)$/);
+			if (matches) {
+				extra = extra.replace(/^publisher:\s*(.*?)$/, `publisher: ${newValue}`);
+			}
+			else {
+				if (extra.length > 0) {
+					extra += `\npublisher: ${newValue}`;
+				}
+				else {
+					extra = `publisher: ${newValue}`;
 				}
 			}
 			fieldKey = 'extra';
