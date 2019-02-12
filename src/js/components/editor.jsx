@@ -170,7 +170,7 @@ class Editor extends React.PureComponent {
 		}
 
 		// Add Publisher to webpage
-		if (fieldKey === 'publisher') {
+		if((fieldKey === 'publisher') && ['webpage'].includes(this.state.item.itemType)) {
 			let extra = 'extra' in this.state.item ? this.state.item.extra : '';
 			let matches = extra.match(/^publisher:\s*(.*?)$/);
 			if (matches) {
