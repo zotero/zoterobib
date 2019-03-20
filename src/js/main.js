@@ -1,5 +1,7 @@
 'use strict';
 
+require('babel-regenerator-runtime');
+
 const SmoothScroll = require('smooth-scroll');
 const ZoteroBibComponent = require('./bib-component');
 
