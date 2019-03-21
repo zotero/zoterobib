@@ -18,6 +18,7 @@ const Icon = require('zotero-web-library/src/js/component/ui/icon');
 const Message = require('./message');
 const Modal = require('./modal');
 const MultipleChoiceDialog = require('./multiple-choice-dialog');
+const ConfirmAddDialog = require('./confirm-add-dialog');
 const PermalinkTools = require('./permalink-tools');
 const Review = require('./review');
 const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
@@ -169,6 +170,7 @@ class ZBib extends React.PureComponent {
 							<Editor { ...this.props } />
 							<MultipleChoiceDialog { ...this.props } />
 							<StyleInstaller { ...this.props } />
+							<ConfirmAddDialog { ...this.props } />
 						</div>
 					</div>
 		);

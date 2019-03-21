@@ -145,8 +145,11 @@ class Container extends React.Component {
 		document.addEventListener('scroll', this.handleScroll);
 		await this.handleIdChanged(this.props);
 
-		if(params.has('q') && this.props.match.path === '/import') {
-			this.handleTranslateIdentifier(params.get('q'));
+		if(this.props.match.path === '/import') {
+			if(params.has('q')) {
+				this.handleTranslateIdentifier(params.get('q'), null, true);
+			}
+			this.props.history.replace('/');
 		}
 	}
 
@@ -535,7 +538,7 @@ class Container extends React.Component {
 		}
 	}
 
-	async handleTranslateIdentifier(identifier, multipleSelectedItems = null) {
+	async handleTranslateIdentifier(identifier, multipleSelectedItems = null, shouldConfirm = false) {
 		identifier = parseIdentifier(identifier);
 
 		this.clearMessages();
@@ -571,15 +574,31 @@ class Container extends React.Component {
 							this.setState({ isTranslating: false });
 							return;
 						}
-						if(isApa(this.state.citationStyle)) {
-							this.bib.addItem(processSentenceCaseAPAItems(translationResponse.items)[0]);
+						if(shouldConfirm) {
+							const reviewBib = new ZoteroBib({
+								...this.state.config,
+								persist: false,
+								initialItems: [translationResponse.items[0]]
+							});
+
+							const reviewCiteproc = await getCiteproc(this.state.citationStyle, reviewBib);
+							reviewCiteproc.opt.development_extensions.wrap_url_and_doi = false;
+							reviewCiteproc.updateItems([translationResponse.items[0].key]);
+							const itemToConfirm = getBibliographyOrFallback(reviewBib, reviewCiteproc);
+							this.setState({ itemToConfirm });
+
+							this.setState({
+								identifier: '',
+								isTranslating: false,
+								isConfirmingAdd: true,
+								permalink: null,
+								itemToConfirm
+							});
+							return;
 						} else {
-							this.bib.addItem(translationResponse.items[0]);
+							this.addItem(translationResponse.items[0]);
 						}
-						if(!localStorage.getItem('zotero-bib-translated')) {
-							localStorage.setItem('zotero-bib-translated', 'true');
-							this.displayFirstCitationMessage();
-						}
+
 						this.setState({
 							identifier: '',
 							isTranslating: false,
@@ -748,11 +767,6 @@ class Container extends React.Component {
 		});
 	}
 
-	calcOffset() {
-		var md = window.matchMedia('(min-width: 768px)');
-		return md.matches ? 48 : 24;
-	}
-
 	handleReadMoreClick(id, event) {
 		const target = document.querySelector('.zbib-illustration');
 		scroll.animateScroll(target, event.target, {
@@ -831,6 +845,22 @@ class Container extends React.Component {
 		});
 	}
 
+	handleConfirmAddCancel() {
+		this.setState({
+			isConfirmingAdd: false,
+			itemToConfirm: null
+		});
+	}
+
+	handleConfirmAddConfirm() {
+		this.addItem(this.state.itemToConfirm.items[0]);
+		this.setState({
+			bibliography: this.bibliography,
+			isConfirmingAdd: false,
+			items: this.bib.itemsRaw,
+			itemToConfirm: null,
+		});
+	}
 
 	handleReviewDelete() {
 		this.handleDeleteEntry(this.state.itemUnderReview.key);
@@ -854,6 +884,23 @@ class Container extends React.Component {
 			this.setState({
 				messages: this.state.messages.filter(m => !m.isWelcomeMessage)
 			})
+		}
+	}
+
+	calcOffset() {
+		var md = window.matchMedia('(min-width: 768px)');
+		return md.matches ? 48 : 24;
+	}
+
+	addItem(item) {
+		if(isApa(this.state.citationStyle)) {
+			this.bib.addItem(processSentenceCaseAPAItems([item])[0]);
+		} else {
+			this.bib.addItem(item);
+		}
+		if(!localStorage.getItem('zotero-bib-translated')) {
+			localStorage.setItem('zotero-bib-translated', 'true');
+			this.displayFirstCitationMessage();
 		}
 	}
 
@@ -972,6 +1019,8 @@ class Container extends React.Component {
 			onCitationModifierChange = { this.handleCitationModifierChange.bind(this) }
 			onCitationStyleChanged = { this.handleCitationStyleChanged.bind(this) }
 			onClearMessage = { this.handleClearMessage.bind(this) }
+			onConfirmAddCancel = { this.handleConfirmAddCancel.bind(this) }
+			onConfirmAddConfirm = { this.handleConfirmAddConfirm.bind(this) }
 			onDeleteCitations = { this.handleDeleteCitations.bind(this) }
 			onDeleteEntry = { this.handleDeleteEntry.bind(this) }
 			onDismissUndo = { this.handleDismissUndo.bind(this) }

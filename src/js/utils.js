@@ -313,12 +313,14 @@ const getBibliographyOrFallback = (bib, citeproc) => {
 	const bibliography = citeproc.makeBibliography();
 	if(bibliography) {
 		return {
+			items: bib.itemsRaw,
 			isFallback: false,
 			bibliography
 		};
 	}
 
 	return {
+		items: bib.itemsRaw,
 		isFallback: true,
 		citations: getCitations(bib, citeproc)
 	};
