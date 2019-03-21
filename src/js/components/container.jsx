@@ -128,6 +128,7 @@ class Container extends React.Component {
 	}
 
 	async componentDidMount() {
+		const params = new URLSearchParams(location.search);
 		const citationStyles = [
 			...coreCitationStyles.map(cs => ({
 				...cs,
@@ -138,11 +139,15 @@ class Container extends React.Component {
 			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
 		];
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
-		this.setState({ citationStyles });
+		this.setState({ citationStyles, identifier: params.get('q') || '' });
 		document.addEventListener('copy', this.handleCopy);
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		document.addEventListener('scroll', this.handleScroll);
 		await this.handleIdChanged(this.props);
+
+		if(params.has('q') && this.props.match.path === '/import') {
+			this.handleTranslateIdentifier(params.get('q'));
+		}
 	}
 
 	async componentWillReceiveProps(props) {

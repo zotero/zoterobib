@@ -12,6 +12,10 @@ class IdInput extends React.PureComponent {
 		identifier: ''
 	}
 
+	componentDidMount() {
+		this.setState({ identifier: this.props.identifier });
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if(this.props.isTranslating && !nextProps.isTranslating) {
 			this.inputField.focus();

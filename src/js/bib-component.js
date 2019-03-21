@@ -16,6 +16,9 @@ class ZoteroBibComponent extends React.Component {
 					<Route path="/:id([0-9a-fA-f]{32})">
 						<Container config = { this.props.config } />
 					</Route>
+					<Route path="/import">
+						<Container config = { this.props.config } />
+					</Route>
 					<Route path="/">
 						<Container config = { this.props.config } />
 					</Route>
