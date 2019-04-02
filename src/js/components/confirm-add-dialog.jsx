@@ -45,7 +45,7 @@ class ConfirmAddDialog extends React.Component {
 				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
-							Please confirm adding the following citation
+							Add this citation to your bibliography?
 						</h4>
 						<Button
 							className="close"
