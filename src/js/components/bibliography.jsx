@@ -12,8 +12,8 @@ const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
 const DropdownItem = require('reactstrap/lib/DropdownItem').default;
 const Button = require('zotero-web-library/src/js/component/ui/button');
 const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const formatBib = require('../cite');
-const { parseTagAndAttrsFromNode } =require('../utils') ;
+
+const { getHtmlNodeFromBibliography, makeBibliographyContentIterator } =require('../utils') ;
 
 class Bibliography extends React.PureComponent {
 	state = {
@@ -182,19 +182,12 @@ class Bibliography extends React.PureComponent {
 	}
 
 	render() {
-		const { citations, bibliography, isFallback } = this.props.bibliography;
-		if(this.props.items.length === 0) {
+		const { bibliography } = this.props;
+		if(bibliography.items.length === 0) {
 			return null;
 		}
 
-		let html = isFallback ?
-			`<ol><li>${citations.join('</li><li>')}</li></ol>` :
-			formatBib(bibliography);
-		let div = document.createElement('div');
-		div.innerHTML = html;
-		div.querySelectorAll('a').forEach(link => {
-			link.setAttribute('rel', 'nofollow');
-		});
+		const div = getHtmlNodeFromBibliography(bibliography);
 
 		if(this.props.isReadOnly) {
 			return (
@@ -203,7 +196,7 @@ class Bibliography extends React.PureComponent {
 					<div className="bibliography read-only"
 						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
 					/>
-					{this.props.items.map(rawItem => (
+					{bibliography.items.map(rawItem => (
 						<script key={ rawItem.key } type="application/vnd.zotero.data+json">
 							{ JSON.stringify(rawItem) }
 						</script>
@@ -211,29 +204,20 @@ class Bibliography extends React.PureComponent {
 				</React.Fragment>
 			);
 		} else {
+			const bibliographyContentIterator = makeBibliographyContentIterator(
+				bibliography, div
+			);
+			const bibliographyProcessedContent = [];
+			for(var [item, content] of bibliographyContentIterator) {
+				bibliographyProcessedContent.push(
+					this.renderBibliographyItem(item, content)
+				);
+			}
+
 			return [
 				...this.keyHandlers,
 				<ul className="bibliography" key="bibliography">
-						{
-							isFallback ? this.props.items.map((item, i) => {
-								return this.renderBibliographyItem(
-									item,
-									<span dangerouslySetInnerHTML={ { __html: citations[i] } } />
-								);
-							}) : Array.from(div.firstChild.children).map((child, i) => {
-								let [ itemId ] = bibliography[0]['entry_ids'][i];
-								let { Tag, attrs } = parseTagAndAttrsFromNode(child);
-								let item = this.props.items.find(i => i.key === itemId);
-
-								return this.renderBibliographyItem(
-									item,
-									<Tag
-										dangerouslySetInnerHTML={ { __html: child.innerHTML } }
-										{ ...attrs }
-									/>
-								);
-							})
-						}
+					{ bibliographyProcessedContent }
 				</ul>
 			];
 		}

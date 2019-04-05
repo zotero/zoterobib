@@ -574,6 +574,30 @@ class Container extends React.Component {
 							this.setState({ isTranslating: false });
 							return;
 						}
+						var rootItems = translationResponse.items.filter(item => !item.parentItem);
+
+						if(rootItems.length > 1) {
+							const reviewBib = new ZoteroBib({
+								...this.state.config,
+								persist: false,
+								initialItems: rootItems
+							});
+
+							const reviewCiteproc = await getCiteproc(this.state.citationStyle, reviewBib);
+							reviewCiteproc.opt.development_extensions.wrap_url_and_doi = false;
+							reviewCiteproc.updateItems([translationResponse.items[0].key]);
+							const multipleItems = getBibliographyOrFallback(reviewBib, reviewCiteproc);
+
+							this.setState({
+								identifier: '',
+								isTranslating: false,
+								isAddingMultiple: true,
+								permalink: null,
+								multipleItems
+							});
+							return;
+						}
+
 						if(shouldConfirm) {
 							const reviewBib = new ZoteroBib({
 								...this.state.config,
@@ -585,7 +609,6 @@ class Container extends React.Component {
 							reviewCiteproc.opt.development_extensions.wrap_url_and_doi = false;
 							reviewCiteproc.updateItems([translationResponse.items[0].key]);
 							const itemToConfirm = getBibliographyOrFallback(reviewBib, reviewCiteproc);
-							this.setState({ itemToConfirm });
 
 							this.setState({
 								identifier: '',
@@ -718,6 +741,25 @@ class Container extends React.Component {
 			this.handleError('An error occurred while fetching more items.', e);
 			this.setState({ isTranslatingMore: false });
 		}
+	}
+
+	handleMutipleItemsCancel() {
+		this.setState({
+			isAddingMultiple: false,
+			multipleItems: {}
+		});
+	}
+
+	handleMutipleItemsSelect(key) {
+		this.addItem(
+			this.state.multipleItems.items.find(i => i.key === key)
+		);
+		this.setState({
+			bibliography: this.bibliography,
+			isAddingMultiple: false,
+			items: this.bib.itemsRaw,
+			multipleItems: null,
+		});
 	}
 
 	handleStyleInstallerCancel() {
@@ -1034,6 +1076,8 @@ class Container extends React.Component {
 			onMultipleChoiceCancel = { this.handleMultipleChoiceCancel.bind(this) }
 			onMultipleChoiceMore = { this.handleMultipleChoiceMore.bind(this) }
 			onMultipleChoiceSelect = { this.handleMultipleChoiceSelect.bind(this) }
+			OnMutipleItemsCancel = { this.handleMutipleItemsCancel.bind(this) }
+			OnMutipleItemsSelect = { this.handleMutipleItemsSelect.bind(this) }
 			onOverride = { this.handleOverride.bind(this) }
 			onReviewDelete = { this.handleReviewDelete.bind(this) }
 			onReviewDismiss = { this.handleReviewDismiss.bind(this) }

@@ -1,10 +1,12 @@
 'use strict';
 
+const React = require('react');
 const balanced = require('balanced-match');
 const api = require('zotero-api-client');
 const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
 const load = require('load-script');
+const formatBib = require('./cite');
 const { baseMappings } = require('zotero-web-library/src/js/constants/item');
 const stylesCache = {};
 
@@ -528,6 +530,44 @@ const dedupMultipleChoiceItems = items => {
 	return removeDuplicatesBy(i => i.signature, items);
 };
 
+const getHtmlNodeFromBibliography = bibliographyData => {
+	const { citations, bibliography, isFallback } = bibliographyData;
+	const html = isFallback ?
+		`<ol><li>${citations.join('</li><li>')}</li></ol>` :
+		formatBib(bibliography);
+	const div = document.createElement('div');
+	div.innerHTML = html;
+	div.querySelectorAll('a').forEach(link => {
+		link.setAttribute('rel', 'nofollow');
+	});
+	return div;
+}
+
+function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
+	const { items, citations, bibliography, isFallback } = bibliographyData;
+
+	if(isFallback) {
+		for(let i = 0; i < items.length; i++) {
+			const item = items[i];
+			const content = <span dangerouslySetInnerHTML={ { __html: citations[i] } } />;
+			yield [item, content];
+		}
+	} else {
+		const nodeArray = Array.from(bibliographyNode.firstChild.children);
+		for(let i = 0; i < nodeArray.length; i++) {
+			const child = nodeArray[i];
+			const [ itemId ] = bibliography[0]['entry_ids'][i];
+			const { Tag, attrs } = parseTagAndAttrsFromNode(child);
+			const item = items.find(i => i.key === itemId);
+			const content = <Tag
+				dangerouslySetInnerHTML={ { __html: child.innerHTML } }
+				{ ...attrs }
+			/>
+			yield [item, content];
+		}
+	}
+}
+
 module.exports = {
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
@@ -536,12 +576,14 @@ module.exports = {
 	getCitation,
 	getCiteproc,
 	getCSL,
+	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
 	isApa,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
+	makeBibliographyContentIterator,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
 	processMultipleChoiceItems,
