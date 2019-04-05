@@ -751,14 +751,14 @@ class Container extends React.Component {
 	}
 
 	handleMutipleItemsSelect(key) {
-		this.addItem(
-			this.state.multipleItems.items.find(i => i.key === key)
-		);
+		const item = this.state.multipleItems.items.find(i => i.key === key);
+		this.addItem(item);
 		this.setState({
 			bibliography: this.bibliography,
 			isAddingMultiple: false,
 			items: this.bib.itemsRaw,
 			multipleItems: null,
+			itemUnderReview: item,
 		});
 	}
 
@@ -901,6 +901,7 @@ class Container extends React.Component {
 			isConfirmingAdd: false,
 			items: this.bib.itemsRaw,
 			itemToConfirm: null,
+			itemUnderReview: this.state.itemToConfirm.items[0],
 		});
 	}
 
