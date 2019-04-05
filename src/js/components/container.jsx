@@ -608,7 +608,7 @@ class Container extends React.Component {
 							permalink: null,
 						});
 					break;
-					case ZoteroBib.MULTIPLE_ITEMS:
+					case ZoteroBib.MULTIPLE_CHOICES:
 						this.setState({
 							isTranslating: false,
 							isPickingItem: true,
