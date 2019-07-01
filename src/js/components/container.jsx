@@ -17,10 +17,10 @@ const {  dedupMultipleChoiceItems,
 	getBibliographyOrFallback,
 	getCitation,
 	getCiteproc,
-	isApa,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
+	isSentenceCaseStyle,
 	parseIdentifier,
 	processMultipleChoiceItems,
 	processSentenceCaseAPAItems,
@@ -163,7 +163,7 @@ class Container extends React.Component {
 		if((this.state.isReadOnly !== state.isReadOnly)
 			|| (this.state.citationStyle !== state.citationStyle)
 		) {
-			if(isApa(this.state.citationStyle) &&
+			if(isSentenceCaseStyle(this.state.citationStyle) &&
 				this.state.isConfirmingStyleSwitch != state.isConfirmingStyleSwitch
 			) {
 				let processedItems = processSentenceCaseAPAItems(this.bib.itemsRaw);
@@ -210,7 +210,7 @@ class Container extends React.Component {
 			this.state.citationStyle !== state.citationStyle &&
 			this.state.isConfirmingStyleSwitch === state.isConfirmingStyleSwitch
 		) {
-			if(isApa(this.state.citationStyle)) {
+			if(isSentenceCaseStyle(this.state.citationStyle)) {
 				this.setState({
 					citationStyle: state.citationStyle,
 					unconfirmedCitationStyle: this.state.citationStyle,
@@ -511,7 +511,7 @@ class Container extends React.Component {
 			return;
 		}
 
-		if(isApa(this.state.citationStyle)) {
+		if(isSentenceCaseStyle(this.state.citationStyle)) {
 			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
 
 			if(!(itemKey in itemsMetaData)) {
@@ -936,7 +936,7 @@ class Container extends React.Component {
 	}
 
 	addItem(item) {
-		if(isApa(this.state.citationStyle)) {
+		if(isSentenceCaseStyle(this.state.citationStyle)) {
 			this.bib.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
 			this.bib.addItem(item);

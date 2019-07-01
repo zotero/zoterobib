@@ -58,7 +58,8 @@ const getCiteproc = async (citationStyle, bib) => {
 			} else {
 				return item;
 			}
-		}
+		},
+		uppercase_subtitles: isAPASentenceCaseStyle(citationStyle)
 	}, style, lang);
 };
 
@@ -88,7 +89,15 @@ const isLikeUrl = identifier => {
 	return !!identifier.match(/^(https?:\/\/)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b(\S*)$/i);
 };
 
-const isApa = citationStyle => !!citationStyle.match(/^apa($|-)/);
+const isSentenceCaseStyle = (citationStyle) => {
+	return isAPASentenceCaseStyle(citationStyle)
+		|| !!citationStyle.match(/^vancouver|cite-them-right/);
+};
+
+// Sentence-case styles that capitalize subtitles like APA
+const isAPASentenceCaseStyle = (citationStyle) => {
+	return !!citationStyle.match(/^apa($|-)|^(academy-of-management|american-medical-association)/);
+};
 
 const isNoteStyle = cslData => !!cslData.match(/citation-format="note.*?"/);
 const isNumericStyle = cslData => !!cslData.match(/citation-format="numeric.*?"/);
@@ -579,10 +588,11 @@ module.exports = {
 	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
-	isApa,
+	isAPASentenceCaseStyle,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
+	isSentenceCaseStyle,
 	makeBibliographyContentIterator,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,

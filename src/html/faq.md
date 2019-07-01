@@ -120,15 +120,15 @@ While ZoteroBib is able to extract high-quality metadata from a wide variety of 
 
 If there's a site for which ZoteroBib consistently returns incorrect results, <a href="#help">let us know</a> and we'll do our best to fix it.
 
-<h3 id="sentence-case">Why are all the proper nouns in my entries in lowercase when I use APA style?</h3>
+<h3 id="sentence-case">Why are all the proper nouns in my entries in lowercase when I use some styles?</h3>
 
-APA style requires titles to be in sentence case rather than title case. When you use APA style, ZoteroBib will partially convert the titles of entries to sentence case for you, but you'll need to manually edit some entries to capitalize proper nouns:
+Some styles, such as APA, require titles to be in sentence case rather than title case. When you use such a style, ZoteroBib will convert the titles of entries to sentence case for you, but you'll need to manually edit some entries to capitalize proper nouns:
 
 <p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
 <p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
 <p><b>Sentence case:</b> <i>Circadian mood variations in <span style="color: #e52e3d; font-weight: bold;">T</span>witter content</i></p>
 
-(We know this is annoying, but we think it's less annoying than manually lowercasing all the other words in titles. Some other tools simply ignore this requirement and generate incorrect, title-cased "APA" bibliographies, but we assume that when you say you want APA you mean it.)
+(We know this is annoying, but we think it's less annoying than manually lowercasing all the other words in titles. Some other tools simply ignore this requirement and generate incorrect, title-cased bibliographies, but we try our best to generate citations according to the style you’ve chosen.)
 
 ### What if I can't find a style that I need?
 
