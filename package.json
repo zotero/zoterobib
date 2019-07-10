@@ -70,7 +70,7 @@
     "smooth-scroll": "^16.0.2",
     "zotero-api-client": "^0.23.0",
     "zotero-api-client-cache": "^0.7.0",
-    "zotero-translation-client": "^3.0.0",
+    "zotero-translation-client": "^3.0.2",
     "zotero-web-library": "^0.10.1"
   },
   "devDependencies": {
