@@ -91,12 +91,12 @@ const isLikeUrl = identifier => {
 
 const isSentenceCaseStyle = (citationStyle) => {
 	return isAPASentenceCaseStyle(citationStyle)
-		|| !!citationStyle.match(/^vancouver|cite-them-right/);
+		|| !!citationStyle.match(/^american-medical-association|cite-them-right|^vancouver/);
 };
 
 // Sentence-case styles that capitalize subtitles like APA
 const isAPASentenceCaseStyle = (citationStyle) => {
-	return !!citationStyle.match(/^apa($|-)|^(academy-of-management|american-medical-association)/);
+	return !!citationStyle.match(/^apa($|-)|^(academy-of-management)/);
 };
 
 const isNoteStyle = cslData => !!cslData.match(/citation-format="note.*?"/);
