@@ -140,7 +140,7 @@ class Container extends React.Component {
 		];
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 		this.setState({ citationStyles, identifier: params.get('q') || '' });
-		document.addEventListener('copy', this.handleCopy);
+		document.addEventListener('copy', this.handleCopy, true);
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		document.addEventListener('scroll', this.handleScroll);
 		await this.handleIdChanged(this.props);
@@ -265,7 +265,7 @@ class Container extends React.Component {
 	}
 
 	componentWillUnmount() {
-		document.removeEventListener('copy', this.handleCopy);
+		document.removeEventListener('copy', this.handleCopy, true);
 		document.removeEventListener('visibilityChange', this.handleVisibilityChange);
 		document.removeEventListener('scroll', this.handleScroll);
 	}
