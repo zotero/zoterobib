@@ -9,7 +9,7 @@ const formatBib = (bib) => {
 	var maxOffset = parseInt(bib[0].maxoffset, 10);
 	var entrySpacing = parseInt(bib[0].entryspacing, 10);
 	var lineSpacing = parseInt(bib[0].linespacing, 10);
-	var hangingIndent = parseInt(bib[0].hangingindent, 10);
+	var hangingIndent = bib[0].hangingindent;
 	var secondFieldAlign = bib[0]['second-field-align'];
 
 	// Validate input
@@ -51,7 +51,7 @@ const formatBib = (bib) => {
 		}
 		// If only one field, apply hanging indent on root
 		else if (!isMultiField) {
-			style += 'margin-left: ' + hangingIndent + 'em; text-indent:-' + hangingIndent + 'em;';
+			style += 'margin-left: 2em; text-indent:-2em;';
 		}
 	}
 
@@ -100,7 +100,7 @@ const formatBib = (bib) => {
 		divStyle = 'margin: 0 .4em 0 ' + (secondFieldAlign ? maxOffset + rightPadding : '0') + 'em;';
 
 		if (hangingIndent) {
-			divStyle += 'padding-left: ' + hangingIndent + 'em; text-indent:-' + hangingIndent + 'em;';
+			divStyle += 'padding-left: 2em; text-indent:-2em;';
 		}
 
 		rightInlineDiv.setAttribute('style', divStyle);
