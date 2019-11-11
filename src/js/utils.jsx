@@ -320,8 +320,10 @@ const getCitations = (bib, citeproc) => {
 
 const getBibliographyOrFallback = (bib, citeproc) => {
 	const items = bib.itemsRaw.map(item => item.key);
+	citeproc.updateItems([]); // workaround for #256
 	citeproc.updateItems(items);
 	const bibliography = citeproc.makeBibliography();
+
 	if(bibliography) {
 		return {
 			items: bib.itemsRaw,
