@@ -77,8 +77,11 @@ const syncRequestAsText = url => {
 const parseIdentifier = identifier => {
 	identifier = identifier.trim();
 
-	//attemt to extract DOI from doi url:
-	const matches = identifier.match(/^https?:\/\/doi.org\/(10(?:\.[0-9]{4,})?\/[^\s]*[^\s.,])$/);
+	// Attempt to extract DOI from DOI URL
+	//
+	// translation-server does this more broadly after trying the URL, but for a doi.org URL we
+	// might as well just use the DOI rather than trying the page first
+	const matches = decodeURIComponent(identifier).match(/^https?:\/\/doi.org\/(10(?:\.[0-9]{4,})?\/[^\s]*[^\s.,])$/);
 	if(matches) {
 		return matches[1];
 	}
