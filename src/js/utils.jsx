@@ -99,7 +99,7 @@ const isSentenceCaseStyle = (citationStyle) => {
 
 // Sentence-case styles that capitalize subtitles like APA
 const isAPASentenceCaseStyle = (citationStyle) => {
-	return !!citationStyle.match(/^apa($|-)|^(academy-of-management)/);
+	return !!citationStyle.match(/^apa($|-)|^(academy-of-management|freshwater-science)/);
 };
 
 const isNoteStyle = cslData => !!cslData.match(/citation-format="note.*?"/);
