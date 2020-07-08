@@ -1,8 +1,8 @@
-# Zotero Bib
+# Schroeder Citation
 
 Overview
 --------
-This repo contains Zotero Bib tool, including React components, stylesheets and entry-point website.
+This repo contains my fork of Zotero's Bib tool, including React components, stylesheets and entry-point website.
 
 Prerequisites
 ------------
