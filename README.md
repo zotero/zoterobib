@@ -1,4 +1,6 @@
-# Schroeder Citation
+# Schroeder Citation Generator
+
+forked from [zotero/bib-web](https://github.com/zotero/bib-web)
 
 Overview
 --------
