@@ -20,7 +20,7 @@ Local Development version
 
 Getting The Library
 
-1. `git clone --recursive git@github.com:mick-schroeder/schroeder-citation.git`
+1. `git clone --recursive https://github.com/mick-schroeder/schroeder-citation.git`
 
 1. `cd schroeder-citation`
 
