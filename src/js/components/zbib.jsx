@@ -73,8 +73,7 @@ class ZBib extends React.PureComponent {
 								!this.props.isReadOnly && (
 									<section className="section section-cite">
 										<nav className="meta-nav">
-											<a onClick={ this.handleHelp.bind(this) }>Help</a>
-											<a href="https://www.zotero.org">Zotero</a>
+											<a onClick={ this.handleHelp.bind(this) }>How to Use</a>
 										</nav>
 										<div className="container">
 											<Brand />

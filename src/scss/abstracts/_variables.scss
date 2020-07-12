@@ -11,17 +11,17 @@
 // Colors
 //
 
-$red:          #e52e3d;
-$blue:         #2970ff;
-$blue-dark:    #333c66;
-$blue-darkest: #3d4466;
-$violet:       #5959ff;
+$red:          #c8102e;
+$blue:         #1e50a0;
+$blue-dark:    #61b2e4;
+$blue-darkest: #1e50a0;
+$violet:       #8967aa;
 
 $primary:   $red;
 $secondary: $blue;
 $error:     $primary;
-$warning:   #ff794d;
-$success:   #3abd57;
+$warning:   #ea5a47;
+$success:   #5c9e31;
 $info:      $blue;
 
 $shade-0: #fff;
@@ -124,9 +124,9 @@ $grid-breakpoints: (
 // Components
 //
 
-$border-radius:    4px;
-$border-radius-sm: 3px;
-$border-radius-lg: 6px;
+$border-radius:    10px;
+$border-radius-sm: 7px;
+$border-radius-lg: 10px;
 
 $border-width: 1px;
 

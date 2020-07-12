@@ -3,21 +3,9 @@
 //
 
 .brand {
-	width: 188px;
-	height: 38px;
+	width: 90%;
+	height: auto;
 	margin: auto;
-
-	a {
-		display: block;
-		height: 100%;
-		position: relative;
-		text-indent: -9999px;
-		overflow: hidden; // Needed for Firfox focus state
-
-		svg {
-			position: absolute;
-			left: 0;
-			top: 0;
-		}
-	}
+	text-align: center;
+	font-weight: 700;
 }

@@ -18,16 +18,15 @@
 	}
 
 	.empty-bibliography {
-		width: 160px;
+		width: 150px;
 		height: auto;
-		margin-bottom: $space-xl - 16px;
+		margin-bottom: $space-xl - 12px;
 
-		@media (min-width: $bp-md) {
-			width: auto;
-			margin-bottom: $space-xxl - 18px;
+		@media (min-width: 150px) {
+			width: 33%;
+			margin-bottom: $space-xxl - 14px;
 		}
 	}
-
 	.empty-title {
 		margin-bottom: $lead-font-size-mobile / 2;
 

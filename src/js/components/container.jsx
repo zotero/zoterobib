@@ -88,20 +88,20 @@ class Container extends React.Component {
 		});
 	}
 
-	displayWelcomeMessage() {
-		const id = getNextMessageId();
-		const message = {
-			action: 'Read More',
-			id,
-			isWelcomeMessage: true,
-			kind: 'info',
-			message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
-			onAction: this.handleReadMoreClick.bind(this, id),
-		};
-		this.setState({
-			messages: [...this.state.messages, message]
-		});
-	}
+	// displayWelcomeMessage() {
+	// 	const id = getNextMessageId();
+	// 	const message = {
+	// 		action: 'Read More',
+	// 		id,
+	// 		isWelcomeMessage: true,
+	// 		kind: 'info',
+	// 		message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
+	// 		onAction: this.handleReadMoreClick.bind(this, id),
+	// 	};
+	// 	this.setState({
+	// 		messages: [...this.state.messages, message]
+	// 	});
+	// }
 
 	displayFirstCitationMessage() {
 		const message = {
@@ -345,10 +345,10 @@ class Container extends React.Component {
 			isLoading: false,
 		});
 
-		if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
-			localStorage.setItem('zotero-bib-visited', 'true');
-			this.displayWelcomeMessage();
-		}
+		//if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
+		//	localStorage.setItem('zotero-bib-visited', 'true');
+		//	this.displayWelcomeMessage();
+		//}
 	}
 
 	async handleSave() {

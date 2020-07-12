@@ -13,13 +13,6 @@ class About extends React.PureComponent {
 		return (
 			<section className="section section-about about">
 				<div className="container">
-					<img
-						src="/static/images/about/citeproc.svg"
-						className="zbib-illustration"
-						width="312"
-						height="400"
-						alt="ZoteroBib"
-					/>
 					<h1>Cite anything</h1>
 					<p className="lead">
 						ZoteroBib helps you build a bibliography instantly from any computer or device,

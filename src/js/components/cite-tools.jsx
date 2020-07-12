@@ -18,7 +18,7 @@ class CiteTools extends React.PureComponent {
 				<Button onClick={ () => { this.props.onEditorOpen(); } }
 					className="btn-sm btn-outline-secondary"
 				>
-					Manual Entry
+					Add a Manual Entry
 				</Button>
 			</div>
 		);

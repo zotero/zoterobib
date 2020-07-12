@@ -46,7 +46,7 @@ class IdInput extends React.PureComponent {
 					onBlur={ () => true /* do not commit on blur */ }
 					onChange={ this.handleChange.bind(this) }
 					onCommit={ this.handleCite.bind(this) }
-					placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title"
+					placeholder="Enter a URL, PubMed ID (PMID), ISBN, DOI, arXiv ID, or  article title"
 					ref = { i => this.inputField = i }
 					tabIndex={ 0 }
 					type="text"
@@ -56,7 +56,7 @@ class IdInput extends React.PureComponent {
 					className="btn-lg btn-secondary"
 					onClick={ this.handleCite.bind(this) }
 				>
-					Cite
+					Suggest Citation
 				</Button>
 			</div>
 		);
