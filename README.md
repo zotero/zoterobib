@@ -4,7 +4,7 @@ forked from [zotero/bib-web](https://github.com/zotero/bib-web)
 
 Overview
 --------
-This repo contains my fork of Zotero's Bib tool, including React components, stylesheets and entry-point website.
+This repo contains a fork of Zotero's Bib tool, including React components, stylesheets and entry-point website.
 
 Prerequisites
 ------------
@@ -20,13 +20,13 @@ Local Development version
 
 Getting The Library
 
-1. `git clone --recursive git@github.com:zotero/bib-web.git`
+1. `git clone --recursive git@github.com:mick-schroeder/schroeder-citation.git`
 
-1. `cd bib-web`
+1. `cd schroeder-citation`
 
 1. `npm install`
 
-1. `npm start`
+1. `npm run start`
 
 This will serve demo on http://127.0.0.1:8001. 
 
