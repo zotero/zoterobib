@@ -4,10 +4,14 @@
 
 .section {
 	padding: $section-padding-mobile 0;
-	border-top: 1px solid $shade-2;
-
+	//border-top: 1px solid $shade-2;
+    //background-color: #fff;
+    //border-radius: 38px;
+	min-height: 320px;
+		
+	//margin: 1em;
 	@media (min-width: $bp-md) {
-		padding: $section-padding 0;
+		padding: $section-padding 0.5em;
 	}
 
 	.review + & {

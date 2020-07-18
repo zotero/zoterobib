@@ -6,16 +6,20 @@
 	text-align: center;
 
 	.id-input-container {
-		display: flex;
-		margin-bottom: $space-lg;
+		//display: flex;
+		margin-bottom: $space-sm;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $space-xl;
+			margin-bottom: $space-md;
 		}
 	}
 
 	.input-group {
 		margin-right: $space-min;
+	}
+
+	button {
+		margin-top: 1em;
 	}
 
 	.form-control {

@@ -10,6 +10,7 @@ class StyleSelector extends React.Component {
 	render() {
 		return (
 			<div className={ cx('style-selector', this.props.className ) }>
+				<p>Citation Style:</p>
 				<Select
 					clearable={ false }
 					searchable={ false}

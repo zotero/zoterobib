@@ -40,7 +40,7 @@ $shade-7: #222;
 //
 
 $body-color: $shade-7;
-$body-bg:    $shade-0;
+$body-bg:    #ffffff;
 
 $selection-color: $shade-0;
 $selection-bg:    $secondary;
@@ -50,7 +50,7 @@ $selection-bg:    $secondary;
 // Type
 //
 
-$font-family-sans-serif: AvenirNextLTPro, system-ui; // todo
+$font-family-sans-serif: "HelveticaNeue", "Helvetica Neue", "Helvetica", 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', "Tahoma", "Arial", sans-serif;
 $font-family-base: $font-family-sans-serif;
 
 $font-size-base: 16px;
@@ -59,10 +59,10 @@ $line-height-base: 1.5;
 $font-size-lg: 24px;
 $font-size-sm: 14px;
 
-$h1-font-size: 60px;
-$h2-font-size: 40px;
-$h3-font-size: 32px;
-$h4-font-size: 24px;
+$h1-font-size: 42px;
+$h2-font-size: 33px;
+$h3-font-size: 26px;
+$h4-font-size: 20px;
 $h5-font-size: 20px;
 
 $h1-font-size-mobile: 40px;
@@ -104,6 +104,7 @@ $body-min-width: 320px;
 
 $grid-gutter-width: $space-xl;
 $container-width:   768px + $grid-gutter-width;
+//$container-width:   600px;
 
 $bp-xs: 0px;
 $bp-sm: 568px;
@@ -116,9 +117,8 @@ $grid-breakpoints: (
 	sm: $bp-sm,
 	md: $bp-md,
 	lg: $bp-lg,
-	xl: $bp-xl
+	xl: $bp-xl,
 );
-
 
 //
 // Components
@@ -148,8 +148,8 @@ $zindex-messages: 1010;
 // Sections
 //
 
-$section-padding:        $space-xxxl + $space-xs;
-$section-padding-mobile: $space-xxl;
+$section-padding:        $space-lg;
+$section-padding-mobile: $space-lg;
 
 
 //
@@ -366,3 +366,10 @@ $preview-border-color: $review-border-color;
 
 $about-bg:    $blue-dark;
 $about-color: $shade-0;
+
+//
+// Navbar
+//
+
+$navbar-padding-y: 0.5em;
+$navbar-padding-x: 0.5em;

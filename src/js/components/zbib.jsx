@@ -27,6 +27,10 @@ const StyleInstaller = require('./style-installer');
 const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-detector');
 const WhatsThis = require('./whats-this');
 const Footer = require('./footer');
+const Container = require('reactstrap/lib/Container').default;
+const Col = require('reactstrap/lib/Col').default;
+const Row = require('reactstrap/lib/row').default;
+
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -68,46 +72,55 @@ class ZBib extends React.PureComponent {
 									))
 								}
 							</div>
+							<Container fluid>
+								<Row>
+									<Col>
+									{
+										!this.props.isReadOnly && (
+											<section className="section section-cite">
+												<nav className="meta-nav">
+													<a onClick={ this.handleHelp.bind(this) }>How to Use</a>
+												</nav>
+												<div className="container">
+													<Brand />
+													<p>Enter query:</p>
+													<CiteTools { ...this.props } />
+													<Review { ...this.props} />
+												</div>
+											</section>
+										)
+									}
+									</Col>
+									<Col>
+										<BibliographySection { ...this.props} />
+									</Col>
+								</Row>
+							</Container>
+							<div className="container">
 
-							{
-								!this.props.isReadOnly && (
-									<section className="section section-cite">
-										<nav className="meta-nav">
-											<a onClick={ this.handleHelp.bind(this) }>How to Use</a>
-										</nav>
+								{
+									<section className="section section-export">
 										<div className="container">
-											<Brand />
-											<CiteTools { ...this.props } />
+											<h2>Export</h2>
+											<ExportTools { ...this.props } />
 										</div>
 									</section>
-								)
-							}
-							<Review { ...this.props} />
-							<BibliographySection { ...this.props} />
-
-							{
-								<section className="section section-export">
-									<div className="container">
-										<h2>Export</h2>
-										<ExportTools { ...this.props } />
-									</div>
-								</section>
-							}
-
-							{
-								!this.props.isReadOnly && (
-									<section className="section section-link">
-										<div className="container">
-											<h2>
-												Link to this version
-												<WhatsThis />
-											</h2>
-											<PermalinkTools { ...this.props } />
-										</div>
-									</section>
-								)
-							}
-
+								}
+								
+								{
+									!this.props.isReadOnly && (
+										<section className="section section-link">
+											<div className="container">
+												<h2>
+													Link to this version
+													<WhatsThis />
+												</h2>
+												<PermalinkTools { ...this.props } />
+											</div>
+										</section>
+									)
+								}
+								</div>
 							{
 								this.props.isReadOnly && (
 									<section className="section section-brand">

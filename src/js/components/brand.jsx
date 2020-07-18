@@ -8,8 +8,6 @@ class Brand extends React.PureComponent {
 		return (
 			<React.Fragment>
 				<h1 className="brand">
-						Mick Schroeder's
-						<br/>
 						Citation Generator
 				</h1>
 			</React.Fragment>
