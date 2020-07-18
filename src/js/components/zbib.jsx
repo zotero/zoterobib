@@ -93,20 +93,21 @@ class ZBib extends React.PureComponent {
 									</Col>
 									<Col>
 										<BibliographySection { ...this.props} />
-									</Col>
-								</Row>
-							</Container>
-							<div className="container">
 
-								{
+								
 									<section className="section section-export">
 										<div className="container">
 											<h2>Export</h2>
 											<ExportTools { ...this.props } />
 										</div>
 									</section>
-								}
 								
+									</Col>
+								</Row>
+							</Container>
+							<div className="container">
+
+							{/* 								
 								{
 									!this.props.isReadOnly && (
 										<section className="section section-link">
@@ -120,6 +121,7 @@ class ZBib extends React.PureComponent {
 										</section>
 									)
 								}
+							*/}
 								</div>
 							{
 								this.props.isReadOnly && (
