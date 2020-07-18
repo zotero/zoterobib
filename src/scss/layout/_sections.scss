@@ -8,7 +8,7 @@
     //background-color: #fff;
     //border-radius: 38px;
 	min-height: 320px;
-		
+	
 	//margin: 1em;
 	@media (min-width: $bp-md) {
 		padding: $section-padding 0.5em;
@@ -17,4 +17,8 @@
 	.review + & {
 		border-top-color: $review-border-color;
 	}
+}
+
+.section.section-cite, .section.section-bibliography, .section.section-export {
+	max-width: $bp-md;
 }

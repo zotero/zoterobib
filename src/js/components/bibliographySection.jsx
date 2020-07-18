@@ -7,7 +7,8 @@ const cx = require('classnames');
 const Editable = require('zotero-web-library/src/js/component/editable');
 const Button = require('zotero-web-library/src/js/component/ui/button');
 const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const StyleSelector = require('./style-selector');
+// Moved above query
+//const StyleSelector = require('./style-selector');
 const Bibliography = require('./bibliography');
 const DeleteAllButton = require('./delete-all-button');
 const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
@@ -95,7 +96,9 @@ class BibliographySection extends React.PureComponent {
 						)
 					}
 					{
-						!this.props.isReadOnly && <StyleSelector { ...this.props } />
+					// Moved above query
+					//	!this.props.isReadOnly && <StyleSelector { ...this.props } />
+					//
 					}
 					{
 						this.props.isLoadingCitations ? (

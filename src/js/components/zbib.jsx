@@ -27,9 +27,7 @@ const StyleInstaller = require('./style-installer');
 const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-detector');
 const WhatsThis = require('./whats-this');
 const Footer = require('./footer');
-const Container = require('reactstrap/lib/Container').default;
-const Col = require('reactstrap/lib/Col').default;
-const Row = require('reactstrap/lib/row').default;
+const StyleSelector = require('./style-selector');
 
 
 class ZBib extends React.PureComponent {
@@ -72,9 +70,10 @@ class ZBib extends React.PureComponent {
 									))
 								}
 							</div>
-							<Container fluid>
-								<Row>
-									<Col>
+							<div className="fullwidth-container">
+								<div className="row">
+								
+								<div className="col">
 									{
 										!this.props.isReadOnly && (
 											<section className="section section-cite">
@@ -83,6 +82,8 @@ class ZBib extends React.PureComponent {
 												</nav>
 												<div className="container">
 													<Brand />
+													<p>Citation style:</p>
+													<StyleSelector { ...this.props } />
 													<p>Enter query:</p>
 													<CiteTools { ...this.props } />
 													<Review { ...this.props} />
@@ -90,9 +91,15 @@ class ZBib extends React.PureComponent {
 											</section>
 										)
 									}
-									</Col>
-									<Col>
-										<BibliographySection { ...this.props} />
+									</div>
+								<div className="col ad">
+									<aside>
+										<div className="billboard"><img class="billboard" src="/static/images/leaderboard.png" height="600" width="300" /></div>
+									</aside>
+								</div>
+								<div className="col">
+
+									<BibliographySection { ...this.props} />
 
 								
 									<section className="section section-export">
@@ -102,9 +109,9 @@ class ZBib extends React.PureComponent {
 										</div>
 									</section>
 								
-									</Col>
-								</Row>
-							</Container>
+									</div>	
+								</div>
+							</div>
 							<div className="container">
 
 							{/* 								

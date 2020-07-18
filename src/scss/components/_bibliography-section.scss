@@ -109,78 +109,7 @@
 		}
 	}
 
-	.style-selector {
-		text-align: left;
-
-		.Select {
-			.Select-control {
-				border-color: transparent;
-				background: $style-selector-bg;
-				color: $style-selector-color;
-				padding: $input-padding-y-lg $input-padding-x-lg;
-				border-radius: $input-border-radius-lg;
-				cursor: pointer;
-				transition:
-					background-color $input-transition,
-					border $input-transition,
-					box-shadow $input-transition;
-
-				&:hover {
-					background: $style-selector-hover-bg;
-				}
-			}
-
-			&.is-focused {
-				.Select-control {
-					box-shadow: 0 0 0 2px $secondary;
-					outline: none;
-
-					&:hover {
-						box-shadow: 0 0 0 2px $style-selector-hover-bg;
-					}
-				}
-			}
-
-			&.Select--single {
-				.Select-value-label {
-					overflow: inherit;
-					text-overflow: inherit;
-					white-space: inherit;
-				}
-			}
-
-			.Select-value {
-				position: static;
-				padding: 0;
-			}
-
-			.Select-input {
-				position: absolute;
-			}
-
-			.Select-arrow-zone {
-				margin-right: 0;
-			}
-
-			.Select-arrow {
-				background: image-url("bg-icons/16/chevron-11-down-light.svg");
-			}
-
-			.Select-menu-outer {
-				padding: $space-xs 0;
-				left: 0;
-				right: 0;
-			}
-
-			.Select-option {
-				padding: $space-min $input-btn-padding-x-lg;
-
-				&:last-child {
-					color: $link-color;
-				}
-			}
-		}
-	}
+	
 
 	.read-only & {
 		border-top: none;

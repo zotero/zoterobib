@@ -2,10 +2,14 @@
 // Brand
 //
 
-.brand {
-	width: 90%;
-	height: auto;
-	margin: auto;
-	text-align: center;
+h1.brand {
+	position: relative;
+	text-align: left;
 	font-weight: 700;
+}
+img.brand {
+	height: 36px;
+	width: 36px;
+	//float: left;
+	margin-right: 0.2em;
 }

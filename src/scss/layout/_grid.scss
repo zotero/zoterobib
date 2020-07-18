@@ -2,34 +2,57 @@
 // Grid
 //
 
-// .container {
-// 	max-width: $container-width;
-// 	margin: auto;
-// 	padding: 0 ($grid-gutter-width / 2);
-
-// 	@media (min-width: $bp-md) {
-// 		width: calc(100% - #{$space-xxl});
-// 	}
-// }
-
 .container {
 	max-width: $container-width;
 	margin: auto;
+	padding: 0 ($grid-gutter-width / 2);
+
+	@media (min-width: $bp-md) {
+		width: calc(100% - #{$space-xxl});
+	}
 }
+
+// .container {
+// 	max-width: $container-width;
+// 	margin: auto;
+// }
 	
 div.billboard {
-	border-top: 1px solid #e4e4e4;
-	border-bottom: 1px solid #e4e4e4;
+	border-left: 1px solid #e4e4e4;
+	border-right: 1px solid #e4e4e4;
 	background-color: #f5f5f7;
 	padding-top: 20px;
-	padding-bottom: 20px;
+    padding-bottom: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 100%;
+    width: auto;
+    min-width: 170px;
 }
 	
 img.billboard {	
 	display: block;
 	margin-left: auto;
-	margin-right: auto;
+    margin-right: auto;
+
+    @media (max-width: $bp-sm) {
+        width: 320px;
+        height: 90px;
+    }
+    @media (max-width: $bp-xl) {
+        width: 720px;
+        height: 90px;
+    }
+    @media (min-width: $bp-xl) {
+        width: 160px;
+        height: 600px;
+    }
+    @media (min-width: 1520px) {
+        width: 320px;
+        height: 600px;
+    }
 }
+
 
 .container-fluid {
 	max-width: 1536px;
@@ -54,26 +77,32 @@ img.billboard {
 .row {
 	display: flex;
 	flex-direction: row;
-	flex-wrap: wrap;
-	width: 100%;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
   }
   
   .col {
 	display: flex;
 	flex-direction: column;
-	flex-basis: 100%;
-	flex: 1;
-
+    flex: 1;    
   }
-
   @media (max-width: 1200px) {
 	.col, .row {
 	  display: block;
-	}
+    }
+    
   }
 
-  .container.nav {
+.col.ad {
+    align-items: center; 
+    display: flex; 
+    justify-content: center; 
+    flex: 0 0 160px;
+}
 
+  .container-fullwidth.nav {
+    background-color: #222;
   }  
 
 nav {
@@ -104,7 +133,7 @@ nav.flexbox {
     flex-wrap: wrap;
     justify-content: center;
 	align-items: center;
-	background-color: #fff;
+	//background-color: #fff;
 	
 	@media (min-width: 600px){
         justify-content: space-between;
@@ -147,3 +176,4 @@ nav.flexbox {
         }
     }
 }
+
