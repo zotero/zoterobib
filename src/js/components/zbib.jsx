@@ -28,6 +28,7 @@ const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-
 const WhatsThis = require('./whats-this');
 const Footer = require('./footer');
 const StyleSelector = require('./style-selector');
+const AdvertisementAlpha = require('./advertisement-alpha');
 
 
 class ZBib extends React.PureComponent {
@@ -55,64 +56,62 @@ class ZBib extends React.PureComponent {
 	render() {
 		return (
 			typeof this.props.isReadOnly === 'undefined'
-				?	<div className={ cx(this.className) }>
-						<Spinner />
-					</div>
-				:	<div className={ cx(this.className) }>
-						<div className="zotero-bib-inner">
-							<div className="messages">
-								{ this.props.messages.map(message => (
-									<Message
-										key={ message.id }
-										onDismiss={ this.handleClearMessage.bind(this, message) }
-										{ ...message }
-									/>
-									))
-								}
-							</div>
-							<div className="fullwidth-container">
-								<div className="row">
-								
+				? <div className={cx(this.className)}>
+					<Spinner />
+				</div>
+				: <div className={cx(this.className)}>
+					<div className="zotero-bib-inner">
+						<div className="messages">
+							{this.props.messages.map(message => (
+								<Message
+									key={message.id}
+									onDismiss={this.handleClearMessage.bind(this, message)}
+									{...message}
+								/>
+							))
+							}
+						</div>
+						<div className="fullwidth-container">
+							<div className="row">
 								<div className="col">
 									{
 										!this.props.isReadOnly && (
 											<section className="section section-cite">
 												<nav className="meta-nav">
-													<a onClick={ this.handleHelp.bind(this) }>How to Use</a>
+													<a onClick={this.handleHelp.bind(this)}>How to Use</a>
 												</nav>
 												<div className="container">
 													<Brand />
-													<p>Citation style:</p>
-													<StyleSelector { ...this.props } />
-													<p>Enter query:</p>
-													<CiteTools { ...this.props } />
-													<Review { ...this.props} />
+													<h3>Citation style</h3>
+													<StyleSelector {...this.props} />
+													<h3>Enter query</h3>
+													<CiteTools {...this.props} />
+													<Review {...this.props} />
 												</div>
 											</section>
 										)
 									}
-									</div>
+								</div>
 								<div className="col ad">
 									<aside>
-										<div className="billboard"><img class="billboard" src="/static/images/leaderboard.png" height="600" width="300" /></div>
+										<div className="billboard">
+											{/* <img className="billboard" src="static/images/leaderboard.png" /> */}
+											<AdvertisementAlpha {...this.props} />
+										</div>
 									</aside>
 								</div>
 								<div className="col">
-
-									<BibliographySection { ...this.props} />
-
-								
+									<BibliographySection {...this.props} />
 									<section className="section section-export">
 										<div className="container">
 											<h2>Export</h2>
-											<ExportTools { ...this.props } />
+											<ExportTools {...this.props} />
 										</div>
 									</section>
-								
-									</div>	
 								</div>
 							</div>
-							<div className="container">
+						</div>
+						<div className="container">
 
 							{/* 								
 								{
@@ -129,72 +128,72 @@ class ZBib extends React.PureComponent {
 									)
 								}
 							*/}
-								</div>
-							{
-								this.props.isReadOnly && (
-									<section className="section section-brand">
-										<div className="container">
-											<Brand />
-										</div>
-									</section>
-								)
-							}
+						</div>
+						{
+							this.props.isReadOnly && (
+								<section className="section section-brand">
+									<div className="container">
+										<Brand />
+									</div>
+								</section>
+							)
+						}
 
-							{
-								!this.props.isReadOnly && (
-									<About { ...this.props } />
-								)
-							}
+						{
+							!this.props.isReadOnly && (
+								<About {...this.props} />
+							)
+						}
 
-							<Footer />
+						<Footer />
 
-							<Confirmation
-								isOpen={ this.props.isConfirmingStyleSwitch }
-								onConfirm={ this.props.onStyleSwitchConfirm }
-								onCancel={ this.props.onStyleSwitchCancel }
-								title="Converting Titles to Sentence Case"
-								confirmLabel="OK, I’ll Edit Them"
-							>
-								<p>The style you’ve selected requires titles to be in sentence case
-								rather than title case. When you use this style, ZoteroBib will
-								convert the titles of entries to sentence case for you, but you’ll
+						<Confirmation
+							isOpen={this.props.isConfirmingStyleSwitch}
+							onConfirm={this.props.onStyleSwitchConfirm}
+							onCancel={this.props.onStyleSwitchCancel}
+							title="Converting Titles to Sentence Case"
+							confirmLabel="OK, I’ll Edit Them"
+						>
+							<p>The style you’ve selected requires titles to be in sentence case
+							rather than title case. When you use this style, ZoteroBib will
+							convert the titles of entries to sentence case for you, but you’ll
 								need to manually edit some entries to capitalize proper nouns:</p>
 
-								<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
-								<p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
-								<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
-							</Confirmation>
-							<Modal
-								isOpen={ this.props.isSaveToZoteroVisible }
-								onRequestClose={ () => this.props.onSaveToZoteroHide() }
-								className={ cx('modal modal-centered') }
-							>
-								<div className="modal-content" tabIndex={ -1 }>
-									<div className="modal-header">
-										<h4 className="modal-title text-truncate">
-											Save to Zotero
+							<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
+							<p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
+							<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{ color: '#e52e3d', fontWeight: 'bold' }}>T</span>witter content</i></p>
+						</Confirmation>
+						<Modal
+							isOpen={this.props.isSaveToZoteroVisible}
+							onRequestClose={() => this.props.onSaveToZoteroHide()}
+							className={cx('modal modal-centered')}
+						>
+							<div className="modal-content" tabIndex={-1}>
+								<div className="modal-header">
+									<h4 className="modal-title text-truncate">
+										Save to Zotero
 										</h4>
-										<Button
-											className="close"
-											onClick={ this.props.onSaveToZoteroHide.bind(this) }
-										>
-											<Icon type={ '24/remove' } width="24" height="24" />
-										</Button>
-									</div>
-									<div className="modal-body">
-										<p>Once you’ve <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">installed Zotero and the Zotero Connector</a>,
-										you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
-									</div>
+									<Button
+										className="close"
+										onClick={this.props.onSaveToZoteroHide.bind(this)}
+									>
+										<Icon type={'24/remove'} width="24" height="24" />
+									</Button>
 								</div>
-							</Modal>
-							<CopyCitationDialog { ...this.props} />
-							<Editor { ...this.props } />
-							<MultipleChoiceDialog { ...this.props } />
-							<StyleInstaller { ...this.props } />
-							<ConfirmAddDialog { ...this.props } />
-							<MultipleItemDialog { ...this.props } />
-						</div>
+								<div className="modal-body">
+									<p>Once you’ve <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">installed Zotero and the Zotero Connector</a>,
+										you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
+								</div>
+							</div>
+						</Modal>
+						<CopyCitationDialog {...this.props} />
+						<Editor {...this.props} />
+						<MultipleChoiceDialog {...this.props} />
+						<StyleInstaller {...this.props} />
+						<ConfirmAddDialog {...this.props} />
+						<MultipleItemDialog {...this.props} />
 					</div>
+				</div>
 		);
 	}
 

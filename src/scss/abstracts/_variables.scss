@@ -40,7 +40,7 @@ $shade-7: #222;
 //
 
 $body-color: $shade-7;
-$body-bg:    #ffffff;
+$body-bg:    #f5f5f7;
 
 $selection-color: $shade-0;
 $selection-bg:    $secondary;
@@ -111,6 +111,7 @@ $bp-sm: 568px;
 $bp-md: 768px;
 $bp-lg: 1004px;
 $bp-xl: 1200px;
+$bp-xxl: 1520px;
 
 $grid-breakpoints: (
 	xs: $bp-xs,
@@ -288,7 +289,7 @@ $style-border-color: $shade-2;
 // React-modal
 //
 
-$modal-backdrop-bg:           rgba($blue-darkest, 0.5);
+$modal-backdrop-bg:           rgba($blue-darkest, 1.0);
 $modal-content-bg:            $shade-0;
 $modal-header-color:          $shade-0;
 $modal-header-bg:             $blue-dark;
