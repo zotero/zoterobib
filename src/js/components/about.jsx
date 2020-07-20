@@ -13,16 +13,11 @@ class About extends React.PureComponent {
 		return (
 			<section className="section section-about about">
 				<div className="container">
-					<h1>Cite anything</h1>
+					<h1>How to use</h1>
 					<p className="lead">
-						helps you build a bibliography instantly from any computer or device,
-						without creating an account or installing any software. It’s based on
-						open-source software by <a href="https://www.zotero.org/">Zotero</a>, the
-						powerful open-source research tool recommended by thousands of universities
-						worldwide, so you can trust it to help you seamlessly add sources and
-						produce perfect bibliographies. If you need to reuse sources across
-						multiple projects or build a shared research library, we recommend using
-						Zotero instead.
+						Suggest citations from tho
+						Build a bibliography instantly from any computer or device, without creating an account or installing any software. 
+						It’s based on open-source software by <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide. 
 					</p>
 					<section className="features">
 						<div className="column">

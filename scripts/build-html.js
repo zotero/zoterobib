@@ -39,7 +39,7 @@ const buildFaqPage = async () => {
 const buildIndexPage = async () => {
 	const indexConfig = config.get('indexConfig');
 	const srcFile = path.join(__dirname, '..', 'src', 'html', 'index.hbs');
-	const dstFile = path.join(__dirname, '..', 'build', 'index');
+	const dstFile = path.join(__dirname, '..', 'build', 'index.html');
 	const index = await fs.readFile(srcFile);
 	const template = Handlebars.compile(index.toString());
 	const output = await template({ indexConfig });
