@@ -35,33 +35,35 @@
 .row {
 	display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-items: center;
+
   }
   
   .col {
-	display: flex;
-    flex-direction: column;
     flex: 1 1 0;
   }
   
     .col.ad {
-        display: flex;
-        flex: 0 0 170px;
+        flex: 0 0 160px;
     }
+
     @media (max-width: $bp-sm) {
-        
-    }
+        .col.ad {
+        min-height: 600px;
+        }
     @media (max-width: $bp-lg) {
         
     }
     @media (max-width: $bp-xl) {
         .col, .row {
-            display: block;
+       //     display: block;
           }
     }
-    @media (min-width: 1530px) {
+    @media (min-width: 1200px) {
         .col.ad {
             display: flex;
-            flex: 0 0 330px;
+            flex: 0 0 320px;
         }
     }
 
