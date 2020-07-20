@@ -36,31 +36,38 @@
 	display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-items: center;
-
+   // justify-content: center;
+    //align-content: flex-start;
   }
   
   .col {
-    flex: 1 1 0;
+    min-width: 320px;
+    flex: 1;
+    flex-wrap: wrap;
   }
   
+  @media (min-width: $bp-sm) {
+
+}
     .col.ad {
         flex: 0 0 160px;
+        flex-wrap: wrap;
     }
 
-    @media (max-width: $bp-sm) {
+    @media (min-width: $bp-sm) {
         .col.ad {
-        min-height: 600px;
+            display: flex;
+            flex: 0 0 160px;
+            min-height: 300px;
         }
-    @media (max-width: $bp-lg) {
-        
+        .col {
+            min-width: 400px;
+            max-width: $bp-md;
+            width: 100%;
+            margin: auto;
+        }
     }
-    @media (max-width: $bp-xl) {
-        .col, .row {
-       //     display: block;
-          }
-    }
-    @media (min-width: 1200px) {
+    @media (min-width: $bp-xl) {
         .col.ad {
             display: flex;
             flex: 0 0 320px;
@@ -72,35 +79,9 @@
 }  
 	
 div.billboard {
-    margin: 0;
-	padding-top: 1em;
-    padding-bottom: 1em;
+  
 }
 	
-img.billboard {	
-	display: block;
-	margin-left: auto;
-    margin-right: auto;
-
-    @media (max-width: $bp-sm) {
-        width: 320px;
-        height: 90px;
-    }
-    @media (max-width: $bp-xl) {
-        width: 720px;
-        height: 90px;
-    }
-    @media (min-width: $bp-xl) {
-        width: 160px;
-        height: 600px;
-    }
-    @media (min-width: 1520px) {
-        width: 320px;
-        height: 600px;
-    }
-}
-
-
 nav {
     padding: 10px;
     font-size: 1em;

@@ -6,6 +6,11 @@
 	border-top: none;
 	padding-top: $section-padding-mobile + 14px; // Distance to baseline meta-nav
 	position: relative;
+	
+	@media (min-width: $bp-sm) {
+		min-height: 600px;
+	}
+	
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 9px;
 	}
