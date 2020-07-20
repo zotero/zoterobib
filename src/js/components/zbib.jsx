@@ -73,7 +73,7 @@ class ZBib extends React.PureComponent {
 						</div>
 						<div className="fullwidth-container">
 							<div className="row">
-								<div className="col">
+								<div className="col content">
 									{
 										!this.props.isReadOnly && (
 											<section className="section section-cite">
@@ -100,7 +100,7 @@ class ZBib extends React.PureComponent {
 										</div>
 									</aside>
 								</div>
-								<div className="col">
+								<div className="col content">
 									<BibliographySection {...this.props} />
 									<section className="section section-export">
 										<div className="container">

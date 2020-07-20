@@ -59,8 +59,9 @@
             display: flex;
             flex: 0 0 160px;
             min-height: 300px;
+            margin: auto;
         }
-        .col {
+        .col.content {
             min-width: 400px;
             max-width: $bp-md;
             width: 100%;
