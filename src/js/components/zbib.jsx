@@ -139,9 +139,9 @@ class ZBib extends React.PureComponent {
 						}
 
 						{
-							!this.props.isReadOnly && (
+							//!this.props.isReadOnly && (
 							//	<About {...this.props} />
-							)
+							//)
 						}
 
 						<Footer />
