@@ -58,13 +58,13 @@
         .col.ad {
             display: flex;
             flex: 0 0 160px;
-            margin: auto;
+            margin: 0 auto;
         }
         .col.content {
             min-width: 320px;
             max-width: $bp-md;
             width: 100%;
-            margin: auto;
+            margin: 0 auto;
         }
     }
     @media (min-width: $bp-xl) {
