@@ -61,18 +61,18 @@
             margin: auto;
         }
         .col.content {
-            min-width: 400px;
+            min-width: 320px;
             max-width: $bp-md;
             width: 100%;
             margin: auto;
         }
     }
-   @media (min-width: $bp-xl) {
-       .col.ad {
-           display: flex;
-           flex: 0 0 330px;
-       }
-   }
+    @media (min-width: $bp-xl) {
+        .col.ad {
+            display: flex;
+            flex: 0 0 330px;
+        }
+    }
 
 .container-fullwidth.nav {
     background-color: #222;
