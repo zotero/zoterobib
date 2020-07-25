@@ -94,6 +94,14 @@ class ZBib extends React.PureComponent {
 										)
 									}
 								</div>
+								<div className="col ad">
+									<aside>
+										<div className="billboard">
+											{/* <img className="billboard" src="static/images/leaderboard.png" /> */}
+											<AdvertisementAlpha {...this.props} />
+										</div>
+									</aside>
+								</div>
 								<div className="col content">
 									<BibliographySection {...this.props} />
 									<section className="section section-export">

@@ -58,7 +58,6 @@
         .col.ad {
             display: flex;
             flex: 0 0 160px;
-            min-height: 300px;
             margin: auto;
         }
         .col.content {
@@ -68,18 +67,18 @@
             margin: auto;
         }
     }
-//    @media (min-width: $bp-xl) {
-//        .col.ad {
-//            display: flex;
-//            flex: 0 0 330px;
-//        }
-//    }
+   @media (min-width: $bp-xl) {
+       .col.ad {
+           display: flex;
+           flex: 0 0 330px;
+       }
+   }
 
 .container-fullwidth.nav {
     background-color: #222;
 }  
 	
-billboard.div {
+div.billboard {
   margin: 0 auto;
 }
 	
