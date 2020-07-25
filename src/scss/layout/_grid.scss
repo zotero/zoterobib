@@ -41,7 +41,7 @@
   }
   
   .col {
-    min-width: 320px;
+    //min-width: 320px;
    // flex: 1;
    // flex-wrap: wrap;
   }
@@ -162,6 +162,11 @@ nav.flexbox {
         }
     }
 }
-advertisement-alpha { width: 320px; height: 260px; }
+
+.advertisement-alpha { width: 320px; height: 260px; }
 @media(min-width: $bp-md) { .advertisement-alpha { width: 160px; height: 600px; } }
 @media(min-width: $bp-xl) { .advertisement-alpha { width: 300px; height: 600px; } }
+
+.example_responsive_1 { width: 320px; height: 100px; }
+@media(min-width: 500px) { .example_responsive_1 { width: 468px; height: 60px; } }
+@media(min-width: 800px) { .example_responsive_1 { width: 728px; height: 90px; } }
