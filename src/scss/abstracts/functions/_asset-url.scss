@@ -12,6 +12,6 @@ $staticPath: '/static';
   @return asset-url("images", $path);
 }
 
-@function font-url($path) {
-  @return asset-url("fonts", $path);
-}
+// @function font-url($path) {
+//   @return asset-url("fonts", $path);
+// }
