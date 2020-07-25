@@ -53,6 +53,7 @@
         flex: 0 0 160px;
         flex-wrap: wrap;
         width: 100%;
+        padding: 0.5em;
     }
 
     .col.content {
@@ -163,7 +164,7 @@ nav.flexbox {
     }
 }
 
-.advertisement-alpha { width: 320px; height: 260px; }
+.advertisement-alpha { width: 320px; height: 260px;  }
 @media(min-width: $bp-md) { .advertisement-alpha { width: 160px; height: 600px; } }
 @media(min-width: $bp-xl) { .advertisement-alpha { width: 300px; height: 600px; } }
 
