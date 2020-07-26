@@ -35,13 +35,12 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h4">Adding a bibliography entry</h2>
+								<h2 className="h4">Suggesting a Citation</h2>
 								<p>
-									Simply find what you’re looking for in another browser tab
-									and copy the page URL to the search bar. You can
-									automatically pull in data from newspaper and magazine
-									articles, library catalogs, journal articles, sites like Amazon
-									and Google Books, and much more. You can also paste or type in
+									Paste a URL in the search bar under Enter query and click Suggest Citation. 
+									Automatically pull in data from thousands of medical and scientific journals, newspapers, magazine
+									articles, library catalogs, articles, sites like Amazon
+									and Google Books, and much more. You can also use an identifier such as 
 									an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
 								</p>
 							</section>

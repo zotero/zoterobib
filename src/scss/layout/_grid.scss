@@ -129,17 +129,18 @@ nav.flexbox {
         padding: 0px;      
     }
 
+    li {
+        font-weight: bold;
+        cursor: pointer;
+        //margin: 11px 0;
+        padding: 0.7em 0.7em;
+        color: #f0f0f0;
+    }
+    
+
     a {
         font-weight: bold;
-        border: 1px solid #444;
-        border-radius: 6px;
-        cursor: pointer;
-        margin: 11px 0;
-        padding: 0.7em 0.7em;
-        background-color: #1f1f1f;
-        border-color: #444;
         color: #f0f0f0;
-        transition: 200ms all linear;
       
       @media (min-width: 42em){
         font-size: 1rem;

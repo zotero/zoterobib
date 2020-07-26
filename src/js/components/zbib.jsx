@@ -84,7 +84,6 @@ class ZBib extends React.PureComponent {
 													<StyleSelector {...this.props} />
 													<h3>Enter query</h3>
 													<CiteTools {...this.props} />
-													<a class="howto" onClick={this.handleHelp.bind(this)}>Learn How to Use</a>
 													<Review {...this.props} />
 												</div>
 											</section>

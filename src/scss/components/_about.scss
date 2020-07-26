@@ -40,7 +40,9 @@
 	}
 
 	a {
-		color: mix($link-color, $shade-0, 40%);
+		color: $pink;
+		font-weight: 600;
+
 	}
 
 	p {
