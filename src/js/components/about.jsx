@@ -15,15 +15,11 @@ class About extends React.PureComponent {
 				<div className="container-fullwidth">
 					<h1>How to use</h1>
 					<p className="lead">
-						Suggest citations automatically from urls, PubMed IDs (PMID), DOI, and many other identifiers.
-						<br/>
-						Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.
-						<br/>
-						Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). 
-						<br/>
-						Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.
-						<br/>
-						Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide. 
+						<p>Suggest citations automatically from urls, PubMed IDs (PMID), DOI, and many other identifiers.</p>
+						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
+						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
+						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
+						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
 					</p>
 					<section className="features">
 						<div className="row">
