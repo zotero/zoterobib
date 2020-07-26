@@ -107,8 +107,18 @@ nav {
     }
 
     a {
-      font-size: 1rem;
-      
+        font-weight: bold;
+        border: 1px solid #444;
+        border-radius: 4px;
+        height: 36px;
+        cursor: pointer;
+        margin: 11px 0;
+        padding: 6px 14px;
+        background-color: #1f1f1f;
+        border-color: #444;
+        color: #f0f0f0;
+        transition: 200ms all linear;
+}
       @media (min-width: 42em){
         font-size: 1rem;
       }
