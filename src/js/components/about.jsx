@@ -198,7 +198,7 @@ class About extends React.PureComponent {
 					</section>
 					<Button
 						onClick={ this.handleClick.bind(this) }
-						className="btn-lg btn-outline-inverse-blue-dark"
+						className="btn-lg btn-secondary"
 					>
 						Cool. Cool-cool-cool. Let’s start!
 					</Button>

@@ -29,7 +29,7 @@
 			flex: 1 1 50%;
 		}
 		@media (min-width: $bp-xl) {
-			flex: 1 1 33%;
+			flex: 1 1 30%;
 		}
 	}
 
@@ -68,11 +68,11 @@
 	.features {
 		text-align: left;
 		margin-top: 80px - 17px;
-		margin-bottom: $space-xxxl - 6px;
+		margin-bottom: $space-xl;
 
 		@media (min-width: $bp-md) {
 			margin-top: 120px - 20px;
-			margin-bottom: $space-max - 6px;
+			margin-bottom: $space-xl;
 		}
 
 		@media (min-width: $bp-lg) {
@@ -102,7 +102,11 @@
 		//position: absolute;
 		//left: 0;
 		//top: -23px;
-		margin-bottom: 10px;
+		margin-top: 0;
+		margin-bottom: 70px;
+		margin-left: 0;
+		margin-right: 15px;
+		float: left;
 		//@media (min-width: $bp-md) {
 		//	top: -20px;
 		//}

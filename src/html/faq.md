@@ -1,4 +1,5 @@
-# Mick Schroeder's Citation Generator FAQ
+# Mick Schroeder's Citation Generator 
+# Frequently Asked Questions (FAQ)
 
 <nav>
   <ul>
@@ -12,7 +13,7 @@
 
 ### What is Mick Schroeder's Citation Generator?
 
-Mick Schroeder's Citation Generator is a free service that helps you build a bibliography instantly from any computer or device, without creating an account or installing any software. 
+This is a free and open-source service that helps you build a bibliography automatically from any computer or device, without creating an account or installing any software. 
 
 ### How much does it cost?
 
@@ -21,8 +22,6 @@ Nothing! Mick Schroeder's Citation Generator is completely free and open-source.
 ### Should I use Mick Schroeder's Citation Generator or Zotero?
 
 Mick Schroeder's Citation Generator and Zotero are both free, [open-source](https://github.com/zotero) tools created with the goal of helping people manage their research. Use whichever one is right for you!
-
-If you just need to create a one-off bibliography for a paper, Mick Schroeder's Citation Generator is the quickest and easiest way to do it.
 
 If you're working on a longer-term project, want to build up a research library to use across multiple projects, or need to collaborate with others, [Zotero] offers many more features:
 

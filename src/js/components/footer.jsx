@@ -9,8 +9,14 @@ class Footer extends React.PureComponent {
 				<nav className="social-nav">
 					
 				</nav>
+				<div className="container">
 				<small className="copyright">
 					© { (new Date()).getFullYear() } Mick Schroeder, LLC. All Rights reserved.
+					<p>
+					This site uses Google AdSense advertisements and Google Analytics.
+					I get commissions for purchases made through links on this site. 
+					As an Amazon Associate I earn from qualifying purchases.
+					</p>
 					<p>
 					This program is free software: you can redistribute it and/or modify
 					it under the terms of the <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">GNU Affero General Public License</a> as
@@ -26,6 +32,8 @@ class Footer extends React.PureComponent {
 					forked from <a href="https://github.com/zotero/bib-web">zotero/bib-web</a>
 					</p>
 				</small>
+				</div>
+
 				
 			</footer>
 		);
