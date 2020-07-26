@@ -19,12 +19,12 @@
 	}
 
 	.container {
-		padding-top: $space-xl - 7px;
-		padding-bottom: $space-xl;
+		padding-top: $space-md - 7px;
+		padding-bottom: $space-md;
 
 		@media (min-width: $bp-md) {
-			padding-top: $space-xxl - 7px; // Caps height
-			padding-bottom: $space-xxl;
+			padding-top: $space-md - 7px; // Caps height
+			padding-bottom: $space-md;
 		}
 	}
 
