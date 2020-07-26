@@ -104,7 +104,6 @@ nav {
 
     ul {
         list-style-type: none;
-        margin: 0px;
         padding: 0px;      
     }
 
@@ -160,13 +159,15 @@ nav.flexbox {
     }
 
     ul li {
-        flex: 0 0 120px;
+        flex: 0 0 150px;
         margin-right: 10px;
+        margin-top: 10px;
         text-align: center;
 
         @media (min-width: 600px){
             flex: 0 0 auto;
             margin-right: 20px;
+            margin-top: 0;
         }
 
         &:last-child {
