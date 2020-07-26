@@ -41,19 +41,18 @@
   }
   
   .col {
-    //min-width: 320px;
    // flex: 1;
    // flex-wrap: wrap;
   }
   
   @media (min-width: $bp-sm) {
     .row {
-        flex-wrap: nowrap;
+       // flex-wrap: wrap;
     }
 }
     .col.ad {
         flex: 0 0 160px;
-        flex-wrap: wrap;
+        //flex-wrap: wrap;
         width: 100%;
         padding: 0.5em;
     }
@@ -80,7 +79,7 @@
     @media (min-width: $bp-xl) {
         .col.ad {
             display: flex;
-            flex: 0 0 330px;
+            flex: 0 0 320px;
             margin: 0 auto;
             width: 100%;
         }

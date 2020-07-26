@@ -14,7 +14,7 @@ const proxy = httpProxy.createProxyServer();
 
 const handler = (req, resp) => {
 	const fallback = () => {
-		fs.readFile(path.join(__dirname, '..', 'build', 'index'), (err, buf) => {
+		fs.readFile(path.join(__dirname, '..', 'build', 'index.html'), (err, buf) => {
 			resp.setHeader('Content-Type', 'text/html');
 			resp.end(buf);
 		});
@@ -32,7 +32,7 @@ const handler = (req, resp) => {
 			resp.end();
 		});
 	} else if (req.url == '/faq') {
-		fs.readFile(path.join(__dirname, '..', 'build', 'faq'), (err, buf) => {
+		fs.readFile(path.join(__dirname, '..', 'build', 'faq.html'), (err, buf) => {
 			resp.setHeader('Content-Type', 'text/html');
 			resp.end(buf);
 		});
