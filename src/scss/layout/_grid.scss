@@ -35,7 +35,6 @@
 .row {
 	display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     //justify-content: center;
     //align-content: flex-start;
   }
@@ -52,7 +51,7 @@
 }
     .col.ad {
         flex: 0 0 160px;
-        //flex-wrap: wrap;
+        flex-wrap: wrap;
         width: 100%;
         padding: 0.5em;
     }
@@ -77,6 +76,9 @@
         }
     }
     @media (min-width: $bp-xl) {
+        .row {
+           // flex-wrap: nowrap;
+        }
         .col.ad {
             display: flex;
             flex: 0 0 320px;
