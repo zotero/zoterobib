@@ -15,15 +15,14 @@
 		padding-top: $section-padding - 9px;
 	}
 
-	.meta-nav {
-		position: absolute;
-		right: $grid-gutter-width / 2;
-		top: $space-sm;
+	.howto {
+		float: right;
+		font-weight: bold;
+		text-align: center;
 		cursor: pointer;
-
-		a + a {
-			margin-left: $space-md;
-		}
+		padding: 0.7em 0.7em;
+		color: #61b2e4;
+		z-index: $zindex-menu;
 	}
 
 	.container {

@@ -76,16 +76,15 @@ class ZBib extends React.PureComponent {
 								<div className="col content">
 									{
 										!this.props.isReadOnly && (
-											<section className="section section-cite">											
+											<section className="section section-cite">
+														
 												<div className="container">
 													<Brand />
 													<h3>Citation style</h3>
-													<nav className="meta-nav">
-													<a onClick={this.handleHelp.bind(this)}>How to Use</a>
-													</nav> 
 													<StyleSelector {...this.props} />
 													<h3>Enter query</h3>
 													<CiteTools {...this.props} />
+													<a class="howto" onClick={this.handleHelp.bind(this)}>Learn How to Use</a>
 													<Review {...this.props} />
 												</div>
 											</section>
@@ -95,7 +94,6 @@ class ZBib extends React.PureComponent {
 								<div className="col ad">
 									<aside>
 										<div className="billboard">
-											{/* <img className="billboard" src="static/images/leaderboard.png" /> */}
 											<AdvertisementAlpha {...this.props} />
 										</div>
 									</aside>
@@ -140,9 +138,9 @@ class ZBib extends React.PureComponent {
 						}
 
 						{
-							//!this.props.isReadOnly && (
-							//	<About {...this.props} />
-							//)
+							!this.props.isReadOnly && (
+								<About {...this.props} />
+							)
 						}
 
 						<Footer />

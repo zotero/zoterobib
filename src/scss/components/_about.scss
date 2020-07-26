@@ -4,10 +4,14 @@
 
 .about {
 	background: $about-bg;
-	color: $shade-0;
+	color: #000;
 	text-align: center;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	h1 {
+		font-weight: 800;
+	}
 
 	.container {
 		@media (min-width: $bp-md) {
@@ -22,20 +26,17 @@
 
 	.column {
 		@media (min-width: $bp-lg) {
-			flex: 0 0 50%;
-
-			&:nth-child(1) {
-				padding-right: 40px;
-			}
-
-			&:nth-child(2) {
-				padding-left: 40px;
-			}
+			flex: 1 1 50%;
+		}
+		@media (min-width: $bp-xl) {
+			flex: 1 1 33%;
 		}
 	}
 
 	.h4 {
 		margin-bottom: $space-xs;
+		font-weight: 800;
+
 	}
 
 	a {
@@ -80,29 +81,31 @@
 	}
 
 	.feature {
-		padding-left: 66px + $space-md;
-		position: relative;
-		margin-bottom: $space-xxxl - 15px;
-
+		padding: $space-xl;
+		//position: relative;
+		//margin-bottom: $space-xxxl - 15px;
+		background-color: #fff;
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-max - 16px;
+			margin-right: $space-xl;
+
 		}
 
 		@media (min-width: $bp-lg) {
 			&:last-child {
-				margin-bottom: 0;
+				margin-right: 0;
 			}
 		}
 	}
 
 	.feature-icon {
-		position: absolute;
-		left: 0;
-		top: -23px;
-
-		@media (min-width: $bp-md) {
-			top: -20px;
-		}
+		//position: absolute;
+		//left: 0;
+		//top: -23px;
+		margin-bottom: 10px;
+		//@media (min-width: $bp-md) {
+		//	top: -20px;
+		//}
 	}
 
 	.remove-icon {

@@ -12,16 +12,22 @@ class About extends React.PureComponent {
 	render() {
 		return (
 			<section className="section section-about about">
-				<div className="container">
+				<div className="container-fullwidth">
 					<h1>How to use</h1>
 					<p className="lead">
-						Suggest citations from tho
-						Build a bibliography instantly from any computer or device, without creating an account or installing any software. 
-						It’s based on open-source software by <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide. 
+						Suggest citations automatically from urls, PubMed IDs (PMID), DOI, and many other identifiers.
+						<br/>
+						Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.
+						<br/>
+						Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). 
+						<br/>
+						Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.
+						<br/>
+						Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide. 
 					</p>
 					<section className="features">
-						<div className="column">
-							<section className="feature">
+						<div className="row">
+							<section className="column feature">
 								<img
 									src="/static/images/about/cite.svg"
 									className="feature-icon"
@@ -39,7 +45,7 @@ class About extends React.PureComponent {
 									an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/manual-entry.svg"
 									className="feature-icon"
@@ -54,7 +60,7 @@ class About extends React.PureComponent {
 									enter the reference information by hand.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/bibliography-title.svg"
 									className="feature-icon"
@@ -69,7 +75,7 @@ class About extends React.PureComponent {
 									sharing a bibliography with others.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/editing.svg"
 									className="feature-icon"
@@ -83,7 +89,7 @@ class About extends React.PureComponent {
 									item. Click on a bibliography entry to make manual changes.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/deleting-items.svg"
 									className="feature-icon"
@@ -106,9 +112,9 @@ class About extends React.PureComponent {
 									bibliography, click <i>Delete All</i> to remove all entries.
 								</p>
 							</section>
-						</div>
-						<div className="column">
-							<section className="feature">
+						{/* </div>
+						<div className="column"> */}
+							<section className="column feature">
 								<img
 									src="/static/images/about/style-selection.svg"
 									className="feature-icon"
@@ -118,12 +124,12 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Style selection</h2>
 								<p>
-									Format your bibliography using APA, MLA, Chicago / Turabian,
+									Format your bibliography using AMA, APA, MLA, Chicago / Turabian,
 									or any of the 9,000+
 									other <a href="http://citationstyles.org/">CSL</a> styles.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/copy.svg"
 									className="feature-icon"
@@ -138,7 +144,7 @@ class About extends React.PureComponent {
 									without typing names or dates by hand.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/export.svg"
 									className="feature-icon"
@@ -155,7 +161,7 @@ class About extends React.PureComponent {
 									reference manager.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/autosave.svg"
 									className="feature-icon"
@@ -172,7 +178,7 @@ class About extends React.PureComponent {
 									window.)
 								</p>
 							</section>
-							<section className="feature">
+							{/* <section className="column feature">
 								<img
 									src="/static/images/about/link.svg"
 									className="feature-icon"
@@ -187,19 +193,19 @@ class About extends React.PureComponent {
 									can generate a link to a copy of the current version on
 									zbib.org. Use the link to retrieve your bibliography later.
 								</p>
-							</section>
+							</section> */}
 						</div>
 					</section>
 					<Button
 						onClick={ this.handleClick.bind(this) }
 						className="btn-lg btn-outline-inverse-blue-dark"
 					>
-						Awesome! Let’s start!
+						Cool. Cool-cool-cool. Let’s start!
 					</Button>
 					<p className="support">
 						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
-						Check the <a href="/faq">FAQ</a>.</p>
+						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a>.</p>
 				</div>
 			</section>
 		);
