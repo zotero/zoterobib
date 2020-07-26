@@ -26,7 +26,7 @@ const addAnchors = html => {
 const buildFaqPage = async () => {
 	const faqMarkdown = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'faq.md'));
 	const faqTemplate = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'faq.hbs'));
-	const dstFile = path.join(__dirname, '..', 'build', 'faq');
+	const dstFile = path.join(__dirname, '..', 'build', 'faq.html');
 	const template = Handlebars.compile(faqTemplate.toString());
 	const faqHTML = marked(faqMarkdown.toString(), { smartypants: true })
 					// Remove "-" at end of id attributes, which marked substitutes for question marks
