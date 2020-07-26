@@ -47,7 +47,9 @@
   }
   
   @media (min-width: $bp-sm) {
-
+    .row {
+        flex-wrap: nowrap;
+    }
 }
     .col.ad {
         flex: 0 0 160px;
@@ -126,7 +128,7 @@ nav {
 
 nav.flexbox {
     display: flex;
-    //flex-wrap: wrap;
+    flex-wrap: wrap;
     justify-content: center;
 	align-items: center;
 	//background-color: #fff;
