@@ -7,9 +7,9 @@ class Brand extends React.PureComponent {
 	render() {
 		return (
 			<React.Fragment>
+				<img className="brand" src="/static/images/icon-cite.png" alt="Logo" />					
 				<h1 className="brand">
 					Mick Schroeder's<br/>
-					<img className="brand" src="/static/images/icon-cite.png" alt="" />					
 					Citation Generator
 				</h1>
 			</React.Fragment>
