@@ -1,4 +1,4 @@
-# Schroeder Citation Generator
+# Mick Schroeder's Citation Generator
 
 forked from [zotero/bib-web](https://github.com/zotero/bib-web)
 
