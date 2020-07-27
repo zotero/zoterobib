@@ -25,7 +25,7 @@ class About extends React.PureComponent {
 						<div className="row">
 							<section className="column feature">
 								<img
-									src="/static/images/cite.svg"
+									src="/static/images/about/cite.svg"
 									className="feature-icon"
 									width="66"
 									height="66"
