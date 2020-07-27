@@ -25,7 +25,7 @@ class About extends React.PureComponent {
 						<div className="row">
 							<section className="column feature">
 								<img
-									src="/static/images/about/cite.svg"
+									src="/static/images/cite.svg"
 									className="feature-icon"
 									width="66"
 									height="66"
@@ -201,6 +201,15 @@ class About extends React.PureComponent {
 						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
 						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a>.</p>
+						<a href="https://github.com/mick-schroeder/schroeder-citation">
+						<img
+									src="/static/images/E045.svg"
+									width="66"
+									height="66"
+									alt=""
+						/><br/>
+						Source code available on github
+						</a>.
 				</div>
 			</section>
 		);
