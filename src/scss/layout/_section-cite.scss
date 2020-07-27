@@ -6,19 +6,23 @@
 	border-top: none;
 	padding-top: $section-padding-mobile + 14px; // Distance to baseline meta-nav
 	position: relative;
+	
+	@media (min-width: $bp-sm) {
+		min-height: 600px;
+	}
+	
 	@media (min-width: $bp-md) {
 		padding-top: $section-padding - 9px;
 	}
 
-	.meta-nav {
-		position: absolute;
-		right: $grid-gutter-width / 2;
-		top: $space-sm;
+	.howto {
+		float: right;
+		font-weight: bold;
+		text-align: center;
 		cursor: pointer;
-
-		a + a {
-			margin-left: $space-md;
-		}
+		padding: 0.7em 0.7em;
+		color: #61b2e4;
+		z-index: $zindex-menu;
 	}
 
 	.container {

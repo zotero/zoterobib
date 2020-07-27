@@ -12,21 +12,18 @@ class About extends React.PureComponent {
 	render() {
 		return (
 			<section className="section section-about about">
-				<div className="container">
-					<h1>Cite anything</h1>
+				<div className="container-fullwidth">
+					<h1>How to use</h1>
 					<p className="lead">
-						ZoteroBib helps you build a bibliography instantly from any computer or device,
-						without creating an account or installing any software. It’s brought to you
-						by the team behind <a href="https://www.zotero.org/">Zotero</a>, the
-						powerful open-source research tool recommended by thousands of universities
-						worldwide, so you can trust it to help you seamlessly add sources and
-						produce perfect bibliographies. If you need to reuse sources across
-						multiple projects or build a shared research library, we recommend using
-						Zotero instead.
+						<p>Suggest citations automatically from urls, PubMed IDs (PMID), DOI, and many other identifiers.</p>
+						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
+						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
+						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
+						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
 					</p>
 					<section className="features">
-						<div className="column">
-							<section className="feature">
+						<div className="row">
+							<section className="column feature">
 								<img
 									src="/static/images/about/cite.svg"
 									className="feature-icon"
@@ -34,17 +31,16 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 								/>
-								<h2 className="h4">Adding a bibliography entry</h2>
+								<h2 className="h4">Suggesting a Citation</h2>
 								<p>
-									Simply find what you’re looking for in another browser tab
-									and copy the page URL to the ZoteroBib search bar. ZoteroBib can
-									automatically pull in data from newspaper and magazine
-									articles, library catalogs, journal articles, sites like Amazon
-									and Google Books, and much more. You can also paste or type in
+									Paste a URL in the search bar under Enter query and click Suggest Citation. 
+									Automatically pull in data from thousands of medical and scientific journals, newspapers, magazine
+									articles, library catalogs, articles, sites like Amazon
+									and Google Books, and much more. You can also use an identifier such as 
 									an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/manual-entry.svg"
 									className="feature-icon"
@@ -59,7 +55,7 @@ class About extends React.PureComponent {
 									enter the reference information by hand.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/bibliography-title.svg"
 									className="feature-icon"
@@ -74,7 +70,7 @@ class About extends React.PureComponent {
 									sharing a bibliography with others.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/editing.svg"
 									className="feature-icon"
@@ -88,7 +84,7 @@ class About extends React.PureComponent {
 									item. Click on a bibliography entry to make manual changes.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/deleting-items.svg"
 									className="feature-icon"
@@ -111,9 +107,9 @@ class About extends React.PureComponent {
 									bibliography, click <i>Delete All</i> to remove all entries.
 								</p>
 							</section>
-						</div>
-						<div className="column">
-							<section className="feature">
+						{/* </div>
+						<div className="column"> */}
+							<section className="column feature">
 								<img
 									src="/static/images/about/style-selection.svg"
 									className="feature-icon"
@@ -123,12 +119,12 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Style selection</h2>
 								<p>
-									Format your bibliography using APA, MLA, Chicago / Turabian,
+									Format your bibliography using AMA, APA, MLA, Chicago / Turabian,
 									or any of the 9,000+
 									other <a href="http://citationstyles.org/">CSL</a> styles.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/copy.svg"
 									className="feature-icon"
@@ -143,7 +139,7 @@ class About extends React.PureComponent {
 									without typing names or dates by hand.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/export.svg"
 									className="feature-icon"
@@ -160,7 +156,7 @@ class About extends React.PureComponent {
 									reference manager.
 								</p>
 							</section>
-							<section className="feature">
+							<section className="column feature">
 								<img
 									src="/static/images/about/autosave.svg"
 									className="feature-icon"
@@ -170,14 +166,14 @@ class About extends React.PureComponent {
 								/>
 								<h2 className="h4">Autosave</h2>
 								<p>
-									ZoteroBib automatically saves your bibliography to your browser’s
+									Automatically saves your bibliography to your browser’s
 									local storage — you can close the page and return to it
 									anytime. (If you’re using private / incognito mode in your
 									browser, your bibliography will be cleared when you close the
 									window.)
 								</p>
 							</section>
-							<section className="feature">
+							{/* <section className="column feature">
 								<img
 									src="/static/images/about/link.svg"
 									className="feature-icon"
@@ -192,19 +188,28 @@ class About extends React.PureComponent {
 									can generate a link to a copy of the current version on
 									zbib.org. Use the link to retrieve your bibliography later.
 								</p>
-							</section>
+							</section> */}
 						</div>
 					</section>
 					<Button
 						onClick={ this.handleClick.bind(this) }
-						className="btn-lg btn-outline-inverse-blue-dark"
+						className="btn-lg btn-secondary"
 					>
-						Awesome! Let’s start!
+						Cool. Cool-cool-cool. Let’s start!
 					</Button>
 					<p className="support">
 						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
-						Check the <a href="/faq">FAQ</a>.</p>
+						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a>.</p>
+						<a href="https://github.com/mick-schroeder/schroeder-citation">
+						<img
+									src="/static/images/E045.svg"
+									width="66"
+									height="66"
+									alt=""
+						/><br/>
+						Source code available on github
+						</a>.
 				</div>
 			</section>
 		);

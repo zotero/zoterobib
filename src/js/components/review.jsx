@@ -22,7 +22,7 @@ class Review extends React.PureComponent {
 		if(this.props.isTranslating) {
 			return (
 				<section className="section section-review review">
-					<h2>New item…</h2>
+					<h2>Loading…</h2>
 				</section>
 			);
 		}

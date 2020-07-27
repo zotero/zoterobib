@@ -9,12 +9,14 @@ const path = require('path');
 const stylesCacheTime = argv['stylesCacheTime'] || 0;
 
 const styles = [
-	'apa',
-	'chicago-note-bibliography',
+	'american-medical-association',
 	'modern-language-association',
+	'apa',
+	'national-library-of-medicine',
+	'chicago-note-bibliography',
 	'turabian-fullnote-bibliography'
 ];
-const defaultStyle = 'modern-language-association';
+const defaultStyle = 'american-medical-association';
 
 (async () => {
 	const stylesJsonPath = path.join(__dirname, '..', 'data', 'styles.json');

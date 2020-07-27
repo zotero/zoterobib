@@ -16,11 +16,22 @@ $blue:         #1e50a0;
 $blue-dark:    #61b2e4;
 $blue-darkest: #1e50a0;
 $violet:       #8967aa;
+$indigo: #622aff;
+$blue-bright: #0e90db;
+$pink: #e94256;
+$green: #0b9e43;
+$azure: #027fff;
+$teal: #2294b1;
+$fuchsia: #dd04d1;
+$orange: #e2620c;
+$cornflower: #0e90db;
+$mahogany: #e94b1b;
+$avocado: #5f9800;
 
 $primary:   $red;
 $secondary: $blue;
 $error:     $primary;
-$warning:   #ea5a47;
+$warning:  $red;
 $success:   #5c9e31;
 $info:      $blue;
 
@@ -71,14 +82,14 @@ $h3-font-size-mobile: 24px;
 $h4-font-size-mobile: 20px;
 
 $headings-line-height: 1.1;
-$headings-font-weight: 300;
+$headings-font-weight: 400;
 
 $link-color: $secondary;
 $link-transition: 0.15s ease;
 
 $lead-font-size:        24px;
 $lead-font-size-mobile: 20px;
-$lead-font-weight:      300;
+$lead-font-weight:      400;
 
 
 //
@@ -365,7 +376,7 @@ $preview-border-color: $review-border-color;
 // About
 //
 
-$about-bg:    $blue-dark;
+$about-bg:    #f5f5f7;
 $about-color: $shade-0;
 
 //

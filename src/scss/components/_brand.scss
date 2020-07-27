@@ -5,11 +5,16 @@
 h1.brand {
 	position: relative;
 	text-align: left;
-	font-weight: 700;
+	font-weight: 800;
+	line-height: 0.9;
+	font-size: 36px;
+	margin-left: 95px;
 }
 img.brand {
-	height: 36px;
-	width: 36px;
-	//float: left;
-	margin-right: 0.2em;
+	height: 60px;
+	width: 60px;
+	float: left;
+	margin-top: 0.2em;
+	margin-right: 1em;
+	margin-left:0.5em;
 }

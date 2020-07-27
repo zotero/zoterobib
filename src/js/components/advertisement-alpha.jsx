@@ -14,9 +14,7 @@ export default class AdvertisementAlpha extends React.PureComponent {
 			style={{ display: 'block' }}
 			data-ad-client='ca-pub-6344797609391119'
 			data-ad-slot='3922555336'
-			data-ad-format='auto'  
-			// TODO: REMOVE data-ad-test LINE
-			data-ad-test="on"
+			data-ad-format='auto'
 			data-full-width-responsive="true"/>
 	  );
 	}

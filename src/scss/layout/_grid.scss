@@ -33,73 +33,92 @@
 
 
 .row {
-	display: flex;
-    flex-direction: row;
+	//display: flex;
+    //flex-direction: row;
+    //justify-content: center;
+    //align-content: flex-start;
   }
-  
-  .col {
-	display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-  }
-  
+    
     .col.ad {
-        display: flex;
-        flex: 0 0 170px;
+        flex: 0 0 160px;
+        flex-wrap: wrap;
+        width: 100%;
+        padding: 0.5em;
     }
-    @media (max-width: $bp-sm) {
-        
+
+    .col.content {
+        width: 100%;
+        margin: 0 auto;
     }
-    @media (max-width: $bp-lg) {
-        
+
+    .col.bibl {
+        width: 100%;
+        margin: 0 auto;
     }
-    @media (max-width: $bp-xl) {
-        .col, .row {
-            display: block;
-          }
-    }
-    @media (min-width: 1530px) {
+
+    @media (min-width: $bp-sm) {
+        .row {
+         flex-wrap: wrap;
+         display: flex;
+         flex-direction: row;
+         }
         .col.ad {
             display: flex;
-            flex: 0 0 330px;
+            flex: 0 0 320px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .col.content {
+            flex: 1;
+            min-width: 400px;
+            max-width: $bp-md;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .col.bibl {
+            flex: none;
+            min-width: 400px;
+            max-width: $bp-md;
+            width: 100%;
+            margin: 0 auto;
         }
     }
+    @media (min-width: $bp-xl) {
+        .row {
+         flex-wrap: wrap;
+         }
+        .col.ad {
+            display: flex;
+            flex: 0 0 320px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .col.content {
+            flex: 1;
+            min-width: 400px;
+            max-width: $bp-md;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .col.bibl {
+            flex: 1;
+            min-width: 400px;
+            max-width: $bp-md;
+            width: 100%;
+            margin: 0 auto;
+        }
+    }
+    
 
 .container-fullwidth.nav {
     background-color: #222;
 }  
 	
 div.billboard {
-    margin: 0;
-	padding-top: 1em;
-    padding-bottom: 1em;
+  margin: 0 auto;
 }
 	
-img.billboard {	
-	display: block;
-	margin-left: auto;
-    margin-right: auto;
-
-    @media (max-width: $bp-sm) {
-        width: 320px;
-        height: 90px;
-    }
-    @media (max-width: $bp-xl) {
-        width: 720px;
-        height: 90px;
-    }
-    @media (min-width: $bp-xl) {
-        width: 160px;
-        height: 600px;
-    }
-    @media (min-width: 1520px) {
-        width: 320px;
-        height: 600px;
-    }
-}
-
-
-nav {
+nav.flexbox {
     padding: 10px;
     font-size: 1em;
 
@@ -109,12 +128,21 @@ nav {
 
     ul {
         list-style-type: none;
-        margin: 0px;
         padding: 0px;      
     }
 
+    li {
+        font-weight: bold;
+        cursor: pointer;
+        //margin: 11px 0;
+        padding: 0.7em 0.7em;
+        color: #f0f0f0;
+    }
+    
+
     a {
-      font-size: 1rem;
+        font-weight: bold;
+        color: #f0f0f0;
       
       @media (min-width: 42em){
         font-size: 1rem;
@@ -156,13 +184,15 @@ nav.flexbox {
     }
 
     ul li {
-        flex: 0 0 100px;
+        flex: 0 0 150px;
         margin-right: 10px;
+        margin-top: 10px;
         text-align: center;
 
         @media (min-width: 600px){
             flex: 0 0 auto;
             margin-right: 20px;
+            margin-top: 0;
         }
 
         &:last-child {
@@ -170,6 +200,6 @@ nav.flexbox {
         }
     }
 }
-advertisement-alpha { width: 320px; height: 100px; }
-@media(min-width: 1360px) { .advertisement-alpha { width: 320px; height: 300px; } }
-@media(min-width: 1856px) { .advertisement-alpha { width: 160px; height: 300px; } }
+
+.advertisement-alpha { width: 320px; height: 260px;  }
+@media(min-width: $bp-md) { .advertisement-alpha { width: 300px; height: 600px; } }

@@ -26,7 +26,7 @@ const addAnchors = html => {
 const buildFaqPage = async () => {
 	const faqMarkdown = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'faq.md'));
 	const faqTemplate = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'faq.hbs'));
-	const dstFile = path.join(__dirname, '..', 'build', 'faq');
+	const dstFile = path.join(__dirname, '..', 'build', 'faq.html');
 	const template = Handlebars.compile(faqTemplate.toString());
 	const faqHTML = marked(faqMarkdown.toString(), { smartypants: true })
 					// Remove "-" at end of id attributes, which marked substitutes for question marks
@@ -39,7 +39,7 @@ const buildFaqPage = async () => {
 const buildIndexPage = async () => {
 	const indexConfig = config.get('indexConfig');
 	const srcFile = path.join(__dirname, '..', 'src', 'html', 'index.hbs');
-	const dstFile = path.join(__dirname, '..', 'build', 'index');
+	const dstFile = path.join(__dirname, '..', 'build', 'index.html');
 	const index = await fs.readFile(srcFile);
 	const template = Handlebars.compile(index.toString());
 	const output = await template({ indexConfig });
