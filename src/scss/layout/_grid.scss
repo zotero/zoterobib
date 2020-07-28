@@ -35,7 +35,7 @@
 .row {
 	//display: flex;
     //flex-direction: row;
-    //justify-content: center;
+    justify-content: center;
     //align-content: flex-start;
   }
     
@@ -48,13 +48,11 @@
 
     .col.content {
         width: 100%;
-        margin: 0 auto;
         -ms-flex: 1 0 auto;
     }
 
     .col.bibl {
         width: 100%;
-        margin: 0 auto;
         -ms-flex: 1 0 auto;
     }
 
@@ -75,7 +73,6 @@
             min-width: 400px;
             max-width: $bp-md;
             width: 100%;
-            margin: 0 auto;
             -ms-flex: 1 0 auto;
         }
         .col.bibl {
@@ -83,7 +80,6 @@
             min-width: 400px;
             max-width: $bp-md;
             width: 100%;
-            margin: 0 auto;
             -ms-flex: 1 0 auto;
         }
     }
@@ -102,7 +98,6 @@
             min-width: 400px;
             max-width: $bp-md;
             width: 100%;
-            margin: 0 auto;
             -ms-flex: 1 0 auto;
         }
         .col.bibl {
@@ -110,7 +105,6 @@
             min-width: 400px;
             max-width: $bp-md;
             width: 100%;
-            margin: 0 auto;
             -ms-flex: 1 0 auto;
         }
     }

@@ -96,6 +96,7 @@
 		}
 			article {
 				background-color: #fff;
+				flex-grow: 1;
 				@media (min-width: $bp-md) {
 					padding: $space-xl;
 					margin-right: $space-xl/2;
