@@ -40,20 +40,22 @@
   }
     
     .col.ad {
-        flex: 0 0 160px;
+        flex: 0 0 300px;
         flex-wrap: wrap;
-        width: 100%;
         padding: 0.5em;
+        margin: 8px 1.5vh;
     }
 
     .col.content {
         width: 100%;
         margin: 0 auto;
+        -ms-flex: 1 0 auto;
     }
 
     .col.bibl {
         width: 100%;
         margin: 0 auto;
+        -ms-flex: 1 0 auto;
     }
 
     @media (min-width: $bp-sm) {
@@ -64,8 +66,8 @@
          }
         .col.ad {
             display: flex;
-            flex: 0 0 320px;
-            margin: 0 auto;
+            flex: 0 0 300px;
+            margin: 8px 1.5vh;
             width: 100%;
         }
         .col.content {
@@ -74,6 +76,7 @@
             max-width: $bp-md;
             width: 100%;
             margin: 0 auto;
+            -ms-flex: 1 0 auto;
         }
         .col.bibl {
             flex: none;
@@ -81,6 +84,7 @@
             max-width: $bp-md;
             width: 100%;
             margin: 0 auto;
+            -ms-flex: 1 0 auto;
         }
     }
     @media (min-width: $bp-xl) {
@@ -89,8 +93,8 @@
          }
         .col.ad {
             display: flex;
-            flex: 0 0 320px;
-            margin: 0 auto;
+            flex: 0 0 300px;
+            margin: 8px 1.5vh;
             width: 100%;
         }
         .col.content {
@@ -99,6 +103,7 @@
             max-width: $bp-md;
             width: 100%;
             margin: 0 auto;
+            -ms-flex: 1 0 auto;
         }
         .col.bibl {
             flex: 1;
@@ -106,6 +111,7 @@
             max-width: $bp-md;
             width: 100%;
             margin: 0 auto;
+            -ms-flex: 1 0 auto;
         }
     }
     
