@@ -24,154 +24,172 @@ class About extends React.PureComponent {
 					<section className="features">
 						<div className="row">
 							<section className="column feature">
-								<img
-									src="/static/images/about/cite.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Suggesting a Citation</h2>
-								<p>
-									Paste a URL in the search bar under Enter query and click Suggest Citation. 
-									Automatically pull in data from thousands of medical and scientific journals, newspapers, magazine
-									articles, library catalogs, articles, sites like Amazon
-									and Google Books, and much more. You can also use an identifier such as 
-									an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
-								</p>
-							</section>
-							<section className="column feature">
-								<img
-									src="/static/images/about/manual-entry.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Manual entry</h2>
-								<p>
-									If automatic import doesn’t find what you’re looking for or
-									you’re entering something without a URL or identifier, you can
-									enter the reference information by hand.
-								</p>
-							</section>
-							<section className="column feature">
-								<img
-									src="/static/images/about/bibliography-title.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Bibliography title</h2>
-								<p>
-									To rename your bibliography, just click its title. A title
-									can be useful if you’re switching between multiple projects or
-									sharing a bibliography with others.
-								</p>
-							</section>
-							<section className="column feature">
-								<img
-									src="/static/images/about/editing.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Editing an item</h2>
-								<p>
-									You might need to add or change a few fields after adding an
-									item. Click on a bibliography entry to make manual changes.
-								</p>
-							</section>
-							<section className="column feature">
-								<img
-									src="/static/images/about/deleting-items.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Deleting items</h2>
-								<p>
-									Click the
-									{ ' ' }
+								<article>
 									<img
-										src="/static/images/about/remove-xs.svg"
-										className="remove-icon"
-										width="14"
-										height="14"
-										alt="Remove icon"/>
-									{ ' ' }
-									next to a bibliography entry to delete it. To start a new
-									bibliography, click <i>Delete All</i> to remove all entries.
-								</p>
+										src="/static/images/about/cite.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Suggesting a Citation</h2>
+									<p>
+										Paste a URL in the search bar under Enter query and click Suggest Citation. 
+										Automatically pull in data from thousands of medical and scientific journals, newspapers, magazine
+										articles, library catalogs, articles, sites like Amazon
+										and Google Books, and much more. You can also use an identifier such as 
+										an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+									<article>
+									<img
+										src="/static/images/about/manual-entry.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Manual entry</h2>
+									<p>
+										If automatic import doesn’t find what you’re looking for or
+										you’re entering something without a URL or identifier, you can
+										enter the reference information by hand.
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/about/bibliography-title.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Bibliography title</h2>
+									<p>
+										To rename your bibliography, just click its title. A title
+										can be useful if you’re switching between multiple projects or
+										sharing a bibliography with others.
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/about/editing.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Editing an item</h2>
+									<p>
+										You might need to add or change a few fields after adding an
+										item. Click on a bibliography entry to make manual changes.
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/about/deleting-items.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Deleting items</h2>
+									<p>
+										Click the
+										{ ' ' }
+										<img
+											src="/static/images/about/remove-xs.svg"
+											className="remove-icon"
+											width="14"
+											height="14"
+											alt="Remove icon"/>
+										{ ' ' }
+										next to a bibliography entry to delete it. To start a new
+										bibliography, click <i>Delete All</i> to remove all entries.
+									</p>
+								</article>
 							</section>
 						{/* </div>
 						<div className="column"> */}
 							<section className="column feature">
-								<img
-									src="/static/images/about/style-selection.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Style selection</h2>
-								<p>
-									Format your bibliography using AMA, APA, MLA, Chicago / Turabian,
-									or any of the 9,000+
-									other <a href="http://citationstyles.org/">CSL</a> styles.
-								</p>
+								<article>
+									<img
+										src="/static/images/about/style-selection.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Style selection</h2>
+									<p>
+										Format your bibliography using AMA, APA, MLA, Chicago / Turabian,
+										or any of the 9,000+
+										other <a href="http://citationstyles.org/">CSL</a> styles.
+									</p>
+								</article>
 							</section>
 							<section className="column feature">
-								<img
-									src="/static/images/about/copy.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Copy Citation / Note</h2>
-								<p>
-									As you’re writing, you can quickly generate parenthetical
-									citations or footnotes /endnotes to paste into your document
-									without typing names or dates by hand.
-								</p>
+								<article>
+									<img
+										src="/static/images/about/copy.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Copy Citation / Note</h2>
+									<p>
+										As you’re writing, you can quickly generate parenthetical
+										citations or footnotes /endnotes to paste into your document
+										without typing names or dates by hand.
+									</p>
+								</article>
 							</section>
 							<section className="column feature">
-								<img
-									src="/static/images/about/export.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Export</h2>
-								<p>
-									When you’re done, you can copy a formatted bibliography to the
-									clipboard and paste it into your document. You can also
-									export HTML to add to a webpage, an RTF document to open
-									in a word processor, or a RIS or BibTeX file to import into a
-									reference manager.
-								</p>
+								<article>
+									<img
+										src="/static/images/about/export.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Export</h2>
+									<p>
+										When you’re done, you can copy a formatted bibliography to the
+										clipboard and paste it into your document. You can also
+										export HTML to add to a webpage, an RTF document to open
+										in a word processor, or a RIS or BibTeX file to import into a
+										reference manager.
+									</p>
+								</article>
 							</section>
 							<section className="column feature">
-								<img
-									src="/static/images/about/autosave.svg"
-									className="feature-icon"
-									width="66"
-									height="66"
-									alt=""
-								/>
-								<h2 className="h4">Autosave</h2>
-								<p>
-									Automatically saves your bibliography to your browser’s
-									local storage — you can close the page and return to it
-									anytime. (If you’re using private / incognito mode in your
-									browser, your bibliography will be cleared when you close the
-									window.)
-								</p>
+								<article>
+									<img
+										src="/static/images/about/autosave.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Autosave</h2>
+									<p>
+										Automatically saves your bibliography to your browser’s
+										local storage — you can close the page and return to it
+										anytime. (If you’re using private / incognito mode in your
+										browser, your bibliography will be cleared when you close the
+										window.)
+									</p>
+								</article>
 							</section>
 							{/* <section className="column feature">
 								<img

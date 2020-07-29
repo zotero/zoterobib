@@ -71,7 +71,7 @@
 		text-align: left;
 		margin-top: 80px - 17px;
 		margin-bottom: $space-xl;
-
+		
 		@media (min-width: $bp-md) {
 			margin-top: 120px - 20px;
 			margin-bottom: $space-xl;
@@ -82,21 +82,26 @@
 		}
 	}
 
+	.features .row {
+		width: 100%;
+	}
+
 	.feature {
-		padding: $space-xl;
 		//position: relative;
 		//margin-bottom: $space-xxxl - 15px;
-		background-color: #fff;
+		display: flex;
+		
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-max - 16px;
-			margin-right: $space-xl;
-
 		}
-
-		@media (min-width: $bp-lg) {
-			&:last-child {
-				margin-right: 0;
-			}
+			article {
+				background-color: #fff;
+				flex-grow: 1;
+				@media (min-width: $bp-md) {
+					padding: $space-xl;
+					margin-right: $space-xl/2;
+					margin-left: $space-xl/2;
+				}
 		}
 	}
 
