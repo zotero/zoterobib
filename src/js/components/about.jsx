@@ -13,14 +13,65 @@ class About extends React.PureComponent {
 		return (
 			<section className="section section-about about">
 				<div className="container-fullwidth">
-					<h1>How to use</h1>
+					<section className="column feature howto">
+								<article>
+								<h1>How to use</h1>
 					<p className="lead">
-						<p>Suggest citations automatically from urls, PubMed IDs (PMID), DOI, and many other identifiers.</p>
+						<h2>Input</h2>
+						<p>Suggest citations automatically from URLs, PubMed IDs (PMID), DOI, and many other identifiers.</p>
+						<p>Uses <a href="https://www.zotero.org/support/dev/translators">Zotero Translators</a> (<a href="https://github.com/zotero/translators">github</a>), maintained by the open-source community. There are over 500 different translators, supporting thousands of different identifiers and websites.</p>
+						<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Type</th>
+      <th scope="col">Description</th>
+      <th scope="col">Input Examples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">URLs</th>
+      <td>Enter a web address</td>
+      <td>
+	  <a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nejm.org%2Fdoi%2Ffull%2F10.1056%2FNEJMoa1403108">https://www.nejm.org/doi/full/10.1056/NEJMoa1403108</a>
+		  <br/>
+	  </td>
+    </tr>
+    <tr>
+      <th scope="row">Pubmed</th>
+      <td>Pubmed ID (PMID) or URL</td>
+      <td>
+		  <a href="https://cite.mickschroeder.com/?q=20069275">20069275</a>
+		  <br/>
+		  <a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fpubmed.ncbi.nlm.nih.gov%2F30280635%2F">https://pubmed.ncbi.nlm.nih.gov/30280635/</a>
+	  </td>
+    </tr>
+    <tr>
+      <th scope="row">DOI</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+    </tr>
+	<tr>
+      <th scope="row">ISBN</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+    </tr>
+  </tbody>
+  </table>
+  <h2>Citation Style</h2>
 						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
+						<h2>Export Bibliography</h2>
 						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
+						<h2>Free and open-source</h2>
 						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
 						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
-					</p>
+			
+									
+
+									</p>
+								</article>
+							</section>
+			
 					<section className="features">
 						<div className="row">
 							<section className="column feature">

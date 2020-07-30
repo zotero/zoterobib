@@ -134,4 +134,27 @@
 			margin-top: $space-xxl - 15px;
 		}
 	}
+	.howto {
+		text-align: start;
+
+		h1 {
+			text-align: center;
+		}
+		h2 {
+			font-weight: bold;
+			margin-bottom: 20px;
+		}
+
+	}
+
+
+	table {
+		border-collapse: collapse;
+	}
+	table, th, td {
+		border: 1px solid #eee;
+	  }
+	th, td {
+		padding: 15px;
+	  }
 }
