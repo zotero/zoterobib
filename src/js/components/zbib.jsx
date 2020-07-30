@@ -108,7 +108,7 @@ class ZBib extends React.PureComponent {
 								</div>
 							</div>
 						</div>
-						<div className="container">
+{/* 						<div className="container">
 
 															
 								{
@@ -116,7 +116,7 @@ class ZBib extends React.PureComponent {
 										<section className="section section-link">
 											<div className="container">
 												<h2>
-													Link to this version
+													Create a Link to this Bibliography
 													<WhatsThis />
 												</h2>
 												<PermalinkTools { ...this.props } />
@@ -125,7 +125,8 @@ class ZBib extends React.PureComponent {
 									)
 								}
 							
-						</div>
+						</div> 
+*/}
 						{
 							this.props.isReadOnly && (
 								<section className="section section-brand">
