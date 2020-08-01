@@ -642,13 +642,13 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.FAILED:
-						this.handleError('Not Found. Query returned nothing useful. Maybe try another identifier.');
+						this.handleError('Not Found. Query returned nothing useful. Maybe try a different identifier.');
 						this.setState({ isTranslating: false });
 					break;
 				}
 			}
 			catch(e) {
-				this.handleError('Not Found. Query returned nothing useful. Maybe try another identifier.', e);
+				this.handleError('Not Found. Query returned nothing useful. Maybe try a different identifier.', e);
 				this.setState({ isTranslating: false });
 			}
 		} else {
@@ -824,7 +824,7 @@ class Container extends React.Component {
 	}
 
 	handleGetStartedClick() {
-		const target = document.querySelector('.zotero-bib-container');
+		const target = document.querySelector('.schroeder-bib-container');
 		scroll.animateScroll(target);
 		document.querySelector('.id-input').focus();
 	}

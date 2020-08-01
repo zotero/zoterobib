@@ -33,7 +33,7 @@ li[tabindex] {
 html,
 body,
 main,
-.zotero-bib-container {
+.schroeder-bib-container {
 	height: 100%; // Stretch for spinner
 }
 
@@ -43,7 +43,7 @@ body {
 	background-color: $body-bg;
 }
 
-.zotero-bib-container {
+.schroeder-bib-container {
 	&.loading {
 		display: flex;
 		justify-content: center;

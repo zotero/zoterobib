@@ -62,7 +62,7 @@ class Modal extends React.PureComponent {
 			style={{ content: { maxHeight: 'calc(100% - 32px)', overflowY: 'hidden' } }}
 			onAfterOpen={ this.handleModalOpen.bind(this) }
 			contentRef={ contentRef => { this.contentRef = contentRef; } }
-			parentSelector={ () => document.querySelector('.zotero-bib-container') }
+			parentSelector={ () => document.querySelector('.schroeder-bib-container') }
 			appElement={ document.querySelector('.zotero-bib-inner') }
 			className="modal"
 			overlayClassName="modal-backdrop"

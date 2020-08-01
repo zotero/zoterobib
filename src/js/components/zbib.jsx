@@ -34,7 +34,7 @@ const AdvertisementAlpha = require('./advertisement-alpha');
 class ZBib extends React.PureComponent {
 	get className() {
 		return {
-			'zotero-bib-container': true,
+			'schroeder-bib-container': true,
 			'loading': typeof this.props.isReadOnly === 'undefined',
 			'keyboard-user': this.props.isKeyboardUser,
 			'mouse-user': this.props.isMouseUser,
