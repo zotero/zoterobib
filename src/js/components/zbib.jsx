@@ -60,7 +60,7 @@ class ZBib extends React.PureComponent {
 					<Spinner />
 				</div>
 				: <div className={cx(this.className)}>
-					<div className="zotero-bib-inner">
+					<div className="schroeder-cite-inner">
 						<div className="messages">
 							{this.props.messages.map(message => (
 								<Message

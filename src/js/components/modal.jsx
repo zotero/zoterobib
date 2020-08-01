@@ -63,7 +63,7 @@ class Modal extends React.PureComponent {
 			onAfterOpen={ this.handleModalOpen.bind(this) }
 			contentRef={ contentRef => { this.contentRef = contentRef; } }
 			parentSelector={ () => document.querySelector('.schroeder-bib-container') }
-			appElement={ document.querySelector('.zotero-bib-inner') }
+			appElement={ document.querySelector('.schroeder-cite-inner') }
 			className="modal"
 			overlayClassName="modal-backdrop"
 			{ ...this.props }

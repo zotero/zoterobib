@@ -44,7 +44,7 @@ class Container extends React.Component {
 		//@TODO: bibliography, citations & items should probably be a single variable
 		bibliography: [],
 		citationCopyModifiers: {},
-		citationStyle: localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
+		citationStyle: localStorage.getItem('schroeder-cite-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
 		citationStyles: [],
 		config: {
 			...defaults,
@@ -70,7 +70,7 @@ class Container extends React.Component {
 		multipleChoiceItems: [],
 		permalink: null,
 		stylesData: null,
-		title: localStorage.getItem('zotero-bib-title') || null,
+		title: localStorage.getItem('schroeder-cite-title') || null,
 		unconfirmedCitationStyle: null,
 		url: '',
 	}
@@ -136,7 +136,7 @@ class Container extends React.Component {
 				parent: null,
 				isCore: true
 			})),
-			...(JSON.parse(localStorage.getItem('zotero-bib-extra-citation-styles')) || [])
+			...(JSON.parse(localStorage.getItem('schroeder-cite-extra-citation-styles')) || [])
 		];
 		citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 		this.setState({ citationStyles, identifier: params.get('q') || '' });
@@ -179,7 +179,7 @@ class Container extends React.Component {
 					this.state.isReadOnly ? this.bibRemote : this.bib,
 					this.state.isReadOnly
 				);
-				localStorage.setItem('zotero-bib-citation-style', this.state.citationStyle);
+				localStorage.setItem('schroeder-cite-citation-style', this.state.citationStyle);
 				this.setState({
 					isNoteStyle: isNoteStyle(cslData),
 					isNumericStyle: isNumericStyle(cslData),
@@ -200,9 +200,9 @@ class Container extends React.Component {
 
 		if(!this.state.isReadOnly && this.state.title !== state.title) {
 			if(this.state.title) {
-				localStorage.setItem('zotero-bib-title', this.state.title);
+				localStorage.setItem('schroeder-cite-title', this.state.title);
 			} else {
-				localStorage.removeItem('zotero-bib-title');
+				localStorage.removeItem('schroeder-cite-title');
 			}
 		}
 
@@ -222,7 +222,7 @@ class Container extends React.Component {
 		if(!arrayEquals(this.state.citationStyles, state.citationStyles)) {
 			//@TODO: store extra citation styles in local storage
 			localStorage.setItem(
-				'zotero-bib-extra-citation-styles',
+				'schroeder-cite-extra-citation-styles',
 				JSON.stringify(this.state.citationStyles.filter(cs => !cs.isCore))
 			);
 		}
@@ -345,8 +345,8 @@ class Container extends React.Component {
 			isLoading: false,
 		});
 
-		if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
-			localStorage.setItem('zotero-bib-visited', 'true');
+		if(!isReadOnly && !localStorage.getItem('schroeder-cite-visited')) {
+			localStorage.setItem('schroeder-cite-visited', 'true');
 			this.displayWelcomeMessage();
 		}
 	}
@@ -410,8 +410,8 @@ class Container extends React.Component {
 			editorItem: null
 		});
 		if(hasCreatedItem) {
-			if(!localStorage.getItem('zotero-bib-translated')) {
-				localStorage.setItem('zotero-bib-translated', 'true');
+			if(!localStorage.getItem('schroeder-cite-translated')) {
+				localStorage.setItem('schroeder-cite-translated', 'true');
 				this.displayFirstCitationMessage();
 			}
 		}
@@ -512,7 +512,7 @@ class Container extends React.Component {
 		}
 
 		if(isSentenceCaseStyle(this.state.citationStyle)) {
-			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
+			const itemsMetaData = JSON.parse(localStorage.getItem('schroeder-cite-items-metadata')) || {};
 
 			if(!(itemKey in itemsMetaData)) {
 				itemsMetaData[itemKey] = {};
@@ -524,7 +524,7 @@ class Container extends React.Component {
 					...Object.keys(patch)
 				]))
 			];
-			localStorage.setItem('zotero-bib-items-metadata', JSON.stringify(itemsMetaData));
+			localStorage.setItem('schroeder-cite-items-metadata', JSON.stringify(itemsMetaData));
 		}
 		this.bib.updateItem(index, updatedItem);
 		this.setState({
@@ -941,8 +941,8 @@ class Container extends React.Component {
 		} else {
 			this.bib.addItem(item);
 		}
-		if(!localStorage.getItem('zotero-bib-translated')) {
-			localStorage.setItem('zotero-bib-translated', 'true');
+		if(!localStorage.getItem('schroeder-cite-translated')) {
+			localStorage.setItem('schroeder-cite-translated', 'true');
 			this.displayFirstCitationMessage();
 		}
 	}

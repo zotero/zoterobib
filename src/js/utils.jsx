@@ -474,7 +474,7 @@ const processSentenceCaseAPAField = value => {
 };
 
 const processSentenceCaseAPAItems = items => {
-	const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
+	const itemsMetaData = JSON.parse(localStorage.getItem('schroeder-cite-items-metadata')) || {};
 	items.forEach(item => {
 		Object.keys(item).forEach(k => {
 			if(typeof(item[k]) === 'string' && whitelist.includes(k)) {
