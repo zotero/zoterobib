@@ -95,7 +95,7 @@ class Container extends React.Component {
 			id,
 			isWelcomeMessage: true,
 			kind: 'info',
-			message: 'Welcome to the BETA of Mick Schroeder\'s Citation Generator.',
+			message: 'Welcome to the beta of my new citation generator.',
 			onAction: this.handleReadMoreClick.bind(this, id),
 		};
 		this.setState({
@@ -810,7 +810,7 @@ class Container extends React.Component {
 	}
 
 	handleReadMoreClick(id, event) {
-		const target = document.querySelector('.zbib-illustration');
+		const target = document.querySelector('.howto');
 		scroll.animateScroll(target, event.target, {
 			header: '.message',
 			offset: this.calcOffset()
@@ -819,7 +819,7 @@ class Container extends React.Component {
 	}
 
 	handleHelpClick(event) {
-		const target = document.querySelector('.zbib-illustration');
+		const target = document.querySelector('.howto');
 		scroll.animateScroll(target, event.target, {offset: this.calcOffset()});
 	}
 
@@ -921,7 +921,7 @@ class Container extends React.Component {
 		if(!this.state.messages.find(m => m.isWelcomeMessage)) {
 			return;
 		}
-		const target = document.querySelector('.zbib-illustration');
+		const target = document.querySelector('.howto');
 		const isScrolledToIllustration = window.pageYOffset > target.offsetTop;
 		if(isScrolledToIllustration) {
 			this.setState({
