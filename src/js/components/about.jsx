@@ -65,10 +65,7 @@ class About extends React.PureComponent {
 						<h2>Free and open-source</h2>
 						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
 						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
-			
-									
-
-									</p>
+						</p>
 								</article>
 							</section>
 			

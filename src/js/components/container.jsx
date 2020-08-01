@@ -88,20 +88,20 @@ class Container extends React.Component {
 		});
 	}
 
-	// displayWelcomeMessage() {
-	// 	const id = getNextMessageId();
-	// 	const message = {
-	// 		action: 'Read More',
-	// 		id,
-	// 		isWelcomeMessage: true,
-	// 		kind: 'info',
-	// 		message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
-	// 		onAction: this.handleReadMoreClick.bind(this, id),
-	// 	};
-	// 	this.setState({
-	// 		messages: [...this.state.messages, message]
-	// 	});
-	// }
+	displayWelcomeMessage() {
+		const id = getNextMessageId();
+		const message = {
+			action: 'Read More',
+			id,
+			isWelcomeMessage: true,
+			kind: 'info',
+			message: 'Welcome to the BETA of Mick Schroeder\'s Citation Generator.',
+			onAction: this.handleReadMoreClick.bind(this, id),
+		};
+		this.setState({
+			messages: [...this.state.messages, message]
+		});
+	}
 
 	displayFirstCitationMessage() {
 		const message = {
@@ -345,10 +345,10 @@ class Container extends React.Component {
 			isLoading: false,
 		});
 
-		//if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
-		//	localStorage.setItem('zotero-bib-visited', 'true');
-		//	this.displayWelcomeMessage();
-		//}
+		if(!isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
+			localStorage.setItem('zotero-bib-visited', 'true');
+			this.displayWelcomeMessage();
+		}
 	}
 
 	async handleSave() {
@@ -642,17 +642,17 @@ class Container extends React.Component {
 						});
 					break;
 					case ZoteroBib.FAILED:
-						this.handleError('An error occurred while citing this source.');
+						this.handleError('Not Found. Query returned nothing useful. Maybe try another identifier.');
 						this.setState({ isTranslating: false });
 					break;
 				}
 			}
 			catch(e) {
-				this.handleError('An error occurred while citing this source.', e);
+				this.handleError('Not Found. Query returned nothing useful. Maybe try another identifier.', e);
 				this.setState({ isTranslating: false });
 			}
 		} else {
-			this.handleError('Value entered doesn’t appear to be a valid URL or identifier');
+			this.handleError('Query doesn’t appear to be a valid URL or identifier');
 			this.setState({ isTranslating: false });
 		}
 	}
