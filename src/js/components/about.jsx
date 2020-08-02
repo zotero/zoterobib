@@ -17,8 +17,8 @@ class About extends React.PureComponent {
 								<article>
 								<h1>How to use</h1>
 					<p className="lead">
-						<h2>Input</h2>
-						<p>Suggest citations automatically from URLs, PubMed IDs (PMID), DOI, and many other identifiers.</p>				
+						<h2>Automatically Suggest Citations</h2>
+						<p>Enter query with a URL, PubMed ID (PMID), DOI, and many other identifiers.</p>				
       <ul>
 	  		<li><b>URLs</b> - Enter a web address</li>
 			<ul>
@@ -43,12 +43,12 @@ class About extends React.PureComponent {
 	  </ul>
 	  <p>Uses <a href="https://www.zotero.org/support/dev/translators">Zotero Translators</a> (<a href="https://github.com/zotero/translators">github</a>), maintained by the open-source community. There are over 500 different translators, supporting thousands of different identifiers and websites.</p>
 
-  <h2>Citation Style</h2>
+  <h2>9,000+ Citation Styles</h2>
 						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
 						<p>You can browse and see examples of all of the styles here: <a href="https://www.zotero.org/styles" target="_blank">Browse Style Repository</a></p>
 						<h2>Export Bibliography</h2>
 						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
-						<h2>Free and open-source</h2>
+						<h2>Free, Private and open-source</h2>
 						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
 						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
 						</p>

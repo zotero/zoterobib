@@ -4,7 +4,9 @@
 
 .section-export {
 	text-align: center;
-
+	h2 {
+		font-weight: 800;
+	}
 	.write & {
 		padding-top: $section-padding-mobile - 10px; // t height
 
