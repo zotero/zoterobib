@@ -53,6 +53,7 @@
 			transition: background-color $input-transition;
 			border-radius: $border-radius-sm;
 			margin-bottom: $space-xl - 12px;
+			font-weight: 800;
 
 			@media (min-width: $bp-md) {
 				margin-bottom: $space-xxl - 18px;

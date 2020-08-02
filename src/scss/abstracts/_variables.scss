@@ -300,10 +300,10 @@ $style-border-color: $shade-2;
 // React-modal
 //
 
-$modal-backdrop-bg:           rgba($blue-darkest, 1.0);
+$modal-backdrop-bg:           rgba($shade-5, 0.9);
 $modal-content-bg:            $shade-0;
 $modal-header-color:          $shade-0;
-$modal-header-bg:             $blue-dark;
+$modal-header-bg:             $blue;
 $modal-title-line-height:     $space-xl;
 $modal-footer-border-width:   1px;
 $modal-footer-border-color:   $shade-2;

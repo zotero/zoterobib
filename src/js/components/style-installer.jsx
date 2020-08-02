@@ -248,6 +248,9 @@ class StyleInstaller extends React.Component {
 									this.props.citationStyles.map(this.renderStyleItem.bind(this))
 							}
 						</ul>
+					<div className="modal-bottom-message">
+						<p>Over 9,800 citation styles are available. <a href="https://www.zotero.org/styles" target="_blank">Browse Style Repository</a></p>
+					</div>
 				</div>
 			</div>
 		);

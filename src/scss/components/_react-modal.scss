@@ -16,6 +16,15 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch; // Momentum scrolling for iOS
 }
+.modal-bottom-message {
+	text-align: center;
+	padding: $space-sm;
+	//margin: $space-xs;
+	background-color: $shade-2;
+	p {
+		margin: 0;
+	}
+}
 
 .modal {
 	width: auto;
@@ -103,6 +112,7 @@
 	line-height: $modal-title-line-height;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	font-weight: 800;
 }
 
 .modal-body,

@@ -18,24 +18,34 @@ class About extends React.PureComponent {
 								<h1>How to use</h1>
 					<p className="lead">
 						<h2>Input</h2>
-						<p>Suggest citations automatically from URLs, PubMed IDs (PMID), DOI, and many other identifiers.</p>
-						<p>Uses <a href="https://www.zotero.org/support/dev/translators">Zotero Translators</a> (<a href="https://github.com/zotero/translators">github</a>), maintained by the open-source community. There are over 500 different translators, supporting thousands of different identifiers and websites.</p>
-						
-     <h2>URLs</h2>
-      <p>Enter a web address</p>
-      <p>
-	  <a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nejm.org%2Fdoi%2Ffull%2F10.1056%2FNEJMoa1403108">https://www.nejm.org/doi/full/10.1056/NEJMoa1403108</a>
-	  </p>
-     <h2>Pubmed </h2>
-      <p>Pubmed ID (PMID) or URL</p>
-		  <a href="https://cite.mickschroeder.com/?q=20069275">20069275</a>
-		  <br/>
-		  <a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fpubmed.ncbi.nlm.nih.gov%2F30280635%2F">https://pubmed.ncbi.nlm.nih.gov/30280635/</a>
-       <h2>DOI </h2>
-     <h2>ISBN </h2>
-      
+						<p>Suggest citations automatically from URLs, PubMed IDs (PMID), DOI, and many other identifiers.</p>				
+      <ul>
+	  		<li><b>URLs</b> - Enter a web address</li>
+			<ul>
+				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nejm.org%2Fdoi%2Ffull%2F10.1056%2FNEJMoa1403108">https://nejm.org/...</a></li>
+				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nytimes.com%2F2013%2F03%2F05%2Fscience%2Fchasing-the-higgs-boson-how-2-teams-of-rivals-at-CERN-searched-for-physics-most-elusive-particle.html">https://nytimes.com/...</a></li>
+			</ul>
+			<li><b>Pubmed</b> - PMID (PubMed ID) or URL</li>
+			<ul>
+				<li><a href="https://cite.mickschroeder.com/?q=30280635">30280635</a></li>
+				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fpubmed.ncbi.nlm.nih.gov%2F30280635%2F">https://pubmed.ncbi.nlm.nih.gov/...</a></li>
+			</ul>
+			<li><b>DOI</b> Provide a persistent "address" to many types of work, from journal articles to research data sets.</li>
+			<ul>
+			<li><a href="https://cite.mickschroeder.com/?q=10.1126%2Fscience.169.3946.635">10.1126/science.169.3946.635</a></li>
+				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fdoi.org%2F10.1126%2Fscience.169.3946.635">https://doi.org/10.1126/science.169.3946.635</a></li>
+			</ul>
+			<li><b>ISBN</b> - International Standard Book Number is an unique numeric book identifier.</li>
+			<ul>
+			<li><a href="https://cite.mickschroeder.com/?q=0323040683">0323040683</a></li>
+				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.amazon.com%2Fs%3Fk%3D0702052302">https://amazon.com/...</a></li>
+			</ul>
+	  </ul>
+	  <p>Uses <a href="https://www.zotero.org/support/dev/translators">Zotero Translators</a> (<a href="https://github.com/zotero/translators">github</a>), maintained by the open-source community. There are over 500 different translators, supporting thousands of different identifiers and websites.</p>
+
   <h2>Citation Style</h2>
 						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
+						<p>You can browse and see examples of all of the styles here: <a href="https://www.zotero.org/styles" target="_blank">Browse Style Repository</a></p>
 						<h2>Export Bibliography</h2>
 						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
 						<h2>Free and open-source</h2>
