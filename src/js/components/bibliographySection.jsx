@@ -129,6 +129,7 @@ class BibliographySection extends React.PureComponent {
 	get className() {
 		return {
 			'section': true,
+			'section-rounded': true,
 			'section-bibliography': true,
 			'loading': this.props.isLoadingCitations,
 			'empty': this.props.items.length === 0

@@ -4,13 +4,7 @@
 
 .section {
 	padding: $section-padding-mobile 0;
-	//border-top: 1px solid $shade-2;
-    background-color: #fff;
-    //border-radius: 20px;
-	border-radius: 1rem;
-	transition: all 250ms ease 0s;
-	box-shadow: rgba(1, 1, 1, 0.05) 1px 1px 5px 0px;
-	@media (min-width: $bp-md) {
+  	@media (min-width: $bp-md) {
 		padding: $section-padding 0.5em;
 		margin: 0.5em;
 		//min-width: 600px;
@@ -21,10 +15,18 @@
 	}
 }
 
-.section:hover {
-	box-shadow: rgba(1, 1, 1, 0.1) 1px 1px 5px 0px;
-  }
+.section-rounded {
+	//border-top: 1px solid $shade-2;
+    background-color: #fff;
+    //border-radius: 20px;
+	border-radius: 1rem;
+	transition: all 250ms ease 0s;
+	box-shadow: rgba(1, 1, 1, 0.05) 1px 1px 5px 0px;
+}
 
+.section-rounded:hover {
+	box-shadow: rgba(1, 1, 1, 0.1) 1px 1px 5px 0px;
+}
 
 
 

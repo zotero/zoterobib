@@ -60,7 +60,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/cite.svg"
+										src="/static/images/openmoji/1F4D1.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -79,7 +79,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 									<article>
 									<img
-										src="/static/images/about/manual-entry.svg"
+										src="/static/images/openmoji/1F3F7.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -96,7 +96,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/bibliography-title.svg"
+										src="/static/images/openmoji/1F914.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -113,7 +113,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/editing.svg"
+										src="/static/images/openmoji/270F.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -129,7 +129,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/deleting-items.svg"
+										src="/static/images/openmoji/1F525.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -137,16 +137,7 @@ class About extends React.PureComponent {
 									/>
 									<h2 className="h4">Deleting items</h2>
 									<p>
-										Click the
-										{ ' ' }
-										<img
-											src="/static/images/about/remove-xs.svg"
-											className="remove-icon"
-											width="14"
-											height="14"
-											alt="Remove icon"/>
-										{ ' ' }
-										next to a bibliography entry to delete it. To start a new
+										Click the <i>remove</i> icon next to a bibliography entry to delete it. To start a new
 										bibliography, click <i>Delete All</i> to remove all entries.
 									</p>
 								</article>
@@ -156,7 +147,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/style-selection.svg"
+										src="/static/images/openmoji/E1C1.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -173,7 +164,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/copy.svg"
+										src="/static/images/openmoji/E25B.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -190,7 +181,7 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/export.svg"
+										src="/static/images/openmoji/1F4E4.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
@@ -209,13 +200,13 @@ class About extends React.PureComponent {
 							<section className="column feature">
 								<article>
 									<img
-										src="/static/images/about/autosave.svg"
+										src="/static/images/openmoji/1F468-200D-1F4BB.svg"
 										className="feature-icon"
 										width="66"
 										height="66"
 										alt=""
 									/>
-									<h2 className="h4">Autosave</h2>
+									<h2 className="h4">On-device Autosave</h2>
 									<p>
 										Automatically saves your bibliography to your browser’s
 										local storage — you can close the page and return to it
