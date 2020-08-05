@@ -7,7 +7,9 @@
 	//border-top: 1px solid $shade-2;
     background-color: #fff;
     //border-radius: 20px;
-	
+	border-radius: 1rem;
+	transition: all 250ms ease 0s;
+	box-shadow: rgba(1, 1, 1, 0.05) 1px 1px 5px 0px;
 	@media (min-width: $bp-md) {
 		padding: $section-padding 0.5em;
 		margin: 0.5em;
@@ -18,6 +20,12 @@
 		border-top-color: $review-border-color;
 	}
 }
+
+.section:hover {
+	box-shadow: rgba(1, 1, 1, 0.1) 1px 1px 5px 0px;
+  }
+
+
 
 
 
