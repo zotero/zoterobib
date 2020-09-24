@@ -29,10 +29,12 @@ const getCSL = () => {
 const getCiteproc = async (citationStyle, bib) => {
 	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
 
-	const [ CSL, style ] = await Promise.all([
+	const [ CSL, styleXmls ] = await Promise.all([
 		getCSL(),
 		retrieveStyle(citationStyle)
 	]);
+
+	const style = styleXmls[styleXmls.length - 1];
 
 	return new CSL.Engine({
 		retrieveLocale: retrieveLocaleSync,
@@ -59,7 +61,7 @@ const getCiteproc = async (citationStyle, bib) => {
 				return item;
 			}
 		},
-		uppercase_subtitles: isAPASentenceCaseStyle(citationStyle)
+		uppercase_subtitles: isUppercaseSubtitlesStyle(citationStyle, styleXmls)
 	}, style, lang);
 };
 
@@ -92,18 +94,22 @@ const isLikeUrl = identifier => {
 	return !!identifier.match(/^(https?:\/\/)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b(\S*)$/i);
 };
 
-const isSentenceCaseStyle = (citationStyle) => {
-	return isAPASentenceCaseStyle(citationStyle)
-		|| !!citationStyle.match(/^american-medical-association|cite-them-right|^vancouver/);
+const isSentenceCaseStyle = (citationStyleName, citationStyleXmls = null) => {
+	const isMatch = citationStyleName && (isUppercaseSubtitlesStyle(citationStyleName)
+		|| !!citationStyleName.match(/^american-medical-association|cite-them-right|^vancouver/));
+
+	return isMatch || (citationStyleXmls && isSentenceCaseStyle(getParentStyleName(citationStyleXmls[0])));
 };
 
 // Sentence-case styles that capitalize subtitles like APA
-const isAPASentenceCaseStyle = (citationStyle) => {
-	return !!citationStyle.match(/^apa($|-)|^(academy-of-management|freshwater-science)/);
+const isUppercaseSubtitlesStyle = (citationStyleName, citationStyleXmls = null) => {
+	const isMatch = citationStyleName && (!!citationStyleName.match(/^apa($|-)|^(academy-of-management|freshwater-science)/));
+
+	return isMatch || (citationStyleXmls && isUppercaseSubtitlesStyle(getParentStyleName(citationStyleXmls[0])));
 };
 
-const isNoteStyle = cslData => !!cslData.match(/citation-format="note.*?"/);
-const isNumericStyle = cslData => !!cslData.match(/citation-format="numeric.*?"/);
+const isNoteStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="note.*?"/);
+const isNumericStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="numeric.*?"/);
 
 const validateUrl = url => {
 		try {
@@ -119,34 +125,48 @@ const validateUrl = url => {
 		}
 };
 
-const getParentStyle = async styleXml => {
+const getParentStyleName = styleXml => {
+	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
+	if(matches) {
+		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w-]*)/i);
+		if(idMatches) {
+			return idMatches[1];
+		}
+	}
+	return null;
+}
+
+const getParentStyle = async (styleXml, styleXmls) => {
 	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
 	if(matches) {
 		// try to extract style id, fallback using url as id
 		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w-]*)/i);
-		return await retrieveStyle(idMatches ? idMatches[1] : matches[1]);
+		await retrieveStyle(idMatches ? idMatches[1] : matches[1], styleXmls);
 	}
-	return styleXml;
 };
 
-const retrieveStyle = async styleIdOrUrl => {
+// return xmls for provided styleIdOrUrl and all its parents
+const retrieveStyle = async (styleIdOrUrl, styleXmls = []) => {
 	var style;
 	// cache styles in memory to avoid going for the disk cache on each call
-	if(styleIdOrUrl in stylesCache) { return stylesCache[styleIdOrUrl]; }
-	const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
-	try {
-		const response = await fetchWithCachedFallback(url);
-		if(!response.ok) { throw new Error(); }
-		style = await response.text();
-	} catch(_) {
-		if(!style) {
-			throw new Error('Failed to load style');
+	if(styleIdOrUrl in stylesCache) {
+		style = stylesCache[styleIdOrUrl];
+	} else {
+		const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
+		try {
+			const response = await fetchWithCachedFallback(url);
+			if(!response.ok) { throw new Error(); }
+			style = await response.text();
+		} catch(_) {
+			if(!style) {
+				throw new Error('Failed to load style');
+			}
 		}
 	}
-	// return parent style for dependent citation styles
-	style = await getParentStyle(style);
+	styleXmls.push(style);
+	await getParentStyle(style, styleXmls);
 	stylesCache[styleIdOrUrl] = style;
-	return style;
+	return styleXmls;
 };
 
 const retrieveLocaleSync = lang => {
@@ -593,7 +613,7 @@ module.exports = {
 	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
-	isAPASentenceCaseStyle,
+	isUppercaseSubtitlesStyle,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
