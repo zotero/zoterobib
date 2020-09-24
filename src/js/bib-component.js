@@ -1,6 +1,6 @@
 'use strict';
 
-require('isomorphic-fetch');
+require('cross-fetch/polyfill');
 const React = require('react');
 const PropTypes = require('prop-types');
 const ReactDOM = require('react-dom');
