@@ -18,7 +18,7 @@ Local Development version
 
 Getting The Library
 
-1. `git clone --recursive https://github.com/mick-schroeder/schroeder-cite.git`
+1. `git clone --recursive git@github.com:mick-schroeder/schroeder-cite.git`
 
 1. `cd schroeder-cite`
 
