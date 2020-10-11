@@ -1,28 +1,26 @@
 # Mick Schroeder's Citation Generator
 
-forked from [zotero/bib-web](https://github.com/zotero/bib-web)
 
 Overview
 --------
-This repo contains a fork of Zotero's Bib tool, including React components, stylesheets and entry-point website.
+Free and open-source software that automatically suggests citations and helps write a bibliography for you. Forked from [zotero/bib-web](https://github.com/zotero/bib-web).
+
 
 Prerequisites
 ------------
 
 1. Node JS with npm
-1. Basic command-line tools including rsync
-1. Existing translation-server
-1. Existing bib-server
-1. Existing styles-repo
+1. Basic Mac or Linux command-line tools including rsync
+1. Existing translation-server, bib-server, styles-repo
 
 Local Development version
 ----------
 
 Getting The Library
 
-1. `git clone --recursive https://github.com/mick-schroeder/schroeder-citation.git`
+1. `git clone --recursive https://github.com/mick-schroeder/schroeder-cite.git`
 
-1. `cd schroeder-citation`
+1. `cd schroeder-cite`
 
 1. `npm install`
 
