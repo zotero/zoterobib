@@ -246,7 +246,7 @@ class About extends React.PureComponent {
 						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a>.</p>
 						<a href="https://github.com/mick-schroeder/schroeder-citation">
 						<img
-									src="/static/images/E045.svg"
+									src="/static/images/openmoji/E045.svg"
 									width="66"
 									height="66"
 									alt=""
