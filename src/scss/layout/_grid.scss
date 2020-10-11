@@ -40,7 +40,7 @@
   }
     
     .col.ad {
-        flex: 0 0 300px;
+        flex: 0;
         flex-wrap: wrap;
         //padding: 0.5em;
         margin: 8px 1.5vh;
@@ -64,7 +64,7 @@
          }
         .col.ad {
             display: flex;
-            flex: 0 0 300px;
+            flex: 0;
             margin: 8px 1.5vh;
             width: 100%;
         }
@@ -89,7 +89,7 @@
          }
         .col.ad {
             display: flex;
-            flex: 0 0 300px;
+            flex: 0x;
             margin: 8px 1.5vh;
             width: 100%;
         }
