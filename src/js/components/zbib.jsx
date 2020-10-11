@@ -90,7 +90,7 @@ class ZBib extends React.PureComponent {
 										)
 									}
 								</div>
-								<div className="col ad" classID="advert">
+								<div className="col ad" id="advert">
 									<aside>
 										<div className="billboard">
 											<AdvertisementAlpha {...this.props} />
