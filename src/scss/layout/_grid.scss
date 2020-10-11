@@ -201,5 +201,5 @@ nav.flexbox {
     }
 }
 
-//.advertisement-alpha { width: 320px; height: 260px;  }
-//@media(min-width: $bp-md) { .advertisement-alpha { width: 300px; height: 600px; } }
+.advertisement-alpha { width: 320px; height: 260px;  }
+@media(min-width: $bp-sm) { .advertisement-alpha { width: 300px; height: 600px; } }
