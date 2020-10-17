@@ -14,7 +14,8 @@ const styles = [
 	'apa',
 	'national-library-of-medicine',
 	'chicago-note-bibliography',
-	'turabian-fullnote-bibliography'
+	'turabian-fullnote-bibliography',
+	'vancouver'
 ];
 const defaultStyle = 'american-medical-association-no-url';
 
