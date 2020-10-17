@@ -251,7 +251,8 @@ class About extends React.PureComponent {
 									height="66"
 									alt=""
 						/><br/>
-						Source code available on github
+						Open-Source Software<br/>
+						Code available on GitHub
 						</a>.
 				</div>
 			</section>

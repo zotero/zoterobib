@@ -36,6 +36,19 @@ const buildFaqPage = async () => {
 	console.log('faq page generated');
 };
 
+const buildTermsPage = async () => {
+	const termsMarkdown = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'terms.md'));
+	const termsTemplate = await fs.readFile(path.join(__dirname, '..', 'src', 'html', 'terms.hbs'));
+	const termsdstFile = path.join(__dirname, '..', 'build', 'terms.html');
+	const template = Handlebars.compile(termsTemplate.toString());
+	const termsHTML = marked(termsMarkdown.toString(), { smartypants: true })
+					// Remove "-" at end of id attributes, which marked substitutes for question marks
+						.replace(/(id="[^"]+)-"/g, '$1"');
+	const output = addAnchors(await template({ terms: termsHTML }));
+	await fs.writeFile(termsdstFile, output);
+	console.log('terms page generated');
+};
+
 const buildIndexPage = async () => {
 	const indexConfig = config.get('indexConfig');
 	const srcFile = path.join(__dirname, '..', 'src', 'html', 'index.hbs');
@@ -51,5 +64,5 @@ const buildIndexPage = async () => {
 (async () => {
 	const dstDir = path.join(__dirname, '..', 'build');
 	await fs.ensureDir(dstDir);
-	await Promise.all([buildIndexPage(), buildFaqPage()]);
+	await Promise.all([buildIndexPage(), buildFaqPage(), buildTermsPage()]);
 })();

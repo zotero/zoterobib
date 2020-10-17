@@ -13,7 +13,7 @@ class Footer extends React.PureComponent {
 				<small className="copyright">
 					© { (new Date()).getFullYear() } Mick Schroeder, LLC. All Rights reserved.
 					<p>
-					This site uses Google AdSense advertisements and Google Analytics.
+					<a href="/terms.html">Terms of Use & Privacy Policy</a>.
 					</p>
 					<p>
 					This program is free software: you can redistribute it and/or modify
@@ -23,11 +23,7 @@ class Footer extends React.PureComponent {
 					<p>
 					This program is distributed in the hope that it will be useful,
 					but WITHOUT ANY WARRANTY; without even the implied warranty of
-					MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-					GNU Affero General Public License for more details.
-					</p>
-					<p>
-					forked from <a href="https://github.com/zotero/bib-web">zotero/bib-web</a>
+					MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 					</p>
 				</small>
 				</div>
