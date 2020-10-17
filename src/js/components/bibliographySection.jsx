@@ -63,7 +63,7 @@ class BibliographySection extends React.PureComponent {
 				<React.Fragment>
 					<img className="empty-bibliography" src="static/images/empty-bibliography.svg"/>
 					<h2 className="empty-title"><span style={{ 'letterSpacing': '-0.092em' }}>Y</span>our bibliography is empty.</h2>
-					<p className="lead empty-lead"><span style={{ 'letterSpacing': '-0.111em' }}>T</span>o suggest a new citation, enter an URL, ISBN, DOI, PubMed ID (PMID), arXiv ID, or title.</p>
+					<p className="lead empty-lead"><span style={{ 'letterSpacing': '-0.111em' }}>T</span>o suggest a new citation, enter a URL, ISBN, DOI, PubMed ID (PMID), arXiv ID, or title.</p>
 				</React.Fragment>
 			);
 		} else {
