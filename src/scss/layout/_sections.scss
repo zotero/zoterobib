@@ -4,7 +4,8 @@
 
 .section {
 	padding: $section-padding-mobile 0;
-  	@media (min-width: $bp-md) {
+	margin: 0.5em 0;
+	@media (min-width: $bp-md) {
 		padding: $section-padding 0.5em;
 		margin: 0.5em;
 		//min-width: 600px;
