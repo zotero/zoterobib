@@ -12,49 +12,6 @@ class About extends React.PureComponent {
 	render() {
 		return (
 			<section className="section section-about about">
-				<div className="container-fullwidth">
-					<section className="column feature howto">
-								<article>
-								<h1>How to use</h1>
-					<p className="lead">
-						<h2>Automatically Suggest Citations</h2>
-						<p>Enter query with a URL, PubMed ID (PMID), DOI, and many other identifiers.</p>				
-      <ul>
-	  		<li><b>URLs</b> - Enter a web address</li>
-			<ul>
-				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nejm.org%2Fdoi%2Ffull%2F10.1056%2FNEJMoa1403108">https://nejm.org/...</a></li>
-				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nytimes.com%2F2013%2F03%2F05%2Fscience%2Fchasing-the-higgs-boson-how-2-teams-of-rivals-at-CERN-searched-for-physics-most-elusive-particle.html">https://nytimes.com/...</a></li>
-			</ul>
-			<li><b>Pubmed</b> - PMID (PubMed ID) or URL</li>
-			<ul>
-				<li><a href="https://cite.mickschroeder.com/?q=30280635">30280635</a></li>
-				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fpubmed.ncbi.nlm.nih.gov%2F30280635%2F">https://pubmed.ncbi.nlm.nih.gov/...</a></li>
-			</ul>
-			<li><b>DOI</b> Provide a persistent "address" to many types of work, from journal articles to research data sets.</li>
-			<ul>
-			<li><a href="https://cite.mickschroeder.com/?q=10.1126%2Fscience.169.3946.635">10.1126/science.169.3946.635</a></li>
-				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fdoi.org%2F10.1126%2Fscience.169.3946.635">https://doi.org/10.1126/science.169.3946.635</a></li>
-			</ul>
-			<li><b>ISBN</b> - International Standard Book Number is an unique numeric book identifier.</li>
-			<ul>
-			<li><a href="https://cite.mickschroeder.com/?q=0323040683">0323040683</a></li>
-				<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.amazon.com%2Fs%3Fk%3D0702052302">https://amazon.com/...</a></li>
-			</ul>
-	  </ul>
-	  <p>Uses <a href="https://www.zotero.org/support/dev/translators">Zotero Translators</a> (<a href="https://github.com/zotero/translators">github</a>), maintained by the open-source community. There are over 500 different translators, supporting thousands of different identifiers and websites.</p>
-
-  <h2>9,000+ Citation Styles</h2>
-						<p>Format using AMA, APA, MLA, Chicago / Turabian, journal specific formats like NEJM, or any of the 9,000+ other CSL styles.</p>
-						<p>You can browse and see examples of all of the styles here: <a href="https://www.zotero.org/styles" target="_blank">Browse Style Repository</a></p>
-						<h2>Export Bibliography</h2>
-						<p>Build a bibliography then export to Clipboard (copy / paste), Word Document (.rtf), or import into a reference manager (.RIS or .BibTeX). </p>
-						<h2>Free, Private and open-source</h2>
-						<p>Free and open-source software by <b><a href="https://www.mickschroeder.com/">Mick Schroeder</a></b>.</p>
-						<p>Based on many open source projects including <a href="https://www.zotero.org/">Zotero</a>, the research tool used by thousands of universities worldwide.</p>
-						</p>
-								</article>
-							</section>
-			
 					<section className="features">
 						<div className="row">
 							<section className="column feature">
@@ -76,6 +33,82 @@ class About extends React.PureComponent {
 								</article>
 							</section>
 							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/openmoji/1F310.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Example: Website URLs</h2>
+									<p>
+										Enter a website address (URL)
+											<ul>
+												<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nejm.org%2Fdoi%2Ffull%2F10.1056%2FNEJMoa1403108">https://nejm.org/...</a></li>
+												<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.nytimes.com%2F2013%2F03%2F05%2Fscience%2Fchasing-the-higgs-boson-how-2-teams-of-rivals-at-CERN-searched-for-physics-most-elusive-particle.html">https://nytimes.com/...</a></li>
+											</ul>
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/openmoji/1F4D8.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Example: Pubmed</h2>
+									<p>
+									Enter a PMID (PubMed ID) or URL
+											<ul>
+												<li><a href="https://cite.mickschroeder.com/?q=30280635">30280635</a></li>
+												<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fpubmed.ncbi.nlm.nih.gov%2F30280635%2F">https://pubmed.ncbi.nlm.nih.gov/...</a></li>
+											</ul>
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/openmoji/1F522.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Example: DOI</h2>
+									<p>
+										Provide a persistent "address" to many types of work, from journal articles to research data sets.
+										<ul>
+											<li><a href="https://cite.mickschroeder.com/?q=10.1126%2Fscience.169.3946.635">10.1126/science.169.3946.635</a></li>
+											<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fdoi.org%2F10.1126%2Fscience.169.3946.635">https://doi.org/...</a></li>
+										</ul>
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/openmoji/1F4DA.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Example: ISBN</h2>
+									<p>
+										International Standard Book Number is an unique numeric book identifier.
+										<ul>
+											<li><a href="https://cite.mickschroeder.com/?q=0323040683">0323040683</a></li>
+											<li><a href="https://cite.mickschroeder.com/?q=https%3A%2F%2Fwww.amazon.com%2Fs%3Fk%3D0702052302">https://amazon.com/...</a></li>
+										</ul>
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
 									<article>
 									<img
 										src="/static/images/openmoji/1F3F7.svg"
@@ -89,23 +122,6 @@ class About extends React.PureComponent {
 										If automatic import doesn’t find what you’re looking for or
 										you’re entering something without a URL or identifier, you can
 										enter the reference information by hand.
-									</p>
-								</article>
-							</section>
-							<section className="column feature">
-								<article>
-									<img
-										src="/static/images/openmoji/1F914.svg"
-										className="feature-icon"
-										width="66"
-										height="66"
-										alt=""
-									/>
-									<h2 className="h4">Bibliography title</h2>
-									<p>
-										To rename your bibliography, just click its title. A title
-										can be useful if you’re switching between multiple projects or
-										sharing a bibliography with others.
 									</p>
 								</article>
 							</section>
@@ -188,7 +204,7 @@ class About extends React.PureComponent {
 									/>
 									<h2 className="h4">Export</h2>
 									<p>
-										When you’re done, you can copy a formatted bibliography to the
+										Copy a formatted bibliography to the
 										clipboard and paste it into your document. You can also
 										export HTML to add to a webpage, an RTF document to open
 										in a word processor, or a RIS or BibTeX file to import into a
@@ -207,11 +223,30 @@ class About extends React.PureComponent {
 									/>
 									<h2 className="h4">On-device Autosave</h2>
 									<p>
-										Automatically saves your bibliography to your browser’s
-										local storage — you can close the page and return to it
-										anytime. (If you’re using private / incognito mode in your
+										Your bibliography automatically saves to your browser’s local storage.
+										Note, if you’re using private / incognito mode in your
 										browser, your bibliography will be cleared when you close the
-										window.)
+										window.
+									</p>
+								</article>
+							</section>
+							<section className="column feature">
+								<article>
+									<img
+										src="/static/images/openmoji/1F9E9.svg"
+										className="feature-icon"
+										width="66"
+										height="66"
+										alt=""
+									/>
+									<h2 className="h4">Browser Extensions</h2>
+									<p>
+									Automatically load the current page in your browser. 
+									<ul>
+									<li>
+										<a href="https://chrome.google.com/webstore/detail/mick-schroeders-citation/gocmebnobccjiigdnakfmlieghedgdhk">Google Chrome Web Store</a>
+									</li>	
+									</ul>
 									</p>
 								</article>
 							</section>
@@ -253,7 +288,6 @@ class About extends React.PureComponent {
 						Open-Source Software<br/>
 						Code available on GitHub
 						</a>
-				</div>
 			</section>
 		);
 	}

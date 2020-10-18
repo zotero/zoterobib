@@ -71,11 +71,11 @@
 
 	.features {
 		text-align: left;
-		margin-top: 80px - 17px;
+		margin-top: $space-xl;
 		margin-bottom: $space-xl;
 		
 		@media (min-width: $bp-md) {
-			margin-top: 120px - 20px;
+			margin-top: $space-xl;
 			margin-bottom: $space-xl;
 		}
 
@@ -92,7 +92,7 @@
 		//position: relative;
 		//margin-bottom: $space-xxxl - 15px;
 		display: flex;
-		
+		width: 100%;
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-max - 16px;
 		}
@@ -103,7 +103,12 @@
 					padding: $space-xl;
 					margin-right: $space-xl/2;
 					margin-left: $space-xl/2;
-				}
+			
+					p {
+						margin-left: 80px;
+					}
+			}
+			
 		}
 	}
 
@@ -112,7 +117,7 @@
 		//left: 0;
 		//top: -23px;
 		margin-top: 0;
-		margin-bottom: 70px;
+		margin-bottom: 80px;
 		margin-left: 0;
 		margin-right: 15px;
 		float: left;
