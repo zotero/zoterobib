@@ -1,5 +1,7 @@
 'use strict';
 
+import AdSense from 'react-adsense-ad';
+
 const React = require('react');
 const PropTypes = require('prop-types');
 const { withRouter } = require('react-router-dom');
@@ -28,7 +30,6 @@ const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-
 const WhatsThis = require('./whats-this');
 const Footer = require('./footer');
 const StyleSelector = require('./style-selector');
-import AdSense from 'react-adsense-ad';
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -93,7 +94,7 @@ class ZBib extends React.PureComponent {
 									<aside>
 										<div className="billboard">
 										<AdSense.Google
-										client='ca-pub-634479760939111'
+										client='ca-pub-6344797609391119'
 										slot='3922555336'
 										style={{ display: 'block' }}
 										format='auto'

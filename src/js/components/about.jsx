@@ -68,10 +68,9 @@ class About extends React.PureComponent {
 									/>
 									<h2 className="h4">Suggesting a Citation</h2>
 									<p>
-										Paste a URL in the search bar under Enter query and click Suggest Citation. 
+										Paste a URL in the text box and click Suggest Citation. 
 										Automatically pull in data from thousands of medical and scientific journals, newspapers, magazine
-										articles, library catalogs, articles, sites like Amazon
-										and Google Books, and much more. You can also use an identifier such as 
+										articles, library catalogs, articles. You can also use an identifier such as 
 										an ISBN, DOI, PMID, or arXiv ID, or you can search by title.
 									</p>
 								</article>
@@ -243,7 +242,7 @@ class About extends React.PureComponent {
 					<p className="support">
 						<span className="d-xs-block d-sm-inline">Still have questions?</span>
 						{ ' ' }
-						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a>.</p>
+						Check the <a href="/faq.html">Frequently Asked Questions (FAQ)</a></p>
 						<a href="https://github.com/mick-schroeder/schroeder-citation">
 						<img
 									src="/static/images/openmoji/E045.svg"
@@ -253,7 +252,7 @@ class About extends React.PureComponent {
 						/><br/>
 						Open-Source Software<br/>
 						Code available on GitHub
-						</a>.
+						</a>
 				</div>
 			</section>
 		);
