@@ -93,7 +93,7 @@ class ZBib extends React.PureComponent {
 									<aside>
 										<div className="billboard">
 										<AdSense.Google
-										client='UA-3312121-8'
+										client='ca-pub-634479760939111'
 										slot='3922555336'
 										style={{ display: 'block' }}
 										format='auto'
