@@ -40,7 +40,7 @@ This software includes links to third party websites. We are not responsible for
 
 ### Security
 
-The security of your personal information is important, but understand that no method of transmission over the Internet, or method of electronic storage, is 100% secure or anonymous. While we strive to store as little data as possible and use acceptable means to protect your information, we cannot guarantee absolute security. Your bibliography data is stored in your browser's local storage by default.
+The security of your personal information is important, but understand that no method of transmission over the Internet, or method of electronic storage, is 100% secure or anonymous. While we strive to store as little data as possible and use acceptable means to protect your information, we cannot guarantee absolute security. Your bibliography data is stored in your browser's local storage by default. Note that if you're using private/incognito mode in your browser, your bibliography will be deleted as soon as you close the window.
 
 
 ### Changes To This Privacy Policy

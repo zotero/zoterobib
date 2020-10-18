@@ -13,7 +13,7 @@ class Footer extends React.PureComponent {
 				<small className="copyright">
 					© { (new Date()).getFullYear() } Mick Schroeder, LLC. All Rights reserved.
 					<p>
-					<a href="/terms.html">Terms of Use & Privacy Policy</a>.
+					<a href="/terms.html">Terms of Use & Privacy Policy</a>
 					</p>
 					<p>
 					This program is free software: you can redistribute it and/or modify

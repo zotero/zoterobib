@@ -28,8 +28,7 @@ const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-
 const WhatsThis = require('./whats-this');
 const Footer = require('./footer');
 const StyleSelector = require('./style-selector');
-const AdvertisementAlpha = require('./advertisement-alpha');
-
+import AdSense from 'react-adsense-ad';
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -93,7 +92,14 @@ class ZBib extends React.PureComponent {
 								<div className="col ad" id="advert">
 									<aside>
 										<div className="billboard">
-											<AdvertisementAlpha {...this.props} />
+										<AdSense.Google
+										client='UA-3312121-8'
+										slot='3922555336'
+										style={{ display: 'block' }}
+										format='auto'
+										responsive='true'
+										className='adsbygoogle advertisement-alpha'
+										/>
 										</div>
 									</aside>
 								</div>

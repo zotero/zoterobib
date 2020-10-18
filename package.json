@@ -61,6 +61,7 @@
     "load-script": "^1.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-adsense-ad": "^3.4.0",
     "react-dom": "^16.13.1",
     "react-key-handler": "^1.1.0",
     "react-modal": "^3.11.2",
