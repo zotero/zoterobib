@@ -95,7 +95,7 @@ class Container extends React.Component {
 			id,
 			isWelcomeMessage: true,
 			kind: 'info',
-			message: 'Welcome to the beta of my new citation generator.',
+			message: 'Welcome to my new citation generator.',
 			onAction: this.handleReadMoreClick.bind(this, id),
 		};
 		this.setState({
@@ -346,8 +346,9 @@ class Container extends React.Component {
 		});
 
 		if(!isReadOnly && !localStorage.getItem('schroeder-cite-visited')) {
-			localStorage.setItem('schroeder-cite-visited', 'true');
-			this.displayWelcomeMessage();
+			localStorage.setItem('schroeder-cite-visited', 'true');		
+			//Disable Welcome Message
+			//this.displayWelcomeMessage();
 		}
 	}
 
