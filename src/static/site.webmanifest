@@ -14,9 +14,9 @@
        },
        {
           "src":"/static/icon-cite-square.png",
-          "sizes":"300x300",
+          "sizes":"1024x1024",
           "type":"image/png",
-          "purpose":"any"
+          "purpose":"maskable"
        }
     ],
     "start_url":"/",
