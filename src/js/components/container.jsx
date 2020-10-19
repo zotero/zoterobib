@@ -33,6 +33,10 @@ const { coreCitationStyles } = require('../../../data/citation-styles-data.json'
 const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 const formatBib = require('../cite');
+const ReactGA = require('react-ga');
+
+// Google Analytics
+ReactGA.initialize("UA-3312121-8");
 
 const scroll = new SmoothScroll();
 var msgId = 0;
@@ -144,6 +148,9 @@ class Container extends React.Component {
 		document.addEventListener('visibilitychange', this.handleVisibilityChange);
 		document.addEventListener('scroll', this.handleScroll);
 		await this.handleIdChanged(this.props);
+		
+		// Google Analytics - register page view
+		ReactGA.pageview(window.location.pathname + window.location.search);
 
 		if(this.props.match.path === '/import') {
 			if(params.has('q')) {
