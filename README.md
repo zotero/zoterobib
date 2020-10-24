@@ -1,5 +1,6 @@
 # Mick Schroeder's Citation Generator
 
+![Screenshot](https://github.com/mick-schroeder/schroeder-cite/raw/master/src/static/images/schroeder-cite.gif)
 
 Overview
 --------
