@@ -10,7 +10,7 @@ class Footer extends React.PureComponent {
 					Stay in touch! Follow <a href="https://twitter.com/zotero">@zotero</a> on Twitter.
 				</nav>
 				<small className="copyright">
-					© { (new Date()).getFullYear() } Corporation for Digital Scholarship &nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
+					© 2018–{new Date().getFullYear()} Zotero &nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
 				</small>
 			</footer>
 		);
