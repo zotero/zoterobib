@@ -107,7 +107,7 @@ If you're adding your bibliography to a webpage, you can use <i>Copy HTML</i> to
 
 Select <i>Download RIS</i> or <i>Download BibTeX</i> to download a data file that can be imported into any reference manager. If you're using Zotero and the Zotero Connector (which we recommend!), just click the <i>Save to Zotero</i> button in your browser's toolbar.
 
-### How can I integrate ZoteroBib with my site?
+<h3 id="site_integration">How can I integrate ZoteroBib with my site?</h3>
 
 You can include a ZoteroBib button on your site that lets your users directly add items to their ZoteroBib bibliographies. Simply link to `/import?q=[url]`, where `url` is a link to a file in BibTeX, RIS, or [another supported format](https://www.zotero.org/support/kb/importing_standardized_formats).
 
