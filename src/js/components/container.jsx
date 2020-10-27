@@ -1052,16 +1052,18 @@ class Container extends React.Component {
 			
 			var date = this.state.itemUnderReview.date;
 			
-			var convertDate = new Date(this.state.itemUnderReview.date);
+			var year = (new Date(date.toString())).getFullYear();
+
+			var yearString = year.toString();
 			
-			console.log(convertDate.getFullYear().toString());
-
 			// If we can convert the long date to just year, use that otherwise revert to full date
-			if (isNaN(convertDate.getFullYear().toString())) {
-				date = convertDate.getFullYear().toString();
+			if (isNaN(year) === false) {
+				date = filenamify(yearString);
 			}
-
-			date = filenamify(date);
+			else {
+				
+				date = filenamify(date);
+			}
 			
 			var dateEnd = ') ';
 			
