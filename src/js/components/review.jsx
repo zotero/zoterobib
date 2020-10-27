@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const CopyCitation = require('./copy-citation');
 const Button = require('zotero-web-library/src/js/component/ui/button');
 const formatBib = require('../cite');
 
@@ -63,6 +64,9 @@ class Review extends React.PureComponent {
 						>
 							Edit
 						</Button>
+					</div>
+					<div className="actions">
+						<CopyCitation {...this.props} />
 					</div>
 				</div>
 			</section>

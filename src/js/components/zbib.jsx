@@ -108,7 +108,7 @@ class ZBib extends React.PureComponent {
 									<BibliographySection {...this.props} />
 									<section className="section section-rounded section-export">
 										<div className="container">
-											<h2>Export</h2>
+											<h2>Export Bibliography</h2>
 											<ExportTools {...this.props} />
 										</div>
 									</section>

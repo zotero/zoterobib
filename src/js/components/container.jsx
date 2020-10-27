@@ -34,7 +34,9 @@ const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 const formatBib = require('../cite');
 const ReactGA = require('react-ga');
-
+const filenamify = require('filenamify');
+const { text } = require('../constants/export-formats');
+ 
 // Google Analytics
 ReactGA.initialize("UA-3312121-8");
 
@@ -992,7 +994,7 @@ class Container extends React.Component {
 		}
 		return bibliography;
 	}
-
+	
 	getCopyData(format) {
 		const bibliography = this.getExportData(format);
 		const copyData = format === 'html' ?
@@ -1012,6 +1014,82 @@ class Container extends React.Component {
 				}];
 			}
 		}
+
+		return copyData;
+	}
+
+	getCitationCopyData(format) {
+		const citationCopyBibliography = this.getExportData('text');
+		var copyData = `${citationCopyBibliography[1][citationCopyBibliography[1].length - 1]}`;
+		const regex = /^(\d+)\.\s/;
+		copyData = copyData.replace(regex, '');
+		return copyData;
+	}
+
+	getFilenameCopyData(format) {
+		var copyData = '';
+
+		// If we have the required fields, create a custom filename.
+		// Otherwise, just "filenamify" the citation and add ".pdf".
+
+		if(this.state.itemUnderReview.creators[0].lastName && 
+				this.state.itemUnderReview.creators[0].firstName &&
+				this.state.itemUnderReview.journalAbbreviation &&
+				this.state.itemUnderReview.date &&
+				this.state.itemUnderReview.title){
+
+			var lastName = filenamify(this.state.itemUnderReview.creators[0].lastName, {maxLength: '200',replacement: ''});
+			
+			var nameSpacer = ', ';
+			
+			var firstName = filenamify(this.state.itemUnderReview.creators[0].firstName, {maxLength: '200',replacement: ''});
+			
+			var dash = ' - ';
+			
+			var journalAbbreviation = filenamify(this.state.itemUnderReview.journalAbbreviation, {maxLength: '200',replacement: ''});
+			var dateStart = ' (';
+			
+			var date = this.state.itemUnderReview.date;
+			
+			var convertDate = new Date(this.state.itemUnderReview.date);
+			
+			console.log(convertDate.getFullYear().toString());
+
+			// If we can convert the long date to just year, use that otherwise revert to full date
+			if (isNaN(convertDate.getFullYear().toString())) {
+				date = convertDate.getFullYear().toString();
+			}
+
+			date = filenamify(date, {maxLength: '200',replacement: ''});
+			
+			var dateEnd = ') ';
+			
+			var title = filenamify(this.state.itemUnderReview.title, {maxLength: '200',replacement: ''});
+			var pdf = '.pdf';
+
+			copyData = copyData.concat(lastName,nameSpacer,firstName,dash,journalAbbreviation,dateStart,date,dateEnd,title);
+
+			copyData = filenamify(copyData, {maxLength: '200',replacement: ''});
+
+			copyData = copyData.trim();
+
+			copyData = copyData.concat(pdf);
+
+			}
+
+		else {
+			const citationCopyBibliography = this.getExportData('text');
+
+			copyData = `${citationCopyBibliography[1][citationCopyBibliography[1].length - 1]}`;
+			const regex = /^(\d+)\.\s/;
+			copyData = copyData.replace(regex, '');
+			
+			if(format === 'filename'){
+				copyData = filenamify(copyData, {maxLength: '200',replacement: ''});
+				copyData = copyData.concat(".pdf");
+			}
+		}
+		
 
 		return copyData;
 	}
@@ -1063,6 +1141,8 @@ class Container extends React.Component {
 	render() {
 		return <ZBib
 			getCopyData = { this.getCopyData.bind(this) }
+			getCitationCopyData = { this.getCitationCopyData.bind(this) }
+			getFilenameCopyData = { this.getFilenameCopyData.bind(this) }
 			getFileData = { this.getFileData.bind(this) }
 			onCitationCopy = { this.handleCitationCopy.bind(this) }
 			onCitationCopyCancel = { this.handleCitationCopyCancel.bind(this) }

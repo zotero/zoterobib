@@ -57,6 +57,7 @@
     "deep-equal": "^2.0.3",
     "es6-promise": "^4.2.8",
     "file-saver": "^2.0.2",
+    "filenamify": "^4.2.0",
     "isomorphic-fetch": "^2.2.1",
     "load-script": "^1.0.0",
     "prop-types": "^15.7.2",

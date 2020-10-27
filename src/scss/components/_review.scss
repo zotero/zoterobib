@@ -59,6 +59,17 @@
 		}
 	}
 
+	// Hide list #
+	.csl-left-margin {
+		display: none !important;
+	}
+
+
+	.csl-right-inline {
+		font-size: 18px !important;
+		margin: 0.5em !important;
+	}
+
 	// Dev only
 	.csl-bib-body {
 		line-height: inherit !important;

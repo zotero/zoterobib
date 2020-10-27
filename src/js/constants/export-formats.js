@@ -39,5 +39,21 @@ module.exports = {
 		label: 'Save to Zotero',
 		isDownloadable: true,
 		isCopyable: false
+	},
+	'citation': {
+		extension: 'txt',
+		mime: 'text/plain',
+		label: 'Copy Citation',
+		include: 'html',
+		isDownloadable: false,
+		isCopyable: true
+	},
+	'filename': {
+		label: 'Copy Filename',
+		extension: 'txt',
+		mime: 'text/plain',
+		include: 'html',
+		isDownloadable: false,
+		isCopyable: true
 	}
 };
