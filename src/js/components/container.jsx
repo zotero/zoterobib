@@ -34,7 +34,8 @@ const defaults = require('../constants/defaults');
 const ZBib = require('./zbib');
 const formatBib = require('../cite');
 const ReactGA = require('react-ga');
-const filenamify = require('filenamify');
+const filenamify = require("sanitize-filename");
+
 const { text } = require('../constants/export-formats');
  
 // Google Analytics
@@ -1030,7 +1031,7 @@ class Container extends React.Component {
 		var copyData = '';
 
 		// If we have the required fields, create a custom filename.
-		// Otherwise, just "filenamify" the citation and add ".pdf".
+		// Otherwise, just "sanitize" the citation and add ".pdf".
 
 		if(this.state.itemUnderReview.creators[0].lastName && 
 				this.state.itemUnderReview.creators[0].firstName &&
@@ -1038,15 +1039,15 @@ class Container extends React.Component {
 				this.state.itemUnderReview.date &&
 				this.state.itemUnderReview.title){
 
-			var lastName = filenamify(this.state.itemUnderReview.creators[0].lastName, {maxLength: '200',replacement: ''});
+			var lastName = filenamify(this.state.itemUnderReview.creators[0].lastName);
 			
 			var nameSpacer = ', ';
 			
-			var firstName = filenamify(this.state.itemUnderReview.creators[0].firstName, {maxLength: '200',replacement: ''});
+			var firstName = filenamify(this.state.itemUnderReview.creators[0].firstName);
 			
 			var dash = ' - ';
 			
-			var journalAbbreviation = filenamify(this.state.itemUnderReview.journalAbbreviation, {maxLength: '200',replacement: ''});
+			var journalAbbreviation = filenamify(this.state.itemUnderReview.journalAbbreviation);
 			var dateStart = ' (';
 			
 			var date = this.state.itemUnderReview.date;
@@ -1060,16 +1061,16 @@ class Container extends React.Component {
 				date = convertDate.getFullYear().toString();
 			}
 
-			date = filenamify(date, {maxLength: '200',replacement: ''});
+			date = filenamify(date);
 			
 			var dateEnd = ') ';
 			
-			var title = filenamify(this.state.itemUnderReview.title, {maxLength: '200',replacement: ''});
+			var title = filenamify(this.state.itemUnderReview.title);
 			var pdf = '.pdf';
 
 			copyData = copyData.concat(lastName,nameSpacer,firstName,dash,journalAbbreviation,dateStart,date,dateEnd,title);
 
-			copyData = filenamify(copyData, {maxLength: '200',replacement: ''});
+			copyData = filenamify(copyData);
 
 			copyData = copyData.trim();
 
@@ -1085,7 +1086,7 @@ class Container extends React.Component {
 			copyData = copyData.replace(regex, '');
 			
 			if(format === 'filename'){
-				copyData = filenamify(copyData, {maxLength: '200',replacement: ''});
+				copyData = filenamify(copyData);
 				copyData = copyData.concat(".pdf");
 			}
 		}
