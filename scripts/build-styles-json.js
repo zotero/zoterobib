@@ -2,7 +2,7 @@
 
 const appDefaults = require('../src/js/constants/defaults');
 const argv = require('minimist')(process.argv.slice(2));
-const fetch = require('isomorphic-fetch');
+const fetch = require('cross-fetch');
 const fs = require('fs-extra');
 const path = require('path');
 
