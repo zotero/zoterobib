@@ -726,7 +726,7 @@ class Container extends React.Component {
 			});
 			switch(result) {
 				case ZoteroBib.COMPLETE:
-				case ZoteroBib.MULTIPLE_ITEMS:
+				case ZoteroBib.MULTIPLE_CHOICES:
 					this.setState({
 						isTranslatingMore: false,
 						isPickingItem: true,
