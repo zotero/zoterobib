@@ -30,7 +30,7 @@ class MultipleChoiceDialog extends React.Component {
 
 	renderItem(item) {
 		let badge = null;
-		let title = item.value.title;
+		let title = item.value.title || '';
 		if(item.source === 'url') {
 			let badges = [];
 			let matches = title.match(/^\[([A-Z]*)\]/);

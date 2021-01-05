@@ -540,7 +540,7 @@ const processMultipleChoiceItems = async (items, isUrl = false) => {
 				itemType: (itemTypes.find(it => it.itemType == value.itemType) || {}).localized
 			},
 			source: isUrl ? 'url' : 'identifier'
-		}));
+		})).filter(itemData => !itemData.value.parentItem); // remove child items if present in multi choice options
 };
 
 const removeDuplicatesBy = (fn, array) => {
