@@ -1,13 +1,10 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const serveStatic = require('serve-static');
 const httpProxy = require('http-proxy');
-const argv = require('minimist')(process.argv.slice(2));
-const translateURL = argv['t'] || 'http://localhost:1969';
-const port = argv['p'] || 8001;
+const translateURL = process.env.TRANSLATE_URL ?? 'http://localhost:1969';
+const port = process.env.PORT ?? 8001;
 
 const serve = serveStatic(path.join(__dirname, '..', 'build'), { 'index': false });
 const proxy = httpProxy.createProxyServer();
@@ -26,9 +23,9 @@ const handler = (req, resp) => {
 			target: `${translateURL}`,
 			secure: false
 		});
-		proxy.on('error', () => {
+		proxy.on('error', err => {
 			resp.statusCode = 502;
-			resp.statusMessage = 'Translation Server not available';
+			resp.statusMessage = `Translation Server not available at ${translateURL}: ${err}`;
 			resp.end();
 		});
 	} else if (req.url == '/faq') {

@@ -6,11 +6,6 @@
   "description": "",
   "repository": "",
   "main": "",
-  "config": {
-    "styles_cache_time": "86400000",
-    "port": "8001",
-    "translation_server": ""
-  },
   "browserslist": "last 2 versions",
   "browserify": {
     "transform": [
@@ -110,7 +105,6 @@
     "json": "^10.0.0",
     "mapstraction": "^1.0.1",
     "marked": "^2.0.0",
-    "minimist": "^1.2.5",
     "mocha": "^8.2.1",
     "node-sass": "^5.0.0",
     "nodemon": "^2.0.7",
