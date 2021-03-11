@@ -114,4 +114,4 @@ const formatBib = (bib) => {
 	return container.innerHTML;
 };
 
-module.exports = formatBib;
+export default formatBib;

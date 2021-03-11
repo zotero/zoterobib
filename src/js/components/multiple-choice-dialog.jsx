@@ -1,13 +1,11 @@
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const Modal = require('./modal');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
+import React from 'react';
+import PropTypes from 'prop-types';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import Button from './ui/button';
+import Spinner from './ui/spinner';
+import Icon from './ui/icon';
+import Modal from './modal';
 
 class MultipleChoiceDialog extends React.Component {
 	handleSelect(item = this.focusedItem) {
@@ -152,4 +150,4 @@ class MultipleChoiceDialog extends React.Component {
 	}
 }
 
-module.exports = MultipleChoiceDialog;
+export default MultipleChoiceDialog;

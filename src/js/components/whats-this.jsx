@@ -1,6 +1,4 @@
-'use strict';
-
-const React = require('react');
+import React from 'react';
 
 class WhatsThis extends React.PureComponent {
 	render() {
@@ -19,4 +17,4 @@ class WhatsThis extends React.PureComponent {
 	}
 }
 
-module.exports = WhatsThis;
+export default WhatsThis;

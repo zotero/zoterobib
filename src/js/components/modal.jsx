@@ -1,10 +1,8 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const ReactModal = require('react-modal');
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
 
 var initialPadding;
 
@@ -75,4 +73,4 @@ class Modal extends React.PureComponent {
 	}
 }
 
-module.exports = Modal;
+export default Modal;

@@ -1,11 +1,8 @@
-'use strict';
-
-require('cross-fetch/polyfill');
-const React = require('react');
-const PropTypes = require('prop-types');
-const ReactDOM = require('react-dom');
-const { BrowserRouter, Route, Switch } = require('react-router-dom');
-const Container = require('./components/container');
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Container from './components/container';
 
 //@TODO fix naming convention (bib vs this.bib)
 class ZoteroBibComponent extends React.Component {
@@ -36,4 +33,4 @@ class ZoteroBibComponent extends React.Component {
 	}
 }
 
-module.exports = ZoteroBibComponent;
+export default ZoteroBibComponent;

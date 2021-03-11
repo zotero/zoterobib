@@ -1,13 +1,11 @@
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Modal = require('./modal');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const { getHtmlNodeFromBibliography, makeBibliographyContentIterator } = require('../utils');
+import React from 'react';
+import PropTypes from 'prop-types';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import Button from './ui/button';
+import Modal from './modal';
+import Icon from './ui/icon';
+import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils';
 
 class MultipleItemsDialog extends React.Component {
 	handleFocus = ev => {
@@ -113,4 +111,4 @@ class MultipleItemsDialog extends React.Component {
 	}
 }
 
-module.exports = MultipleItemsDialog;
+export default MultipleItemsDialog;

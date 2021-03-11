@@ -1,10 +1,8 @@
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Confirmation = require('./confirmation');
+import Button from './ui/button';
+import Confirmation from './confirmation';
 
 class DeleteAllButton extends React.Component {
 	state = {
@@ -60,4 +58,4 @@ class DeleteAllButton extends React.Component {
 	}
 }
 
-module.exports = DeleteAllButton;
+export default DeleteAllButton;

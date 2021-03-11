@@ -1,10 +1,8 @@
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const IdInput = require('./id-input');
+import Button from './ui/button';
+import IdInput from './id-input';
 
 class CiteTools extends React.PureComponent {
 	render() {
@@ -32,4 +30,4 @@ class CiteTools extends React.PureComponent {
 	}
 }
 
-module.exports = CiteTools;
+export default CiteTools;

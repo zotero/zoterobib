@@ -1,17 +1,15 @@
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const cx = require('classnames');
-
-const Editable = require('zotero-web-library/src/js/component/editable');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const StyleSelector = require('./style-selector');
-const Bibliography = require('./bibliography');
-const DeleteAllButton = require('./delete-all-button');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const Confirmation = require('./confirmation');
+import Editable from './ui/editable';
+import Button from './ui/button';
+import Icon from './ui/icon';
+import StyleSelector from './style-selector';
+import Bibliography from './bibliography';
+import DeleteAllButton from './delete-all-button';
+import Spinner from './ui/spinner';
+import Confirmation from './confirmation';
 
 class BibliographySection extends React.PureComponent {
 	state = {
@@ -166,4 +164,4 @@ class BibliographySection extends React.PureComponent {
 	}
 }
 
-module.exports = BibliographySection;
+export default BibliographySection;

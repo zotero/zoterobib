@@ -1,21 +1,19 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { saveAs } from 'file-saver';
+import cx from 'classnames';
+import copy from 'copy-to-clipboard';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const { saveAs } = require('file-saver');
-const cx = require('classnames');
-const copy = require('copy-to-clipboard');
-
-const exportFormats = require('../constants/export-formats');
-const { withRouter } = require('react-router-dom');
-const Dropdown = require('reactstrap/lib/Dropdown').default;
-const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
-const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
-const DropdownItem = require('reactstrap/lib/DropdownItem').default;
+import exportFormats from '../constants/export-formats';
+import { withRouter } from 'react-router-dom';
+import { default as Dropdown } from 'reactstrap/lib/Dropdown';
+import { default as DropdownToggle } from 'reactstrap/lib/DropdownToggle';
+import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
+import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 const formatsInDropdown = ['rtf', 'html', 'ris', 'bibtex', 'zotero'];
-const Button = require('zotero-web-library/src/js/component/ui/button');
+import Button from './ui/button';
 
 class ExportDialog extends React.Component {
 	state = {
@@ -169,4 +167,4 @@ class ExportDialog extends React.Component {
 	}
 }
 
-module.exports = withRouter(ExportDialog);
+export default withRouter(ExportDialog);

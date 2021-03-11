@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	'html': {
 		extension: 'html',
 		mime: 'text/html',

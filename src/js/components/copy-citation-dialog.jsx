@@ -1,17 +1,15 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const cx = require('classnames');
-const Input = require('zotero-web-library/src/js/component/form/input');
-const KeyHandler = require('react-key-handler').default;
-const Modal = require('./modal');
-const Select = require('zotero-web-library/src/js/component/form/select');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const { KEYDOWN } = require('react-key-handler');
+import React from 'react';
+import PropTypes from 'prop-types';
+import Button from './ui/button';
+import cx from 'classnames';
+import Input from './form/input';
+import { default as KeyHandler } from 'react-key-handler';
+import Modal from './modal';
+import Select from './form/select';
+import Spinner from './ui/spinner';
+import { KEYDOWN } from 'react-key-handler';
 
 const locators = [
 	'page',
@@ -210,4 +208,4 @@ class CopyCitationDialog extends React.PureComponent {
 }
 
 
-module.exports = CopyCitationDialog;
+export default CopyCitationDialog;

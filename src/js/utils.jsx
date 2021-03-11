@@ -602,7 +602,30 @@ function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
 	}
 }
 
-module.exports = {
+
+//@TODO: deduplicate with web-library
+const noop = () => {};
+
+const reverseMap = map => {
+	return Object.keys(map).reduce((acc, key) => {
+		acc[map[key]] = key;
+		return acc;
+	}, {});
+};
+
+const splice = (array, at, count = 0, ...items) => {
+	if (at == null) {
+		at = array.length;
+	}
+
+	return [
+		...array.slice(0, at),
+		...items,
+		...array.slice(at + count)
+	];
+};
+
+export {
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
 	getBibliographyFormatParameters,
@@ -613,12 +636,13 @@ module.exports = {
 	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
-	isUppercaseSubtitlesStyle,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
 	isSentenceCaseStyle,
+	isUppercaseSubtitlesStyle,
 	makeBibliographyContentIterator,
+	noop,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,
 	processMultipleChoiceItems,
@@ -627,8 +651,10 @@ module.exports = {
 	retrieveLocaleSync,
 	retrieveStyle,
 	retrieveStylesData,
+	reverseMap,
 	saveToPermalink,
 	syncRequestAsText,
 	validateItem,
 	validateUrl,
+	splice,
 };

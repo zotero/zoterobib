@@ -1,8 +1,6 @@
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/src/js/component/ui/button');
+import React from 'react';
+import PropTypes from 'prop-types';
+import Button from './ui/button';
 
 class About extends React.PureComponent {
 	handleClick(event) {
@@ -222,4 +220,4 @@ class About extends React.PureComponent {
 	}
 }
 
-module.exports = About;
+export default About;

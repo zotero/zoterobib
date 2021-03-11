@@ -1,22 +1,20 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import deepEqual from 'deep-equal';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import baseMappings from 'zotero-base-mappings';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const cx = require('classnames');
-const deepEqual = require('deep-equal');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const ItemBox = require('zotero-web-library/src/js/component/item/box');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const { baseMappings } = require('zotero-web-library/src/js/constants/item');
-const { getItemTypeMeta } = require('../utils');
-const { hideFields, noEditFields } = require('zotero-web-library/src/js/constants/item');
-const { reverseMap } = require('zotero-web-library/src/js/utils');
-const Modal = require('./modal');
+import Button from './ui/button';
+import ItemBox from './itembox';
+import Spinner from './ui/spinner';
+import { getItemTypeMeta } from '../utils';
+import { hideFields, noEditFields } from '../constants/item';
+import { reverseMap } from '../utils';
+import Modal from './modal';
 
 class Editor extends React.PureComponent {
 	constructor(props) {
@@ -317,4 +315,4 @@ class Editor extends React.PureComponent {
 	}
 }
 
-module.exports = Editor;
+export default Editor;

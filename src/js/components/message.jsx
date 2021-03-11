@@ -1,16 +1,14 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const cx = require('classnames');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-const { withRouter } = require('react-router-dom');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const { noop } = require('zotero-web-library/src/js/utils');
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import { withRouter } from 'react-router-dom';
+import Icon from './ui/icon';
+import Button from './ui/button';
+import { noop } from '../utils';
 
 class Message extends React.Component {
 	componentWillReceiveProps(nextProps) {
@@ -93,4 +91,4 @@ class Message extends React.Component {
 	}
 }
 
-module.exports = withRouter(Message);
+export default withRouter(Message);

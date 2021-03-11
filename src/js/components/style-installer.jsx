@@ -1,19 +1,20 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import Spinner from './ui/spinner';
+import Button from './ui/button';
+import Icon from './ui/icon';
+import Input from './form/input';
+import cx from 'classnames';
+import Modal from './modal';
+import SearchWorker from 'webworkify';
+const searchWorker = SearchWorker(require('../search-worker.js'));
+// import SearchWorker from 'web-worker:../search-worker.js';
+// const searchWorker = new SearchWorker();
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const Input = require('zotero-web-library/src/js/component/form/input');
-const cx = require('classnames');
-const Modal = require('./modal');
-
-var SearchWorker = require('webworkify')(require('../search-worker.js'));
 
 class StyleInstaller extends React.Component {
 	state = {
@@ -43,11 +44,11 @@ class StyleInstaller extends React.Component {
 	}
 
 	componentDidMount() {
-		SearchWorker.addEventListener('message', this.handleWorkerMessage);
+		searchWorker.addEventListener('message', this.handleWorkerMessage);
 	}
 
 	componentWillUnmount() {
-		SearchWorker.removeEventListener('message', this.handleWorkerMessage);
+		searchWorker.removeEventListener('message', this.handleWorkerMessage);
 		if(this.timeout) {
 			clearTimeout(this.timeout);
 			delete this.timeout;
@@ -56,14 +57,14 @@ class StyleInstaller extends React.Component {
 
 	componentWillReceiveProps({ isStylesDataLoading, stylesData }) {
 		if(!isStylesDataLoading && this.props.isStylesDataLoading != isStylesDataLoading) {
-			SearchWorker.postMessage(['LOAD', stylesData]);
+			searchWorker.postMessage(['LOAD', stylesData]);
 		}
 	}
 
 	componentDidUpdate(_, { isSearching }) {
 		if(this.state.isSearching && this.state.isSearching !== isSearching) {
 			const filter = this.state.filterInput.toLowerCase();
-			SearchWorker.postMessage(['FILTER', filter]);
+			searchWorker.postMessage(['FILTER', filter]);
 		}
 	}
 
@@ -281,4 +282,4 @@ class StyleInstaller extends React.Component {
 }
 
 
-module.exports = StyleInstaller;
+export default StyleInstaller;

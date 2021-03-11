@@ -1,39 +1,23 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const copy = require('copy-to-clipboard');
-const deepEqual = require('deep-equal');
-const SmoothScroll = require('smooth-scroll');
-const ZoteroBib = require('zotero-translation-client');
-const exportFormats = require('../constants/export-formats');
-const { withRouter } = require('react-router-dom');
-const arrayEquals = require('array-equal');
-const {  dedupMultipleChoiceItems,
-	fetchFromPermalink,
-	getBibliographyFormatParameters,
-	getBibliographyOrFallback,
-	getCitation,
-	getCiteproc,
-	isLikeUrl,
-	isNoteStyle,
-	isNumericStyle,
-	isSentenceCaseStyle,
-	isUppercaseSubtitlesStyle,
-	parseIdentifier,
-	processMultipleChoiceItems,
-	processSentenceCaseAPAItems,
-	retrieveStyle,
-	retrieveStylesData,
-	saveToPermalink,
-	validateItem,
-	validateUrl, } = require('../utils');
-const { coreCitationStyles } = require('../../../data/citation-styles-data.json');
-const defaults = require('../constants/defaults');
-const ZBib = require('./zbib');
-const formatBib = require('../cite');
+import React from 'react';
+import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
+import deepEqual from 'deep-equal';
+import SmoothScroll from 'smooth-scroll';
+import ZoteroBib from 'zotero-translation-client';
+import exportFormats from '../constants/export-formats';
+import { withRouter } from 'react-router-dom';
+import arrayEquals from 'array-equal';
+import {  dedupMultipleChoiceItems, fetchFromPermalink, getBibliographyFormatParameters,
+	getBibliographyOrFallback, getCitation, getCiteproc, isLikeUrl, isNoteStyle, isNumericStyle,
+	isSentenceCaseStyle, isUppercaseSubtitlesStyle, parseIdentifier, processMultipleChoiceItems,
+	processSentenceCaseAPAItems, retrieveStyle, retrieveStylesData, saveToPermalink, validateItem,
+	validateUrl, } from '../utils';
+import { coreCitationStyles } from '../../../data/citation-styles-data.json';
+import defaults from '../constants/defaults';
+import ZBib from './zbib';
+import formatBib from '../cite';
 
 const scroll = new SmoothScroll();
 var msgId = 0;
@@ -1111,4 +1095,4 @@ class Container extends React.Component {
 	}
 }
 
-module.exports = withRouter(Container);
+export default withRouter(Container);

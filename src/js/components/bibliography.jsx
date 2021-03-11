@@ -1,19 +1,16 @@
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const cx = require('classnames');
-const { withRouter } = require('react-router-dom');
-const KeyHandler = require('react-key-handler').default;
-const { KEYDOWN } = require('react-key-handler');
-const Dropdown = require('reactstrap/lib/Dropdown').default;
-const DropdownToggle = require('reactstrap/lib/DropdownToggle').default;
-const DropdownMenu = require('reactstrap/lib/DropdownMenu').default;
-const DropdownItem = require('reactstrap/lib/DropdownItem').default;
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-
-const { getHtmlNodeFromBibliography, makeBibliographyContentIterator } =require('../utils') ;
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { withRouter } from 'react-router-dom';
+import { default as KeyHandler } from 'react-key-handler';
+import { KEYDOWN } from 'react-key-handler';
+import { default as Dropdown } from 'reactstrap/lib/Dropdown';
+import { default as DropdownToggle } from 'reactstrap/lib/DropdownToggle';
+import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
+import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
+import Button from './ui/button';
+import Icon from './ui/icon';
+import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
 
 class Bibliography extends React.PureComponent {
 	state = {
@@ -241,4 +238,4 @@ class Bibliography extends React.PureComponent {
 }
 
 
-module.exports = withRouter(Bibliography);
+export default withRouter(Bibliography);

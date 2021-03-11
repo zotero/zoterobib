@@ -1,9 +1,7 @@
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const formatBib = require('../cite');
+import React from 'react';
+import PropTypes from 'prop-types';
+import Button from './ui/button';
+import formatBib from '../cite';
 
 class Review extends React.PureComponent {
 	handleDismiss() {
@@ -78,4 +76,4 @@ class Review extends React.PureComponent {
 	}
 }
 
-module.exports = Review;
+export default Review;

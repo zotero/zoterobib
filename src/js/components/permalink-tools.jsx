@@ -1,14 +1,12 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
+import cx from 'classnames';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const copy = require('copy-to-clipboard');
-const cx = require('classnames');
-
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
+import Button from './ui/button';
+import Spinner from './ui/spinner';
 
 class PermalinkTools extends React.Component {
 	state = {
@@ -106,4 +104,4 @@ class PermalinkTools extends React.Component {
 }
 
 
-module.exports = PermalinkTools;
+export default PermalinkTools;

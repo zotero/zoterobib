@@ -1,11 +1,9 @@
 /* eslint-disable react/no-deprecated */
 // @TODO: migrate to getDerivedStateFromProps()
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
-const Input = require('zotero-web-library/src/js/component/form/input');
-const Button = require('zotero-web-library/src/js/component/ui/button');
+import React from 'react';
+import PropTypes from 'prop-types';
+import Input from './form/input';
+import Button from './ui/button';
 
 class IdInput extends React.PureComponent {
 	state = {
@@ -69,4 +67,4 @@ class IdInput extends React.PureComponent {
 	}
 }
 
-module.exports = IdInput;
+export default IdInput;

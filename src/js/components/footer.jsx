@@ -1,6 +1,4 @@
-'use strict';
-
-const React = require('react');
+import React from 'react';
 
 class Footer extends React.PureComponent {
 	render() {
@@ -17,4 +15,4 @@ class Footer extends React.PureComponent {
 	}
 }
 
-module.exports = Footer;
+export default Footer;

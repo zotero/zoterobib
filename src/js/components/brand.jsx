@@ -1,7 +1,5 @@
-'use strict';
-
-const React = require('react');
-const { Link } = require('react-router-dom');
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Brand extends React.PureComponent {
 	render() {
@@ -31,4 +29,4 @@ class Brand extends React.PureComponent {
 	}
 }
 
-module.exports = Brand;
+export default Brand;

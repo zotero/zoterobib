@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = function(self) {
 	var data = [];
 	var items = [];

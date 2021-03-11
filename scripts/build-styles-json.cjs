@@ -1,9 +1,10 @@
-const appDefaults = require('../src/js/constants/defaults');
+// const appDefaults = require('../src/js/constants/defaults');
 const fetch = require('cross-fetch');
 const fs = require('fs-extra');
 const path = require('path');
 
 const stylesCacheTime = process.env.STYLES_CACHE_TIME ?? 86400000;
+const stylesURL = 'https://www.zotero.org/styles-files/styles.json';
 
 const styles = [
 	'apa',
@@ -24,8 +25,8 @@ const defaultStyle = 'modern-language-association';
 			throw new Error();
 		}
 	} catch(e) {
-		console.log(`Downloading ${appDefaults.stylesURL}`);
-		stylesMeta = await (await fetch(appDefaults.stylesURL)).json();
+		console.log(`Downloading ${stylesURL}`);
+		stylesMeta = await (await fetch(stylesURL)).json();
 		await fs.outputJson(stylesJsonPath, stylesMeta);
 	}
 	const coreCitationStyles = styles.map(style => {

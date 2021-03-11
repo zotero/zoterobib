@@ -1,32 +1,30 @@
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import cx from 'classnames';
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const { withRouter } = require('react-router-dom');
-const cx = require('classnames');
-
-const About = require('./about');
-const BibliographySection = require('./bibliographySection');
-const Brand = require('./brand');
-const Button = require('zotero-web-library/src/js/component/ui/button');
-const CiteTools = require('./cite-tools');
-const Confirmation = require('./confirmation');
-const CopyCitationDialog = require('./copy-citation-dialog');
-const Editor = require('./editor');
-const ExportTools = require('./export-tools');
-const Icon = require('zotero-web-library/src/js/component/ui/icon');
-const Message = require('./message');
-const Modal = require('./modal');
-const MultipleChoiceDialog = require('./multiple-choice-dialog');
-const MultipleItemDialog = require('./multiple-items-dialog');
-const ConfirmAddDialog = require('./confirm-add-dialog');
-const PermalinkTools = require('./permalink-tools');
-const Review = require('./review');
-const Spinner = require('zotero-web-library/src/js/component/ui/spinner');
-const StyleInstaller = require('./style-installer');
-const UserTypeDetector = require('zotero-web-library/src/js/enhancers/user-type-detector');
-const WhatsThis = require('./whats-this');
-const Footer = require('./footer');
+import About from './about';
+import BibliographySection from './bibliographySection';
+import Brand from './brand';
+import Button from './ui/button';
+import CiteTools from './cite-tools';
+import Confirmation from './confirmation';
+import CopyCitationDialog from './copy-citation-dialog';
+import Editor from './editor';
+import ExportTools from './export-tools';
+import Icon from './ui/icon';
+import Message from './message';
+import Modal from './modal';
+import MultipleChoiceDialog from './multiple-choice-dialog';
+import MultipleItemDialog from './multiple-items-dialog';
+import ConfirmAddDialog from './confirm-add-dialog';
+import PermalinkTools from './permalink-tools';
+import Review from './review';
+import Spinner from './ui/spinner';
+import StyleInstaller from './style-installer';
+import UserTypeDetector from '../enhancers/user-type-detector';
+import WhatsThis from './whats-this';
+import Footer from './footer';
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -203,4 +201,4 @@ class ZBib extends React.PureComponent {
 	}
 }
 
-module.exports = withRouter(UserTypeDetector(ZBib));
+export default withRouter(UserTypeDetector(ZBib));
