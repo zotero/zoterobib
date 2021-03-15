@@ -1,13 +1,12 @@
-'use strict';
+import React from 'react';
+import balanced from 'balanced-match';
+import api from 'zotero-api-client';
+import apiCache from 'zotero-api-client-cache';
+import load from 'load-script';
+import formatBib from './cite';
+import baseMappings from 'zotero-base-mappings';
 
-const React = require('react');
-const balanced = require('balanced-match');
-const api = require('zotero-api-client');
-const apiCache = require('zotero-api-client-cache');
 const cachedApi = api().use(apiCache());
-const load = require('load-script');
-const formatBib = require('./cite');
-const { baseMappings } = require('zotero-web-library/src/js/constants/item');
 const stylesCache = {};
 
 const getCSL = () => {
