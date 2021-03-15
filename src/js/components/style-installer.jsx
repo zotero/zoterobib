@@ -10,10 +10,8 @@ import Icon from './ui/icon';
 import Input from './form/input';
 import cx from 'classnames';
 import Modal from './modal';
-import SearchWorker from 'webworkify';
-const searchWorker = SearchWorker(require('../search-worker.js'));
-// import SearchWorker from 'web-worker:../search-worker.js';
-// const searchWorker = new SearchWorker();
+import SearchWorker from 'web-worker:../search-worker.js';
+const searchWorker = new SearchWorker();
 
 
 class StyleInstaller extends React.Component {

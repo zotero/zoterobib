@@ -1,15 +1,42 @@
 import React from 'react';
 import balanced from 'balanced-match';
 import api from 'zotero-api-client';
-import apiCache from 'zotero-api-client-cache';
+// import apiCache from 'zotero-api-client-cache';
 import load from 'load-script';
 import formatBib from './cite';
 import baseMappings from 'zotero-base-mappings';
+// import * as citeproc from '@citeproc-rs/wasm';
+// import init, { Driver } from '@citeproc-rs/wasm';
 
-const cachedApi = api().use(apiCache());
+// const cachedApi = api().use(apiCache());
+const cachedApi = api();
 const stylesCache = {};
 
-const getCSL = () => {
+// const citeproc = require('');
+
+// import "/build/static/js/citeproc-rs/wasm.js";
+// console.log(citeproc.Driver);
+
+// debugger;
+
+class Fetcher {
+    async fetchLocale(lang) {
+    //     return await fetch("https://some-cdn-with-locales.com/locales-${lang}.xml")
+    //         .then(res => res.text());
+
+        // or just
+        // return "<locale> ... </locale>";
+        // return LOCALES_PRELOADED[lang];
+
+        // or if you don't support locales other than the bundled en-US!
+        return null;
+    }
+}
+
+const fetcher = new Fetcher();
+
+
+const getCSL = async () => {
 	if('CSL' in window) {
 		return Promise.resolve(window.CSL);
 	}
@@ -34,6 +61,16 @@ const getCiteproc = async (citationStyle, bib) => {
 	]);
 
 	const style = styleXmls[styleXmls.length - 1];
+
+	try {
+		const { default: init, Driver } = await import("/static/js/citeproc-rs/wasm.js");
+		await init();
+		const driverResult = Driver.new({ style, fetcher });
+		const driver = driverResult.unwrap();
+		console.log({ driver, style });
+	} catch(err) {
+		console.error(err);
+	}
 
 	return new CSL.Engine({
 		retrieveLocale: retrieveLocaleSync,
@@ -342,6 +379,7 @@ const getCitations = (bib, citeproc) => {
 
 const getBibliographyOrFallback = (bib, citeproc) => {
 	const items = bib.itemsRaw.map(item => item.key);
+	console.log({ items, bib });
 	citeproc.updateItems([]); // workaround for #256
 	citeproc.updateItems(items);
 	const bibliography = citeproc.makeBibliography();
