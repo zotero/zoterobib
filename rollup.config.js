@@ -10,7 +10,7 @@ const config = {
 	input: './src/js/main.js',
 	output: {
 		dir: './build/static',
-		format: 'esm',
+		format: 'iife',
 		sourcemap: true,
 	},
 	plugins: [

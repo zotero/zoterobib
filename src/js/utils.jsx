@@ -2,7 +2,7 @@ import React from 'react';
 import balanced from 'balanced-match';
 import api from 'zotero-api-client';
 // import apiCache from 'zotero-api-client-cache';
-import load from 'load-script';
+// import load from 'load-script';
 import formatBib from './cite';
 import baseMappings from 'zotero-base-mappings';
 // import * as citeproc from '@citeproc-rs/wasm';
@@ -33,72 +33,75 @@ class Fetcher {
     }
 }
 
-const fetcher = new Fetcher();
 
+// const getCSL = async () => {
+// 	if('CSL' in window) {
+// 		return Promise.resolve(window.CSL);
+// 	}
 
-const getCSL = async () => {
-	if('CSL' in window) {
-		return Promise.resolve(window.CSL);
-	}
+// 	return new Promise((resolve, reject) => {
+// 		load('/static/js/citeproc.js', (err) => {
+// 			if (err) {
+// 				reject(err);
+// 			} else {
+// 				resolve(window.CSL);
+// 			}
+// 		});
+// 	});
+// };
 
-	return new Promise((resolve, reject) => {
-		load('/static/js/citeproc.js', (err) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(window.CSL);
-			}
-		});
-	});
-};
-
-const getCiteproc = async (citationStyle, bib) => {
+const getCiteproc = async (citationStyle) => {
 	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
+	const fetcher = new Fetcher();
 
-	const [ CSL, styleXmls ] = await Promise.all([
-		getCSL(),
-		retrieveStyle(citationStyle)
-	]);
+	// const [ CSL, styleXmls ] = await Promise.all([
+	// 	getCSL(),
+	// 	retrieveStyle(citationStyle)
+	// ]);
 
+	const styleXmls = await retrieveStyle(citationStyle);
 	const style = styleXmls[styleXmls.length - 1];
 
 	try {
 		const { default: init, Driver } = await import("/static/js/citeproc-rs/wasm.js");
 		await init();
+		// const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
 		const driverResult = Driver.new({ style, fetcher });
 		const driver = driverResult.unwrap();
+		await driver.fetchLocales();
 		console.log({ driver, style });
+		return driver;
 	} catch(err) {
 		console.error(err);
 	}
 
-	return new CSL.Engine({
-		retrieveLocale: retrieveLocaleSync,
-		retrieveItem: itemId => {
-			const item = bib.itemsCSL.find(item => item.id === itemId);
+	// return new CSL.Engine({
+	// 	retrieveLocale: retrieveLocaleSync,
+	// 	retrieveItem: itemId => {
+	// 		const item = bib.itemsCSL.find(item => item.id === itemId);
 
-			// Don't return URL or accessed information for journal, newspaper, or magazine
-			// articles if there's a page number. Equivalent to export.citePaperJournalArticleURL
-			// being set in Zotero (as it is by default)
-			if (item.type.startsWith('article-') && item.page) {
-				delete item.URL;
-				delete item.accessed;
-			}
+	// 		// Don't return URL or accessed information for journal, newspaper, or magazine
+	// 		// articles if there's a page number. Equivalent to export.citePaperJournalArticleURL
+	// 		// being set in Zotero (as it is by default)
+	// 		if (item.type.startsWith('article-') && item.page) {
+	// 			delete item.URL;
+	// 			delete item.accessed;
+	// 		}
 
-			if(!('author' in item) && !('title' in item) && !('issued' in item)) {
-				// there is a risk of this item being skipped by citeproc
-				// in makeBibliography so we inject title to make sure it
-				// can be edited in bib-web
-				return {
-					...item,
-					title: 'Untitled'
-				};
-			} else {
-				return item;
-			}
-		},
-		uppercase_subtitles: isUppercaseSubtitlesStyle(citationStyle, styleXmls)
-	}, style, lang);
+	// 		if(!('author' in item) && !('title' in item) && !('issued' in item)) {
+	// 			// there is a risk of this item being skipped by citeproc
+	// 			// in makeBibliography so we inject title to make sure it
+	// 			// can be edited in bib-web
+	// 			return {
+	// 				...item,
+	// 				title: 'Untitled'
+	// 			};
+	// 		} else {
+	// 			return item;
+	// 		}
+	// 	},
+	// 	uppercase_subtitles: isUppercaseSubtitlesStyle(citationStyle, styleXmls)
+	// }, style, lang);
 };
 
 const syncRequestAsText = url => {
@@ -253,6 +256,8 @@ const getItemTypes = async () => {
 };
 
 const getItemTypeMeta = async (itemType) => {
+	console.log('getItemTypeMeta');
+
 	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
 		cachedApi.itemTypes().get(),
 		cachedApi.itemTypeFields(itemType).get(),
@@ -614,33 +619,33 @@ const getHtmlNodeFromBibliography = bibliographyData => {
 	return div;
 }
 
-function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
-	const { items, citations, bibliography, isFallback } = bibliographyData;
+// function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
+// 	const { items, citations, bibliography, isFallback } = bibliographyData;
 
-	if(isFallback) {
-		for(let i = 0; i < items.length; i++) {
-			const item = items[i];
-			const content = <span dangerouslySetInnerHTML={ { __html: citations[i] } } />;
-			yield [item, content];
-		}
-	} else {
-		const nodeArray = Array.from(bibliographyNode.firstChild.children);
-		for(let i = 0; i < nodeArray.length; i++) {
-			const child = nodeArray[i];
-			const [ itemId ] = bibliography[0]['entry_ids'][i];
-			const { Tag, attrs } = parseTagAndAttrsFromNode(child);
-			const item = items.find(i => i.key === itemId);
-			const content = <Tag
-				dangerouslySetInnerHTML={ { __html: child.innerHTML } }
-				{ ...attrs }
-			/>
-			yield [item, content];
-		}
-	}
-}
+// 	if(isFallback) {
+// 		for(let i = 0; i < items.length; i++) {
+// 			const item = items[i];
+// 			const content = <span dangerouslySetInnerHTML={ { __html: citations[i] } } />;
+// 			yield [item, content];
+// 		}
+// 	} else {
+// 		const nodeArray = Array.from(bibliographyNode.firstChild.children);
+// 		for(let i = 0; i < nodeArray.length; i++) {
+// 			const child = nodeArray[i];
+// 			const [ itemId ] = bibliography[0]['entry_ids'][i];
+// 			const { Tag, attrs } = parseTagAndAttrsFromNode(child);
+// 			const item = items.find(i => i.key === itemId);
+// 			const content = <Tag
+// 				dangerouslySetInnerHTML={ { __html: child.innerHTML } }
+// 				{ ...attrs }
+// 			/>
+// 			yield [item, content];
+// 		}
+// 	}
+// }
 
 
-//@TODO: deduplicate with web-library
+// @TODO: deduplicate with web-library
 const noop = () => {};
 
 const reverseMap = map => {
@@ -669,7 +674,7 @@ export {
 	getBibliographyOrFallback,
 	getCitation,
 	getCiteproc,
-	getCSL,
+	// getCSL,
 	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
@@ -678,7 +683,7 @@ export {
 	isNumericStyle,
 	isSentenceCaseStyle,
 	isUppercaseSubtitlesStyle,
-	makeBibliographyContentIterator,
+	// makeBibliographyContentIterator,
 	noop,
 	parseIdentifier,
 	parseTagAndAttrsFromNode,

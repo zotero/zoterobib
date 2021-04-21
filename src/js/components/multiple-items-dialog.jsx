@@ -46,18 +46,20 @@ class MultipleItemsDialog extends React.Component {
 		const { isAddingMultiple, multipleItems } = this.props;
 		const bibliographyProcessedContent = [];
 
-		if(isAddingMultiple) {
-			const div = getHtmlNodeFromBibliography(multipleItems);
-			const bibliographyContentIterator = makeBibliographyContentIterator(
-				multipleItems, div
-			);
+		//@TODO!
 
-			for(var [item, content] of bibliographyContentIterator) {
-				bibliographyProcessedContent.push(
-					this.renderItem(item, content)
-				);
-			}
-		}
+		// if(isAddingMultiple) {
+		// 	const div = getHtmlNodeFromBibliography(multipleItems);
+		// 	const bibliographyContentIterator = makeBibliographyContentIterator(
+		// 		multipleItems, div
+		// 	);
+
+		// 	for(var [item, content] of bibliographyContentIterator) {
+		// 		bibliographyProcessedContent.push(
+		// 			this.renderItem(item, content)
+		// 		);
+		// 	}
+		// }
 
 		return (
 			<Modal

@@ -10,7 +10,103 @@ import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 import Button from './ui/button';
 import Icon from './ui/icon';
-import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
+import { noop } from '../utils';
+// import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
+
+
+const BibliographyItem = props => {
+	const {
+		clipboardConfirmations,
+		dropdownsOpen,
+		isNoteStyle,
+		isNumericStyle,
+		onCopyCitationDialogOpen, //@TODO
+		onDeleteCitation,
+		onEditCitation, //@TODO
+		onFocus, //@TODO
+		onToggleDropdown, //@TODO,
+		rawItem,
+		renderedItem,
+	} = props;
+
+	return (
+		<li key={ rawItem.key }
+			data-key={ rawItem.key }
+			className="citation"
+			onFocus={ onFocus }
+			onClick={ onEditCitation }
+			tabIndex={ 0 }
+		>
+			<div className="csl-entry-container" dangerouslySetInnerHTML={ { __html: renderedItem.value } } />
+			<Dropdown
+				isOpen={ dropdownsOpen.includes(rawItem.key) }
+				toggle={ onToggleDropdown }
+				className="d-md-none"
+			>
+				<DropdownToggle
+					color={ null }
+					className="btn-icon dropdown-toggle"
+				>
+					<Icon type={ '28/dots' } width="28" height="28" />
+				</DropdownToggle>
+				<DropdownMenu right className="dropdown-menu">
+					{ !isNumericStyle && (
+						<DropdownItem
+							onClick={ onCopyCitationDialogOpen }
+							className="btn"
+						>
+							<span className={ cx('inline-feedback', {
+								'active': clipboardConfirmations.includes(rawItem.key)
+							}) }>
+								<span
+								className="default-text"
+								aria-hidden={ !clipboardConfirmations.includes(rawItem.key) }>
+									{ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
+								</span>
+								<span
+								className="shorter feedback"
+								aria-hidden={ clipboardConfirmations.includes(rawItem.key) }>
+									Copied!
+								</span>
+							</span>
+						</DropdownItem>
+					) }
+					<DropdownItem
+						onClick={ onEditCitation }
+						className="btn"
+					>
+						Edit
+					</DropdownItem>
+					<DropdownItem
+						onClick={ onEditCitation }
+						className="btn"
+					>
+						Delete
+					</DropdownItem>
+				</DropdownMenu>
+			</Dropdown>
+			{ !isNumericStyle && (
+				<Button
+					title={ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
+					className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: clipboardConfirmations.includes(rawItem.key) })}
+					onClick={ onCopyCitationDialogOpen }
+				>
+					<Icon type={ '16/copy' } width="16" height="16" />
+				</Button>
+			) }
+			<Button
+				title="Delete Entry"
+				className="btn-outline-secondary btn-remove"
+				onClick={ onDeleteCitation }
+			>
+				<Icon type={ '16/remove-sm' } width="16" height="16" />
+			</Button>
+			<script type="application/vnd.zotero.data+json">
+				{ JSON.stringify(rawItem) }
+			</script>
+		</li>
+	);
+}
 
 class Bibliography extends React.PureComponent {
 	state = {
@@ -97,127 +193,71 @@ class Bibliography extends React.PureComponent {
 		];
 	}
 
-	renderBibliographyItem(rawItem, content) {
-		return (
-			<li key={ rawItem.key }
-				className="citation"
-				onFocus={ this.handleFocus.bind(this, rawItem.key) }
-				onClick={ ev => this.handleEditCitation(rawItem.key, ev) }
-				tabIndex={ 0 }
-			>
-				<div className="csl-entry-container">
-					{ content }
-				</div>
-				<Dropdown
-					isOpen={ this.state.dropdownsOpen.includes(rawItem.key) }
-					toggle={ this.handleToggleDropdown.bind(this, rawItem.key) }
-					className="d-md-none"
-				>
-					<DropdownToggle
-						color={ null }
-						className="btn-icon dropdown-toggle"
-					>
-						<Icon type={ '28/dots' } width="28" height="28" />
-					</DropdownToggle>
-					<DropdownMenu right className="dropdown-menu">
-						{ !this.props.isNumericStyle && (
-							<DropdownItem
-								onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
-								className="btn"
-							>
-								<span className={ cx('inline-feedback', {
-									'active': this.state.clipboardConfirmations.includes(rawItem.key)
-								}) }>
-									<span
-									className="default-text"
-									aria-hidden={ !this.state.clipboardConfirmations.includes(rawItem.key) }>
-										{this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
-									</span>
-									<span
-									className="shorter feedback"
-									aria-hidden={ this.state.clipboardConfirmations.includes(rawItem.key) }>
-										Copied!
-									</span>
-								</span>
-							</DropdownItem>
-						) }
-						<DropdownItem
-							onClick={ this.handleEditCitation.bind(this, rawItem.key) }
-							className="btn"
-						>
-							Edit
-						</DropdownItem>
-						<DropdownItem
-							onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
-							className="btn"
-						>
-							Delete
-						</DropdownItem>
-					</DropdownMenu>
-				</Dropdown>
-				{ !this.props.isNumericStyle && (
-					<Button
-						title={this.props.isNoteStyle ? 'Copy Note' : 'Copy Citation'}
-						className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: this.state.clipboardConfirmations.includes(rawItem.key) })}
-						onClick={ this.handleCopyCitationDialogOpen.bind(this, rawItem.key) }
-					>
-						<Icon type={ '16/copy' } width="16" height="16" />
-					</Button>
-				) }
-				<Button
-					title="Delete Entry"
-					className="btn-outline-secondary btn-remove"
-					onClick={ this.handleDeleteCitation.bind(this, rawItem.key) }
-				>
-					<Icon type={ '16/remove-sm' } width="16" height="16" />
-				</Button>
-				<script type="application/vnd.zotero.data+json">
-					{ JSON.stringify(rawItem) }
-				</script>
-			</li>
-		);
-	}
-
 	render() {
-		const { bibliography } = this.props;
-		if(bibliography.items.length === 0) {
-			return null;
-		}
+		const { items, bibliographyItems, bibliographyMeta } = this.props;
 
-		const div = getHtmlNodeFromBibliography(bibliography);
-
-		if(this.props.isReadOnly) {
-			return (
-				<React.Fragment>
-					{ this.keyHandlers }
-					<div className="bibliography read-only"
-						dangerouslySetInnerHTML={ { __html: div.innerHTML } }
+		return (
+			<ul className="bibliography" key="bibliography">
+				{ bibliographyItems.map((renderedItem, index) => (
+					<BibliographyItem
+						key={ items[index].key }
+						rawItem={ items[index] }
+						renderedItem={ renderedItem }
+						clipboardConfirmations= { [] /*TODO*/ }
+						dropdownsOpen = { []  /*TODO*/ }
+						isNoteStyle = { false /*TODO*/ }
+						isNumericStyle = { false /*TODO*/ }
+						onCopyCitationDialogOpen = { noop }
+						onDeleteCitation = { noop }
+						onEditCitation = { noop }
+						onFocus = { noop }
+						onToggleDropdown = { noop }
 					/>
-					{bibliography.items.map(rawItem => (
-						<script key={ rawItem.key } type="application/vnd.zotero.data+json">
-							{ JSON.stringify(rawItem) }
-						</script>
-					))}
-				</React.Fragment>
-			);
-		} else {
-			const bibliographyContentIterator = makeBibliographyContentIterator(
-				bibliography, div
-			);
-			const bibliographyProcessedContent = [];
-			for(var [item, content] of bibliographyContentIterator) {
-				bibliographyProcessedContent.push(
-					this.renderBibliographyItem(item, content)
-				);
-			}
+				)) }
+			</ul>
+		);
 
-			return [
-				...this.keyHandlers,
-				<ul className="bibliography" key="bibliography">
-					{ bibliographyProcessedContent }
-				</ul>
-			];
-		}
+
+
+		// if(bibliography.items.length === 0) {
+		// 	return null;
+		// }
+
+		// const div = getHtmlNodeFromBibliography(bibliography);
+
+		// @TODO: reimplement
+		// if(this.props.isReadOnly) {
+		// 	return (
+		// 		<React.Fragment>
+		// 			{ this.keyHandlers }
+		// 			<div className="bibliography read-only"
+		// 				dangerouslySetInnerHTML={ { __html: div.innerHTML } }
+		// 			/>
+		// 			{bibliography.items.map(rawItem => (
+		// 				<script key={ rawItem.key } type="application/vnd.zotero.data+json">
+		// 					{ JSON.stringify(rawItem) }
+		// 				</script>
+		// 			))}
+		// 		</React.Fragment>
+		// 	);
+		// } else {
+		// 	const bibliographyContentIterator = makeBibliographyContentIterator(
+		// 		bibliography, div
+		// 	);
+		// 	const bibliographyProcessedContent = [];
+		// 	for(var [item, content] of bibliographyContentIterator) {
+		// 		bibliographyProcessedContent.push(
+		// 			this.renderBibliographyItem(item, content)
+		// 		);
+		// 	}
+
+		// 	return [
+		// 		...this.keyHandlers,
+		// 		<ul className="bibliography" key="bibliography">
+		// 			{ 	 }
+		// 		</ul>
+		// 	];
+		// }
 	}
 
 	static defaultProps = {
