@@ -20,16 +20,24 @@ const stylesCache = {};
 // debugger;
 
 class Fetcher {
-    async fetchLocale(lang) {
-    //     return await fetch("https://some-cdn-with-locales.com/locales-${lang}.xml")
-    //         .then(res => res.text());
+	async fetchLocale(lang) {
+		const cacheId = `zotero-style-locales-${lang}`;
+		var locales = localStorage.getItem(cacheId);
 
-        // or just
-        // return "<locale> ... </locale>";
-        // return LOCALES_PRELOADED[lang];
+		// fix in place for scenarios where potentially bad locales have been cached
+		// see issue #236
+		if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
+			locales = false;
+		}
 
-        // or if you don't support locales other than the bundled en-US!
-        return null;
+		if(locales) {
+			return locales;
+		} else {
+			const response = await fetch(`/static/locales/locales-${lang}.xml`);
+			const locales = response.text();
+			localStorage.setItem(cacheId, locales);
+			return locales;
+		}
     }
 }
 
@@ -65,8 +73,7 @@ const getCiteproc = async (citationStyle) => {
 	try {
 		const { default: init, Driver } = await import("/static/js/citeproc-rs/wasm.js");
 		await init();
-		// const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
-		const driverResult = Driver.new({ style, fetcher });
+		const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
 		const driver = driverResult.unwrap();
 		await driver.fetchLocales();
 		console.log({ driver, style });
