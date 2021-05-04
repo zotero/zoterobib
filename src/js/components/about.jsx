@@ -129,8 +129,8 @@ class About extends React.PureComponent {
 								<h2 className="h4">Style selection</h2>
 								<p>
 									Format your bibliography using APA, MLA, Chicago / Turabian,
-									or any of the 9,000+
-									other <a href="http://citationstyles.org/">CSL</a> styles.
+									Harvard, or any of the 10,000+
+									other <a href="https://citationstyles.org/">CSL</a> styles.
 								</p>
 							</section>
 							<section className="feature">
