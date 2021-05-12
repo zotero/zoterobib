@@ -50,7 +50,7 @@ class ZBib extends React.PureComponent {
 
 	render() {
 		return (
-			typeof this.props.isReadOnly === 'undefined'
+			!this.props.isReady
 				?	<div className={ cx(this.className) }>
 						<Spinner />
 					</div>
@@ -183,6 +183,7 @@ class ZBib extends React.PureComponent {
 		isKeyboardUser: PropTypes.bool,
 		isMouseUser: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
+		isReady: PropTypes.bool,
 		isSaveToZoteroVisible: PropTypes.bool,
 		isTouchUser: PropTypes.bool,
 		itemUnderReviewBibliography: PropTypes.object,

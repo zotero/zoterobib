@@ -10,7 +10,8 @@ import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 import Button from './ui/button';
 import Icon from './ui/icon';
-import { noop } from '../utils';
+import { noop, parseTagAndAttrsFromNode } from '../utils';
+import formatBib from '../cite';
 // import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
 
 
@@ -196,26 +197,48 @@ class Bibliography extends React.PureComponent {
 	render() {
 		const { items, bibliographyItems, bibliographyMeta } = this.props;
 
-		return (
-			<ul className="bibliography" key="bibliography">
-				{ bibliographyItems.map((renderedItem, index) => (
-					<BibliographyItem
-						key={ items[index].key }
-						rawItem={ items[index] }
-						renderedItem={ renderedItem }
-						clipboardConfirmations= { [] /*TODO*/ }
-						dropdownsOpen = { []  /*TODO*/ }
-						isNoteStyle = { false /*TODO*/ }
-						isNumericStyle = { false /*TODO*/ }
-						onCopyCitationDialogOpen = { noop }
-						onDeleteCitation = { noop }
-						onEditCitation = { noop }
-						onFocus = { noop }
-						onToggleDropdown = { noop }
-					/>
-				)) }
-			</ul>
-		);
+		const bibliographyRendered = formatBib([
+			{
+				bibstart: bibliographyMeta.formatMeta.markupPre,
+				bibend: bibliographyMeta.formatMeta.markupPost,
+				hangingindent: bibliographyMeta.hangingIndent,
+				maxoffset: bibliographyMeta.maxOffset,
+				entryspacing: bibliographyMeta.entrySpacing,
+				linespacing: bibliographyMeta.lineSpacing,
+				'second-field-align': bibliographyMeta.secondFieldAlign
+			},
+			bibliographyItems.map((renderedItem, index) => (
+				`<div className="csl-entry">${renderedItem.value}</div>`
+			)).join('')
+		]);
+
+		if(this.props.isReadOnly) {
+			// TODO: { this.keyHandlers }
+			return (
+				<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
+			);
+		} else {
+			return (
+				<ul className="bibliography" key="bibliography">
+					{ bibliographyItems.map((renderedItem, index) => (
+						<BibliographyItem
+							key={ items[index].key }
+							rawItem={ items[index] }
+							renderedItem={ renderedItem }
+							clipboardConfirmations= { [] /*TODO*/ }
+							dropdownsOpen = { []  /*TODO*/ }
+							isNoteStyle = { false /*TODO*/ }
+							isNumericStyle = { false /*TODO*/ }
+							onCopyCitationDialogOpen = { noop }
+							onDeleteCitation = { noop }
+							onEditCitation = { noop }
+							onFocus = { noop }
+							onToggleDropdown = { noop }
+						/>
+					)) }
+				</ul>
+			);
+		}
 
 
 

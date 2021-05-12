@@ -674,6 +674,25 @@ const splice = (array, at, count = 0, ...items) => {
 	];
 };
 
+const getExpandedCitationStyles = (citationStyles, styleMeta) => {
+	if(citationStyles.find(cs => cs.name === styleMeta.name)) {
+		return citationStyles;
+	}
+
+	const newCitationStyles = [
+		...citationStyles,
+		{
+			name: styleMeta.name,
+			title: styleMeta.title,
+			isDependent: styleMeta.dependent,
+			isCore: false
+		}
+	];
+
+	newCitationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
+	return newCitationStyles;
+};
+
 export {
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
@@ -685,6 +704,7 @@ export {
 	getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
+	getExpandedCitationStyles,
 	isLikeUrl,
 	isNoteStyle,
 	isNumericStyle,
