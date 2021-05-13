@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ZoteroBib from 'zotero-translation-client';
 import { useParams, useHistory } from "react-router-dom";
 
@@ -36,6 +36,18 @@ const BibWebContainer = props => {
 	]);
 	citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 
+	const localCitationsCount = useMemo(() => {
+		// parse citations from localstorage so we know how many there are.toUpperCase
+		// if not remoteid, we don't care so save don't waste time parsing
+		if(remoteId) {
+			const localBib = new ZoteroBib(config);
+			localBib.reloadItems();
+			return localBib.items.length;
+		} else {
+			return null;
+		}
+	}, [config, remoteId]);
+
 	const handleCitationStyleChanged = useCallback(ev => {
 		console.log({ ev });
 		setCitationStyle(ev.value);
@@ -45,6 +57,18 @@ const BibWebContainer = props => {
 		// TODO: display message
 		throw e;
 	}, []);
+
+	const handleOverride = useCallback(() => {
+		const localBib = new ZoteroBib(config);
+		localBib.clearItems();
+
+		bib.current = new ZoteroBib({
+			...config,
+			initialItems: bib.current.itemsRaw
+		});
+
+		history.replace('/');
+	}, [config, history]);
 
 	const refreshBibliography = useCallback(async (citationStyle) => {
 		if(citeproc.current) {
@@ -116,6 +140,7 @@ const BibWebContainer = props => {
 		citationStyles={ citationStyles }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
+		localCitationsCount={ localCitationsCount }
 		messages={ messages }
 		items={ bib?.current?.items || [] }
 		onCitationCopy = { noop }
@@ -128,6 +153,7 @@ const BibWebContainer = props => {
 		onStyleSwitchCancel = { noop }
 		onStyleSwitchConfirm = { noop }
 		onCitationStyleChanged={ handleCitationStyleChanged }
+		onOverride={ handleOverride }
 		onUndoDelete = { noop }
 	/>);
 }
