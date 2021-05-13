@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { withRouter } from 'react-router-dom';
 import { default as KeyHandler } from 'react-key-handler';
 import { KEYDOWN } from 'react-key-handler';
 import { default as Dropdown } from 'reactstrap/lib/Dropdown';
@@ -10,10 +9,29 @@ import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 import Button from './ui/button';
 import Icon from './ui/icon';
-import { noop, parseTagAndAttrsFromNode } from '../utils';
+import { noop } from '../utils';
 import formatBib from '../cite';
 // import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
 
+
+const KeyHandlers = ({ onKeyHandle }) => {
+	return (
+		<React.Fragment>
+			<KeyHandler
+				key="key-handler-enter"
+				keyEventName={ KEYDOWN }
+				keyValue="Enter"
+				onKeyHandle={ onKeyHandle }
+			/>
+			<KeyHandler
+				key="key-handler-space"
+				keyEventName={ KEYDOWN }
+				keyValue=" "
+				onKeyHandle={ onKeyHandle }
+			/>
+		</React.Fragment>
+	);
+}
 
 const BibliographyItem = props => {
 	const {
@@ -177,23 +195,6 @@ class Bibliography extends React.PureComponent {
 		this.props.onCitationCopyDialogOpen(itemId);
 	}
 
-	get keyHandlers() {
-		return [
-			<KeyHandler
-				key="key-handler-enter"
-				keyEventName={ KEYDOWN }
-				keyValue="Enter"
-				onKeyHandle={ this.handleKeyboard.bind(this) }
-			/>,
-			<KeyHandler
-				key="key-handler-space"
-				keyEventName={ KEYDOWN }
-				keyValue=" "
-				onKeyHandle={ this.handleKeyboard.bind(this) }
-			/>,
-		];
-	}
-
 	render() {
 		const { items, bibliographyItems, bibliographyMeta } = this.props;
 
@@ -212,75 +213,44 @@ class Bibliography extends React.PureComponent {
 			)).join('')
 		]);
 
-		if(this.props.isReadOnly) {
-			// TODO: { this.keyHandlers }
-			return (
-				<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
-			);
-		} else {
-			return (
-				<ul className="bibliography" key="bibliography">
-					{ bibliographyItems.map((renderedItem, index) => (
-						<BibliographyItem
-							key={ items[index].key }
-							rawItem={ items[index] }
-							renderedItem={ renderedItem }
-							clipboardConfirmations= { [] /*TODO*/ }
-							dropdownsOpen = { []  /*TODO*/ }
-							isNoteStyle = { false /*TODO*/ }
-							isNumericStyle = { false /*TODO*/ }
-							onCopyCitationDialogOpen = { noop }
-							onDeleteCitation = { noop }
-							onEditCitation = { noop }
-							onFocus = { noop }
-							onToggleDropdown = { noop }
-						/>
-					)) }
-				</ul>
-			);
+		if(bibliographyItems.length === 0) {
+			return null;
 		}
 
-
-
-		// if(bibliography.items.length === 0) {
-		// 	return null;
-		// }
-
-		// const div = getHtmlNodeFromBibliography(bibliography);
-
-		// @TODO: reimplement
-		// if(this.props.isReadOnly) {
-		// 	return (
-		// 		<React.Fragment>
-		// 			{ this.keyHandlers }
-		// 			<div className="bibliography read-only"
-		// 				dangerouslySetInnerHTML={ { __html: div.innerHTML } }
-		// 			/>
-		// 			{bibliography.items.map(rawItem => (
-		// 				<script key={ rawItem.key } type="application/vnd.zotero.data+json">
-		// 					{ JSON.stringify(rawItem) }
-		// 				</script>
-		// 			))}
-		// 		</React.Fragment>
-		// 	);
-		// } else {
-		// 	const bibliographyContentIterator = makeBibliographyContentIterator(
-		// 		bibliography, div
-		// 	);
-		// 	const bibliographyProcessedContent = [];
-		// 	for(var [item, content] of bibliographyContentIterator) {
-		// 		bibliographyProcessedContent.push(
-		// 			this.renderBibliographyItem(item, content)
-		// 		);
-		// 	}
-
-		// 	return [
-		// 		...this.keyHandlers,
-		// 		<ul className="bibliography" key="bibliography">
-		// 			{ 	 }
-		// 		</ul>
-		// 	];
-		// }
+		return (
+			<React.Fragment>
+				<KeyHandlers onKeyHandle={ this.handleKeyboard.bind(this) } />
+				{ this.props.isReadOnly ? (
+					<React.Fragment>
+						<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
+						{ bibliographyItems.map((_renderedItem, index) => (
+						<script key={ items[index].key } type="application/vnd.zotero.data+json">
+								{ JSON.stringify(items[index]) }
+						</script>
+						)) }
+					</React.Fragment>
+				) : (
+					<ul className="bibliography" key="bibliography">
+						{ bibliographyItems.map((renderedItem, index) => (
+							<BibliographyItem
+								key={ items[index].key }
+								rawItem={ items[index] }
+								renderedItem={ renderedItem }
+								clipboardConfirmations= { [] /*TODO*/ }
+								dropdownsOpen = { []  /*TODO*/ }
+								isNoteStyle = { false /*TODO*/ }
+								isNumericStyle = { false /*TODO*/ }
+								onCopyCitationDialogOpen = { noop }
+								onDeleteCitation = { noop }
+								onEditCitation = { noop }
+								onFocus = { noop }
+								onToggleDropdown = { noop }
+							/>
+						)) }
+					</ul>
+				)}
+			</React.Fragment>
+		)
 	}
 
 	static defaultProps = {
@@ -293,7 +263,6 @@ class Bibliography extends React.PureComponent {
 		isNumericStyle: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		items: PropTypes.array,
-		match: PropTypes.object,
 		onCitationCopyDialogOpen:  PropTypes.func.isRequired,
 		onDeleteEntry: PropTypes.func.isRequired,
 		onEditorOpen:  PropTypes.func.isRequired,
@@ -301,4 +270,4 @@ class Bibliography extends React.PureComponent {
 }
 
 
-export default withRouter(Bibliography);
+export default Bibliography;

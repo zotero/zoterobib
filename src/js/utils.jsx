@@ -560,22 +560,22 @@ const processSentenceCaseAPAItems = items => {
 	return items;
 };
 
-const parseTagAndAttrsFromNode = node => {
-	let Tag = node.tagName.toLowerCase();
-	let attrs = {
-		className: node.getAttribute('class') || '',
-		style: (node.getAttribute('style') || '')
-			.split(';')
-			.map(x => x.split(':')
-				.map(y => y.trim())
-			).reduce((aggr, val) => {
-				aggr[val[0].replace(/-([a-z])/g, g => g[1].toUpperCase())] = val[1];
-				return aggr;
-			}, {})
-	};
+// const parseTagAndAttrsFromNode = node => {
+// 	let Tag = node.tagName.toLowerCase();
+// 	let attrs = {
+// 		className: node.getAttribute('class') || '',
+// 		style: (node.getAttribute('style') || '')
+// 			.split(';')
+// 			.map(x => x.split(':')
+// 				.map(y => y.trim())
+// 			).reduce((aggr, val) => {
+// 				aggr[val[0].replace(/-([a-z])/g, g => g[1].toUpperCase())] = val[1];
+// 				return aggr;
+// 			}, {})
+// 	};
 
-	return { Tag, attrs };
-};
+// 	return { Tag, attrs };
+// };
 
 const processMultipleChoiceItems = async (items, isUrl = false) => {
 	const itemTypes = await getItemTypes();
@@ -613,18 +613,18 @@ const dedupMultipleChoiceItems = items => {
 	return removeDuplicatesBy(i => i.signature, items);
 };
 
-const getHtmlNodeFromBibliography = bibliographyData => {
-	const { citations, bibliography, isFallback } = bibliographyData;
-	const html = isFallback ?
-		`<ol><li>${citations.join('</li><li>')}</li></ol>` :
-		formatBib(bibliography);
-	const div = document.createElement('div');
-	div.innerHTML = html;
-	div.querySelectorAll('a').forEach(link => {
-		link.setAttribute('rel', 'nofollow');
-	});
-	return div;
-}
+// const getHtmlNodeFromBibliography = bibliographyData => {
+// 	const { citations, bibliography, isFallback } = bibliographyData;
+// 	const html = isFallback ?
+// 		`<ol><li>${citations.join('</li><li>')}</li></ol>` :
+// 		formatBib(bibliography);
+// 	const div = document.createElement('div');
+// 	div.innerHTML = html;
+// 	div.querySelectorAll('a').forEach(link => {
+// 		link.setAttribute('rel', 'nofollow');
+// 	});
+// 	return div;
+// }
 
 // function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
 // 	const { items, citations, bibliography, isFallback } = bibliographyData;
@@ -701,7 +701,7 @@ export {
 	getCitation,
 	getCiteproc,
 	// getCSL,
-	getHtmlNodeFromBibliography,
+	// getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
 	getExpandedCitationStyles,
@@ -713,7 +713,7 @@ export {
 	// makeBibliographyContentIterator,
 	noop,
 	parseIdentifier,
-	parseTagAndAttrsFromNode,
+	// parseTagAndAttrsFromNode,
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
