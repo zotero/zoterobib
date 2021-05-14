@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { default as KeyHandler } from 'react-key-handler';
@@ -127,146 +127,120 @@ const BibliographyItem = props => {
 	);
 }
 
-class Bibliography extends React.PureComponent {
-	state = {
-		clipboardConfirmations: [],
-		dropdownsOpen: [],
-		focusedItem: null
-	}
+const Bibliography = props => {
+	const [clipboardConfirmations, setClipboardConfirmations] = useState([]);
+	const [dropdownsOpen, setDropdownsOpen] = useState([]);
+	const [focusedItem, setFocusedItem] = useState(null);
 
-	constructor(props) {
-		super(props);
-		this.timeouts = {};
-	}
+	const { isReadOnly, items, bibliographyItems, bibliographyMeta, onCitationCopyDialogOpen } = props;
 
-	componentWillUnmount() {
-		Object.values(this.timeouts).forEach(t => clearTimeout(t));
-		this.timeouts = {};
-	}
+	const bibliographyRendered = formatBib([
+		{
+			bibstart: bibliographyMeta.formatMeta.markupPre,
+			bibend: bibliographyMeta.formatMeta.markupPost,
+			hangingindent: bibliographyMeta.hangingIndent,
+			maxoffset: bibliographyMeta.maxOffset,
+			entryspacing: bibliographyMeta.entrySpacing,
+			linespacing: bibliographyMeta.lineSpacing,
+			'second-field-align': bibliographyMeta.secondFieldAlign
+		},
+		bibliographyItems.map((renderedItem, index) => (
+			`<div className="csl-entry">${renderedItem.value}</div>`
+		)).join('')
+	]);
 
-	handleEditCitation(itemId, ev) {
-		let selection = window.getSelection();
-		if(selection.toString().length) {
-			try {
-				if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
-					return;
-				}
-			} catch(_) {
-				// selection.anchorNode.parentNode might fail in which case we open the editor
-			}
-		}
-		if(!this.props.isReadOnly) {
-			this.props.onEditorOpen(itemId);
-		}
-	}
 
-	handleDeleteCitation(itemId, ev) {
+	const handleEditCitation = useCallback((itemId, ev) => {
+		// let selection = window.getSelection();
+		// if(selection.toString().length) {
+		// 	try {
+		// 		if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
+		// 			return;
+		// 		}
+		// 	} catch(_) {
+		// 		// selection.anchorNode.parentNode might fail in which case we open the editor
+		// 	}
+		// }
+		// if(!this.props.isReadOnly) {
+		// 	this.props.onEditorOpen(itemId);
+		// }
+	}, []);
+
+	const handleDeleteCitation = useCallback((itemId, ev) => {
+		// ev.stopPropagation();
+		// this.props.onDeleteEntry(itemId);
+	}, []);
+
+	const handleFocus = useCallback((itemId) => {
+		// this.setState({
+		// 	focusedItem: itemId
+		// });
+	}, []);
+
+	const handleKeyboard = useCallback((ev) => {
+		// if(document.activeElement.className == 'citation' && this.state.focusedItem) {
+		// 	this.props.onEditorOpen(this.state.focusedItem);
+		// 	ev.preventDefault();
+		// }
+	}, []);
+
+	const handleToggleDropdown = useCallback((itemId, ev) => {
+		// const isOpen = this.state.dropdownsOpen.includes(itemId);
+		// const dropdownsOpen = isOpen ?
+		// 	this.state.dropdownsOpen.filter(i => i !== itemId) :
+		// 	[ ...this.state.dropdownsOpen, itemId];
+
+		// this.setState({ dropdownsOpen });
+		// ev.preventDefault();
+		// ev.stopPropagation();
+	}, []);
+
+	const handleCopyCitationDialogOpen = useCallback(ev => {
 		ev.stopPropagation();
-		this.props.onDeleteEntry(itemId);
-	}
-
-	handleFocus(itemId) {
-		this.setState({
-			focusedItem: itemId
-		});
-	}
-
-	handleKeyboard(ev) {
-		if(document.activeElement.className == 'citation' && this.state.focusedItem) {
-			this.props.onEditorOpen(this.state.focusedItem);
-			ev.preventDefault();
-		}
-	}
-
-	handleToggleDropdown(itemId, ev) {
-		const isOpen = this.state.dropdownsOpen.includes(itemId);
-		const dropdownsOpen = isOpen ?
-			this.state.dropdownsOpen.filter(i => i !== itemId) :
-			[ ...this.state.dropdownsOpen, itemId];
-
-		this.setState({ dropdownsOpen });
 		ev.preventDefault();
-		ev.stopPropagation();
+		console.log(ev.currentTarget, ev);
+		onCitationCopyDialogOpen(ev.currentTarget.closest('[data-key]').dataset.key);
+	}, [onCitationCopyDialogOpen]);
+
+
+	if(bibliographyItems.length === 0) {
+		return null;
 	}
 
-	handleCopyCitationDialogOpen(itemId, ev) {
-		ev.stopPropagation();
-		ev.preventDefault();
-		this.props.onCitationCopyDialogOpen(itemId);
-	}
-
-	render() {
-		const { items, bibliographyItems, bibliographyMeta } = this.props;
-
-		const bibliographyRendered = formatBib([
-			{
-				bibstart: bibliographyMeta.formatMeta.markupPre,
-				bibend: bibliographyMeta.formatMeta.markupPost,
-				hangingindent: bibliographyMeta.hangingIndent,
-				maxoffset: bibliographyMeta.maxOffset,
-				entryspacing: bibliographyMeta.entrySpacing,
-				linespacing: bibliographyMeta.lineSpacing,
-				'second-field-align': bibliographyMeta.secondFieldAlign
-			},
-			bibliographyItems.map((renderedItem, index) => (
-				`<div className="csl-entry">${renderedItem.value}</div>`
-			)).join('')
-		]);
-
-		if(bibliographyItems.length === 0) {
-			return null;
-		}
-
-		return (
-			<React.Fragment>
-				<KeyHandlers onKeyHandle={ this.handleKeyboard.bind(this) } />
-				{ this.props.isReadOnly ? (
-					<React.Fragment>
-						<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
-						{ bibliographyItems.map((_renderedItem, index) => (
-						<script key={ items[index].key } type="application/vnd.zotero.data+json">
-								{ JSON.stringify(items[index]) }
-						</script>
-						)) }
-					</React.Fragment>
-				) : (
-					<ul className="bibliography" key="bibliography">
-						{ bibliographyItems.map((renderedItem, index) => (
-							<BibliographyItem
-								key={ items[index].key }
-								rawItem={ items[index] }
-								renderedItem={ renderedItem }
-								clipboardConfirmations= { [] /*TODO*/ }
-								dropdownsOpen = { []  /*TODO*/ }
-								isNoteStyle = { false /*TODO*/ }
-								isNumericStyle = { false /*TODO*/ }
-								onCopyCitationDialogOpen = { noop }
-								onDeleteCitation = { noop }
-								onEditCitation = { noop }
-								onFocus = { noop }
-								onToggleDropdown = { noop }
-							/>
-						)) }
-					</ul>
-				)}
-			</React.Fragment>
-		)
-	}
-
-	static defaultProps = {
-		bibliography: []
-	}
-
-	static propTypes = {
-		bibliography: PropTypes.object,
-		isNoteStyle: PropTypes.bool,
-		isNumericStyle: PropTypes.bool,
-		isReadOnly: PropTypes.bool,
-		items: PropTypes.array,
-		onCitationCopyDialogOpen:  PropTypes.func.isRequired,
-		onDeleteEntry: PropTypes.func.isRequired,
-		onEditorOpen:  PropTypes.func.isRequired,
-	}
+	return (
+		<React.Fragment>
+			<KeyHandlers onKeyHandle={ handleKeyboard } />
+			{ isReadOnly ? (
+				<React.Fragment>
+					<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
+					{ bibliographyItems.map((_renderedItem, index) => (
+					<script key={ items[index].key } type="application/vnd.zotero.data+json">
+							{ JSON.stringify(items[index]) }
+					</script>
+					)) }
+				</React.Fragment>
+			) : (
+				<ul className="bibliography" key="bibliography">
+					{ bibliographyItems.map((renderedItem, index) => (
+						<BibliographyItem
+							key={ items[index].key }
+							rawItem={ items[index] }
+							renderedItem={ renderedItem }
+							clipboardConfirmations= { [] /*TODO*/ }
+							dropdownsOpen = { []  /*TODO*/ }
+							isNoteStyle = { false /*TODO*/ }
+							isNumericStyle = { false /*TODO*/ }
+							onCopyCitationDialogOpen = { handleCopyCitationDialogOpen }
+							onDeleteCitation = { noop }
+							onEditCitation = { noop }
+							onFocus = { noop }
+							onToggleDropdown = { noop }
+						/>
+					)) }
+				</ul>
+			)}
+		</React.Fragment>
+	);
 }
 
 

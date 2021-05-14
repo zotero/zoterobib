@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ZoteroBib from 'zotero-translation-client';
 import { useParams, useHistory } from "react-router-dom";
-
+import copy from 'copy-to-clipboard';
 
 import { fetchFromPermalink, getExpandedCitationStyles, getCiteproc, noop, retrieveIndependentStyle, retrieveStylesData } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
@@ -14,8 +14,10 @@ const BibWebContainer = props => {
 	const history = useHistory();
 	const citeproc = useRef(null);
 	const bib = useRef(null);
+	const copyData = useRef(null);
 	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
 	const [isDataReady, setIsDataReady] = useState(false);
+	const [activeDialog, setActiveDialog] = useState(false);
 	const wasDataReady = usePrevious(isDataReady);
 	const [messages, setMessages] = useState([]);
 	const [bibliographyItems, setBibliographyItems] = useState([]);
@@ -27,6 +29,10 @@ const BibWebContainer = props => {
 	const [citationStyleXml, setCitationStyleXml] = useState(null);
 	const [isFetchingStyleXml, setIsFetchingStyleXml] = useState(false);
 	const prevCitationStyleXml = usePrevious(citationStyleXml);
+
+	const [citationToCopy, setCitationToCopy] = useState(null);
+	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
+	const [citationHtml, setCitationHtml] = useState(null);
 
 	const { isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
@@ -57,7 +63,6 @@ const BibWebContainer = props => {
 	}, [config, remoteId]);
 
 	const handleCitationStyleChanged = useCallback(ev => {
-		console.log({ ev });
 		setCitationStyle(ev.value);
 	}, []);
 
@@ -69,8 +74,41 @@ const BibWebContainer = props => {
 	const handleCitationCopyDialogOpen = useCallback(itemId => {
 		// this.clearMessages(); //@TODO
 		// setItemUnderReview(null); //@TODO
-		// setPopup(CITATION)
-		// setCitation(itemId)
+		setActiveDialog('COPY_CITATION');
+		setCitationToCopy(itemId);
+	}, []);
+
+	const handleCitationCopyDialogClose = useCallback(() => {
+		setActiveDialog(null);
+		setCitationToCopy(null);
+		setCitationHtml(null);
+		setCitationCopyModifiers({});
+	}, []);
+
+	const handleCitationCopy = useCallback(() => {
+		const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
+		const positions = [{ }];
+		const text = citeproc.current.previewCitationCluster(cites, positions, 'plain').unwrap();
+		const html = citationHtml;
+		copyData.current = [
+			{ mime: 'text/plain', data: text },
+			{ mime: 'text/html', data: html },
+		];
+		return copy(text);
+	}, [citationCopyModifiers, citationHtml, citationToCopy]);
+
+	const handleCopyToClipboard = useCallback(ev => {
+		if(copyData.current) {
+			copyData.current.forEach(copyDataFormat => {
+				ev.clipboardData.setData(copyDataFormat.mime, copyDataFormat.data);
+			});
+			ev.preventDefault();
+			copyData.current = null;
+		}
+	}, []);
+
+	const handleCitationModifierChange = useCallback(citationCopyModifiers => {
+		setCitationCopyModifiers(citationCopyModifiers);
 	}, []);
 
 	const handleOverride = useCallback(() => {
@@ -137,6 +175,20 @@ const BibWebContainer = props => {
 	}, [citationStyle]);
 
 	useEffect(() => {
+		if(!isCiteprocReady || !citationToCopy) {
+			return;
+		}
+
+		setTimeout(() => {
+			const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
+			const positions = [{ }];
+			setCitationHtml(
+				citeproc.current.previewCitationCluster(cites, positions, 'html').unwrap()
+			);
+		}, 0);
+	}, [isCiteprocReady, citationCopyModifiers, citationToCopy]);
+
+	useEffect(() => {
 		const isDataTrigger = typeof(wasDataReady) !== 'undefined' && !wasDataReady && isDataReady;
 		const isStyleXmlTrigger = typeof(prevCitationStyleXml) !== 'undefined' && citationStyleXml !== prevCitationStyleXml;
 		if(citationStyleXml && (isDataTrigger || (isStyleXmlTrigger && isDataReady))) {
@@ -165,22 +217,28 @@ const BibWebContainer = props => {
 			bib.current.reloadItems();
 			setIsDataReady(true);
 		}
+		document.addEventListener('copy', handleCopyToClipboard, true);
 	}, []);
 
 
 	return (<ZBib
 		bibliographyItems={ bibliographyItems }
 		bibliographyMeta={ bibliographyMeta }
+		citationCopyModifiers={ citationCopyModifiers }
+		citationHtml={ citationHtml }
 		citationStyle={ citationStyle }
 		citationStyles={ citationStyles }
+		isNoteStyle={ isNoteStyle }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
 		localCitationsCount={ localCitationsCount }
 		messages={ messages }
 		items={ bib?.current?.items || [] }
-		onCitationCopy = { noop }
-		onCitationCopyCancel = { noop }
-		onCitationModifierChange = { noop }
+		activeDialog={ activeDialog }
+		onCitationCopyDialogOpen = { handleCitationCopyDialogOpen }
+		onCitationCopy = { handleCitationCopy }
+		onCitationCopyDialogClose = { handleCitationCopyDialogClose }
+		onCitationModifierChange = { handleCitationModifierChange }
 		onClearMessage = { noop }
 		onDismissUndo = { noop }
 		onHelpClick = { noop }

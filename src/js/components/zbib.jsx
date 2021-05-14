@@ -190,7 +190,6 @@ class ZBib extends React.PureComponent {
 		lastDeletedItem: PropTypes.object,
 		messages: PropTypes.array.isRequired,
 		onCitationCopy: PropTypes.func.isRequired,
-		onCitationCopyCancel: PropTypes.func.isRequired,
 		onCitationModifierChange: PropTypes.func.isRequired,
 		onClearMessage: PropTypes.func.isRequired,
 		onDismissUndo: PropTypes.func.isRequired,

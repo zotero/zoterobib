@@ -68,14 +68,14 @@ class CopyCitationDialog extends React.PureComponent {
 
 	handleCancel() {
 		this.cleanUp();
-		this.props.onCitationCopyCancel();
+		this.props.onCitationCopyDialogClose();
 	}
 
 	handleConfirm() {
 		if(this.props.onCitationCopy()) {
 			this.setState({ isCopied: true });
 			this.timeout = setTimeout(() => {
-				this.props.onCitationCopyCancel();
+				this.props.onCitationCopyDialogClose();
 				this.setState({ isCopied: false });
 			}, 1000);
 		}
@@ -114,7 +114,7 @@ class CopyCitationDialog extends React.PureComponent {
 								options={ locators }
 								searchable={ false}
 								tabIndex={ 0 }
-								value={ this.props.citationCopyModifiers.citationLabel || 'page' }
+								value={ this.props.citationCopyModifiers.label || 'page' }
 								className="form-control-sm"
 							/>
 							</div>
@@ -125,7 +125,7 @@ class CopyCitationDialog extends React.PureComponent {
 								onChange={ this.handleChange.bind(this, 'locator') }
 								onCommit={ this.handleInputCommit.bind(this) }
 								tabIndex={ 0 }
-								value={ this.props.citationCopyModifiers.citationLocator }
+								value={ this.props.citationCopyModifiers.locator }
 								className="form-control-sm"
 								placeholder="Number"
 							/>
@@ -182,9 +182,9 @@ class CopyCitationDialog extends React.PureComponent {
 		return (
 			<Modal
 				className={ cx('modal modal-centered copy-citation-dialog', { loading: !this.props.citationHtml }) }
-				isOpen={ this.props.isCitationCopyDialogOpen }
+				isOpen={ this.props.activeDialog === 'COPY_CITATION' }
 				contentLabel={ this.title }
-				onRequestClose={ () => { this.props.onCitationCopyCancel(); } }
+				onRequestClose={ () => { this.props.onCitationCopyDialogClose(); } }
 			>
 				{ this.props.citationHtml ? this.renderModalContent() : <Spinner /> }
 				<KeyHandler
@@ -199,10 +199,10 @@ class CopyCitationDialog extends React.PureComponent {
 	static propTypes = {
 		citationCopyModifiers: PropTypes.object,
 		citationHtml: PropTypes.string,
-		isCitationCopyDialogOpen: PropTypes.bool,
+		activeDialog: PropTypes.string,
 		isNoteStyle: PropTypes.bool,
 		onCitationCopy: PropTypes.func.isRequired,
-		onCitationCopyCancel: PropTypes.func.isRequired,
+		onCitationCopyDialogClose: PropTypes.func.isRequired,
 		onCitationModifierChange: PropTypes.func.isRequired,
 	}
 }
