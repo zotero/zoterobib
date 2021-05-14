@@ -58,7 +58,7 @@ class Fetcher {
 // 	});
 // };
 
-const getCiteproc = async (citationStyle) => {
+const getCiteproc = async (style) => {
 	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
 	const fetcher = new Fetcher();
 
@@ -67,12 +67,11 @@ const getCiteproc = async (citationStyle) => {
 	// 	retrieveStyle(citationStyle)
 	// ]);
 
-	const styleXmls = await retrieveStyle(citationStyle);
-	const style = styleXmls[styleXmls.length - 1];
 
 	try {
 		const { default: init, Driver } = await import("/static/js/citeproc-rs/wasm.js");
 		await init();
+		console.log({ lang, style, fetcher});
 		const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
 		const driver = driverResult.unwrap();
 		await driver.fetchLocales();
@@ -140,23 +139,6 @@ const isLikeUrl = identifier => {
 	return !!identifier.match(/^(https?:\/\/)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b(\S*)$/i);
 };
 
-const isSentenceCaseStyle = (citationStyleName, citationStyleXmls = null) => {
-	const isMatch = citationStyleName && (isUppercaseSubtitlesStyle(citationStyleName)
-		|| !!citationStyleName.match(/^american-medical-association|cite-them-right|^vancouver/));
-
-	return isMatch || (citationStyleXmls && isSentenceCaseStyle(getParentStyleName(citationStyleXmls[0])));
-};
-
-// Sentence-case styles that capitalize subtitles like APA
-const isUppercaseSubtitlesStyle = (citationStyleName, citationStyleXmls = null) => {
-	const isMatch = citationStyleName && (!!citationStyleName.match(/^apa($|-)|^academy-of-management($|-)|^(freshwater-science)/));
-
-	return isMatch || (citationStyleXmls && isUppercaseSubtitlesStyle(getParentStyleName(citationStyleXmls[0])));
-};
-
-const isNoteStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="note.*?"/);
-const isNumericStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="numeric.*?"/);
-
 const validateUrl = url => {
 		try {
 			url = new URL(url);
@@ -171,17 +153,6 @@ const validateUrl = url => {
 		}
 };
 
-const getParentStyleName = styleXml => {
-	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
-	if(matches) {
-		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w-]*)/i);
-		if(idMatches) {
-			return idMatches[1];
-		}
-	}
-	return null;
-}
-
 const getParentStyle = async (styleXml, styleXmls) => {
 	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
 	if(matches) {
@@ -191,7 +162,6 @@ const getParentStyle = async (styleXml, styleXmls) => {
 	}
 };
 
-// return xmls for provided styleIdOrUrl and all its parents
 const retrieveStyle = async (styleIdOrUrl, styleXmls = []) => {
 	var style;
 	// cache styles in memory to avoid going for the disk cache on each call
@@ -214,6 +184,11 @@ const retrieveStyle = async (styleIdOrUrl, styleXmls = []) => {
 	stylesCache[styleIdOrUrl] = style;
 	return styleXmls;
 };
+
+const retrieveIndependentStyle = async styleIdOrUrl => {
+	const styles = await retrieveStyle(styleIdOrUrl);
+	return styles[styles.length - 1];
+}
 
 const retrieveLocaleSync = lang => {
 	const cacheId = `zotero-style-locales-${lang}`;
@@ -696,6 +671,7 @@ const getExpandedCitationStyles = (citationStyles, styleMeta) => {
 export {
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
+	fetchWithCachedFallback,
 	getBibliographyFormatParameters,
 	getBibliographyOrFallback,
 	getCitation,
@@ -706,10 +682,10 @@ export {
 	getItemTypes,
 	getExpandedCitationStyles,
 	isLikeUrl,
-	isNoteStyle,
-	isNumericStyle,
-	isSentenceCaseStyle,
-	isUppercaseSubtitlesStyle,
+	// isNoteStyle,
+	// isNumericStyle,
+	// isSentenceCaseStyle,
+	// isUppercaseSubtitlesStyle,
 	// makeBibliographyContentIterator,
 	noop,
 	parseIdentifier,
@@ -718,7 +694,8 @@ export {
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
 	retrieveLocaleSync,
-	retrieveStyle,
+	retrieveIndependentStyle,
+	// retrieveStyle,
 	retrieveStylesData,
 	reverseMap,
 	saveToPermalink,

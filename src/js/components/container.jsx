@@ -3,11 +3,11 @@ import ZoteroBib from 'zotero-translation-client';
 import { useParams, useHistory } from "react-router-dom";
 
 
-import { fetchFromPermalink, getExpandedCitationStyles, getCiteproc, noop, retrieveStylesData } from '../utils';
+import { fetchFromPermalink, getExpandedCitationStyles, getCiteproc, noop, retrieveIndependentStyle, retrieveStylesData } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import ZBib from './zbib';
-import { usePrevious } from '../hooks';
+import { useCitationStyle, usePrevious } from '../hooks';
 
 const BibWebContainer = props => {
 	const { id: remoteId } = useParams();
@@ -15,7 +15,8 @@ const BibWebContainer = props => {
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
-	const [isDataReady, setIsDataReady] = useState(!remoteId);
+	const [isDataReady, setIsDataReady] = useState(false);
+	const wasDataReady = usePrevious(isDataReady);
 	const [messages, setMessages] = useState([]);
 	const [bibliographyItems, setBibliographyItems] = useState([]);
 	const [bibliographyMeta, setBibliographyMeta] = useState({});
@@ -23,9 +24,16 @@ const BibWebContainer = props => {
 		localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name
 	);
 	const prevCitationStyle = usePrevious(citationStyle);
-	const config = { ...defaults, ...props.config };
+	const [citationStyleXml, setCitationStyleXml] = useState(null);
+	const [isFetchingStyleXml, setIsFetchingStyleXml] = useState(false);
+	const prevCitationStyleXml = usePrevious(citationStyleXml);
 
-	const isReady = isCiteprocReady && isDataReady;
+	const { isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
+		useCitationStyle(citationStyle, citationStyleXml);
+
+	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
+	const isStyleReady = !!citationStyleXml;
+	const isReady = isStyleReady && isCiteprocReady && isDataReady;
 	const isReadOnly = !!remoteId;
 
 	const [citationStyles, setCitationStyles] = useState([
@@ -58,6 +66,13 @@ const BibWebContainer = props => {
 		throw e;
 	}, []);
 
+	const handleCitationCopyDialogOpen = useCallback(itemId => {
+		// this.clearMessages(); //@TODO
+		// setItemUnderReview(null); //@TODO
+		// setPopup(CITATION)
+		// setCitation(itemId)
+	}, []);
+
 	const handleOverride = useCallback(() => {
 		const localBib = new ZoteroBib(config);
 		localBib.clearItems();
@@ -70,13 +85,13 @@ const BibWebContainer = props => {
 		history.replace('/');
 	}, [config, history]);
 
-	const refreshBibliography = useCallback(async (citationStyle) => {
+	const buildBibliography = useCallback(async () => {
 		if(citeproc.current) {
 			citeproc.current.free();
 		}
 		setIsCiteprocReady(false);
-		citeproc.current = await getCiteproc(citationStyle);
 
+		citeproc.current = await getCiteproc(citationStyleXml);
 		citeproc.current.includeUncited("All").unwrap();
 		citeproc.current.insertReferences(bib.current.itemsCSL).unwrap();
 
@@ -85,7 +100,7 @@ const BibWebContainer = props => {
 		setBibliographyItems(bibliographyItems);
 		setBibliographyMeta(bibliographyMeta);
 		setIsCiteprocReady(true);
-	}, []);
+	}, [citationStyleXml]);
 
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
@@ -98,7 +113,7 @@ const BibWebContainer = props => {
 				if(!citationStyleMeta) {
 					const stylesData = await retrieveStylesData(config.stylesURL);
 					const newStyleMeta = stylesData.find(sd => sd.name === citationStyle);
-					setCitationStyle(getExpandedCitationStyles(citationStyles, newStyleMeta));
+					setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
 				}
 
 				bib.current = new ZoteroBib({
@@ -108,27 +123,47 @@ const BibWebContainer = props => {
 				});
 
 				setIsDataReady(true);
-				refreshBibliography(citationStyle);
 			}
 		} catch(e) {
 			history.push('/');
 			handleError('Failed to load citations by id', e);
 		}
-	}, [citationStyles, config, handleError, history, refreshBibliography, remoteId]);
+	}, [citationStyles, config, handleError, history, remoteId]);
+
+	const fetchCitationStyleXml = useCallback(async () => {
+		setIsFetchingStyleXml(true);
+		setCitationStyleXml(await retrieveIndependentStyle(citationStyle));
+		setIsFetchingStyleXml(false);
+	}, [citationStyle]);
+
+	useEffect(() => {
+		const isDataTrigger = typeof(wasDataReady) !== 'undefined' && !wasDataReady && isDataReady;
+		const isStyleXmlTrigger = typeof(prevCitationStyleXml) !== 'undefined' && citationStyleXml !== prevCitationStyleXml;
+		if(citationStyleXml && (isDataTrigger || (isStyleXmlTrigger && isDataReady))) {
+			buildBibliography();
+		}
+	}, [buildBibliography, citationStyleXml, isDataReady, prevCitationStyleXml, wasDataReady]);
 
 	useEffect(() => {
 		if(typeof(prevCitationStyle) !== 'undefined' && citationStyle !== prevCitationStyle) {
-			refreshBibliography(citationStyle);
+			setCitationStyleXml(null);
 		}
-	}, [citationStyle, prevCitationStyle, refreshBibliography]);
+	}, [citationStyle, prevCitationStyle]);
 
 	useEffect(() => {
+		if(citationStyleXml === null && !isFetchingStyleXml) {
+			fetchCitationStyleXml();
+		}
+	}, [citationStyleXml, fetchCitationStyleXml, isFetchingStyleXml]);
+
+	useEffect(() => {
+		fetchCitationStyleXml();
 		if(remoteId) {
 			fetchRemoteBibliography();
 		} else {
 			bib.current = new ZoteroBib(config);
 			bib.current.reloadItems();
-			refreshBibliography(citationStyle);
+			setIsDataReady(true);
 		}
 	}, []);
 
