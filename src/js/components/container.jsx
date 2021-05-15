@@ -30,6 +30,9 @@ const BibWebContainer = props => {
 	const [isFetchingStyleXml, setIsFetchingStyleXml] = useState(false);
 	const prevCitationStyleXml = usePrevious(citationStyleXml);
 
+	const [isStylesDataLoading, setIsStylesDataLoading] = useState(false);
+	const [stylesData, setStylesData] = useState(null);
+
 	const [citationToCopy, setCitationToCopy] = useState(null);
 	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
 	const [citationHtml, setCitationHtml] = useState(null);
@@ -62,14 +65,30 @@ const BibWebContainer = props => {
 		}
 	}, [config, remoteId]);
 
-	const handleCitationStyleChanged = useCallback(ev => {
-		setCitationStyle(ev.value);
-	}, []);
-
 	const handleError = useCallback((message, e) => {
 		// TODO: display message
 		throw e;
 	}, []);
+
+	const handleCitationStyleChanged = useCallback(async ev => {
+		const newCitationStyle = ev.value;
+		// this.clearMessages(); //@TODO
+		// setItemUnderReview(null); //@TODO
+		if(newCitationStyle === 'install') {
+			setActiveDialog('STYLE_INSTALLER');
+			setIsStylesDataLoading(true);
+			try {
+				setStylesData(await retrieveStylesData(config.stylesURL));
+				setIsStylesDataLoading(false);
+			} catch(e) {
+				handleError(e.message, e);
+				setActiveDialog(null);
+				setIsStylesDataLoading(false);
+			}
+		} else {
+			setCitationStyle(newCitationStyle);
+		}
+	}, [config.stylesURL, handleError]);
 
 	const handleCitationCopyDialogOpen = useCallback(itemId => {
 		// this.clearMessages(); //@TODO
@@ -122,6 +141,19 @@ const BibWebContainer = props => {
 
 		history.replace('/');
 	}, [config, history]);
+
+	const handleStyleInstallerCancel = () => {
+		setActiveDialog(null);
+	};
+
+	const handleStyleInstallerDelete = (deleteStyleMeta) => {
+		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
+	};
+
+	const handleStyleInstallerSelect = (newStyleMeta) => {
+		setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+		setCitationStyle(newStyleMeta.name);
+	};
 
 	const buildBibliography = useCallback(async () => {
 		if(citeproc.current) {
@@ -229,6 +261,7 @@ const BibWebContainer = props => {
 		citationStyle={ citationStyle }
 		citationStyles={ citationStyles }
 		isNoteStyle={ isNoteStyle }
+		isStylesDataLoading={ isStylesDataLoading }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
 		localCitationsCount={ localCitationsCount }
@@ -240,6 +273,9 @@ const BibWebContainer = props => {
 		onCitationCopyDialogClose = { handleCitationCopyDialogClose }
 		onCitationModifierChange = { handleCitationModifierChange }
 		onClearMessage = { noop }
+		onStyleInstallerCancel = { handleStyleInstallerCancel }
+		onStyleInstallerDelete = { handleStyleInstallerDelete }
+		onStyleInstallerSelect = { handleStyleInstallerSelect }
 		onDismissUndo = { noop }
 		onHelpClick = { noop }
 		onSaveToZoteroHide = { noop }
@@ -248,6 +284,7 @@ const BibWebContainer = props => {
 		onCitationStyleChanged={ handleCitationStyleChanged }
 		onOverride={ handleOverride }
 		onUndoDelete = { noop }
+		stylesData={ stylesData }
 	/>);
 }
 

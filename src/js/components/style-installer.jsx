@@ -253,15 +253,16 @@ class StyleInstaller extends React.Component {
 	}
 
 	render() {
+		const isOpen = this.props.activeDialog === 'STYLE_INSTALLER';
 		return (
 			<Modal
-				isOpen={ this.props.isInstallingStyle }
+				isOpen={ isOpen }
 				contentLabel="Citation Style Picker"
 				className={ cx(this.className) }
 				onRequestClose={ this.handleCancel.bind(this) }
 			>
 				{ this.state.isReady ? this.renderModalContent() : <Spinner /> }
-				{ this.props.isInstallingStyle && this.keyHandlers }
+				{ isOpen && this.keyHandlers }
 			</Modal>
 		);
 	}
@@ -269,7 +270,7 @@ class StyleInstaller extends React.Component {
 	static propTypes = {
 		citationStyle: PropTypes.string,
 		citationStyles: PropTypes.array,
-		isInstallingStyle: PropTypes.bool,
+		activeDialog: PropTypes.string,
 		isStylesDataLoading: PropTypes.bool,
 		onStyleInstallerCancel: PropTypes.func.isRequired,
 		onStyleInstallerDelete: PropTypes.func.isRequired,
