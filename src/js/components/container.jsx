@@ -3,11 +3,15 @@ import ZoteroBib from 'zotero-translation-client';
 import { useParams, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
 
-import { fetchFromPermalink, getExpandedCitationStyles, getCiteproc, noop, retrieveIndependentStyle, retrieveStylesData } from '../utils';
+import { fetchFromPermalink, getExpandedCitationStyles, getCiteproc, isLikeUrl, noop,
+parseIdentifier, retrieveIndependentStyle, retrieveStylesData, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
+
+var msgId = 0;
+const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
 
 const BibWebContainer = props => {
 	const { id: remoteId } = useParams();
@@ -21,7 +25,7 @@ const BibWebContainer = props => {
 	const wasDataReady = usePrevious(isDataReady);
 	const [messages, setMessages] = useState([]);
 	const [bibliographyItems, setBibliographyItems] = useState([]);
-	const [bibliographyMeta, setBibliographyMeta] = useState({});
+	const [bibliographyMeta, setBibliographyMeta] = useState(null);
 	const [citationStyle, setCitationStyle] = useState(
 		localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name
 	);
@@ -37,7 +41,11 @@ const BibWebContainer = props => {
 	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
 	const [citationHtml, setCitationHtml] = useState(null);
 
-	const { isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
+	const [identifier, setIdentifier] = useState('');
+	const [isTranslating, setIsTranslating] = useState(false);
+	const [itemUnderReview, setItemUnderReview] = useState(null);
+
+	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
 
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
@@ -156,21 +164,36 @@ const BibWebContainer = props => {
 	};
 
 	const buildBibliography = useCallback(async () => {
-		if(citeproc.current) {
-			citeproc.current.free();
-		}
 		setIsCiteprocReady(false);
 
-		citeproc.current = await getCiteproc(citationStyleXml);
+		if(citeproc.current) {
+			citeproc.current.setStyle(citationStyleXml);
+		} else {
+			citeproc.current = await getCiteproc(citationStyleXml);
+		}
+
 		citeproc.current.includeUncited("All").unwrap();
 		citeproc.current.insertReferences(bib.current.itemsCSL).unwrap();
 
-		let bibliographyMeta = citeproc.current.bibliographyMeta().unwrap();
-		let bibliographyItems = citeproc.current.makeBibliography().unwrap();
-		setBibliographyItems(bibliographyItems);
-		setBibliographyMeta(bibliographyMeta);
+		if(styleHasBibliography) {
+			const bibliographyMeta = citeproc.current.bibliographyMeta().unwrap();
+			const bibliographyItems = citeproc.current.makeBibliography().unwrap();
+			setBibliographyItems(bibliographyItems);
+			setBibliographyMeta(bibliographyMeta);
+		} else {
+			citeproc.current.initClusters(
+				bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
+			).unwrap();
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
+			const render = citeproc.current.fullRender().unwrap();
+			const bibliographyItems = bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] }));
+			setBibliographyItems(bibliographyItems);
+			setBibliographyMeta(null);
+		}
+
 		setIsCiteprocReady(true);
-	}, [citationStyleXml]);
+
+	}, [citationStyleXml, styleHasBibliography]);
 
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
@@ -285,6 +308,7 @@ const BibWebContainer = props => {
 		onOverride={ handleOverride }
 		onUndoDelete = { noop }
 		stylesData={ stylesData }
+		styleHasBibliography={ styleHasBibliography }
 	/>);
 }
 

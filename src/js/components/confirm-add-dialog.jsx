@@ -5,7 +5,7 @@ import { KEYDOWN } from 'react-key-handler';
 import Button from './ui/button';
 import Modal from './modal';
 import Icon from './ui/icon';
-import formatBib from '../cite';
+import { formatBib } from '../cite';
 
 class ConfirmAddDialog extends React.Component {
 	render() {

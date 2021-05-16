@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { default as KeyHandler } from 'react-key-handler';
@@ -10,7 +10,7 @@ import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 import Button from './ui/button';
 import Icon from './ui/icon';
 import { noop } from '../utils';
-import formatBib from '../cite';
+import { formatBib, formatFallback } from '../cite';
 // import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
 
 
@@ -33,7 +33,7 @@ const KeyHandlers = ({ onKeyHandle }) => {
 	);
 }
 
-const BibliographyItem = props => {
+const BibliographyItem = memo(props => {
 	const {
 		clipboardConfirmations,
 		dropdownsOpen,
@@ -125,30 +125,22 @@ const BibliographyItem = props => {
 			</script>
 		</li>
 	);
-}
+});
+
+BibliographyItem.displayName = 'BibliographyItem';
 
 const Bibliography = props => {
 	const [clipboardConfirmations, setClipboardConfirmations] = useState([]);
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 	const [focusedItem, setFocusedItem] = useState(null);
 
-	const { isReadOnly, items, bibliographyItems, bibliographyMeta, onCitationCopyDialogOpen } = props;
+	const { isReadOnly, items, bibliographyItems, bibliographyMeta, onCitationCopyDialogOpen, styleHasBibliography } = props;
 
-	const bibliographyRendered = formatBib([
-		{
-			bibstart: bibliographyMeta.formatMeta.markupPre,
-			bibend: bibliographyMeta.formatMeta.markupPost,
-			hangingindent: bibliographyMeta.hangingIndent,
-			maxoffset: bibliographyMeta.maxOffset,
-			entryspacing: bibliographyMeta.entrySpacing,
-			linespacing: bibliographyMeta.lineSpacing,
-			'second-field-align': bibliographyMeta.secondFieldAlign
-		},
-		bibliographyItems.map((renderedItem, index) => (
-			`<div className="csl-entry">${renderedItem.value}</div>`
-		)).join('')
-	]);
 
+	//TODO: citations fallback for styles that dont do bibliography
+	const bibliographyRendered = useMemo(() => isReadOnly ?
+		styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems)
+		: null, [bibliographyItems, bibliographyMeta, isReadOnly, styleHasBibliography]);
 
 	const handleEditCitation = useCallback((itemId, ev) => {
 		// let selection = window.getSelection();
@@ -244,4 +236,4 @@ const Bibliography = props => {
 }
 
 
-export default Bibliography;
+export default memo(Bibliography);

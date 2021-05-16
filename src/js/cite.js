@@ -1,5 +1,27 @@
+const formatFallback = bibliographyItems => {
+	return `<ol><li>${bibliographyItems.join('</li><li>')}</li></ol>`;
+}
+
+// adapter from citeproc-rs output
+const formatBib = (bibliographyItems, bibliographyMeta) => {
+	return formatBibLegacy([
+		{
+			bibstart: bibliographyMeta.formatMeta.markupPre,
+			bibend: bibliographyMeta.formatMeta.markupPost,
+			hangingindent: bibliographyMeta.hangingIndent,
+			maxoffset: bibliographyMeta.maxOffset,
+			entryspacing: bibliographyMeta.entrySpacing,
+			linespacing: bibliographyMeta.lineSpacing,
+			'second-field-align': bibliographyMeta.secondFieldAlign
+		},
+		bibliographyItems.map(renderedItem => (
+			`<div className="csl-entry">${renderedItem.value}</div>`
+		)).join('')
+	]);
+};
+
 // adapted from https://github.com/zotero/zotero/blob/553d2b00d86f852e051a9d76474993cd0575f7cd/chrome/content/zotero/xpcom/cite.js#L140-L274
-const formatBib = (bib) => {
+const formatBibLegacy = (bib) => {
 	var output = [
 		bib[0].bibstart,
 		...bib[1],
@@ -114,4 +136,4 @@ const formatBib = (bib) => {
 	return container.innerHTML;
 };
 
-export default formatBib;
+export { formatBib, formatFallback };

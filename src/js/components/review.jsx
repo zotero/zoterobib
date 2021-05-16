@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './ui/button';
-import formatBib from '../cite';
+import { formatBib } from '../cite';
 
 class Review extends React.PureComponent {
 	handleDismiss() {

@@ -26,8 +26,21 @@ const isUppercaseSubtitlesStyle = (citationStyleName, citationStyleXmls = null) 
 const isNoteStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="note.*?"/);
 const isNumericStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="numeric.*?"/);
 
+//TODO: refactor to use DomParser instead of regex for everything
 const useCitationStyle = (citationStyleName, citationStyleXml) =>  {
-	return  {
+	var styleHasBibliography, parentStyle;
+
+	if(citationStyleXml) {
+		const parser = new DOMParser();
+		const xmlDoc = parser.parseFromString(citationStyleXml, 'application/xml');
+
+		styleHasBibliography = xmlDoc.querySelector('style > bibliography') !== null;
+		parentStyle = xmlDoc.querySelector('info > link[rel="independent-parent"]')?.getAttribute('href')
+	}
+
+	return {
+		styleHasBibliography,
+		parentStyle,
 		isNoteStyle: citationStyleXml ? isNoteStyle(citationStyleXml) : null,
 		isNumericStyle: citationStyleXml ? isNumericStyle(citationStyleXml) : null,
 		isSentenceCaseStyle: citationStyleXml ? isSentenceCaseStyle(citationStyleName, citationStyleXml) : null,
