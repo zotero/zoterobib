@@ -1,5 +1,5 @@
 var data = [];
-var items = [];
+var matches = [];
 var filter = null;
 
 self.addEventListener('message', function(ev) {
@@ -11,12 +11,12 @@ self.addEventListener('message', function(ev) {
 		break;
 		case 'FILTER':
 			filter = payload;
-			items =  data.filter(
+			matches =  data.filter(
 				style => style.name.toLowerCase().includes(filter)
 					|| style.title.toLowerCase().includes(filter)
 					|| (style.titleShort && style.titleShort.toLowerCase().includes(filter))
 			);
-			self.postMessage(['FILTER_COMPLETE', items]);
+			self.postMessage(['FILTER_COMPLETE', matches]);
 		break;
 	}
 });

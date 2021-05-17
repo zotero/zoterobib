@@ -5,27 +5,25 @@ import { KEYDOWN } from 'react-key-handler';
 import Button from './ui/button';
 import Modal from './modal';
 import Icon from './ui/icon';
-import { formatBib } from '../cite';
+import { formatBib, formatFallback } from '../cite';
 
 class ConfirmAddDialog extends React.Component {
 	render() {
-		const { onConfirmAddCancel, onConfirmAddConfirm,
-			isConfirmingAdd, itemToConfirm } = this.props;
+		const { activeDialog, onConfirmAddCancel, onConfirmAddConfirm, itemToConfirm,
+		styleHasBibliography } = this.props;
 
 		if(!itemToConfirm) {
 			return null;
 		}
 
-		const { citations, bibliography, isFallback } = itemToConfirm;
-		const html = isFallback ?
-			`<ol><li>${citations.join('</li><li>')}</li></ol>` :
-			formatBib(bibliography);
+		const { bibliographyItems, bibliographyMeta } = itemToConfirm;
+		const html = styleHasBibliography ? formatFallback(bibliographyItems) : formatBib(bibliographyItems, bibliographyMeta);
 		const div = document.createElement('div');
 		div.innerHTML = html;
 
 		return (
 			<Modal
-				isOpen={ isConfirmingAdd }
+				isOpen={ activeDialog === 'CONFIRM_ADD_DIALOG' }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal modal-lg"
 				onRequestClose={ onConfirmAddCancel }
@@ -73,7 +71,7 @@ class ConfirmAddDialog extends React.Component {
 	}
 
 	static propTypes = {
-		isConfirmingAdd: PropTypes.bool,
+		activeDialog: PropTypes.string,
 		itemToConfirm: PropTypes.object,
 		onConfirmAddCancel: PropTypes.func.isRequired,
 		onConfirmAddConfirm: PropTypes.func.isRequired,

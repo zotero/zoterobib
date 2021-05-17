@@ -21,7 +21,7 @@ class StyleInstaller extends React.Component {
 		selectedIndex: null,
 		filterInput: '',
 		filter: '',
-		items: [],
+		items: [], //TODO: rename to "style" or something
 	}
 
 	handleWorkerMessage = (event) => {

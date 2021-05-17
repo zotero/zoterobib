@@ -5,7 +5,6 @@ import { KEYDOWN } from 'react-key-handler';
 import Button from './ui/button';
 import Modal from './modal';
 import Icon from './ui/icon';
-import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils';
 
 class MultipleItemsDialog extends React.Component {
 	handleFocus = ev => {
@@ -26,44 +25,16 @@ class MultipleItemsDialog extends React.Component {
 		this.props.OnMutipleItemsCancel();
 	}
 
-	renderItem(item, content) {
-		return (
-			<li key={ item.key }
-				data-key={ item.key }
-				className="result"
-				onFocus={ this.handleFocus }
-				onClick={ this.handleAdd }
-				tabIndex={ 0 }
-			>
-				<div className="csl-entry-container">
-					{ content }
-				</div>
-			</li>
-		);
-	}
-
 	render() {
-		const { isAddingMultiple, multipleItems } = this.props;
-		const bibliographyProcessedContent = [];
+		const { activeDialog, multipleItems } = this.props;
 
-		//@TODO!
-
-		// if(isAddingMultiple) {
-		// 	const div = getHtmlNodeFromBibliography(multipleItems);
-		// 	const bibliographyContentIterator = makeBibliographyContentIterator(
-		// 		multipleItems, div
-		// 	);
-
-		// 	for(var [item, content] of bibliographyContentIterator) {
-		// 		bibliographyProcessedContent.push(
-		// 			this.renderItem(item, content)
-		// 		);
-		// 	}
-		// }
+		if(activeDialog !== 'MULTIPLE_ITEMS_DIALOG') {
+			return null;
+		}
 
 		return (
 			<Modal
-				isOpen={ isAddingMultiple }
+				isOpen={ activeDialog === 'MULTIPLE_ITEMS_DIALOG' }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal modal-lg"
 				onRequestClose={ this.handleCancel }
@@ -92,7 +63,21 @@ class MultipleItemsDialog extends React.Component {
 					</div>
 					<div className="modal-body">
 						<ul className="results">
-							{ bibliographyProcessedContent }
+							{
+								multipleItems.bibliographyItems.map(item => (
+									<li key={ item.id }
+										data-key={ item.id }
+										className="result"
+										onFocus={ this.handleFocus }
+										onClick={ this.handleAdd }
+										tabIndex={ 0 }
+									>
+										<div className="csl-entry-container">
+											{ item.value }
+										</div>
+									</li>
+								))
+							}
 						</ul>
 					</div>
 				</div>
@@ -105,7 +90,7 @@ class MultipleItemsDialog extends React.Component {
 	}
 
 	static propTypes = {
-		isAddingMultiple: PropTypes.bool,
+		activeDialog: PropTypes.string,
 		multipleItems: PropTypes.object,
 		multipleChoiceItems: PropTypes.array,
 		OnMutipleItemsCancel: PropTypes.func.isRequired,

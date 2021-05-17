@@ -3,7 +3,7 @@ import balanced from 'balanced-match';
 import api from 'zotero-api-client';
 // import apiCache from 'zotero-api-client-cache';
 // import load from 'load-script';
-import formatBib from './cite';
+// import formatBib from './cite';
 import baseMappings from 'zotero-base-mappings';
 // import * as citeproc from '@citeproc-rs/wasm';
 // import init, { Driver } from '@citeproc-rs/wasm';
@@ -364,26 +364,47 @@ const getCitations = (bib, citeproc) => {
 	return citations;
 };
 
-const getBibliographyOrFallback = (bib, citeproc) => {
-	const items = bib.itemsRaw.map(item => item.key);
-	console.log({ items, bib });
-	citeproc.updateItems([]); // workaround for #256
-	citeproc.updateItems(items);
-	const bibliography = citeproc.makeBibliography();
+const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography) => {
+	var bibliographyItems, bibliographyMeta = null;
 
-	if(bibliography) {
-		return {
-			items: bib.itemsRaw,
-			isFallback: false,
-			bibliography
-		};
+	citeproc.current = await getCiteproc(citationStyleXml);
+	citeproc.current.includeUncited("All").unwrap();
+	citeproc.current.insertReferences(itemsCSL).unwrap();
+
+	if(styleHasBibliography) {
+		const bibliographyMeta = citeproc.bibliographyMeta().unwrap();
+		const bibliographyItems = citeproc.makeBibliography().unwrap();
+	} else {
+		citeproc.current.initClusters(
+			itemsCSL.map(item => ({ id: item.id, cites: [ { id: item.id } ] }))
+		).unwrap();
+		citeproc.current.setClusterOrder(itemsCSL.map(item => ({ id: item.id }))).unwrap();
+		const render = citeproc.current.fullRender().unwrap();
+		const bibliographyItems = itemsCSL.map(item => ({ id: item.id, value: render.allClusters[item.id] }));
 	}
 
-	return {
-		items: bib.itemsRaw,
-		isFallback: true,
-		citations: getCitations(bib, citeproc)
-	};
+	return { bibliographyItems, bibliographyMeta };
+
+	// citeprocjs
+	// const items = bib.itemsRaw.map(item => item.key);
+	// console.log({ items, bib });
+	// citeproc.updateItems([]); // workaround for #256
+	// citeproc.updateItems(items);
+	// const bibliography = citeproc.makeBibliography();
+
+	// if(bibliography) {
+	// 	return {
+	// 		items: bib.itemsRaw,
+	// 		isFallback: false,
+	// 		bibliography
+	// 	};
+	// }
+
+	// return {
+	// 	items: bib.itemsRaw,
+	// 	isFallback: true,
+	// 	citations: getCitations(bib, citeproc)
+	// };
 };
 
 const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
@@ -673,7 +694,7 @@ export {
 	fetchFromPermalink,
 	fetchWithCachedFallback,
 	getBibliographyFormatParameters,
-	getBibliographyOrFallback,
+	getOneTimeBibliographyOrFallback,
 	getCitation,
 	getCiteproc,
 	// getCSL,

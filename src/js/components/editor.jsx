@@ -306,7 +306,6 @@ class Editor extends React.PureComponent {
 		className: PropTypes.string,
 		editorItem: PropTypes.object,
 		isEditorOpen: PropTypes.bool,
-		items: PropTypes.array,
 		location: PropTypes.object,
 		onEditorClose: PropTypes.func.isRequired,
 		onError: PropTypes.func.isRequired,

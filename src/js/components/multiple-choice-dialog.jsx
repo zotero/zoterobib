@@ -89,9 +89,13 @@ class MultipleChoiceDialog extends React.Component {
 	}
 
 	render() {
+		if(this.props.activeDialog !== 'MULTIPLE_CHOICE_DIALOG') {
+			return null
+		}
+
 		return (
 			<Modal
-				isOpen={ this.props.isPickingItem }
+				isOpen={ this.props.activeDialog === 'MULTIPLE_CHOICE_DIALOG' }
 				contentLabel="Select the entry to add:"
 				className="multiple-choice-dialog modal modal-lg"
 				onRequestClose={ this.handleCancel.bind(this) }
@@ -140,7 +144,7 @@ class MultipleChoiceDialog extends React.Component {
 	}
 
 	static propTypes = {
-		isPickingItem: PropTypes.bool,
+		activeDialog: PropTypes.string,
 		isTranslatingMore: PropTypes.bool,
 		moreItemsLink: PropTypes.object,
 		multipleChoiceItems: PropTypes.array,

@@ -48,6 +48,8 @@ const BibliographyItem = memo(props => {
 		renderedItem,
 	} = props;
 
+	console.log({ renderedKey: renderedItem.id, rawKey: rawItem.key });
+
 	return (
 		<li key={ rawItem.key }
 			data-key={ rawItem.key }
@@ -134,13 +136,14 @@ const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 	const [focusedItem, setFocusedItem] = useState(null);
 
-	const { isReadOnly, items, bibliographyItems, bibliographyMeta, onCitationCopyDialogOpen, styleHasBibliography } = props;
+	const { isReadOnly, bibliography, onCitationCopyDialogOpen,
+	onDeleteEntry, styleHasBibliography } = props;
 
 
 	//TODO: citations fallback for styles that dont do bibliography
 	const bibliographyRendered = useMemo(() => isReadOnly ?
-		styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems)
-		: null, [bibliographyItems, bibliographyMeta, isReadOnly, styleHasBibliography]);
+		styleHasBibliography ? formatBib(bibliography.items, bibliography.meta) : formatFallback(bibliography.items)
+		: null, [bibliography.items, bibliography.meta, isReadOnly, styleHasBibliography]);
 
 	const handleEditCitation = useCallback((itemId, ev) => {
 		// let selection = window.getSelection();
@@ -158,10 +161,10 @@ const Bibliography = props => {
 		// }
 	}, []);
 
-	const handleDeleteCitation = useCallback((itemId, ev) => {
-		// ev.stopPropagation();
-		// this.props.onDeleteEntry(itemId);
-	}, []);
+	const handleDeleteCitation = useCallback(ev => {
+		ev.stopPropagation();
+		onDeleteEntry(ev.currentTarget.closest('[data-key]').dataset.key);
+	}, [onDeleteEntry]);
 
 	const handleFocus = useCallback((itemId) => {
 		// this.setState({
@@ -195,9 +198,11 @@ const Bibliography = props => {
 	}, [onCitationCopyDialogOpen]);
 
 
-	if(bibliographyItems.length === 0) {
+	if(bibliography.items.length === 0) {
 		return null;
 	}
+
+	console.log('RENDERS:', bibliography.items, bibliography.lookup);
 
 	return (
 		<React.Fragment>
@@ -205,25 +210,25 @@ const Bibliography = props => {
 			{ isReadOnly ? (
 				<React.Fragment>
 					<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
-					{ bibliographyItems.map((_renderedItem, index) => (
-					<script key={ items[index].key } type="application/vnd.zotero.data+json">
-							{ JSON.stringify(items[index]) }
+					{ bibliography.items.map(renderedItem => (
+					<script key={ renderedItem.id } type="application/vnd.zotero.data+json">
+							{ JSON.stringify(bibliography.lookup[renderedItem.id]) }
 					</script>
 					)) }
 				</React.Fragment>
 			) : (
 				<ul className="bibliography" key="bibliography">
-					{ bibliographyItems.map((renderedItem, index) => (
+					{ bibliography.items.map(renderedItem => (
 						<BibliographyItem
-							key={ items[index].key }
-							rawItem={ items[index] }
+							key={ renderedItem }
+							rawItem={ bibliography.lookup[renderedItem.id] }
 							renderedItem={ renderedItem }
 							clipboardConfirmations= { [] /*TODO*/ }
 							dropdownsOpen = { []  /*TODO*/ }
 							isNoteStyle = { false /*TODO*/ }
 							isNumericStyle = { false /*TODO*/ }
 							onCopyCitationDialogOpen = { handleCopyCitationDialogOpen }
-							onDeleteCitation = { noop }
+							onDeleteCitation = { handleDeleteCitation }
 							onEditCitation = { noop }
 							onFocus = { noop }
 							onToggleDropdown = { noop }
