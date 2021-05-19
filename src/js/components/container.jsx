@@ -246,6 +246,7 @@ const BibWebContainer = props => {
 			}
 		} else {
 			setCitationStyle(newCitationStyle);
+			localStorage.setItem('zotero-bib-citation-style', newCitationStyle);
 		}
 	}, [config.stylesURL, handleError]);
 
@@ -350,14 +351,20 @@ const BibWebContainer = props => {
 		setActiveDialog(null);
 	};
 
-	const handleStyleInstallerDelete = (deleteStyleMeta) => {
+	const handleStyleInstallerDelete = useCallback((deleteStyleMeta) => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
-	};
+	}, [citationStyles]);
 
-	const handleStyleInstallerSelect = (newStyleMeta) => {
-		setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+	const handleStyleInstallerSelect = useCallback((newStyleMeta) => {
+		const newCitationStyles = getExpandedCitationStyles(citationStyles, newStyleMeta);
+		setCitationStyles(newCitationStyles);
 		setCitationStyle(newStyleMeta.name);
-	};
+		localStorage.setItem(
+			'zotero-bib-extra-citation-styles',
+			JSON.stringify(newCitationStyles.filter(cs => !cs.isCore))
+		);
+		localStorage.setItem('zotero-bib-citation-style', newStyleMeta.name);
+	}, [citationStyles]);
 
 	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
 		identifier = parseIdentifier(identifier);
