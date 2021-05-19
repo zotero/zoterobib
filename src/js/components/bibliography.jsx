@@ -48,8 +48,6 @@ const BibliographyItem = memo(props => {
 		renderedItem,
 	} = props;
 
-	console.log({ renderedKey: renderedItem.id, rawKey: rawItem.key });
-
 	return (
 		<li key={ rawItem.key }
 			data-key={ rawItem.key }
@@ -136,8 +134,8 @@ const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 	const [focusedItem, setFocusedItem] = useState(null);
 
-	const { isReadOnly, bibliography, onCitationCopyDialogOpen,
-	onDeleteEntry, styleHasBibliography } = props;
+	const { isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
+	styleHasBibliography } = props;
 
 
 	//TODO: citations fallback for styles that dont do bibliography
@@ -145,21 +143,23 @@ const Bibliography = props => {
 		styleHasBibliography ? formatBib(bibliography.items, bibliography.meta) : formatFallback(bibliography.items)
 		: null, [bibliography.items, bibliography.meta, isReadOnly, styleHasBibliography]);
 
-	const handleEditCitation = useCallback((itemId, ev) => {
-		// let selection = window.getSelection();
-		// if(selection.toString().length) {
-		// 	try {
-		// 		if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
-		// 			return;
-		// 		}
-		// 	} catch(_) {
-		// 		// selection.anchorNode.parentNode might fail in which case we open the editor
-		// 	}
-		// }
-		// if(!this.props.isReadOnly) {
-		// 	this.props.onEditorOpen(itemId);
-		// }
-	}, []);
+	const handleEditCitation = useCallback((ev) => {
+		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
+		const  selection = window.getSelection();
+
+		if(selection.toString().length) {
+			try {
+				if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
+					return;
+				}
+			} catch(_) {
+				// selection.anchorNode.parentNode might fail in which case we open the editor
+			}
+		}
+		if(!isReadOnly) {
+			onEditorOpen(itemId);
+		}
+	}, [isReadOnly, onEditorOpen]);
 
 	const handleDeleteCitation = useCallback(ev => {
 		ev.stopPropagation();
@@ -202,8 +202,6 @@ const Bibliography = props => {
 		return null;
 	}
 
-	console.log('RENDERS:', bibliography.items, bibliography.lookup);
-
 	return (
 		<React.Fragment>
 			<KeyHandlers onKeyHandle={ handleKeyboard } />
@@ -220,7 +218,7 @@ const Bibliography = props => {
 				<ul className="bibliography" key="bibliography">
 					{ bibliography.items.map(renderedItem => (
 						<BibliographyItem
-							key={ renderedItem }
+							key={ renderedItem.key }
 							rawItem={ bibliography.lookup[renderedItem.id] }
 							renderedItem={ renderedItem }
 							clipboardConfirmations= { [] /*TODO*/ }
@@ -229,7 +227,7 @@ const Bibliography = props => {
 							isNumericStyle = { false /*TODO*/ }
 							onCopyCitationDialogOpen = { handleCopyCitationDialogOpen }
 							onDeleteCitation = { handleDeleteCitation }
-							onEditCitation = { noop }
+							onEditCitation = { handleEditCitation }
 							onFocus = { noop }
 							onToggleDropdown = { noop }
 						/>

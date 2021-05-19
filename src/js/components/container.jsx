@@ -6,7 +6,7 @@ import copy from 'copy-to-clipboard';
 import { dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
 getExpandedCitationStyles, getCiteproc, isLikeUrl, noop, parseIdentifier,
 processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
-retrieveStylesData, validateUrl } from '../utils';
+retrieveStylesData, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import ZBib from './zbib';
@@ -49,6 +49,7 @@ const BibWebContainer = props => {
 	const [itemToConfirm, setItemToConfirm] = useState(null);
 	const [moreItemsLink, setMoreItemsLink] = useState(null);
 	const [multipleChoiceItems, setMultipleChoiceItems] = useState(null);
+	const [editorItem, setEditorItem] = useState(null);
 
 	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
@@ -193,12 +194,21 @@ const BibWebContainer = props => {
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		if(diff.bibliography && styleHasBibliography) {
-			const newBibliographyItems = diff.bibliography.entryIds.map(entryId => ({
-				id: entryId,
-				value: entryId in diff.bibliography.updatedEntries ?
-					diff.bibliography.updatedEntries[entryId] :
-					bibliography.items.find(bibItem => bibItem.id === entryId).value
-			}));
+			var newBibliographyItems;
+			if(diff.bibliography.entryIds) {
+				newBibliographyItems = diff.bibliography.entryIds.map(entryId => ({
+					id: entryId,
+					value: entryId in diff.bibliography.updatedEntries ?
+						diff.bibliography.updatedEntries[entryId] :
+						bibliography.items.find(bibItem => bibItem.id === entryId).value
+				}));
+			} else {
+				newBibliographyItems = bibliography.items.map(bibItem => {
+					return bibItem.id in diff.bibliography.updatedEntries ?
+						{ id: bibItem.id, value: diff.bibliography.updatedEntries[bibItem.id] } :
+						bibItem;
+				});
+			}
 
 			setBibliography({
 				...bibliography,
@@ -300,7 +310,7 @@ const BibWebContainer = props => {
 		setItemUnderReview(itemToConfirm.item);
 		setActiveDialog(null);
 		setItemToConfirm(null);
-	}, [itemToConfirm]);
+	}, [addItem, itemToConfirm]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		setItemUnderReview(null);
@@ -310,6 +320,7 @@ const BibWebContainer = props => {
 	}, [deleteItem, updateBibliography]);
 
 	const handleDeleteCitations = useCallback(() => {
+		// TODO
 		// this.bib.clearItems();
 		// this.clearMessages();
 		// this.setState({
@@ -320,6 +331,57 @@ const BibWebContainer = props => {
 		// 	title: null,
 		// });
 	}, []);
+
+	const handleItemCreated = useCallback((item) => {
+		addItem(item);
+		setEditorItem(item);
+		updateBibliography();
+		// setPermalink(null);
+	}, [addItem, updateBibliography]);
+
+	const handleItemUpdate = useCallback(async (itemKey, patch) => {
+		const index = bib.current.itemsRaw.findIndex(item => item.key === itemKey);
+
+		let updatedItem = {
+			...bib.current.itemsRaw[index],
+			...patch
+		};
+
+		try {
+			await validateItem(updatedItem);
+		} catch(e) {
+			handleError('Failed to obtain metadata. Please check your connection and try again.', e);
+			return;
+		}
+
+		if(isSentenceCaseStyle) {
+			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
+
+			if(!(itemKey in itemsMetaData)) {
+				itemsMetaData[itemKey] = {};
+			}
+
+			itemsMetaData[itemKey]['apaEditedKeys'] = [
+				...(new Set([
+					...(itemsMetaData[itemKey]['apaEditedKeys'] || []),
+					...Object.keys(patch)
+				]))
+			];
+			localStorage.setItem('zotero-bib-items-metadata', JSON.stringify(itemsMetaData));
+		}
+		bib.current.updateItem(index, updatedItem);
+		setEditorItem(updatedItem);
+
+		deleteItem(itemKey);
+		addItem(updatedItem);
+		updateBibliography();
+
+		//TODO
+		// if edited item is itemUnderReview, update it as well
+		// if(this.state.itemUnderReview && this.state.itemUnderReview.key === itemKey) {
+		// 	this.setState({ itemUnderReview: updatedItem });
+		// }
+	}, [addItem, deleteItem, handleError, isSentenceCaseStyle, updateBibliography]);
 
 	const handleMutipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
@@ -334,6 +396,28 @@ const BibWebContainer = props => {
 		setItemUnderReview(null);
 		updateBibliography();
 	}, [addItem, multipleItems, updateBibliography]);
+
+	const handleOpenEditor = useCallback((itemId = null) => {
+		if(itemUnderReview && itemId && itemId != itemUnderReview.key) {
+			setItemUnderReview(null);
+		}
+
+		// this.clearMessages(); //@TODO
+		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId));
+		setActiveDialog('EDITOR');
+	}, [itemUnderReview]);
+
+	const handleCloseEditor = useCallback((hasCreatedItem = false) => {
+		setEditorItem(null);
+		setActiveDialog(null);
+
+		if(hasCreatedItem) {
+			if(!localStorage.getItem('zotero-bib-translated')) {
+				localStorage.setItem('zotero-bib-translated', 'true');
+				// this.displayFirstCitationMessage(); //@TODO
+			}
+		}
+	}, []);
 
 	const handleOverride = useCallback(() => {
 		const localBib = new ZoteroBib(config);
@@ -539,6 +623,7 @@ const BibWebContainer = props => {
 		citationHtml = { citationHtml }
 		citationStyle = { citationStyle }
 		citationStyles = { citationStyles }
+		editorItem = { editorItem }
 		identifier = { identifier }
 		isNoteStyle = { isNoteStyle }
 		isStylesDataLoading = { isStylesDataLoading }
@@ -559,6 +644,10 @@ const BibWebContainer = props => {
 		onConfirmAddCancel = { handleConfirmAddCancel }
 		onConfirmAddConfirm = { handleConfirmAddConfirm }
 		onDeleteEntry = { handleDeleteEntry }
+		onEditorClose = { handleCloseEditor }
+		onEditorOpen = { handleOpenEditor }
+		onItemCreated = { handleItemCreated }
+		onItemUpdate = { handleItemUpdate }
 		onMutipleItemsCancel = { handleMutipleItemsCancel }
 		onMutipleItemsSelect = { handleMutipleItemsSelect }
 		onStyleInstallerCancel = { handleStyleInstallerCancel }

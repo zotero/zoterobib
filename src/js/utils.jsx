@@ -238,8 +238,6 @@ const getItemTypes = async () => {
 };
 
 const getItemTypeMeta = async (itemType) => {
-	console.log('getItemTypeMeta');
-
 	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
 		cachedApi.itemTypes().get(),
 		cachedApi.itemTypeFields(itemType).get(),

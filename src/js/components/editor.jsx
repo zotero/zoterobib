@@ -30,7 +30,7 @@ class Editor extends React.PureComponent {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(this.props.isEditorOpen === nextProps.isEditorOpen
+		if(this.props.activeDialog === nextProps.activeDialog
 			&& deepEqual(this.props.editorItem, nextProps.editorItem)) {
 			return;
 		}
@@ -38,8 +38,8 @@ class Editor extends React.PureComponent {
 		this.prepareState(nextProps);
 	}
 
-	componentDidUpdate({ isEditorOpen }) {
-		if(this.props.isEditorOpen && !isEditorOpen) {
+	componentDidUpdate({ activeDialog }) {
+		if(this.props.activeDialog === 'EDITOR' && activeDialog !== 'EDITOR') {
 			this.isRecentlyOpen = true;
 		}
 		if(this.isRecentlyOpen && this.itemBox) {
@@ -50,7 +50,7 @@ class Editor extends React.PureComponent {
 
 	async prepareState(props) {
 		var item;
-		if(!props.isEditorOpen) {
+		if(props.activeDialog !== 'EDITOR') {
 			this.setState({
 				fields: [],
 				isLoading: true,
@@ -287,7 +287,7 @@ class Editor extends React.PureComponent {
 	render() {
 		return (
 			<Modal
-				isOpen={ this.props.isEditorOpen }
+				isOpen={ this.props.activeDialog === 'EDITOR' }
 				contentLabel="Item Editor"
 				className={ cx('editor-container modal modal-lg', { loading: this.state.isLoading })}
 				onRequestClose={ this.handleClose.bind(this) }
@@ -303,9 +303,9 @@ class Editor extends React.PureComponent {
 	}
 
 	static propTypes = {
+		activeDialog: PropTypes.string,
 		className: PropTypes.string,
 		editorItem: PropTypes.object,
-		isEditorOpen: PropTypes.bool,
 		location: PropTypes.object,
 		onEditorClose: PropTypes.func.isRequired,
 		onError: PropTypes.func.isRequired,
