@@ -40,14 +40,6 @@ class ZBib extends React.PureComponent {
 		};
 	}
 
-	handleClearMessage(message) {
-		this.props.onClearMessage(message);
-	}
-
-	handleHelp(event) {
-		this.props.onHelpClick(event);
-	}
-
 	render() {
 		return (
 			!this.props.isReady
@@ -59,11 +51,11 @@ class ZBib extends React.PureComponent {
 							<div className="messages">
 								{ this.props.messages.map(message => (
 									<Message
-										key={ message.id }
-										onDismiss={ this.handleClearMessage.bind(this, message) }
-										onUndoDelete={ this.props.onUndoDelete }
-										onDismissUndo={ this.props.onDismissUndo }
 										{ ...message }
+										key={ message.id }
+										onDismiss = { this.props.onDismiss }
+										onUndoDelete = { this.props.onUndoDelete }
+										onReadMore = { this.props.onReadMore }
 									/>
 									))
 								}
@@ -73,7 +65,7 @@ class ZBib extends React.PureComponent {
 								!this.props.isReadOnly && (
 									<section className="section section-cite">
 										<nav className="meta-nav">
-											<a onClick={ this.handleHelp.bind(this) }>Help</a>
+											<a onClick={ this.props.onHelpClick }>Help</a>
 											<a href="https://www.zotero.org">Zotero</a>
 										</nav>
 										<div className="container">
@@ -194,8 +186,9 @@ class ZBib extends React.PureComponent {
 		onCitationCopy: PropTypes.func.isRequired,
 		onCitationModifierChange: PropTypes.func.isRequired,
 		onClearMessage: PropTypes.func.isRequired,
-		onDismissUndo: PropTypes.func.isRequired,
+		onDismiss: PropTypes.func.isRequired,
 		onHelpClick: PropTypes.func.isRequired,
+		onReadMore: PropTypes.func.isRequired,
 		onSaveToZoteroHide: PropTypes.func.isRequired,
 		onStyleSwitchCancel: PropTypes.func.isRequired,
 		onStyleSwitchConfirm: PropTypes.func.isRequired,

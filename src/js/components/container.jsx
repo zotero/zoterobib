@@ -2,8 +2,9 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import ZoteroBib from 'zotero-translation-client';
 import { useParams, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
+import SmoothScroll from 'smooth-scroll';
 
-import { dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
+import { calcOffset, dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
 getExpandedCitationStyles, getCiteproc, isLikeUrl, noop, parseIdentifier,
 processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
 retrieveStylesData, validateItem, validateUrl } from '../utils';
@@ -12,6 +13,7 @@ import defaults from '../constants/defaults';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
 
+const scroll = new SmoothScroll();
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
 
@@ -107,6 +109,16 @@ const BibWebContainer = props => {
 			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
 		}
 	}, []);
+
+	const displayWelcomeMessage = useCallback(() => {
+		const message = {
+			action: 'Read More',
+			id: getNextMessageId(),
+			kind: 'WELCOME_MESSAGE',
+			message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
+		};
+		setMessages([...messages, message]);
+	}, [messages]);
 
 	const buildBibliography = useCallback(async () => {
 		setIsCiteprocReady(false);
@@ -308,8 +320,7 @@ const BibWebContainer = props => {
 		const message = {
 			id: getNextMessageId(),
 			action: 'Undo',
-			isUndoMessage: true,
-			kind: 'warning',
+			kind: 'UNDO_DELETE',
 			message: 'Item Deleted',
 		};
 		setMessages([ ...messages.filter(m => !m.isUndoMessage), message ]);
@@ -335,9 +346,14 @@ const BibWebContainer = props => {
 		// setPermalink(null);
 	}, [addItem, updateBibliography]);
 
-	const handleDismissUndo = useCallback(() => {
-		setMessages(messages.filter(m => !m.isUndoMessage));
-		setLastDeletedItem(null);
+	const handleDismiss = useCallback(id => {
+		const message = messages.find(m => m.id === id);
+		if(message) {
+			if(message.kind === 'UNDO_DELETE') {
+				setLastDeletedItem(null);
+			}
+			setMessages(messages.filter(m => m.id !== id));
+		}
 	}, [messages]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
@@ -408,6 +424,7 @@ const BibWebContainer = props => {
 		setActiveDialog('EDITOR');
 	}, [itemUnderReview]);
 
+
 	const handleCloseEditor = useCallback((hasCreatedItem = false) => {
 		setEditorItem(null);
 		setActiveDialog(null);
@@ -431,6 +448,15 @@ const BibWebContainer = props => {
 
 		history.replace('/');
 	}, [config, history]);
+
+	const handleReadMoreClick = useCallback(event => {
+		const target = document.querySelector('.zbib-illustration');
+		scroll.animateScroll(target, event.currentTarget, {
+			header: '.message',
+			offset: calcOffset()
+		});
+		setMessages(messages.filter(m => m.kind !== 'WELCOME_MESSAGE'));
+	}, [messages]);
 
 	const handleStyleInstallerCancel = () => {
 		setActiveDialog(null);
@@ -483,7 +509,7 @@ const BibWebContainer = props => {
 						if(translationResponse.items.length === 0) {
 							setMessages(...messages, {
 								id: getNextMessageId(),
-								kind: 'info',
+								kind: 'INFO',
 								message: 'No results found',
 							});
 							setIsTranslating(false);
@@ -569,7 +595,7 @@ const BibWebContainer = props => {
 		if(lastDeletedItem) {
 			addItem(lastDeletedItem);
 			updateBibliography();
-			setMessages(messages.filter(m => !m.isUndoMessage));
+			setMessages(messages.filter(m => m.kind !== 'UNDO_DELETE'));
 			// setPermalink(null); //TODO!
 			setLastDeletedItem(null);
 		}
@@ -616,6 +642,13 @@ const BibWebContainer = props => {
 	}, [citationStyleXml, fetchCitationStyleXml, isFetchingStyleXml]);
 
 	useEffect(() => {
+		if(!remoteId && !isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
+			localStorage.setItem('zotero-bib-visited', 'true');
+			displayWelcomeMessage();
+		}
+	}, [displayWelcomeMessage, isReadOnly, remoteId])
+
+	useEffect(() => {
 		fetchCitationStyleXml();
 		if(remoteId) {
 			fetchRemoteBibliography();
@@ -655,8 +688,7 @@ const BibWebContainer = props => {
 		onConfirmAddCancel = { handleConfirmAddCancel }
 		onConfirmAddConfirm = { handleConfirmAddConfirm }
 		onDeleteEntry = { handleDeleteEntry }
-		onDismissReadMore = { noop }
-		onDismissUndo = { handleDismissUndo }
+		onDismiss = { handleDismiss }
 		onEditorClose = { handleCloseEditor }
 		onEditorOpen = { handleOpenEditor }
 		onItemCreated = { handleItemCreated }
@@ -667,7 +699,7 @@ const BibWebContainer = props => {
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
 		onHelpClick = { noop }
-		onReadMore = { noop }
+		onReadMore = { handleReadMoreClick }
 		onSaveToZoteroHide = { noop }
 		onStyleSwitchCancel = { noop }
 		onStyleSwitchConfirm = { noop }

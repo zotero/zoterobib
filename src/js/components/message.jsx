@@ -1,100 +1,82 @@
-/* eslint-disable react/no-deprecated */
-// @TODO: migrate to getDerivedStateFromProps()
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+
+import { useLocation } from "react-router-dom";
 import { default as KeyHandler } from 'react-key-handler';
 import { KEYDOWN } from 'react-key-handler';
-import { withRouter } from 'react-router-dom';
 import Icon from './ui/icon';
 import Button from './ui/button';
-import { noop } from '../utils';
+import { usePrevious } from '../hooks/';
 
-class Message extends React.Component {
-	componentWillReceiveProps(nextProps) {
-		if('location' in nextProps &&
-			nextProps.location.pathname !== this.props.location.pathname) {
-			this.props.onDismiss();
+const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUndoDelete }) => {
+	const location = useLocation();
+	const prevLocation = usePrevious(location);
+	let category = kind === 'UNDO_DELETE' ? 'warning' : 'info';
+
+	const handleAction = useCallback(ev => {
+		switch(kind) {
+			case 'WELCOME_MESSAGE': onReadMore(ev); break;
+			case 'UNDO_DELETE': onUndoDelete(); break;
 		}
-	}
+	}, [kind, onReadMore, onUndoDelete]);
 
-	handleDismiss() {
-		switch(this.props.action) {
-			case 'Undo': this.props.onDismissUndo(); break;
-			case 'Read More': this.props.onDismissReadMore(); break;
+	const handleDismiss = useCallback(() => {
+		onDismiss(id);
+	}, [id, onDismiss]);
+
+	useEffect(() => {
+		if(prevLocation !== location && typeof(prevLocation)  !== 'undefined') {
+			onDismiss(id);
 		}
-	}
+	}, [id, location, onDismiss, prevLocation]);
 
-	handleAction() {
-		switch(this.props.action) {
-			case 'Undo': this.props.onUndoDelete(); break;
-			case 'Read More': this.props.onReadMore(); break;
-		}
-	}
-
-	get className() {
-		return {
-			message: true,
-			[this.props.kind]: true
-		};
-	}
-
-	renderButton() {
-		return (
-			this.props.href ? (
-				<a
-				className={ `btn btn-sm btn-outline-inverse-${this.props.kind}` }
-				href={ this.props.href }
-				>
-					{ this.props.action }
-				</a>
-			): (
-				<Button
-					className={ `btn-sm btn-outline-inverse-${this.props.kind}` }
-					onClick={ this.handleAction.bind(this) }
-				>
-					{ this.props.action }
-				</Button>
-			)
-
-		);
-	}
-
-	render() {
-		return this.props.message ? (
-			<div className={ cx(this.className) }>
-				<p className="text">
-					{ this.props.message }
-					{ this.props.action ? this.renderButton() : null }
-				</p>
-				<button
-					className="btn btn-icon close"
-					onClick={ this.handleDismiss.bind(this) }
-				>
-					<Icon type={ '24/remove' } width="24" height="24" />
-				</button>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="Escape"
-					onKeyHandle={ this.handleDismiss.bind(this) }
-				/>
-			</div>
-		) : null;
-	}
-
-	static defaultProps = {
-		onAction: noop
-	}
-
-	static propTypes = {
-		action: PropTypes.string,
-		href: PropTypes.string,
-		kind: PropTypes.oneOf(['info', 'success', 'warning', 'error']).isRequired,
-		location: PropTypes.object,
-		message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-		onAction: PropTypes.func,
-		onDismiss: PropTypes.func.isRequired,
-	}
+	return (
+		<div className={ cx('message', category) }>
+			<p className="text">
+				{ message }
+				{ action && (
+					href ? (
+						<a
+							className={ `btn btn-sm btn-outline-inverse-${category}` }
+							href={ href }
+						>
+							{ action }
+						</a>
+					) : (
+						<Button
+							className={ `btn-sm btn-outline-inverse-${category}` }
+							onClick={ handleAction }
+						>
+							{ action }
+						</Button>
+					)
+				) }
+			</p>
+			<button
+				className="btn btn-icon close"
+				onClick={ handleDismiss }
+			>
+				<Icon type={ '24/remove' } width="24" height="24" />
+			</button>
+			<KeyHandler
+				keyEventName={ KEYDOWN }
+				keyValue="Escape"
+				onKeyHandle={ handleDismiss }
+			/>
+		</div>
+	);
 }
 
-export default withRouter(Message);
+Message.propTypes = {
+	id: PropTypes.number,
+	action: PropTypes.string,
+	href: PropTypes.string,
+	kind: PropTypes.oneOf(['INFO', 'UNDO_DELETE', 'WELCOME_MESSAGE']).isRequired,
+	message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+	onDismiss: PropTypes.func.isRequired,
+	onReadMore: PropTypes.func,
+	onUndoDelete: PropTypes.func,
+}
+
+export default Message;

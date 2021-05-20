@@ -687,7 +687,13 @@ const getExpandedCitationStyles = (citationStyles, styleMeta) => {
 	return newCitationStyles;
 };
 
+const calcOffset = () => {
+	var md = window.matchMedia('(min-width: 768px)');
+	return md.matches ? 48 : 24;
+}
+
 export {
+	calcOffset,
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
