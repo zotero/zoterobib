@@ -19,11 +19,17 @@ class Message extends React.Component {
 	}
 
 	handleDismiss() {
-		this.props.onDismiss();
+		switch(this.props.action) {
+			case 'Undo': this.props.onDismissUndo(); break;
+			case 'Read More': this.props.onDismissReadMore(); break;
+		}
 	}
 
-	handleAction(event) {
-		this.props.onAction(event);
+	handleAction() {
+		switch(this.props.action) {
+			case 'Undo': this.props.onUndoDelete(); break;
+			case 'Read More': this.props.onReadMore(); break;
+		}
 	}
 
 	get className() {

@@ -61,6 +61,8 @@ class ZBib extends React.PureComponent {
 									<Message
 										key={ message.id }
 										onDismiss={ this.handleClearMessage.bind(this, message) }
+										onUndoDelete={ this.props.onUndoDelete }
+										onDismissUndo={ this.props.onDismissUndo }
 										{ ...message }
 									/>
 									))

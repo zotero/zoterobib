@@ -50,6 +50,7 @@ const BibWebContainer = props => {
 	const [moreItemsLink, setMoreItemsLink] = useState(null);
 	const [multipleChoiceItems, setMultipleChoiceItems] = useState(null);
 	const [editorItem, setEditorItem] = useState(null);
+	const [lastDeletedItem, setLastDeletedItem] = useState(null);
 
 	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
@@ -101,21 +102,6 @@ const BibWebContainer = props => {
 	const deleteItem = useCallback(itemId => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		if(bib.current.removeItem(item)) {
-			// TODO MESSAGE, LAST DELETED ITEM
-			// const message = {
-			// 	id: getNextMessageId(),
-			// 	action: 'Undo',
-			// 	isUndoMessage: true,
-			// 	kind: 'warning',
-			// 	message: 'Item Deleted',
-			// 	onAction: this.handleUndoDelete.bind(this),
-			// 	onDismiss: this.handleDismissUndo.bind(this),
-			// };
-			// setMessages([
-			// 	...this.state.messages.filter(m => !m.isUndoMessage),
-			// 	message
-			// ]);
-			// setLastDeletedItem({ ...item });
 			citeproc.current.removeReference(itemId);
 			citeproc.current.removeCluster(itemId);
 			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
@@ -313,11 +299,21 @@ const BibWebContainer = props => {
 	}, [addItem, itemToConfirm]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
+		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		setItemUnderReview(null);
 		// setPermalink(null); //TODO
 		deleteItem(itemId);
 		updateBibliography();
-	}, [deleteItem, updateBibliography]);
+		setLastDeletedItem({ ...item });
+		const message = {
+			id: getNextMessageId(),
+			action: 'Undo',
+			isUndoMessage: true,
+			kind: 'warning',
+			message: 'Item Deleted',
+		};
+		setMessages([ ...messages.filter(m => !m.isUndoMessage), message ]);
+	}, [deleteItem, messages, updateBibliography]);
 
 	const handleDeleteCitations = useCallback(() => {
 		// TODO
@@ -338,6 +334,11 @@ const BibWebContainer = props => {
 		updateBibliography();
 		// setPermalink(null);
 	}, [addItem, updateBibliography]);
+
+	const handleDismissUndo = useCallback(() => {
+		setMessages(messages.filter(m => !m.isUndoMessage));
+		setLastDeletedItem(null);
+	}, [messages]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
 		const index = bib.current.itemsRaw.findIndex(item => item.key === itemKey);
@@ -564,6 +565,16 @@ const BibWebContainer = props => {
 		}
 	}, [addItem, citationStyleXml, config, handleError, messages, styleHasBibliography, updateBibliography]);
 
+	const handleUndoDelete = useCallback(() => {
+		if(lastDeletedItem) {
+			addItem(lastDeletedItem);
+			updateBibliography();
+			setMessages(messages.filter(m => !m.isUndoMessage));
+			// setPermalink(null); //TODO!
+			setLastDeletedItem(null);
+		}
+	}, [addItem, lastDeletedItem, messages, updateBibliography]);
+
 	const fetchCitationStyleXml = useCallback(async () => {
 		setIsFetchingStyleXml(true);
 		setCitationStyleXml(await retrieveIndependentStyle(citationStyle));
@@ -644,6 +655,8 @@ const BibWebContainer = props => {
 		onConfirmAddCancel = { handleConfirmAddCancel }
 		onConfirmAddConfirm = { handleConfirmAddConfirm }
 		onDeleteEntry = { handleDeleteEntry }
+		onDismissReadMore = { noop }
+		onDismissUndo = { handleDismissUndo }
 		onEditorClose = { handleCloseEditor }
 		onEditorOpen = { handleOpenEditor }
 		onItemCreated = { handleItemCreated }
@@ -653,15 +666,15 @@ const BibWebContainer = props => {
 		onStyleInstallerCancel = { handleStyleInstallerCancel }
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
-		onDismissUndo = { noop }
 		onHelpClick = { noop }
+		onReadMore = { noop }
 		onSaveToZoteroHide = { noop }
 		onStyleSwitchCancel = { noop }
 		onStyleSwitchConfirm = { noop }
 		onTranslationRequest = { handleTranslateIdentifier }
 		onCitationStyleChanged={ handleCitationStyleChanged }
 		onOverride={ handleOverride }
-		onUndoDelete = { noop }
+		onUndoDelete = { handleUndoDelete }
 		stylesData={ stylesData }
 		styleHasBibliography={ styleHasBibliography }
 	/>);
