@@ -25,7 +25,7 @@ const BibWebContainer = props => {
 	const copyData = useRef(null);
 	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
 	const [isDataReady, setIsDataReady] = useState(false);
-	const [activeDialog, setActiveDialog] = useState(false);
+	const [activeDialog, setActiveDialog] = useState(null);
 	const wasDataReady = usePrevious(isDataReady);
 	const [messages, setMessages] = useState([]);
 	const [bibliography, setBibliography] = useState({ items: [], meta: null, lookup: {} });
@@ -240,7 +240,7 @@ const BibWebContainer = props => {
 	const handleCitationStyleChanged = useCallback(async ev => {
 		const newCitationStyle = ev.value;
 		// this.clearMessages(); //@TODO
-		// setItemUnderReview(null); //@TODO
+		setItemUnderReview(null);
 		if(newCitationStyle === 'install') {
 			setActiveDialog('STYLE_INSTALLER');
 			setIsStylesDataLoading(true);
@@ -260,7 +260,7 @@ const BibWebContainer = props => {
 
 	const handleCitationCopyDialogOpen = useCallback(itemId => {
 		// this.clearMessages(); //@TODO
-		// setItemUnderReview(null); //@TODO
+		setItemUnderReview(null);
 		setActiveDialog('COPY_CITATION');
 		setCitationToCopy(itemId);
 	}, []);
@@ -303,9 +303,15 @@ const BibWebContainer = props => {
 		setItemToConfirm(null);
 	}, []);
 
-	const handleConfirmAddConfirm = useCallback(() => {
+	const handleConfirmAddConfirm = useCallback(async () => {
 		addItem(itemToConfirm.item);
-		setItemUnderReview(itemToConfirm.item);
+		// TODO
+		// setItemUnderReview({
+		// 	item: itemToConfirm.items,
+		// 	...(await getOneTimeBibliographyOrFallback(
+		// 		reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
+		// 	))
+		// );
 		setActiveDialog(null);
 		setItemToConfirm(null);
 	}, [addItem, itemToConfirm]);
@@ -462,6 +468,18 @@ const BibWebContainer = props => {
 		setActiveDialog(null);
 	};
 
+	const handleReviewDelete = useCallback(() => {
+		handleDeleteEntry(itemUnderReview.key);
+	}, [handleDeleteEntry, itemUnderReview]);
+
+	const handleReviewDismiss = useCallback(() => {
+		setItemUnderReview(null);
+	}, []);
+
+	const handleReviewEdit = useCallback(() => {
+		handleOpenEditor(itemUnderReview.key);
+	}, [handleOpenEditor, itemUnderReview]);
+
 	const handleStyleInstallerDelete = useCallback((deleteStyleMeta) => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
 	}, [citationStyles]);
@@ -478,6 +496,7 @@ const BibWebContainer = props => {
 	}, [citationStyles]);
 
 	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
+		var reviewBib;
 		identifier = parseIdentifier(identifier);
 
 		// this.clearMessages(); //@TODO
@@ -518,7 +537,7 @@ const BibWebContainer = props => {
 						var rootItems = translationResponse.items.filter(item => !item.parentItem);
 
 						if(rootItems.length > 1) {
-							const reviewBib = new ZoteroBib({
+							reviewBib = new ZoteroBib({
 								...config,
 								persist: false,
 								initialItems: rootItems
@@ -538,13 +557,13 @@ const BibWebContainer = props => {
 							return;
 						}
 
-						if(shouldConfirm) {
-							const reviewBib = new ZoteroBib({
-								...config,
-								persist: false,
-								initialItems: [translationResponse.items[0]]
-							});
+						reviewBib = new ZoteroBib({
+							...config,
+							persist: false,
+							initialItems: [translationResponse.items[0]]
+						});
 
+						if(shouldConfirm) {
 							const itemToConfirm = {
 								item: translationResponse.items[0],
 								...(await getOneTimeBibliographyOrFallback(
@@ -557,14 +576,18 @@ const BibWebContainer = props => {
 							setActiveDialog('CONFIRM_ADD_DIALOG');
 							setItemToConfirm(itemToConfirm);
 							return;
-						} else {
-							addItem(translationResponse.items[0]);
 						}
 
+						addItem(translationResponse.items[0]);
 						setIdentifier('');
 						setIsTranslating(false);
 						updateBibliography();
-						setItemUnderReview(translationResponse.items[0]);
+						setItemUnderReview({
+							item: translationResponse.items[0],
+							...(await getOneTimeBibliographyOrFallback(
+							reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
+							))
+						});
 
 					break;
 					case ZoteroBib.MULTIPLE_CHOICES:
@@ -695,6 +718,9 @@ const BibWebContainer = props => {
 		onItemUpdate = { handleItemUpdate }
 		onMutipleItemsCancel = { handleMutipleItemsCancel }
 		onMutipleItemsSelect = { handleMutipleItemsSelect }
+		onReviewDelete = { handleReviewDelete }
+		onReviewDismiss = { handleReviewDismiss }
+		onReviewEdit = { handleReviewEdit }
 		onStyleInstallerCancel = { handleStyleInstallerCancel }
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
