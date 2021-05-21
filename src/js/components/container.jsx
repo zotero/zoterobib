@@ -13,7 +13,6 @@ import defaults from '../constants/defaults';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
 
-const scroll = new SmoothScroll();
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
 
@@ -360,13 +359,6 @@ const BibWebContainer = props => {
 		updateBibliography();
 	}, [updateBibliography]);
 
-	const handleItemCreated = useCallback((item) => {
-		addItem(item, false);
-		setEditorItem(item);
-		updateBibliography();
-		// setPermalink(null);
-	}, [addItem, updateBibliography]);
-
 	const handleDismiss = useCallback(id => {
 		const message = messages.find(m => m.id === id);
 		if(message) {
@@ -376,6 +368,19 @@ const BibWebContainer = props => {
 			setMessages(messages.filter(m => m.id !== id));
 		}
 	}, [messages]);
+
+	const handleGetStartedClick = useCallback(ev => {
+		const target = document.querySelector('.zotero-bib-container');
+		(new SmoothScroll()).animateScroll(target, ev.currentTarget, { speed: 1000, speedAsDuration: true });
+		document.querySelector('.id-input').focus();
+	}, []);
+
+	const handleItemCreated = useCallback((item) => {
+		addItem(item, false);
+		setEditorItem(item);
+		updateBibliography();
+		// setPermalink(null);
+	}, [addItem, updateBibliography]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
 		const index = bib.current.itemsRaw.findIndex(item => item.key === itemKey);
@@ -472,9 +477,10 @@ const BibWebContainer = props => {
 
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
-		scroll.animateScroll(target, event.currentTarget, {
+		(new SmoothScroll()).animateScroll(target, event.currentTarget, {
 			header: '.message',
-			offset: calcOffset()
+			offset: calcOffset(),
+			speed: 1000, speedAsDuration: true,
 		});
 		setMessages(messages.filter(m => m.kind !== 'WELCOME_MESSAGE'));
 	}, [messages]);
@@ -742,6 +748,7 @@ const BibWebContainer = props => {
 		onDismiss = { handleDismiss }
 		onEditorClose = { handleCloseEditor }
 		onEditorOpen = { handleOpenEditor }
+		onGetStartedClick = { handleGetStartedClick }
 		onItemCreated = { handleItemCreated }
 		onItemUpdate = { handleItemUpdate }
 		onMutipleItemsCancel = { handleMutipleItemsCancel }
