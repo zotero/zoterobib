@@ -44,6 +44,8 @@ const BibWebContainer = props => {
 	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
 	const [citationHtml, setCitationHtml] = useState(null);
 
+	const [title, setTitle] = useState(localStorage.getItem('zotero-bib-title') || '');
+	const prevTitle = usePrevious(title);
 	const [identifier, setIdentifier] = useState('');
 	const [isTranslating, setIsTranslating] = useState(false);
 	const [itemUnderReview, setItemUnderReview] = useState(null);
@@ -82,15 +84,16 @@ const BibWebContainer = props => {
 		}
 	}, [config, remoteId]);
 
-	const addItem = useCallback(item => {
+	const addItem = useCallback((item, showFirstCitationMessage = true)  => {
 		if(isSentenceCaseStyle) {
 			bib.current.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
 			bib.current.addItem(item);
 		}
-		if(!localStorage.getItem('zotero-bib-translated')) {
+
+		if(showFirstCitationMessage && !localStorage.getItem('zotero-bib-translated')) {
 			localStorage.setItem('zotero-bib-translated', 'true');
-			// this.displayFirstCitationMessage(); //TODO
+			displayFirstCitationMessage();
 		}
 
 		//TODO: optimise in bib
@@ -109,6 +112,17 @@ const BibWebContainer = props => {
 			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
 		}
 	}, []);
+
+	const displayFirstCitationMessage = useCallback(() => {
+		const message = {
+			action: 'Read More',
+			id: getNextMessageId(),
+			kind: 'FIRST_CITATION',
+			message: 'Your first citation has been added. Citations are stored locally in your browser.',
+			href: '/faq#where-is-my-bibliography-stored'
+		};
+		setMessages([...messages, message]);
+	}, [messages]);
 
 	const displayWelcomeMessage = useCallback(() => {
 		const message = {
@@ -164,7 +178,6 @@ const BibWebContainer = props => {
 			const remoteData = await fetchFromPermalink(`${config.storeURL}/${remoteId}`);
 			if(remoteData && 'items' in remoteData) {
 				const citationStyle = remoteData.citationStyle || citationStyle;
-				const title = 'title' in remoteData && remoteData.title || null;
 
 				var citationStyleMeta = citationStyles.find(cs => cs.name === citationStyle);
 				if(!citationStyleMeta) {
@@ -179,6 +192,7 @@ const BibWebContainer = props => {
 					persist: false
 				});
 
+				setTitle(remoteData?.title);
 				setIsDataReady(true);
 			}
 		} catch(e) {
@@ -190,6 +204,11 @@ const BibWebContainer = props => {
 	const updateBibliography = useCallback(() => {
 		const diff = citeproc.current.batchedUpdates().unwrap();
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
+
+		if(bib.current.itemsRaw.length === 0) {
+			setBibliography({ items: [], meta: null, lookup: {} });
+			return;
+		}
 
 		if(diff.bibliography && styleHasBibliography) {
 			var newBibliographyItems;
@@ -333,20 +352,16 @@ const BibWebContainer = props => {
 	}, [deleteItem, messages, updateBibliography]);
 
 	const handleDeleteCitations = useCallback(() => {
-		// TODO
-		// this.bib.clearItems();
-		// this.clearMessages();
-		// this.setState({
-		// 	bibliography: this.bibliography,
-		// 	items: this.bib.itemsRaw,
-		// 	itemUnderReview: null,
-		// 	permalink: null,
-		// 	title: null,
-		// });
-	}, []);
+		bib.current.clearItems();
+		setMessages([]);
+		setItemUnderReview(null);
+		// setPermalink(null)
+		setTitle(null);
+		updateBibliography();
+	}, [updateBibliography]);
 
 	const handleItemCreated = useCallback((item) => {
-		addItem(item);
+		addItem(item, false);
 		setEditorItem(item);
 		updateBibliography();
 		// setPermalink(null);
@@ -438,10 +453,10 @@ const BibWebContainer = props => {
 		if(hasCreatedItem) {
 			if(!localStorage.getItem('zotero-bib-translated')) {
 				localStorage.setItem('zotero-bib-translated', 'true');
-				// this.displayFirstCitationMessage(); //@TODO
+				displayFirstCitationMessage();
 			}
 		}
-	}, []);
+	}, [displayFirstCitationMessage]);
 
 	const handleOverride = useCallback(() => {
 		const localBib = new ZoteroBib(config);
@@ -495,6 +510,13 @@ const BibWebContainer = props => {
 		localStorage.setItem('zotero-bib-citation-style', newStyleMeta.name);
 	}, [citationStyles]);
 
+	const handleTitleChange = useCallback(title => {
+		setMessages([]);
+		setItemUnderReview(null);
+		// setPermalink(null);
+		setTitle(title);
+	}, []);
+
 	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
 		var reviewBib;
 		identifier = parseIdentifier(identifier);
@@ -526,11 +548,10 @@ const BibWebContainer = props => {
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
 						if(translationResponse.items.length === 0) {
-							setMessages(...messages, {
-								id: getNextMessageId(),
-								kind: 'INFO',
-								message: 'No results found',
-							});
+							setMessages([
+								...messages,
+								{ id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
+							]);
 							setIsTranslating(false);
 							return;
 						}
@@ -672,6 +693,12 @@ const BibWebContainer = props => {
 	}, [displayWelcomeMessage, isReadOnly, remoteId])
 
 	useEffect(() => {
+		if(title !== prevTitle && typeof(prevTitle) !== 'undefined') {
+			localStorage.setItem('zotero-bib-title', title);
+		}
+	}, [title, prevTitle]);
+
+	useEffect(() => {
 		fetchCitationStyleXml();
 		if(remoteId) {
 			fetchRemoteBibliography();
@@ -710,6 +737,7 @@ const BibWebContainer = props => {
 		onClearMessage = { noop }
 		onConfirmAddCancel = { handleConfirmAddCancel }
 		onConfirmAddConfirm = { handleConfirmAddConfirm }
+		onDeleteCitations = { handleDeleteCitations }
 		onDeleteEntry = { handleDeleteEntry }
 		onDismiss = { handleDismiss }
 		onEditorClose = { handleCloseEditor }
@@ -724,6 +752,7 @@ const BibWebContainer = props => {
 		onStyleInstallerCancel = { handleStyleInstallerCancel }
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
+		onTitleChanged = { handleTitleChange }
 		onHelpClick = { noop }
 		onReadMore = { handleReadMoreClick }
 		onSaveToZoteroHide = { noop }
@@ -735,6 +764,7 @@ const BibWebContainer = props => {
 		onUndoDelete = { handleUndoDelete }
 		stylesData={ stylesData }
 		styleHasBibliography={ styleHasBibliography }
+		title = { title }
 	/>);
 }
 

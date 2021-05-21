@@ -35,7 +35,7 @@ class Fetcher {
 			return locales;
 		} else {
 			const response = await fetch(`/static/locales/locales-${lang}.xml`);
-			const locales = response.text();
+			const locales = await response.text();
 			localStorage.setItem(cacheId, locales);
 			return locales;
 		}

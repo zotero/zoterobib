@@ -12,7 +12,13 @@ import { usePrevious } from '../hooks/';
 const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUndoDelete }) => {
 	const location = useLocation();
 	const prevLocation = usePrevious(location);
-	let category = kind === 'UNDO_DELETE' ? 'warning' : 'info';
+	let category;
+
+	switch(kind) {
+		case 'UNDO_DELETE': category = 'warning'; break;
+		case 'FIRST_CITATION': category = 'success'; break;
+		default: category = 'info'; break;
+	}
 
 	const handleAction = useCallback(ev => {
 		switch(kind) {
@@ -72,7 +78,7 @@ Message.propTypes = {
 	id: PropTypes.number,
 	action: PropTypes.string,
 	href: PropTypes.string,
-	kind: PropTypes.oneOf(['INFO', 'UNDO_DELETE', 'WELCOME_MESSAGE']).isRequired,
+	kind: PropTypes.oneOf(['FIRST_CITATION', 'INFO', 'UNDO_DELETE', 'WELCOME_MESSAGE']).isRequired,
 	message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 	onDismiss: PropTypes.func.isRequired,
 	onReadMore: PropTypes.func,
