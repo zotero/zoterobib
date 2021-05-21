@@ -11,6 +11,7 @@ import baseMappings from 'zotero-base-mappings';
 // const cachedApi = api().use(apiCache());
 const cachedApi = api();
 const stylesCache = {};
+var Driver = null;
 
 // const citeproc = require('');
 
@@ -69,13 +70,15 @@ const getCiteproc = async (style) => {
 
 
 	try {
-		const { default: init, Driver } = await import("/static/js/citeproc-rs/wasm.js");
-		await init();
-		console.log({ lang, style, fetcher});
+		if(!Driver) {
+			const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
+			Driver = CreateDriver;
+			await init();
+		}
+
 		const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
 		const driver = driverResult.unwrap();
 		await driver.fetchLocales();
-		console.log({ driver, style });
 		return driver;
 	} catch(err) {
 		console.error(err);
@@ -365,21 +368,23 @@ const getCitations = (bib, citeproc) => {
 const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography) => {
 	var bibliographyItems, bibliographyMeta = null;
 
-	citeproc.current = await getCiteproc(citationStyleXml);
-	citeproc.current.includeUncited("All").unwrap();
-	citeproc.current.insertReferences(itemsCSL).unwrap();
+	const citeproc = await getCiteproc(citationStyleXml);
+	citeproc.includeUncited("All").unwrap();
+	citeproc.insertReferences(itemsCSL).unwrap();
 
 	if(styleHasBibliography) {
-		const bibliographyMeta = citeproc.bibliographyMeta().unwrap();
-		const bibliographyItems = citeproc.makeBibliography().unwrap();
+		bibliographyMeta = citeproc.bibliographyMeta().unwrap();
+		bibliographyItems = citeproc.makeBibliography().unwrap();
 	} else {
 		citeproc.current.initClusters(
 			itemsCSL.map(item => ({ id: item.id, cites: [ { id: item.id } ] }))
 		).unwrap();
 		citeproc.current.setClusterOrder(itemsCSL.map(item => ({ id: item.id }))).unwrap();
 		const render = citeproc.current.fullRender().unwrap();
-		const bibliographyItems = itemsCSL.map(item => ({ id: item.id, value: render.allClusters[item.id] }));
+		bibliographyItems = itemsCSL.map(item => ({ id: item.id, value: render.allClusters[item.id] }));
 	}
+
+	citeproc.free();
 
 	return { bibliographyItems, bibliographyMeta };
 
