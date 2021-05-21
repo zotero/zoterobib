@@ -329,7 +329,7 @@ const BibWebContainer = props => {
 			kind: 'UNDO_DELETE',
 			message: 'Item Deleted',
 		};
-		setMessages([ ...messages.filter(m => !m.isUndoMessage), message ]);
+		setMessages([ ...messages.filter(m => m.kind !== 'UNDO_DELETE'), message ]);
 	}, [deleteItem, messages, updateBibliography]);
 
 	const handleDeleteCitations = useCallback(() => {
