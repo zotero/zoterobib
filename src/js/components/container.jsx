@@ -250,10 +250,17 @@ const BibWebContainer = props => {
 		}
 	}, [bibliography, styleHasBibliography]);
 
-	const handleError = useCallback((message, e) => {
-		// TODO: display message
-		throw e;
-	}, []);
+	const handleError = useCallback((errorMessage, errorData) => {
+		const message = {
+			id: getNextMessageId(),
+			kind: 'ERROR',
+			message: errorMessage,
+		};
+		setMessages([...messages, message]);
+		if(errorData) {
+			console.error(errorData); //eslint-disable-line no-console
+		}
+	}, [messages]);
 
 	const handleCitationStyleChanged = useCallback(async ev => {
 		const newCitationStyle = ev.value;
@@ -572,7 +579,7 @@ const BibWebContainer = props => {
 
 							const multipleItems = {
 								items: rootItems,
-								...(await getOneTimeBibliographyOrFallback(
+							...(await getOneTimeBibliographyOrFallback(
 									reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
 								))
 							};
@@ -748,6 +755,7 @@ const BibWebContainer = props => {
 		onDismiss = { handleDismiss }
 		onEditorClose = { handleCloseEditor }
 		onEditorOpen = { handleOpenEditor }
+		onError = { handleError }
 		onGetStartedClick = { handleGetStartedClick }
 		onItemCreated = { handleItemCreated }
 		onItemUpdate = { handleItemUpdate }

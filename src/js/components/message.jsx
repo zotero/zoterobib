@@ -17,6 +17,7 @@ const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUnd
 	switch(kind) {
 		case 'UNDO_DELETE': category = 'warning'; break;
 		case 'FIRST_CITATION': category = 'success'; break;
+		case 'ERROR': category = 'error'; break;
 		default: category = 'info'; break;
 	}
 
