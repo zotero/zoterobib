@@ -79,7 +79,7 @@ Message.propTypes = {
 	id: PropTypes.number,
 	action: PropTypes.string,
 	href: PropTypes.string,
-	kind: PropTypes.oneOf(['FIRST_CITATION', 'INFO', 'UNDO_DELETE', 'WELCOME_MESSAGE']).isRequired,
+	kind: PropTypes.oneOf(['ERROR', 'FIRST_CITATION', 'INFO', 'UNDO_DELETE', 'WELCOME_MESSAGE']).isRequired,
 	message: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 	onDismiss: PropTypes.func.isRequired,
 	onReadMore: PropTypes.func,
