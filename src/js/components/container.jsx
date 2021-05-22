@@ -7,7 +7,7 @@ import SmoothScroll from 'smooth-scroll';
 import { calcOffset, dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
 getExpandedCitationStyles, getCiteproc, isLikeUrl, noop, parseIdentifier,
 processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
-retrieveStylesData, validateItem, validateUrl } from '../utils';
+retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import ZBib from './zbib';
@@ -54,6 +54,7 @@ const BibWebContainer = props => {
 	const [multipleChoiceItems, setMultipleChoiceItems] = useState(null);
 	const [editorItem, setEditorItem] = useState(null);
 	const [lastDeletedItem, setLastDeletedItem] = useState(null);
+	const [permalink, setPermalink] = useState(null);
 
 	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
@@ -344,7 +345,7 @@ const BibWebContainer = props => {
 	const handleDeleteEntry = useCallback((itemId) => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		setItemUnderReview(null);
-		// setPermalink(null); //TODO
+		setPermalink(null);
 		deleteItem(itemId);
 		updateBibliography();
 		setLastDeletedItem({ ...item });
@@ -361,7 +362,7 @@ const BibWebContainer = props => {
 		bib.current.clearItems();
 		setMessages([]);
 		setItemUnderReview(null);
-		// setPermalink(null)
+		setPermalink(null);
 		setTitle(null);
 		updateBibliography();
 	}, [updateBibliography]);
@@ -386,7 +387,7 @@ const BibWebContainer = props => {
 		addItem(item, false);
 		setEditorItem(item);
 		updateBibliography();
-		// setPermalink(null);
+		setPermalink(null);
 	}, [addItem, updateBibliography]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
@@ -508,6 +509,21 @@ const BibWebContainer = props => {
 		handleOpenEditor(itemUnderReview.key);
 	}, [handleOpenEditor, itemUnderReview]);
 
+	const handleSave = useCallback(async () => {
+		try {
+			const key = await saveToPermalink(config.storeURL, {
+				title: title,
+				citationStyle: citationStyle,
+				items: bib.current.itemsRaw
+			});
+			setPermalink(`${window.location.origin}/${key}`);
+		} catch(e) {
+			setPermalink(null);
+			history.push('/');
+			handleError('Failed to upload bibliography', e);
+		}
+	}, [citationStyle, config, handleError, history, title]);
+
 	const handleStyleInstallerDelete = useCallback((deleteStyleMeta) => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
 	}, [citationStyles]);
@@ -526,7 +542,7 @@ const BibWebContainer = props => {
 	const handleTitleChange = useCallback(title => {
 		setMessages([]);
 		setItemUnderReview(null);
-		// setPermalink(null);
+		setPermalink(null);
 		setTitle(title);
 	}, []);
 
@@ -534,11 +550,11 @@ const BibWebContainer = props => {
 		var reviewBib;
 		identifier = parseIdentifier(identifier);
 
-		// this.clearMessages(); //@TODO
+		setMessages([]);
 		setIdentifier(identifier);
 		setIsTranslating(true);
 		setItemUnderReview(null);
-		// setPermalink(null); //@TODO
+		setPermalink(null);
 
 		let isUrl = !!multipleSelectedItems || isLikeUrl(identifier);
 		if(identifier || isUrl) {
@@ -653,7 +669,7 @@ const BibWebContainer = props => {
 			addItem(lastDeletedItem);
 			updateBibliography();
 			setMessages(messages.filter(m => m.kind !== 'UNDO_DELETE'));
-			// setPermalink(null); //TODO!
+			setPermalink(null);
 			setLastDeletedItem(null);
 		}
 	}, [addItem, lastDeletedItem, messages, updateBibliography]);
@@ -733,10 +749,10 @@ const BibWebContainer = props => {
 		editorItem = { editorItem }
 		identifier = { identifier }
 		isNoteStyle = { isNoteStyle }
-		isStylesDataLoading = { isStylesDataLoading }
-		isTranslating={ isTranslating }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
+		isStylesDataLoading = { isStylesDataLoading }
+		isTranslating={ isTranslating }
 		itemUnderReview = { itemUnderReview }
 		localCitationsCount = { localCitationsCount }
 		messages={ messages }
@@ -764,6 +780,7 @@ const BibWebContainer = props => {
 		onReviewDelete = { handleReviewDelete }
 		onReviewDismiss = { handleReviewDismiss }
 		onReviewEdit = { handleReviewEdit }
+		onSave = { handleSave }
 		onStyleInstallerCancel = { handleStyleInstallerCancel }
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
@@ -777,6 +794,7 @@ const BibWebContainer = props => {
 		onCitationStyleChanged={ handleCitationStyleChanged }
 		onOverride={ handleOverride }
 		onUndoDelete = { handleUndoDelete }
+		permalink = { permalink }
 		stylesData={ stylesData }
 		styleHasBibliography={ styleHasBibliography }
 		title = { title }
