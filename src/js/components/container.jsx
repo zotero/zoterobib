@@ -47,6 +47,7 @@ const BibWebContainer = props => {
 	const prevTitle = usePrevious(title);
 	const [identifier, setIdentifier] = useState('');
 	const [isTranslating, setIsTranslating] = useState(false);
+	const [isTranslatingMore, setIsTranslatingMore] = useState(false);
 	const [itemUnderReview, setItemUnderReview] = useState(null);
 	const [multipleItems, setMultipleItems] = useState(null);
 	const [itemToConfirm, setItemToConfirm] = useState(null);
@@ -434,6 +435,54 @@ const BibWebContainer = props => {
 		// }
 	}, [addItem, deleteItem, handleError, isSentenceCaseStyle, updateBibliography]);
 
+	const handleMultipleChoiceCancel = useCallback(() => {
+		setActiveDialog(null);
+		setMultipleChoiceItems(null);
+	}, []);
+
+	const handleMultipleChoiceMore = useCallback(async () => {
+		setIsTranslatingMore(true);
+		try {
+			let { result, items, links } = await bib.current.translateIdentifier(identifier, {
+				endpoint: moreItemsLink.url,
+				add: false
+			});
+
+			switch(result) {
+				case ZoteroBib.COMPLETE:
+				case ZoteroBib.MULTIPLE_CHOICES:
+					setIsTranslatingMore(false);
+					setActiveDialog('MULTIPLE_CHOICE_DIALOG');
+					setMoreItemsLink('next' in links ? links.next : null);
+					setMultipleChoiceItems(dedupMultipleChoiceItems([
+						...multipleChoiceItems,
+						...(await processMultipleChoiceItems(items))
+					]));
+				break;
+				case ZoteroBib.FAILED:
+					handleError('An error occurred while fetching more items.');
+					setIsTranslatingMore(false);
+				break;
+			}
+		} catch(e) {
+			handleError('An error occurred while fetching more items.', e);
+			setIsTranslatingMore(false);
+		}
+	}, [handleError, identifier, moreItemsLink, multipleChoiceItems]);
+
+	const handleMultipleChoiceSelect = useCallback(async selectedItem => {
+		setActiveDialog(null);
+		setMultipleChoiceItems(null);
+
+		if(selectedItem.source === 'url') {
+			return await handleTranslateIdentifier(identifier,
+				{ [selectedItem.key]: selectedItem.value.title }
+			);
+		} else {
+			return await handleTranslateIdentifier(selectedItem.key);
+		}
+	}, [handleTranslateIdentifier, identifier]);
+
 	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
 		setMultipleItems(null);
@@ -746,6 +795,7 @@ const BibWebContainer = props => {
 		isReady={ isReady }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }
+		isTranslatingMore= { isTranslatingMore }
 		itemUnderReview = { itemUnderReview }
 		localCitationsCount = { localCitationsCount }
 		messages={ messages }
@@ -769,6 +819,9 @@ const BibWebContainer = props => {
 		onGetStartedClick = { handleGetStartedClick }
 		onItemCreated = { handleItemCreated }
 		onItemUpdate = { handleItemUpdate }
+		onMultipleChoiceCancel = { handleMultipleChoiceCancel }
+		onMultipleChoiceMore = { handleMultipleChoiceMore }
+		onMultipleChoiceSelect = { handleMultipleChoiceSelect }
 		onMultipleItemsCancel = { handleMultipleItemsCancel }
 		onMultipleItemsSelect = { handleMultipleItemsSelect }
 		onReviewDelete = { handleReviewDelete }

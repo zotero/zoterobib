@@ -89,7 +89,7 @@ class MultipleChoiceDialog extends React.Component {
 	}
 
 	render() {
-		if(this.props.activeDialog !== 'MULTIPLE_CHOICE_DIALOG') {
+		if(!this.props.multipleChoiceItems || this.props.activeDialog !== 'MULTIPLE_CHOICE_DIALOG') {
 			return null
 		}
 
