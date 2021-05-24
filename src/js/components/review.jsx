@@ -6,7 +6,6 @@ import { formatBib, formatFallback } from '../cite';
 const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, onReviewDismiss, styleHasBibliography }) => {
 	const { bibliographyItems, bibliographyMeta } = itemUnderReview;
 	const html = styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems);
-	console.log({ html, bibliographyItems, bibliographyMeta });
 
 	return isTranslating ? (
 		<section className="section section-review review">

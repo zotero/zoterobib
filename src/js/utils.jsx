@@ -1,4 +1,5 @@
 import React from 'react';
+import ZoteroBib from 'zotero-translation-client';
 import balanced from 'balanced-match';
 import api from 'zotero-api-client';
 // import apiCache from 'zotero-api-client-cache';
@@ -697,6 +698,16 @@ const calcOffset = () => {
 	return md.matches ? 48 : 24;
 }
 
+//TODO: a nicer API for Zotero -> CSL conversion
+const getItemsCSL = items => {
+	const bib = new ZoteroBib({
+		persist: false,
+		initialItems: items
+	});
+
+	return bib.itemsCSL;
+};
+
 export {
 	calcOffset,
 	dedupMultipleChoiceItems,
@@ -706,6 +717,7 @@ export {
 	getOneTimeBibliographyOrFallback,
 	getCitation,
 	getCiteproc,
+	getItemsCSL,
 	// getCSL,
 	// getHtmlNodeFromBibliography,
 	getItemTypeMeta,

@@ -5,7 +5,7 @@ import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 
 import { calcOffset, dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
-getExpandedCitationStyles, getCiteproc, isLikeUrl, noop, parseIdentifier,
+getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl, noop, parseIdentifier,
 processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
 retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
@@ -332,12 +332,12 @@ const BibWebContainer = props => {
 	const handleConfirmAddConfirm = useCallback(async () => {
 		addItem(itemToConfirm.item);
 		// TODO
-		// setItemUnderReview({
-		// 	item: itemToConfirm.items,
-		// 	...(await getOneTimeBibliographyOrFallback(
-		// 		reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
-		// 	))
-		// );
+		setItemUnderReview({
+			item: itemToConfirm.items,
+			...(await getOneTimeBibliographyOrFallback(
+				getItemsCSL(itemToConfirm.items), citationStyleXml, styleHasBibliography
+			))
+		});
 		setActiveDialog(null);
 		setItemToConfirm(null);
 	}, [addItem, itemToConfirm]);
@@ -434,19 +434,25 @@ const BibWebContainer = props => {
 		// }
 	}, [addItem, deleteItem, handleError, isSentenceCaseStyle, updateBibliography]);
 
-	const handleMutipleItemsCancel = useCallback(() => {
+	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
 		setMultipleItems(null);
 	}, []);
 
-	const handleMutipleItemsSelect = useCallback((key) => {
+	const handleMultipleItemsSelect = useCallback(async key => {
 		const item = multipleItems.items.find(i => i.key === key);
 		addItem(item);
 		setActiveDialog(null);
 		setMultipleItems(null);
 		setItemUnderReview(null);
+		setItemUnderReview({
+			item,
+			...(await getOneTimeBibliographyOrFallback(
+			getItemsCSL([item]), citationStyleXml, styleHasBibliography
+			))
+		});
 		updateBibliography();
-	}, [addItem, multipleItems, updateBibliography]);
+	}, [addItem, citationStyleXml, multipleItems, styleHasBibliography, updateBibliography]);
 
 	const handleOpenEditor = useCallback((itemId = null) => {
 		if(itemUnderReview && itemId && itemId != itemUnderReview.key) {
@@ -547,7 +553,6 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
-		var reviewBib;
 		identifier = parseIdentifier(identifier);
 
 		setMessages([]);
@@ -587,16 +592,10 @@ const BibWebContainer = props => {
 						var rootItems = translationResponse.items.filter(item => !item.parentItem);
 
 						if(rootItems.length > 1) {
-							reviewBib = new ZoteroBib({
-								...config,
-								persist: false,
-								initialItems: rootItems
-							});
-
 							const multipleItems = {
 								items: rootItems,
 							...(await getOneTimeBibliographyOrFallback(
-									reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
+									getItemsCSL(rootItems), citationStyleXml, styleHasBibliography
 								))
 							};
 
@@ -607,17 +606,11 @@ const BibWebContainer = props => {
 							return;
 						}
 
-						reviewBib = new ZoteroBib({
-							...config,
-							persist: false,
-							initialItems: [translationResponse.items[0]]
-						});
-
 						if(shouldConfirm) {
 							const itemToConfirm = {
 								item: translationResponse.items[0],
 								...(await getOneTimeBibliographyOrFallback(
-								reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
+								getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography
 								))
 							};
 
@@ -635,7 +628,7 @@ const BibWebContainer = props => {
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
-							reviewBib.itemsCSL, citationStyleXml, styleHasBibliography
+							getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography
 							))
 						});
 
@@ -758,7 +751,8 @@ const BibWebContainer = props => {
 		messages={ messages }
 		moreItemsLink = { moreItemsLink }
 		multipleChoiceItems = { multipleChoiceItems }
-		activeDialog={ activeDialog }
+		multipleItems= { multipleItems }
+		activeDialog= { activeDialog }
 		onCitationCopyDialogOpen = { handleCitationCopyDialogOpen }
 		onCitationCopy = { handleCitationCopy }
 		onCitationCopyDialogClose = { handleCitationCopyDialogClose }
@@ -775,8 +769,8 @@ const BibWebContainer = props => {
 		onGetStartedClick = { handleGetStartedClick }
 		onItemCreated = { handleItemCreated }
 		onItemUpdate = { handleItemUpdate }
-		onMutipleItemsCancel = { handleMutipleItemsCancel }
-		onMutipleItemsSelect = { handleMutipleItemsSelect }
+		onMultipleItemsCancel = { handleMultipleItemsCancel }
+		onMultipleItemsSelect = { handleMultipleItemsSelect }
 		onReviewDelete = { handleReviewDelete }
 		onReviewDismiss = { handleReviewDismiss }
 		onReviewEdit = { handleReviewEdit }

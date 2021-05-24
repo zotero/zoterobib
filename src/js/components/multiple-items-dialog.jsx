@@ -13,22 +13,22 @@ class MultipleItemsDialog extends React.Component {
 
 	handleKeyboardConfirm = () => {
 		if(this.focusedItem) {
-			this.props.OnMutipleItemsSelect(this.focusedItem);
+			this.props.onMultipleItemsSelect(this.focusedItem);
 		}
 	}
 
 	handleAdd = ev => {
-		this.props.OnMutipleItemsSelect(ev.currentTarget.dataset.key);
+		this.props.onMultipleItemsSelect(ev.currentTarget.dataset.key);
 	}
 
 	handleCancel = () => {
-		this.props.OnMutipleItemsCancel();
+		this.props.onMultipleItemsCancel();
 	}
 
 	render() {
 		const { activeDialog, multipleItems } = this.props;
 
-		if(activeDialog !== 'MULTIPLE_ITEMS_DIALOG') {
+		if(!multipleItems || activeDialog !== 'MULTIPLE_ITEMS_DIALOG') {
 			return null;
 		}
 
@@ -85,16 +85,12 @@ class MultipleItemsDialog extends React.Component {
 		);
 	}
 
-	static defaultProps = {
-		multipleChoiceItems: []
-	}
-
 	static propTypes = {
 		activeDialog: PropTypes.string,
 		multipleItems: PropTypes.object,
 		multipleChoiceItems: PropTypes.array,
-		OnMutipleItemsCancel: PropTypes.func.isRequired,
-		OnMutipleItemsSelect: PropTypes.func.isRequired,
+		onMultipleItemsCancel: PropTypes.func.isRequired,
+		onMultipleItemsSelect: PropTypes.func.isRequired,
 	}
 }
 
