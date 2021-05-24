@@ -12,9 +12,11 @@ class ConfirmAddDialog extends React.Component {
 		const { activeDialog, onConfirmAddCancel, onConfirmAddConfirm, itemToConfirm,
 		styleHasBibliography } = this.props;
 
-		if(!itemToConfirm) {
+		if(!itemToConfirm || activeDialog !== 'CONFIRM_ADD_DIALOG') {
 			return null;
 		}
+
+		console.log({ itemToConfirm });
 
 		const { bibliographyItems, bibliographyMeta } = itemToConfirm;
 		const html = styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems);

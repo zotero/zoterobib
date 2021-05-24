@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ZoteroBib from 'zotero-translation-client';
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 
@@ -19,6 +19,7 @@ const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgI
 const BibWebContainer = props => {
 	const { id: remoteId } = useParams();
 	const history = useHistory();
+	const location = useLocation();
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const copyData = useRef(null);
@@ -56,13 +57,14 @@ const BibWebContainer = props => {
 	const [editorItem, setEditorItem] = useState(null);
 	const [lastDeletedItem, setLastDeletedItem] = useState(null);
 	const [permalink, setPermalink] = useState(null);
+	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
 
 	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
 		useCitationStyle(citationStyle, citationStyleXml);
 
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 	const isStyleReady = !!citationStyleXml;
-	const isReady = isStyleReady && isCiteprocReady && isDataReady;
+	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
 	const isReadOnly = !!remoteId;
 
 	const [citationStyles, setCitationStyles] = useState([
@@ -332,16 +334,16 @@ const BibWebContainer = props => {
 
 	const handleConfirmAddConfirm = useCallback(async () => {
 		addItem(itemToConfirm.item);
-		// TODO
 		setItemUnderReview({
-			item: itemToConfirm.items,
+			item: itemToConfirm.item,
 			...(await getOneTimeBibliographyOrFallback(
-				getItemsCSL(itemToConfirm.items), citationStyleXml, styleHasBibliography
+				getItemsCSL([itemToConfirm.item]), citationStyleXml, styleHasBibliography
 			))
 		});
 		setActiveDialog(null);
 		setItemToConfirm(null);
-	}, [addItem, itemToConfirm]);
+		updateBibliography();
+	}, [addItem, citationStyleXml, itemToConfirm, styleHasBibliography, updateBibliography]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
@@ -481,7 +483,8 @@ const BibWebContainer = props => {
 		} else {
 			return await handleTranslateIdentifier(selectedItem.key);
 		}
-	}, [handleTranslateIdentifier, identifier]);
+	// citationStyleXml is required here to break circular dependency. TODO: refactor so it isn't
+	}, [citationStyleXml, handleTranslateIdentifier, identifier]);
 
 	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
@@ -674,6 +677,7 @@ const BibWebContainer = props => {
 						setIdentifier('');
 						setIsTranslating(false);
 						updateBibliography();
+						console.log([translationResponse.items[0]], { citationStyleXml, styleHasBibliography });
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
@@ -704,7 +708,7 @@ const BibWebContainer = props => {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
 		}
-	}, [addItem, citationStyleXml, config, handleError, messages, styleHasBibliography, updateBibliography]);
+	}, [addItem, citationStyleXml, handleError, messages, styleHasBibliography, updateBibliography]);
 
 	const handleUndoDelete = useCallback(() => {
 		if(lastDeletedItem) {
@@ -770,15 +774,33 @@ const BibWebContainer = props => {
 	}, [title, prevTitle]);
 
 	useEffect(() => {
+		if(isDataReady && isStyleReady && isCiteprocReady && !isQueryHandled && location.pathname === '/import') {
+			history.replace('/');
+			setIsQueryHandled(true);
+			console.log({ isStyleReady, isDataReady, handleTranslateIdentifier });
+			(async () => {
+				console.log({ isStyleReady });
+				await handleTranslateIdentifier(identifier, null, true);
+			})();
+		}
+	}, [handleTranslateIdentifier, history, identifier, isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, location]);
+
+	useEffect(() => {
+		document.addEventListener('copy', handleCopyToClipboard, true);
+
 		fetchCitationStyleXml();
+
 		if(remoteId) {
 			fetchRemoteBibliography();
 		} else {
 			bib.current = new ZoteroBib(config);
 			bib.current.reloadItems();
+
+			const params = new URLSearchParams(location.search);
+			const prefilledIdentifier = params.get('q') || '';
+			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
 		}
-		document.addEventListener('copy', handleCopyToClipboard, true);
 	}, []);
 
 
@@ -796,6 +818,7 @@ const BibWebContainer = props => {
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }
 		isTranslatingMore= { isTranslatingMore }
+		itemToConfirm = { itemToConfirm }
 		itemUnderReview = { itemUnderReview }
 		localCitationsCount = { localCitationsCount }
 		messages={ messages }
