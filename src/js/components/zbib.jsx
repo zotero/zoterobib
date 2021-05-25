@@ -186,7 +186,6 @@ class ZBib extends React.PureComponent {
 		messages: PropTypes.array.isRequired,
 		onCitationCopy: PropTypes.func.isRequired,
 		onCitationModifierChange: PropTypes.func.isRequired,
-		onClearMessage: PropTypes.func.isRequired,
 		onDismiss: PropTypes.func.isRequired,
 		onHelpClick: PropTypes.func.isRequired,
 		onReadMore: PropTypes.func.isRequired,

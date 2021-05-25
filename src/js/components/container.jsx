@@ -461,6 +461,11 @@ const BibWebContainer = props => {
 		document.querySelector('.id-input').focus();
 	}, []);
 
+	const handleHelpClick = useCallback(ev => {
+		const target = document.querySelector('.zbib-illustration');
+		(new SmoothScroll()).animateScroll(target, ev.currentTarget, { speed: 1000, speedAsDuration: true, offset: calcOffset() });
+	}, []);
+
 	const handleItemCreated = useCallback((item) => {
 		addItem(item, false);
 		setEditorItem(item);
@@ -912,7 +917,6 @@ const BibWebContainer = props => {
 		onCitationCopy = { handleCitationCopy }
 		onCitationCopyDialogClose = { handleCitationCopyDialogClose }
 		onCitationModifierChange = { handleCitationModifierChange }
-		onClearMessage = { noop }
 		onConfirmAddCancel = { handleConfirmAddCancel }
 		onConfirmAddConfirm = { handleConfirmAddConfirm }
 		onDeleteCitations = { handleDeleteCitations }
@@ -937,7 +941,7 @@ const BibWebContainer = props => {
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
 		onTitleChanged = { handleTitleChange }
-		onHelpClick = { noop }
+		onHelpClick = { handleHelpClick }
 		onReadMore = { handleReadMoreClick }
 		onStyleSwitchCancel = { noop }
 		onStyleSwitchConfirm = { noop }
