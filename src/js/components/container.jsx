@@ -10,8 +10,10 @@ processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyl
 retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
+import exportFormats from '../constants/export-formats';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
+import { formatBib, getBibliographyFormatParameters } from '../cite';
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -23,6 +25,7 @@ const BibWebContainer = props => {
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const copyData = useRef(null);
+	const copyDataInclude = useRef(null);
 	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
@@ -203,6 +206,78 @@ const BibWebContainer = props => {
 			handleError('Failed to load citations by id', e);
 		}
 	}, [citationStyles, config, handleError, history, remoteId]);
+
+	const getCopyData = useCallback(async format => {
+		if(format === 'text') {
+			//NOTE: citeprocRS uses 'plain', citeprocJS uses 'text';
+			format = 'plain';
+		}
+		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
+			bib.current.itemsCSL, citationStyleXml, styleHasBibliography, format
+		);
+
+		if(bibliographyItems) {
+			const copyData = format === 'html' ?
+				formatBib(bibliographyItems, bibliographyMeta) :
+				bibliographyItems.map(i => i.value).join('\n');
+
+			if(exportFormats[format].include) {
+				copyDataInclude.current = [
+				{
+					mime: exportFormats[format].mime,
+					data: copyData
+				},
+				{
+					mime: exportFormats[exportFormats[format].include].mime,
+					data: await getCopyData(exportFormats[format].include)
+				}];
+			}
+			return copyData;
+		}
+
+		return '';
+	}, [citationStyleXml, styleHasBibliography]);
+
+	const getFileData = useCallback(async format => {
+		var fileContents, separator, bibStyle, preamble = '';
+
+		if(format === 'ris') {
+			try {
+				fileContents = await bib.current.exportItems('ris');
+			} catch(e) {
+				handleError(e.message);
+				return;
+			}
+		} else if(format === 'bibtex') {
+			try {
+				fileContents = await bib.current.exportItems('bibtex');
+			} catch(e) {
+				handleError(e.message);
+				return;
+			}
+		} else {
+			const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
+				bib.current.itemsCSL, citationStyleXml, styleHasBibliography, format
+			);
+
+			if(format === 'rtf') {
+				bibStyle = getBibliographyFormatParameters(bibliographyMeta);
+				separator = '\\\r\n';
+				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') + ' ' : ''}\\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
+			}
+			fileContents = `{\\rtf ${bibliographyMeta.formatMeta.markupPre}${preamble}${bibliographyItems.map(i => i.value).join(separator)}${bibliographyMeta.formatMeta.markupPost}}`;
+			// citeprocJS
+			// fileContents = `${bibliography[0].bibstart}${preamble}${bibliography[1].join(separator)}${bibliography[0].bibend}`;
+		}
+
+		const fileName = `citations.${exportFormats[format].extension}`;
+		const file = new File(
+			[fileContents],
+			fileName,
+			{ type: exportFormats[format].mime }
+		);
+		return file;
+	}, [handleError, citationStyleXml, styleHasBibliography]);
 
 	const updateBibliography = useCallback(() => {
 		const diff = citeproc.current.batchedUpdates().unwrap();
@@ -677,7 +752,6 @@ const BibWebContainer = props => {
 						setIdentifier('');
 						setIsTranslating(false);
 						updateBibliography();
-						console.log([translationResponse.items[0]], { citationStyleXml, styleHasBibliography });
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
@@ -719,6 +793,14 @@ const BibWebContainer = props => {
 			setLastDeletedItem(null);
 		}
 	}, [addItem, lastDeletedItem, messages, updateBibliography]);
+
+	const handleSaveToZoteroShow = useCallback(() => {
+		setActiveDialog('SAVE_TO_ZOTERO');
+	}, []);
+
+	const handleSaveToZoteroHide = useCallback(() => {
+		setActiveDialog(null);
+	}, []);
 
 	const fetchCitationStyleXml = useCallback(async () => {
 		setIsFetchingStyleXml(true);
@@ -777,9 +859,7 @@ const BibWebContainer = props => {
 		if(isDataReady && isStyleReady && isCiteprocReady && !isQueryHandled && location.pathname === '/import') {
 			history.replace('/');
 			setIsQueryHandled(true);
-			console.log({ isStyleReady, isDataReady, handleTranslateIdentifier });
 			(async () => {
-				console.log({ isStyleReady });
 				await handleTranslateIdentifier(identifier, null, true);
 			})();
 		}
@@ -805,6 +885,8 @@ const BibWebContainer = props => {
 
 
 	return (<ZBib
+		getCopyData = { getCopyData }
+		getFileData = { getFileData }
 		bibliography = { bibliography }
 		citationCopyModifiers = { citationCopyModifiers }
 		citationHtml = { citationHtml }
@@ -857,13 +939,14 @@ const BibWebContainer = props => {
 		onTitleChanged = { handleTitleChange }
 		onHelpClick = { noop }
 		onReadMore = { handleReadMoreClick }
-		onSaveToZoteroHide = { noop }
 		onStyleSwitchCancel = { noop }
 		onStyleSwitchConfirm = { noop }
 		onTranslationRequest = { handleTranslateIdentifier }
 		onCitationStyleChanged={ handleCitationStyleChanged }
 		onOverride={ handleOverride }
 		onUndoDelete = { handleUndoDelete }
+		onSaveToZoteroShow = { handleSaveToZoteroShow }
+		onSaveToZoteroHide = { handleSaveToZoteroHide }
 		permalink = { permalink }
 		stylesData={ stylesData }
 		styleHasBibliography={ styleHasBibliography }

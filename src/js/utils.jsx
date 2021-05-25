@@ -60,7 +60,7 @@ class Fetcher {
 // 	});
 // };
 
-const getCiteproc = async (style) => {
+const getCiteproc = async (style, format = 'html') => {
 	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
 	const fetcher = new Fetcher();
 
@@ -77,7 +77,9 @@ const getCiteproc = async (style) => {
 			await init();
 		}
 
-		const driverResult = Driver.new({ localeOverride: lang, style, fetcher });
+		console.log({ localeOverride: lang, format, style, fetcher });
+
+		const driverResult = Driver.new({ localeOverride: lang, format, style, fetcher });
 		const driver = driverResult.unwrap();
 		await driver.fetchLocales();
 		return driver;
@@ -313,37 +315,6 @@ const saveToPermalink = async (url, data) => {
 	}
 };
 
-/**
-	 * copied from https://github.com/zotero/zotero/blob/1f5639da4297ac20fd21223d2004a7cfeef72e21/chrome/content/zotero/xpcom/cite.js#L43
-	 * Convert formatting data from citeproc-js bibliography object into explicit format
-	 * parameters for RTF or word processors
-	 * @param {bib} citeproc-js bibliography object
-	 * @return {Object} Bibliography style parameters.
- */
-
-const getBibliographyFormatParameters = bib => {
-		var bibStyle = {'tabStops':[], 'indent':0, 'firstLineIndent':0,
-						'lineSpacing':(240 * bib[0].linespacing),
-						'entrySpacing':(240 * bib[0].entryspacing)};
-		if(bib[0].hangingindent) {
-			bibStyle.indent = 720;				// 720 twips = 0.5 in
-			bibStyle.firstLineIndent = -720;	// -720 twips = -0.5 in
-		} else if(bib[0]['second-field-align']) {
-			// this is a really sticky issue. the below works for first fields that look like "[1]"
-			// and "1." otherwise, i have no idea. luckily, this will be good enough 99% of the time.
-			var alignAt = 24+bib[0].maxoffset*120;
-			bibStyle.firstLineIndent = -alignAt;
-			if(bib[0]['second-field-align'] == 'margin') {
-				bibStyle.tabStops = [0];
-			} else {
-				bibStyle.indent = alignAt;
-				bibStyle.tabStops = [alignAt];
-			}
-		}
-
-		return bibStyle;
-};
-
 const getCitations = (bib, citeproc) => {
 	const items = bib.itemsRaw.map(item => item.key);
 	const citations = [];
@@ -366,10 +337,10 @@ const getCitations = (bib, citeproc) => {
 	return citations;
 };
 
-const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography) => {
+const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, format = 'html') => {
 	var bibliographyItems, bibliographyMeta = null;
 
-	const citeproc = await getCiteproc(citationStyleXml);
+	const citeproc = await getCiteproc(citationStyleXml, format);
 	citeproc.includeUncited("All").unwrap();
 	citeproc.insertReferences(itemsCSL).unwrap();
 
@@ -713,7 +684,6 @@ export {
 	dedupMultipleChoiceItems,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
-	getBibliographyFormatParameters,
 	getOneTimeBibliographyOrFallback,
 	getCitation,
 	getCiteproc,

@@ -1,3 +1,13 @@
+const metaCiteprocRStoJS = bibliographyMeta => ({
+	bibstart: bibliographyMeta.formatMeta.markupPre,
+	bibend: bibliographyMeta.formatMeta.markupPost,
+	hangingindent: bibliographyMeta.hangingIndent,
+	maxoffset: bibliographyMeta.maxOffset,
+	entryspacing: bibliographyMeta.entrySpacing,
+	linespacing: bibliographyMeta.lineSpacing,
+	'second-field-align': bibliographyMeta.secondFieldAlign
+});
+
 const formatFallback = bibliographyItems => {
 	return `<ol><li>${bibliographyItems.join('</li><li>')}</li></ol>`;
 }
@@ -5,15 +15,7 @@ const formatFallback = bibliographyItems => {
 // adapter from citeproc-rs output
 const formatBib = (bibliographyItems, bibliographyMeta) => {
 	return formatBibLegacy([
-		{
-			bibstart: bibliographyMeta.formatMeta.markupPre,
-			bibend: bibliographyMeta.formatMeta.markupPost,
-			hangingindent: bibliographyMeta.hangingIndent,
-			maxoffset: bibliographyMeta.maxOffset,
-			entryspacing: bibliographyMeta.entrySpacing,
-			linespacing: bibliographyMeta.lineSpacing,
-			'second-field-align': bibliographyMeta.secondFieldAlign
-		},
+		metaCiteprocRStoJS(bibliographyMeta),
 		bibliographyItems.map(renderedItem => (
 			`<div className="csl-entry">${renderedItem.value}</div>`
 		)).join('')
@@ -136,4 +138,37 @@ const formatBibLegacy = (bib) => {
 	return container.innerHTML;
 };
 
-export { formatBib, formatFallback };
+const getBibliographyFormatParameters = bibliographyMeta =>
+	getBibliographyFormatParametersLegacy([metaCiteprocRStoJS(bibliographyMeta)]);
+
+/**
+	 * copied from https://github.com/zotero/zotero/blob/1f5639da4297ac20fd21223d2004a7cfeef72e21/chrome/content/zotero/xpcom/cite.js#L43
+	 * Convert formatting data from citeproc-js bibliography object into explicit format
+	 * parameters for RTF or word processors
+	 * @param {bib} citeproc-js bibliography object
+	 * @return {Object} Bibliography style parameters.
+ */
+const getBibliographyFormatParametersLegacy = bib => {
+		var bibStyle = {'tabStops':[], 'indent':0, 'firstLineIndent':0,
+						'lineSpacing':(240 * bib[0].linespacing),
+						'entrySpacing':(240 * bib[0].entryspacing)};
+		if(bib[0].hangingindent) {
+			bibStyle.indent = 720;				// 720 twips = 0.5 in
+			bibStyle.firstLineIndent = -720;	// -720 twips = -0.5 in
+		} else if(bib[0]['second-field-align']) {
+			// this is a really sticky issue. the below works for first fields that look like "[1]"
+			// and "1." otherwise, i have no idea. luckily, this will be good enough 99% of the time.
+			var alignAt = 24+bib[0].maxoffset*120;
+			bibStyle.firstLineIndent = -alignAt;
+			if(bib[0]['second-field-align'] == 'margin') {
+				bibStyle.tabStops = [0];
+			} else {
+				bibStyle.indent = alignAt;
+				bibStyle.tabStops = [alignAt];
+			}
+		}
+
+		return bibStyle;
+};
+
+export { formatBib, formatBibLegacy, formatFallback, getBibliographyFormatParameters, getBibliographyFormatParametersLegacy };

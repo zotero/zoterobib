@@ -14,6 +14,14 @@ export default {
 		isDownloadable: false,
 		isCopyable: true
 	},
+	'plain': { // same as text but for citeprocRS
+		extension: 'txt',
+		mime: 'text/plain',
+		label: 'Copy to Clipboard',
+		include: 'html',
+		isDownloadable: false,
+		isCopyable: true
+	},
 	'rtf': {
 		extension: 'rtf',
 		mime: 'text/rtf',

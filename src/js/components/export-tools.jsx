@@ -65,8 +65,8 @@ class ExportDialog extends React.Component {
 		}
 	}
 
-	handleCopy(format) {
-		const text = this.props.getCopyData(format);
+	async handleCopy(format) {
+		const text = await this.props.getCopyData(format);
 		const result = copy(text);
 		if(result) {
 			this.handleClipoardSuccess(format);

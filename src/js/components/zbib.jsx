@@ -136,7 +136,7 @@ class ZBib extends React.PureComponent {
 								<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
 							</Confirmation>
 							<Modal
-								isOpen={ this.props.isSaveToZoteroVisible }
+								isOpen={ this.props.activeDialog === 'SAVE_TO_ZOTERO' }
 								onRequestClose={ () => this.props.onSaveToZoteroHide() }
 								className={ cx('modal modal-centered') }
 							>
@@ -170,6 +170,7 @@ class ZBib extends React.PureComponent {
 	}
 
 	static propTypes = {
+		activeDialog: PropTypes.string,
 		citationHtml: PropTypes.string,
 		citationToCopy: PropTypes.string,
 		errorMessage: PropTypes.string,
