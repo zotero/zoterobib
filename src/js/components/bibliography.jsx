@@ -218,7 +218,7 @@ const Bibliography = props => {
 				<ul className="bibliography" key="bibliography">
 					{ bibliography.items.map(renderedItem => (
 						<BibliographyItem
-							key={ renderedItem.key }
+							key={ renderedItem.id }
 							rawItem={ bibliography.lookup[renderedItem.id] }
 							renderedItem={ renderedItem }
 							clipboardConfirmations= { [] /*TODO*/ }

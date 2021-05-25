@@ -274,7 +274,6 @@ class StyleInstaller extends React.Component {
 		isStylesDataLoading: PropTypes.bool,
 		onStyleInstallerCancel: PropTypes.func.isRequired,
 		onStyleInstallerDelete: PropTypes.func.isRequired,
-		onStyleInstallerInstall: PropTypes.func.isRequired,
 		onStyleInstallerSelect: PropTypes.func.isRequired,
 		stylesData: PropTypes.array,
 	}
