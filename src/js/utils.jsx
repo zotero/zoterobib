@@ -348,11 +348,11 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 		bibliographyMeta = citeproc.bibliographyMeta().unwrap();
 		bibliographyItems = citeproc.makeBibliography().unwrap();
 	} else {
-		citeproc.current.initClusters(
+		citeproc.initClusters(
 			itemsCSL.map(item => ({ id: item.id, cites: [ { id: item.id } ] }))
 		).unwrap();
-		citeproc.current.setClusterOrder(itemsCSL.map(item => ({ id: item.id }))).unwrap();
-		const render = citeproc.current.fullRender().unwrap();
+		citeproc.setClusterOrder(itemsCSL.map(item => ({ id: item.id }))).unwrap();
+		const render = citeproc.fullRender().unwrap();
 		bibliographyItems = itemsCSL.map(item => ({ id: item.id, value: render.allClusters[item.id] }));
 	}
 

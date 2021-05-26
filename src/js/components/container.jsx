@@ -5,7 +5,7 @@ import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 
 import { calcOffset, dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
-getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl, noop, parseIdentifier,
+getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl, parseIdentifier,
 processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
 retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
@@ -13,7 +13,7 @@ import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
-import { formatBib, getBibliographyFormatParameters } from '../cite';
+import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -224,7 +224,9 @@ const BibWebContainer = props => {
 
 		if(bibliographyItems) {
 			const copyData = format === 'html' ?
-				formatBib(bibliographyItems, bibliographyMeta) :
+				styleHasBibliography ?
+					formatBib(bibliographyItems, bibliographyMeta) :
+					formatFallback(bibliographyItems) :
 				bibliographyItems.map(i => i.value).join('\n');
 
 			if(exportFormats[format].include) {
@@ -271,7 +273,7 @@ const BibWebContainer = props => {
 				separator = '\\\r\n';
 				preamble = `${bibStyle.tabStops.length ? '\\tx' + bibStyle.tabStops.join(' \\tx') + ' ' : ''}\\li${bibStyle.indent} \\fi${bibStyle.firstLineIndent} \\sl${bibStyle.lineSpacing} \\slmult1 \\sa${bibStyle.entrySpacing} `;
 			}
-			fileContents = `{\\rtf ${bibliographyMeta.formatMeta.markupPre}${preamble}${bibliographyItems.map(i => i.value).join(separator)}${bibliographyMeta.formatMeta.markupPost}}`;
+			fileContents = `{\\rtf ${bibliographyMeta?.formatMeta?.markupPre || ''}${preamble}${bibliographyItems.map(i => i.value).join(separator)}${bibliographyMeta?.formatMeta?.markupPost || ''}}`;
 			// citeprocJS
 			// fileContents = `${bibliography[0].bibstart}${preamble}${bibliography[1].join(separator)}${bibliography[0].bibend}`;
 		}
@@ -288,6 +290,8 @@ const BibWebContainer = props => {
 	const updateBibliography = useCallback(() => {
 		const diff = citeproc.current.batchedUpdates().unwrap();
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
+
+		console.log({ diff });
 
 		if(bib.current.itemsRaw.length === 0) {
 			setBibliography({ items: [], meta: null, lookup: {} });
@@ -512,15 +516,14 @@ const BibWebContainer = props => {
 		bib.current.updateItem(index, updatedItem);
 		setEditorItem(updatedItem);
 
-		deleteItem(itemKey);
-		addItem(updatedItem);
+		citeproc.current.resetReferences(bib.current.itemsCSL);
 		updateBibliography();
 
 		// if edited item is itemUnderReview, update it as well
 		if(itemUnderReview && itemUnderReview.key === itemKey) {
 			setItemUnderReview(updatedItem);
 		}
-	}, [addItem, deleteItem, handleError, itemUnderReview, isSentenceCaseStyle, updateBibliography]);
+	}, [handleError, itemUnderReview, isSentenceCaseStyle, updateBibliography]);
 
 	const handleMultipleChoiceCancel = useCallback(() => {
 		setActiveDialog(null);

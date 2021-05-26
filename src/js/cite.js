@@ -1,15 +1,15 @@
 const metaCiteprocRStoJS = bibliographyMeta => ({
-	bibstart: bibliographyMeta.formatMeta.markupPre,
-	bibend: bibliographyMeta.formatMeta.markupPost,
-	hangingindent: bibliographyMeta.hangingIndent,
-	maxoffset: bibliographyMeta.maxOffset,
-	entryspacing: bibliographyMeta.entrySpacing,
-	linespacing: bibliographyMeta.lineSpacing,
-	'second-field-align': bibliographyMeta.secondFieldAlign
+	bibstart: bibliographyMeta?.formatMeta?.markupPre,
+	bibend: bibliographyMeta?.formatMeta?.markupPost,
+	hangingindent: bibliographyMeta?.hangingIndent,
+	maxoffset: bibliographyMeta?.maxOffset,
+	entryspacing: bibliographyMeta?.entrySpacing,
+	linespacing: bibliographyMeta?.lineSpacing,
+	'second-field-align': bibliographyMeta?.secondFieldAlign
 });
 
 const formatFallback = bibliographyItems => {
-	return `<ol><li>${bibliographyItems.join('</li><li>')}</li></ol>`;
+	return `<ol><li>${bibliographyItems.map(renderedItem => renderedItem.value).join('</li><li>')}</li></ol>`;
 }
 
 // adapter from citeproc-rs output
