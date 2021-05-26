@@ -399,12 +399,12 @@ const BibWebContainer = props => {
 	}, [citationCopyModifiers, citationHtml, citationToCopy]);
 
 	const handleCopyToClipboard = useCallback(ev => {
-		if(copyData.current) {
-			copyData.current.forEach(copyDataFormat => {
+		if(copyDataInclude.current) {
+			copyDataInclude.current.forEach(copyDataFormat => {
 				ev.clipboardData.setData(copyDataFormat.mime, copyDataFormat.data);
 			});
 			ev.preventDefault();
-			copyData.current = null;
+			copyDataInclude.current = null;
 		}
 	}, []);
 
