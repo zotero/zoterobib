@@ -982,6 +982,7 @@ const BibWebContainer = props => {
 		editorItem = { editorItem }
 		identifier = { identifier }
 		isNoteStyle = { isNoteStyle }
+		isNumericStyle = { isNumericStyle }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
 		isStylesDataLoading = { isStylesDataLoading }

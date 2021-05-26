@@ -23,8 +23,8 @@ const isUppercaseSubtitlesStyle = (citationStyleName, citationStyleXmls = null) 
 	return isMatch || (citationStyleXmls && isUppercaseSubtitlesStyle(getParentStyleName(citationStyleXmls[0])));
 };
 
-const isNoteStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="note.*?"/);
-const isNumericStyle = cslDataXmls => !!cslDataXmls[cslDataXmls.length - 1].match(/citation-format="numeric.*?"/);
+const isNoteStyle = citationStyleXml => !!citationStyleXml.match(/citation-format="note.*?"/);
+const isNumericStyle = citationStyleXml => !!citationStyleXml.match(/citation-format="numeric.*?"/);
 
 //TODO: refactor to use DomParser instead of regex for everything
 const useCitationStyle = (citationStyleName, citationStyleXml) =>  {

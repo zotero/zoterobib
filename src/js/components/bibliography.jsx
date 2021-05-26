@@ -9,12 +9,10 @@ import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
 import Button from './ui/button';
 import Icon from './ui/icon';
-import { noop } from '../utils';
 import { formatBib, formatFallback } from '../cite';
-// import { getHtmlNodeFromBibliography, makeBibliographyContentIterator } from '../utils' ;
 
 
-const KeyHandlers = ({ onKeyHandle }) => {
+const KeyHandlers = memo(({ onKeyHandle }) => {
 	return (
 		<React.Fragment>
 			<KeyHandler
@@ -31,22 +29,14 @@ const KeyHandlers = ({ onKeyHandle }) => {
 			/>
 		</React.Fragment>
 	);
-}
+});
+
+KeyHandlers.displayName = 'KeyHandlers';
+KeyHandlers.propTypes = { onKeyHandle: PropTypes.func };
 
 const BibliographyItem = memo(props => {
-	const {
-		clipboardConfirmations,
-		dropdownsOpen,
-		isNoteStyle,
-		isNumericStyle,
-		onCopyCitationDialogOpen, //@TODO
-		onDeleteCitation,
-		onEditCitation, //@TODO
-		onFocus, //@TODO
-		onToggleDropdown, //@TODO,
-		rawItem,
-		renderedItem,
-	} = props;
+	const { dropdownsOpen, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
+	onEditCitation, onFocus, onToggleDropdown, rawItem, renderedItem, } = props;
 
 	return (
 		<li key={ rawItem.key }
@@ -74,20 +64,7 @@ const BibliographyItem = memo(props => {
 							onClick={ onCopyCitationDialogOpen }
 							className="btn"
 						>
-							<span className={ cx('inline-feedback', {
-								'active': clipboardConfirmations.includes(rawItem.key)
-							}) }>
-								<span
-								className="default-text"
-								aria-hidden={ !clipboardConfirmations.includes(rawItem.key) }>
-									{ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
-								</span>
-								<span
-								className="shorter feedback"
-								aria-hidden={ clipboardConfirmations.includes(rawItem.key) }>
-									Copied!
-								</span>
-							</span>
+							{ isNoteStyle ? 'Copy Note' : 'Copy Citation' }
 						</DropdownItem>
 					) }
 					<DropdownItem
@@ -97,7 +74,7 @@ const BibliographyItem = memo(props => {
 						Edit
 					</DropdownItem>
 					<DropdownItem
-						onClick={ onEditCitation }
+						onClick={ onDeleteCitation }
 						className="btn"
 					>
 						Delete
@@ -107,7 +84,7 @@ const BibliographyItem = memo(props => {
 			{ !isNumericStyle && (
 				<Button
 					title={ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
-					className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy', { success: clipboardConfirmations.includes(rawItem.key) })}
+					className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 					onClick={ onCopyCitationDialogOpen }
 				>
 					<Icon type={ '16/copy' } width="16" height="16" />
@@ -129,16 +106,26 @@ const BibliographyItem = memo(props => {
 
 BibliographyItem.displayName = 'BibliographyItem';
 
+BibliographyItem.propTypes = {
+	dropdownsOpen: PropTypes.array,
+	isNoteStyle: PropTypes.bool,
+	isNumericStyle: PropTypes.bool,
+	onCopyCitationDialogOpen: PropTypes.func,
+	onDeleteCitation: PropTypes.func,
+	onEditCitation: PropTypes.func,
+	onFocus: PropTypes.func,
+	onToggleDropdown: PropTypes.func,
+	rawItem: PropTypes.object,
+	renderedItem: PropTypes.object,
+}
+
 const Bibliography = props => {
-	const [clipboardConfirmations, setClipboardConfirmations] = useState([]);
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 	const [focusedItem, setFocusedItem] = useState(null);
 
-	const { isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
+	const { isNoteStyle, isNumericStyle, isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
 	styleHasBibliography } = props;
 
-
-	//TODO: citations fallback for styles that dont do bibliography
 	const bibliographyRendered = useMemo(() => isReadOnly ?
 		styleHasBibliography ? formatBib(bibliography.items, bibliography.meta) : formatFallback(bibliography.items)
 		: null, [bibliography.items, bibliography.meta, isReadOnly, styleHasBibliography]);
@@ -166,34 +153,34 @@ const Bibliography = props => {
 		onDeleteEntry(ev.currentTarget.closest('[data-key]').dataset.key);
 	}, [onDeleteEntry]);
 
-	const handleFocus = useCallback((itemId) => {
-		// this.setState({
-		// 	focusedItem: itemId
-		// });
+	const handleFocus = useCallback(ev => {
+		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
+		setFocusedItem(itemId);
 	}, []);
 
 	const handleKeyboard = useCallback((ev) => {
-		// if(document.activeElement.className == 'citation' && this.state.focusedItem) {
-		// 	this.props.onEditorOpen(this.state.focusedItem);
-		// 	ev.preventDefault();
-		// }
-	}, []);
+		if(document.activeElement.className == 'citation' && focusedItem) {
+			onEditorOpen(focusedItem);
+			ev.preventDefault();
+		}
+	}, [focusedItem, onEditorOpen]);
 
-	const handleToggleDropdown = useCallback((itemId, ev) => {
-		// const isOpen = this.state.dropdownsOpen.includes(itemId);
-		// const dropdownsOpen = isOpen ?
-		// 	this.state.dropdownsOpen.filter(i => i !== itemId) :
-		// 	[ ...this.state.dropdownsOpen, itemId];
+	const handleToggleDropdown = useCallback(ev => {
+		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
+		const isOpen = dropdownsOpen.includes(itemId);
+		const newDropdownsOpen = isOpen ?
+			dropdownsOpen.filter(i => i !== itemId) :
+			[ ...dropdownsOpen, itemId];
 
-		// this.setState({ dropdownsOpen });
-		// ev.preventDefault();
-		// ev.stopPropagation();
-	}, []);
+		setDropdownsOpen(newDropdownsOpen);
+
+		ev.preventDefault();
+		ev.stopPropagation();
+	}, [dropdownsOpen]);
 
 	const handleCopyCitationDialogOpen = useCallback(ev => {
 		ev.stopPropagation();
 		ev.preventDefault();
-		console.log(ev.currentTarget, ev);
 		onCitationCopyDialogOpen(ev.currentTarget.closest('[data-key]').dataset.key);
 	}, [onCitationCopyDialogOpen]);
 
@@ -218,24 +205,34 @@ const Bibliography = props => {
 				<ul className="bibliography" key="bibliography">
 					{ bibliography.items.map(renderedItem => (
 						<BibliographyItem
-							key={ renderedItem.key }
+							key={ renderedItem.id }
 							rawItem={ bibliography.lookup[renderedItem.id] }
 							renderedItem={ renderedItem }
-							clipboardConfirmations= { [] /*TODO*/ }
-							dropdownsOpen = { []  /*TODO*/ }
-							isNoteStyle = { false /*TODO*/ }
-							isNumericStyle = { false /*TODO*/ }
+							dropdownsOpen = { dropdownsOpen }
+							isNoteStyle = { isNoteStyle }
+							isNumericStyle = { isNumericStyle }
 							onCopyCitationDialogOpen = { handleCopyCitationDialogOpen }
 							onDeleteCitation = { handleDeleteCitation }
 							onEditCitation = { handleEditCitation }
-							onFocus = { noop }
-							onToggleDropdown = { noop }
+							onFocus = { handleFocus }
+							onToggleDropdown = { handleToggleDropdown }
 						/>
 					)) }
 				</ul>
 			)}
 		</React.Fragment>
 	);
+}
+
+Bibliography.propTypes = {
+	bibliography: PropTypes.object,
+	isNoteStyle: PropTypes.bool,
+	isNumericStyle: PropTypes.bool,
+	isReadOnly: PropTypes.bool,
+	onCitationCopyDialogOpen: PropTypes.func,
+	onDeleteEntry: PropTypes.func,
+	onEditorOpen: PropTypes.func,
+	styleHasBibliography: PropTypes.bool,
 }
 
 
