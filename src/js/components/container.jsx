@@ -819,6 +819,19 @@ const BibWebContainer = props => {
 		}
 	}, [addItem, lastDeletedItem, messages, updateBibliography]);
 
+	const handleVisibilityChange = useCallback(() => {
+		if(!isReadOnly && document.visibilityState === 'visible') {
+			const storageCitationStyle = localStorage.getItem('zotero-bib-citation-style');
+			bib.current.reloadItems();
+			citeproc.current.resetReferences(bib.current.itemsCSL);
+			if(storageCitationStyle === citationStyle) {
+				updateBibliography();
+			} else {
+				setCitationStyle(storageCitationStyle);
+			}
+		}
+	}, [citationStyle, isReadOnly, updateBibliography]);
+
 	const handleSaveToZoteroShow = useCallback(() => {
 		setActiveDialog('SAVE_TO_ZOTERO');
 	}, []);
@@ -916,6 +929,11 @@ const BibWebContainer = props => {
 			})();
 		}
 	}, [handleTranslateIdentifier, history, identifier, isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, location]);
+
+	useEffect(() => {
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+	}, [handleVisibilityChange]);
 
 	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
