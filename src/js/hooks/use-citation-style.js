@@ -41,10 +41,10 @@ const useCitationStyle = (citationStyleName, citationStyleXml) =>  {
 	return {
 		styleHasBibliography,
 		parentStyle,
-		isNoteStyle: citationStyleXml ? isNoteStyle(citationStyleXml) : null,
-		isNumericStyle: citationStyleXml ? isNumericStyle(citationStyleXml) : null,
-		isSentenceCaseStyle: citationStyleXml ? isSentenceCaseStyle(citationStyleName, citationStyleXml) : null,
-		isUppercaseSubtitlesStyle: citationStyleXml ? isUppercaseSubtitlesStyle(citationStyleName, citationStyleXml) : null,
+		isNoteStyle: citationStyleXml ? isNoteStyle(citationStyleXml) : undefined,
+		isNumericStyle: citationStyleXml ? isNumericStyle(citationStyleXml) : undefined,
+		isSentenceCaseStyle: citationStyleXml ? isSentenceCaseStyle(citationStyleName, citationStyleXml) : undefined,
+		isUppercaseSubtitlesStyle: citationStyleXml ? isUppercaseSubtitlesStyle(citationStyleName, citationStyleXml) : undefined,
 	};
 }
 

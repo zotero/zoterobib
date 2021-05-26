@@ -120,7 +120,7 @@ class ZBib extends React.PureComponent {
 							<Footer />
 
 							<Confirmation
-								isOpen={ this.props.isConfirmingStyleSwitch }
+								isOpen={ this.props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
 								onConfirm={ this.props.onStyleSwitchConfirm }
 								onCancel={ this.props.onStyleSwitchCancel }
 								title="Converting Titles to Sentence Case"
@@ -137,7 +137,7 @@ class ZBib extends React.PureComponent {
 							</Confirmation>
 							<Modal
 								isOpen={ this.props.activeDialog === 'SAVE_TO_ZOTERO' }
-								onRequestClose={ () => this.props.onSaveToZoteroHide() }
+								onRequestClose={ this.props.onSaveToZoteroHide }
 								className={ cx('modal modal-centered') }
 							>
 								<div className="modal-content" tabIndex={ -1 }>
@@ -147,7 +147,7 @@ class ZBib extends React.PureComponent {
 										</h4>
 										<Button
 											className="close"
-											onClick={ this.props.onSaveToZoteroHide.bind(this) }
+											onClick={ this.props.onSaveToZoteroHide }
 										>
 											<Icon type={ '24/remove' } width="24" height="24" />
 										</Button>
