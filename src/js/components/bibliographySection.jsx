@@ -55,7 +55,7 @@ class BibliographySection extends React.PureComponent {
 	}
 
 	renderBibliography() {
-		if (this.props.bibliography.items.length === 0) {
+		if (this.props.isReady && this.props.bibliography.items.length === 0) {
 			return (
 				<React.Fragment>
 					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
@@ -96,14 +96,14 @@ class BibliographySection extends React.PureComponent {
 						!this.props.isReadOnly && <StyleSelector { ...this.props } />
 					}
 					{
-						this.props.isLoadingCitations ? (
+						this.props.isReady ? <Bibliography { ...this.props } /> : (
 							<div className="spinner-container">
 								<Spinner />
 							</div>
-						) : <Bibliography { ...this.props } />
+						)
 					}
 					{
-						!this.props.isReadOnly && !this.props.isLoadingCitations && <DeleteAllButton { ...this.props } />
+						!this.props.isReadOnly && this.props.isReady && <DeleteAllButton { ...this.props } />
 					}
 					<Confirmation
 						isOpen={ this.props.isReadOnly && this.state.isConfirmingOverride }
@@ -125,8 +125,8 @@ class BibliographySection extends React.PureComponent {
 		return {
 			'section': true,
 			'section-bibliography': true,
-			'loading': this.props.isLoadingCitations,
-			'empty': this.props.bibliography.items.length === 0
+			'loading': !this.props.isReady,
+			'empty': this.props.isReady && this.props.bibliography.items.length === 0
 		};
 	}
 
@@ -136,7 +136,7 @@ class BibliographySection extends React.PureComponent {
 				<div className="container">
 					{ this.renderBibliography() }
 					{
-						this.props.isReadOnly && (
+						this.props.isReady && this.props.isReadOnly && (
 							<Button
 								onClick={ this.handleEditBibliography.bind(this) }
 								className="btn-sm btn-outline-secondary">
@@ -155,7 +155,7 @@ class BibliographySection extends React.PureComponent {
 
 	static propTypes = {
 		bibliography: PropTypes.object,
-		isLoadingCitations: PropTypes.bool,
+		isReady: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
 		localCitationsCount: PropTypes.number,
 		onOverride: PropTypes.func.isRequired,

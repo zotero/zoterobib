@@ -373,7 +373,7 @@ const BibWebContainer = props => {
 	}, [config.stylesURL, handleError]);
 
 	const handleCitationCopyDialogOpen = useCallback(itemId => {
-		// this.clearMessages(); //@TODO
+		setMessages([]);
 		setItemUnderReview(null);
 		setActiveDialog('COPY_CITATION');
 		setCitationToCopy(itemId);
@@ -599,7 +599,7 @@ const BibWebContainer = props => {
 			setItemUnderReview(null);
 		}
 
-		// this.clearMessages(); //@TODO
+		setMessages([]);
 		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId));
 		setActiveDialog('EDITOR');
 	}, [itemUnderReview]);
