@@ -670,6 +670,17 @@ const BibWebContainer = props => {
 		}
 	}, [citationStyle, config, handleError, history, title]);
 
+	const handleScroll = useCallback(() => {
+		if(!messages.find(m => m.kind === 'WELCOME_MESSAGE')) {
+			return;
+		}
+		const target = document.querySelector('.zbib-illustration');
+		const isScrolledToIllustration = window.pageYOffset > target.offsetTop;
+		if(isScrolledToIllustration) {
+			setMessages(messages.filter(m => m.kind !== 'WELCOME_MESSAGE'));
+		}
+	}, [messages]);
+
 	const handleStyleInstallerDelete = useCallback((deleteStyleMeta) => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
 	}, [citationStyles]);
@@ -937,6 +948,11 @@ const BibWebContainer = props => {
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
 	}, [handleVisibilityChange]);
+
+	useEffect(() => {
+		document.addEventListener('scroll', handleScroll);
+		return () => document.removeEventListener('scroll', handleScroll);
+	}, [handleScroll]);
 
 	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
