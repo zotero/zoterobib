@@ -21,27 +21,27 @@ var Driver = null;
 
 // debugger;
 
-class Fetcher {
-	async fetchLocale(lang) {
-		const cacheId = `zotero-style-locales-${lang}`;
-		var locales = localStorage.getItem(cacheId);
+// class Fetcher {
+// 	async fetchLocale(lang) {
+// 		const cacheId = `zotero-style-locales-${lang}`;
+// 		var locales = localStorage.getItem(cacheId);
 
-		// fix in place for scenarios where potentially bad locales have been cached
-		// see issue #236
-		if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
-			locales = false;
-		}
+// 		// fix in place for scenarios where potentially bad locales have been cached
+// 		// see issue #236
+// 		if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
+// 			locales = false;
+// 		}
 
-		if(locales) {
-			return locales;
-		} else {
-			const response = await fetch(`/static/locales/locales-${lang}.xml`);
-			const locales = await response.text();
-			localStorage.setItem(cacheId, locales);
-			return locales;
-		}
-    }
-}
+// 		if(locales) {
+// 			return locales;
+// 		} else {
+// 			const response = await fetch(`/static/locales/locales-${lang}.xml`);
+// 			const locales = await response.text();
+// 			localStorage.setItem(cacheId, locales);
+// 			return locales;
+// 		}
+//     }
+// }
 
 
 // const getCSL = async () => {
@@ -60,32 +60,37 @@ class Fetcher {
 // 	});
 // };
 
+import CiteprocWrapper from './citeproc-wrapper';
+
+
+//TODO: retrieveItem below contains some logic that has not been ported to the wrapper
 const getCiteproc = async (style, format = 'html') => {
-	const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
-	const fetcher = new Fetcher();
+	return CiteprocWrapper.new({ style, format }, true);
+	// const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
+	// const fetcher = new Fetcher();
 
-	// const [ CSL, styleXmls ] = await Promise.all([
-	// 	getCSL(),
-	// 	retrieveStyle(citationStyle)
-	// ]);
+	// // const [ CSL, styleXmls ] = await Promise.all([
+	// // 	getCSL(),
+	// // 	retrieveStyle(citationStyle)
+	// // ]);
 
 
-	try {
-		if(!Driver) {
-			const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
-			Driver = CreateDriver;
-			await init();
-		}
+	// try {
+	// 	if(!Driver) {
+	// 		const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
+	// 		Driver = CreateDriver;
+	// 		await init();
+	// 	}
 
-		console.log({ localeOverride: lang, format, style, fetcher });
+	// 	console.log({ localeOverride: lang, format, style, fetcher });
 
-		const driverResult = Driver.new({ localeOverride: lang, format, style, fetcher });
-		const driver = driverResult.unwrap();
-		await driver.fetchLocales();
-		return driver;
-	} catch(err) {
-		console.error(err);
-	}
+	// 	const driverResult = Driver.new({ localeOverride: lang, format, style, fetcher });
+	// 	const driver = driverResult.unwrap();
+	// 	await driver.fetchLocales();
+	// 	return driver;
+	// } catch(err) {
+	// 	console.error(err);
+	// }
 
 	// return new CSL.Engine({
 	// 	retrieveLocale: retrieveLocaleSync,
@@ -116,16 +121,16 @@ const getCiteproc = async (style, format = 'html') => {
 	// }, style, lang);
 };
 
-const syncRequestAsText = url => {
-	let xhr = new XMLHttpRequest();
-	xhr.open('GET', url, false);
-	xhr.send();
-	if(xhr.readyState === xhr.DONE && xhr.status === 200) {
-		return xhr.responseText;
-	} else {
-		return false;
-	}
-};
+// const syncRequestAsText = url => {
+// 	let xhr = new XMLHttpRequest();
+// 	xhr.open('GET', url, false);
+// 	xhr.send();
+// 	if(xhr.readyState === xhr.DONE && xhr.status === 200) {
+// 		return xhr.responseText;
+// 	} else {
+// 		return false;
+// 	}
+// };
 
 const parseIdentifier = identifier => {
 	identifier = identifier.trim();
@@ -196,29 +201,29 @@ const retrieveIndependentStyle = async styleIdOrUrl => {
 	return styles[styles.length - 1];
 }
 
-const retrieveLocaleSync = lang => {
-	const cacheId = `zotero-style-locales-${lang}`;
-	var locales = localStorage.getItem(cacheId);
+// const retrieveLocaleSync = lang => {
+// 	const cacheId = `zotero-style-locales-${lang}`;
+// 	var locales = localStorage.getItem(cacheId);
 
-	// fix in place for scenarios where potentially bad locales have been cached
-	// see issue #236
-	if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
-		locales = false;
-	}
+// 	// fix in place for scenarios where potentially bad locales have been cached
+// 	// see issue #236
+// 	if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
+// 		locales = false;
+// 	}
 
-	if(!locales) {
-		const url = `/static/locales/locales-${lang}.xml`;
-		try {
-			locales = syncRequestAsText(url);
-			localStorage.setItem(cacheId, locales);
-		} catch(e) {
-			if(!locales) {
-				throw new Error('Failed to load locales');
-			}
-		}
-	}
-	return locales;
-};
+// 	if(!locales) {
+// 		const url = `/static/locales/locales-${lang}.xml`;
+// 		try {
+// 			locales = syncRequestAsText(url);
+// 			localStorage.setItem(cacheId, locales);
+// 		} catch(e) {
+// 			if(!locales) {
+// 				throw new Error('Failed to load locales');
+// 			}
+// 		}
+// 	}
+// 	return locales;
+// };
 
 const retrieveStylesData = async url => {
 	try {
@@ -341,18 +346,18 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 	var bibliographyItems, bibliographyMeta = null;
 
 	const citeproc = await getCiteproc(citationStyleXml, format);
-	citeproc.includeUncited("All").unwrap();
-	citeproc.insertReferences(itemsCSL).unwrap();
+	citeproc.includeUncited("All");
+	citeproc.insertReferences(itemsCSL);
 
 	if(styleHasBibliography) {
-		bibliographyMeta = citeproc.bibliographyMeta().unwrap();
-		bibliographyItems = citeproc.makeBibliography().unwrap();
+		bibliographyMeta = citeproc.bibliographyMeta();
+		bibliographyItems = citeproc.makeBibliography();
 	} else {
 		citeproc.initClusters(
 			itemsCSL.map(item => ({ id: item.id, cites: [ { id: item.id } ] }))
-		).unwrap();
-		citeproc.setClusterOrder(itemsCSL.map(item => ({ id: item.id }))).unwrap();
-		const render = citeproc.fullRender().unwrap();
+		);
+		citeproc.setClusterOrder(itemsCSL.map(item => ({ id: item.id })));
+		const render = citeproc.fullRender();
 		bibliographyItems = itemsCSL.map(item => ({ id: item.id, value: render.allClusters[item.id] }));
 	}
 
@@ -705,13 +710,13 @@ export {
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
-	retrieveLocaleSync,
+	// retrieveLocaleSync,
 	retrieveIndependentStyle,
 	// retrieveStyle,
 	retrieveStylesData,
 	reverseMap,
 	saveToPermalink,
-	syncRequestAsText,
+	// syncRequestAsText,
 	validateItem,
 	validateUrl,
 	splice,

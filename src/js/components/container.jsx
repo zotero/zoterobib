@@ -112,7 +112,7 @@ const BibWebContainer = props => {
 
 		citeproc.current.insertReference(itemCSL);
 		citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
-		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
+		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 	}, [displayFirstCitationMessage, isSentenceCaseStyle]);
 
 	const deleteItem = useCallback(itemId => {
@@ -120,7 +120,7 @@ const BibWebContainer = props => {
 		if(bib.current.removeItem(item)) {
 			citeproc.current.removeReference(itemId);
 			citeproc.current.removeCluster(itemId);
-			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 		}
 	}, []);
 
@@ -152,27 +152,28 @@ const BibWebContainer = props => {
 			citeproc.current.setStyle(citationStyleXml);
 		} else {
 			citeproc.current = await getCiteproc(citationStyleXml);
+			console.log(citeproc.current);
 		}
 
-		citeproc.current.includeUncited("All").unwrap();
-		citeproc.current.insertReferences(bib.current.itemsCSL).unwrap();
+		citeproc.current.includeUncited("All");
+		citeproc.current.insertReferences(bib.current.itemsCSL);
 
 		// we also init every single item as a separate cluster for fallback rendering
 		citeproc.current.initClusters(
 			bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
-		).unwrap();
-		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key }))).unwrap();
+		);
+		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		if(styleHasBibliography) {
 			setBibliography({
-				items: citeproc.current.makeBibliography().unwrap(),
-				meta: citeproc.current.bibliographyMeta().unwrap(),
+				items: citeproc.current.makeBibliography(),
+				meta: citeproc.current.bibliographyMeta(),
 				lookup: itemsLookup
 			});
 		} else {
-			const render = citeproc.current.fullRender().unwrap();
+			const render = citeproc.current.fullRender();
 			setBibliography({
 				items: bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] })),
 				meta: null,
@@ -288,7 +289,7 @@ const BibWebContainer = props => {
 	}, [handleError, citationStyleXml, styleHasBibliography]);
 
 	const updateBibliography = useCallback(() => {
-		const diff = citeproc.current.batchedUpdates().unwrap();
+		const diff = citeproc.current.batchedUpdates();
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		console.log({ diff });
@@ -389,7 +390,7 @@ const BibWebContainer = props => {
 	const handleCitationCopy = useCallback(() => {
 		const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
 		const positions = [{ }];
-		const text = citeproc.current.previewCitationCluster(cites, positions, 'plain').unwrap();
+		const text = citeproc.current.previewCitationCluster(cites, positions, 'plain');
 		const html = citationHtml;
 		copyData.current = [
 			{ mime: 'text/plain', data: text },
@@ -870,7 +871,7 @@ const BibWebContainer = props => {
 			const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
 			const positions = [{ }];
 			setCitationHtml(
-				citeproc.current.previewCitationCluster(cites, positions, 'html').unwrap()
+				citeproc.current.previewCitationCluster(cites, positions, 'html')
 			);
 		}, 0);
 	}, [isCiteprocReady, citationCopyModifiers, citationToCopy]);

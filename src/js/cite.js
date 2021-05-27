@@ -1,12 +1,4 @@
-const metaCiteprocRStoJS = bibliographyMeta => ({
-	bibstart: bibliographyMeta?.formatMeta?.markupPre,
-	bibend: bibliographyMeta?.formatMeta?.markupPost,
-	hangingindent: bibliographyMeta?.hangingIndent,
-	maxoffset: bibliographyMeta?.maxOffset,
-	entryspacing: bibliographyMeta?.entrySpacing,
-	linespacing: bibliographyMeta?.lineSpacing,
-	'second-field-align': bibliographyMeta?.secondFieldAlign
-});
+import CiteprocWrapper from './citeproc-wrapper';
 
 const formatFallback = bibliographyItems => {
 	return `<ol><li>${bibliographyItems.map(renderedItem => renderedItem.value).join('</li><li>')}</li></ol>`;
@@ -15,7 +7,7 @@ const formatFallback = bibliographyItems => {
 // adapter from citeproc-rs output
 const formatBib = (bibliographyItems, bibliographyMeta) => {
 	return formatBibLegacy([
-		metaCiteprocRStoJS(bibliographyMeta),
+		CiteprocWrapper.metaCiteprocRStoJS(bibliographyMeta),
 		bibliographyItems.map(renderedItem => (
 			`<div className="csl-entry">${renderedItem.value}</div>`
 		)).join('')
