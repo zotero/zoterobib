@@ -115,18 +115,23 @@ const BibWebContainer = props => {
 		const itemCSL = bib.current.itemsCSL.find(icsl => icsl.id === item.key)
 
 		citeproc.current.insertReference(ensureNoBlankItems([itemCSL])[0]);
-		citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
-		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
-	}, [displayFirstCitationMessage, isSentenceCaseStyle]);
+		if(!styleHasBibliography) {
+			citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
+		}
+	}, [displayFirstCitationMessage, isSentenceCaseStyle, styleHasBibliography]);
 
 	const deleteItem = useCallback(itemId => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		if(bib.current.removeItem(item)) {
 			citeproc.current.removeReference(itemId);
-			citeproc.current.removeCluster(itemId);
-			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
+
+			if(!styleHasBibliography) {
+				citeproc.current.removeCluster(itemId);
+				citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
+			}
 		}
-	}, []);
+	}, [styleHasBibliography]);
 
 	const displayFirstCitationMessage = useCallback(() => {
 		const message = {
@@ -459,12 +464,16 @@ const BibWebContainer = props => {
 
 	const handleDeleteCitations = useCallback(() => {
 		bib.current.clearItems();
+		citeproc.current.resetReferences([]);
+		if(!styleHasBibliography) {
+			citeproc.current.initClusters([]);
+		}
 		setMessages([]);
 		setItemUnderReview(null);
 		setPermalink(null);
-		setTitle(null);
+		setTitle('');
 		updateBibliography();
-	}, [updateBibliography]);
+	}, [styleHasBibliography, updateBibliography]);
 
 	const handleDismiss = useCallback(id => {
 		const message = messages.find(m => m.id === id);
