@@ -252,7 +252,7 @@ class CiteprocWrapper {
 
 	removeCluster(cluster_id) {
 		if(this.isLegacy) {
-			this.clustersStore.filter(c => c.id !== cluster_id);
+			this.clustersStore = this.clustersStore.filter(c => c.id !== cluster_id);
 		} else {
 			return this.driver.removeCluster(cluster_id).unwrap();
 		}

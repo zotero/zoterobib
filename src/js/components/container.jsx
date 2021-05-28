@@ -333,11 +333,11 @@ const BibWebContainer = props => {
 					newBibliographyItems.push({ id, value });
 				}
 			});
-			// TODO: cluster removal
+
 			setBibliography({
 				...bibliography,
 				lookup: itemsLookup,
-				items: [...bibliography.items, ...newBibliographyItems]
+				items: [...bibliography.items.filter(i => i.id in itemsLookup), ...newBibliographyItems]
 			});
 		}
 	}, [bibliography, styleHasBibliography]);
