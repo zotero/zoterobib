@@ -74,6 +74,7 @@ class CiteprocWrapper {
 				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
 			}, opts.style, opts.lang);
 			this.driver.setOutputFormat(opts.format);
+			this.driver.opt.development_extensions.wrap_url_and_doi = opts.wrap_url_and_doi;
 		} else {
 			this.driver = engine;
 		}
@@ -289,14 +290,23 @@ class CiteprocWrapper {
 	setStyle(style_text) {
 		if(this.isLegacy) {
 			// citeprocJS doesn't seem to be able to set style so we recreate the driver
+			this.recreateEngine({ style: style_text });
+		} else {
+			return this.driver.setStyle(style_text).unwrap();
+		}
+	}
+
+	// not part of citeproc-rs api
+	recreateEngine(newOpts) {
+		if(this.isLegacy) {
+			this.opts = { ...this.opts, ...newOpts };
 			this.driver = new this.CSL.Engine({
 				retrieveLocale: retrieveLocaleSync,
 				retrieveItem: itemId => this.itemsStore[itemId],
 				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
-			}, style_text, this.opts.lang);
+			}, this.opts.style, this.opts.lang);
 			this.driver.setOutputFormat(this.opts.format);
-		} else {
-			return this.driver.setStyle(style_text).unwrap();
+			this.driver.opt.development_extensions.wrap_url_and_doi = this.opts.wrap_url_and_doi;
 		}
 	}
 }
@@ -317,7 +327,7 @@ const getCSL = async () => {
 	});
 };
 
-CiteprocWrapper.new = async ({ style, format = 'html', lang = null }, useLegacy = null) => {
+CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and_doi = false }, useLegacy = null) => {
 	lang = lang ? lang : window ? window.navigator.userLanguage || window.navigator.language : null;
 	useLegacy = useLegacy === null ? !isWasmSupported : useLegacy;
 
@@ -327,7 +337,7 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null }, useLegacy 
 			if(format === 'plain') {
 				format = 'text';
 			}
-			return new CiteprocWrapper(true, CSL, { style, format, lang });
+			return new CiteprocWrapper(true, CSL, { style, format, lang, wrap_url_and_doi });
 		} else {
 			if(!Driver) {
 				const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
@@ -335,6 +345,7 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null }, useLegacy 
 				await init();
 			}
 			const fetcher = new Fetcher();
+			// NOTE: wrap_url_and_doi is not supported in citeproc rs (yet?)
 			const driverResult = Driver.new({ localeOverride: lang, format, style, fetcher });
 			const driver = driverResult.unwrap();
 			await driver.fetchLocales();

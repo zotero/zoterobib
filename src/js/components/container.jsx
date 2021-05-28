@@ -5,7 +5,7 @@ import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
-getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl,
+getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isLikeUrl,
 parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
 retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
@@ -14,6 +14,7 @@ import exportFormats from '../constants/export-formats';
 import ZBib from './zbib';
 import { useCitationStyle, usePrevious } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
+import CiteprocWrapper from '../citeproc-wrapper';
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -71,6 +72,9 @@ const BibWebContainer = props => {
 	const wasSentenceCaseStyle = usePrevious(isSentenceCaseStyle);
 
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
+
+	const useLegacy = useRef(true);
+
 	const isStyleReady = !!citationStyleXml;
 	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
 	const isReadOnly = !!remoteId;
@@ -151,7 +155,12 @@ const BibWebContainer = props => {
 		if(citeproc.current) {
 			citeproc.current.setStyle(citationStyleXml);
 		} else {
-			citeproc.current = await getCiteproc(citationStyleXml);
+			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}`);
+			citeproc.current = await CiteprocWrapper.new({
+				style: citationStyleXml,
+				format: 'html',
+				wrap_url_and_doi: isReadOnly
+			}, useLegacy.current);
 		}
 
 		citeproc.current.includeUncited("All");
@@ -213,7 +222,7 @@ const BibWebContainer = props => {
 
 	const getCopyData = useCallback(async format => {
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-			bib.current.itemsCSL, citationStyleXml, styleHasBibliography, format
+			bib.current.itemsCSL, citationStyleXml, styleHasBibliography, useLegacy.current, { format }
 		);
 
 		if(bibliographyItems) {
@@ -260,7 +269,7 @@ const BibWebContainer = props => {
 			}
 		} else {
 			const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-				bib.current.itemsCSL, citationStyleXml, styleHasBibliography, format
+				bib.current.itemsCSL, citationStyleXml, styleHasBibliography, useLegacy.current, { format }
 			);
 
 			if(format === 'rtf') {
@@ -416,7 +425,7 @@ const BibWebContainer = props => {
 		setItemUnderReview({
 			item: itemToConfirm.item,
 			...(await getOneTimeBibliographyOrFallback(
-				getItemsCSL([itemToConfirm.item]), citationStyleXml, styleHasBibliography
+				getItemsCSL([itemToConfirm.item]), citationStyleXml, styleHasBibliography, useLegacy.current
 			))
 		});
 		setActiveDialog(null);
@@ -582,7 +591,7 @@ const BibWebContainer = props => {
 		setItemUnderReview({
 			item,
 			...(await getOneTimeBibliographyOrFallback(
-			getItemsCSL([item]), citationStyleXml, styleHasBibliography
+			getItemsCSL([item]), citationStyleXml, styleHasBibliography, useLegacy.current
 			))
 		});
 		updateBibliography();
@@ -620,8 +629,11 @@ const BibWebContainer = props => {
 			initialItems: bib.current.itemsRaw
 		});
 
+		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
+		buildBibliography(); // because engine settings has changed, we need to force rebuild
+
 		history.replace('/');
-	}, [config, history]);
+	}, [buildBibliography, config, history]);
 
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
@@ -755,7 +767,7 @@ const BibWebContainer = props => {
 							const multipleItems = {
 								items: rootItems,
 							...(await getOneTimeBibliographyOrFallback(
-									getItemsCSL(rootItems), citationStyleXml, styleHasBibliography
+									getItemsCSL(rootItems), citationStyleXml, styleHasBibliography, useLegacy.current
 								))
 							};
 
@@ -770,7 +782,7 @@ const BibWebContainer = props => {
 							const itemToConfirm = {
 								item: translationResponse.items[0],
 								...(await getOneTimeBibliographyOrFallback(
-								getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography
+								getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography, useLegacy.current
 								))
 							};
 
@@ -788,7 +800,7 @@ const BibWebContainer = props => {
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
-							getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography
+							getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography, useLegacy.current
 							))
 						});
 
@@ -957,8 +969,13 @@ const BibWebContainer = props => {
 			bib.current = new ZoteroBib(config);
 			bib.current.reloadItems();
 
+			console.log(location);
+
 			const params = new URLSearchParams(location.search);
 			const prefilledIdentifier = params.get('q') || '';
+
+			//citeproc-rs is opt-in, i.e. if truthy then useLegacy = false, defaults to true
+			useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
 		}

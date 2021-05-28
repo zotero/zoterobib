@@ -16,7 +16,6 @@ class ConfirmAddDialog extends React.Component {
 			return null;
 		}
 
-		console.log({ itemToConfirm });
 
 		const { bibliographyItems, bibliographyMeta } = itemToConfirm;
 		const html = styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems);

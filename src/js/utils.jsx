@@ -354,10 +354,15 @@ const getCitations = (bib, citeproc) => {
 	return citations;
 };
 
-const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, format = 'html') => {
+const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, useLegacy, opts = {}) => {
 	var bibliographyItems, bibliographyMeta = null;
 
-	const citeproc = await getCiteproc(citationStyleXml, format);
+	const citeproc = await await CiteprocWrapper.new({
+		format: 'html',
+		style: citationStyleXml,
+		wrap_url_and_doi: false,
+		...opts
+	}, useLegacy);
 	citeproc.includeUncited("All");
 	citeproc.insertReferences(itemsCSL);
 
