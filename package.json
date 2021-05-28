@@ -38,6 +38,7 @@
     "test": "nyc mocha --require @babel/register"
   },
   "dependencies": {
+    "@citeproc-rs/wasm": "^0.0.0-canary-5252fbd",
     "array-equal": "^1.0.0",
     "babel-regenerator-runtime": "^6.5.0",
     "balanced-match": "^2.0.0",

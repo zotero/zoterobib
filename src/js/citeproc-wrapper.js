@@ -340,7 +340,7 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and
 			return new CiteprocWrapper(true, CSL, { style, format, lang, wrap_url_and_doi });
 		} else {
 			if(!Driver) {
-				const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
+				const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/citeproc_rs_wasm.js");
 				Driver = CreateDriver;
 				await init();
 			}
