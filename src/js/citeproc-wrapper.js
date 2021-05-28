@@ -223,7 +223,7 @@ class CiteprocWrapper {
 	makeBibliography() {
 		if(this.isLegacy) {
 			const [meta, items] = this.driver.makeBibliography();
-			this.nextMeta = CiteprocWrapper.metaCiteprocJStoRS(meta);
+			this.nextMeta = CiteprocWrapper.metaCiteprocJStoRS(meta, this.opts.format);
 			return meta.entry_ids.map((id, index) => ({ id, value: items[index] }));
 		} else {
 			return this.driver.makeBibliography().unwrap();
@@ -356,9 +356,9 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and
 	}
 }
 
-CiteprocWrapper.metaCiteprocRStoJS = bibliographyMeta => ({
-	bibstart: bibliographyMeta?.formatMeta?.markupPre,
-	bibend: bibliographyMeta?.formatMeta?.markupPost,
+CiteprocWrapper.metaCiteprocRStoJS = (bibliographyMeta, format = 'html') => ({
+	bibstart: format === 'rtf' ? '{\\rtf ' + bibliographyMeta?.formatMeta?.markupPre : bibliographyMeta?.formatMeta?.markupPre,
+	bibend: format === 'rtf' ? bibliographyMeta?.formatMeta?.markupPost + '}' : bibliographyMeta?.formatMeta?.markupPost,
 	hangingindent: bibliographyMeta?.hangingIndent,
 	maxoffset: bibliographyMeta?.maxOffset,
 	entryspacing: bibliographyMeta?.entrySpacing,
@@ -366,10 +366,10 @@ CiteprocWrapper.metaCiteprocRStoJS = bibliographyMeta => ({
 	'second-field-align': bibliographyMeta?.secondFieldAlign
 });
 
-CiteprocWrapper.metaCiteprocJStoRS = meta => ({
+CiteprocWrapper.metaCiteprocJStoRS = (meta, format = 'html') => ({
 	formatMeta: {
-		markupPre: meta.bibstart,
-		markupPost: meta.bibend
+		markupPre: format === 'rtf' ? meta.bibstart.slice(6) : meta.bibstart,
+		markupPost: format === 'rtf' ? meta.bibend.slice(0, -1) : meta.bibend,
 	},
 	hangingIndent: meta.hangingindent,
 	maxOffset: meta.maxoffset,
