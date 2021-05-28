@@ -155,7 +155,6 @@ const BibWebContainer = props => {
 		if(citeproc.current) {
 			citeproc.current.setStyle(citationStyleXml);
 		} else {
-			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}`);
 			citeproc.current = await CiteprocWrapper.new({
 				style: citationStyleXml,
 				format: 'html',
@@ -163,23 +162,28 @@ const BibWebContainer = props => {
 			}, useLegacy.current);
 		}
 
+		const t0 = performance.now();
 		citeproc.current.includeUncited("All");
 		citeproc.current.insertReferences(ensureNoBlankItems(bib.current.itemsCSL));
-
-		// we also init every single item as a separate cluster for fallback rendering
-		citeproc.current.initClusters(
-			bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
-		);
-		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		if(styleHasBibliography) {
+			citeproc.current.initClusters([]);
 			const items = citeproc.current.makeBibliography();
 			const meta = citeproc.current.bibliographyMeta();
+			const t1 = performance.now();
+			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
 			setBibliography({ items, meta, lookup: itemsLookup });
 		} else {
+			// init every single item as a separate cluster for fallback rendering
+			citeproc.current.initClusters(
+				bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
+			);
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 			const render = citeproc.current.fullRender();
+			const t1 = performance.now();
+			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
 			setBibliography({
 				items: bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] })),
 				meta: null,
@@ -187,10 +191,11 @@ const BibWebContainer = props => {
 			});
 		}
 
+
 		setIsBibliographyStale(false);
 		setIsCiteprocReady(true);
 		firstRenderComplete.current = true;
-	}, [citationStyleXml, styleHasBibliography]);
+	}, [citationStyleXml, isReadOnly, styleHasBibliography]);
 
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
@@ -292,9 +297,12 @@ const BibWebContainer = props => {
 	}, [handleError, citationStyleXml, styleHasBibliography]);
 
 	const updateBibliography = useCallback(() => {
+		const t0 = performance.now();
 		const diff = citeproc.current.batchedUpdates();
-		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
+		const t1 = performance.now();
+		console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; Bibliography update took ${(t1 - t0).toFixed(2)} milliseconds.`);
 
+		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		if(bib.current.itemsRaw.length === 0) {
 			setBibliography({ items: [], meta: null, lookup: {} });
