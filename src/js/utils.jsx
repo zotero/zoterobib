@@ -62,6 +62,18 @@ var Driver = null;
 
 import CiteprocWrapper from './citeproc-wrapper';
 
+const ensureNoBlankItems = itemsCSL => itemsCSL.map(item => {
+	if(!('author' in item) && !('title' in item) && !('issued' in item)) {
+		// there is a risk of this item being skipped by citeproc in makeBibliography so we inject
+		// title to make sure it can be edited in bib-web
+		return {
+			...item,
+			title: 'Untitled'
+		};
+	} else {
+		return item;
+	}
+});
 
 //TODO: retrieveItem below contains some logic that has not been ported to the wrapper
 const getCiteproc = async (style, format = 'html') => {
@@ -350,8 +362,8 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 	citeproc.insertReferences(itemsCSL);
 
 	if(styleHasBibliography) {
-		bibliographyMeta = citeproc.bibliographyMeta();
 		bibliographyItems = citeproc.makeBibliography();
+		bibliographyMeta = citeproc.bibliographyMeta();
 	} else {
 		citeproc.initClusters(
 			itemsCSL.map(item => ({ id: item.id, cites: [ { id: item.id } ] }))
@@ -687,6 +699,7 @@ const getItemsCSL = items => {
 export {
 	calcOffset,
 	dedupMultipleChoiceItems,
+	ensureNoBlankItems,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
 	getOneTimeBibliographyOrFallback,

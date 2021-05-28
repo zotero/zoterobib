@@ -131,7 +131,7 @@ const formatBibLegacy = (bib) => {
 };
 
 const getBibliographyFormatParameters = bibliographyMeta =>
-	getBibliographyFormatParametersLegacy([metaCiteprocRStoJS(bibliographyMeta)]);
+	getBibliographyFormatParametersLegacy([CiteprocWrapper.metaCiteprocRStoJS(bibliographyMeta)]);
 
 /**
 	 * copied from https://github.com/zotero/zotero/blob/1f5639da4297ac20fd21223d2004a7cfeef72e21/chrome/content/zotero/xpcom/cite.js#L43

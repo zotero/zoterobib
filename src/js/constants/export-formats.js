@@ -6,15 +6,7 @@ export default {
 		isDownloadable: false,
 		isCopyable: true
 	},
-	'text': {
-		extension: 'txt',
-		mime: 'text/plain',
-		label: 'Copy to Clipboard',
-		include: 'html',
-		isDownloadable: false,
-		isCopyable: true
-	},
-	'plain': { // same as text but for citeprocRS
+	'plain': {
 		extension: 'txt',
 		mime: 'text/plain',
 		label: 'Copy to Clipboard',

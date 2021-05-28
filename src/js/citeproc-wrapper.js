@@ -73,6 +73,7 @@ class CiteprocWrapper {
 				retrieveItem: itemId => this.itemsStore[itemId],
 				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
 			}, opts.style, opts.lang);
+			this.driver.setOutputFormat(opts.format);
 		} else {
 			this.driver = engine;
 		}
@@ -81,22 +82,25 @@ class CiteprocWrapper {
 	batchedUpdates() {
 		if(this.isLegacy) {
 			// TODO: implement for citeproc JS
-			const [meta, items] = this.driver.makeBibliography();
-			const updatedEntries = meta.entry_ids.reduce((acc, id, index) => {
-				acc[id] = items[index];
-				return acc;
-			}, {});
+			const legacyDriverBib = this.driver.makeBibliography();
+			var bibliography = null;
 
-			const bibliography = { entryIds: meta.entry_ids, updatedEntries };
+			if(legacyDriverBib) {
+				const [meta, items] = legacyDriverBib;
+				const updatedEntries = meta.entry_ids.reduce((acc, id, index) => {
+					acc[id] = items[index];
+					return acc;
+				}, {});
+
+				bibliography = { entryIds: meta?.entry_ids, updatedEntries };
+			}
+
 			const clusters = this.driver.rebuildProcessorState(
 				this.clustersStore.map(cluster => ({
 					citationID: cluster.id,
 					citationItems: cluster.cites
 				}))
-			).reduce((acc, cluster) => {
-				acc[cluster[0]] = cluster[2];
-				return acc;
-			}, {});
+			).map(cluster => ([cluster[0], cluster[2]]));
 
 			return { bibliography, clusters };
 		} else {
@@ -290,6 +294,7 @@ class CiteprocWrapper {
 				retrieveItem: itemId => this.itemsStore[itemId],
 				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
 			}, style_text, this.opts.lang);
+			this.driver.setOutputFormat(this.opts.format);
 		} else {
 			return this.driver.setStyle(style_text).unwrap();
 		}
@@ -319,6 +324,9 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null }, useLegacy 
 	try {
 		if(useLegacy) {
 			const CSL = await getCSL();
+			if(format === 'plain') {
+				format = 'text';
+			}
 			return new CiteprocWrapper(true, CSL, { style, format, lang });
 		} else {
 			if(!Driver) {

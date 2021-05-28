@@ -4,9 +4,9 @@ import { useParams, useLocation, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 
-import { calcOffset, dedupMultipleChoiceItems, fetchFromPermalink, getOneTimeBibliographyOrFallback,
-getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl, parseIdentifier,
-processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
+import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
+getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getCiteproc, getItemsCSL, isLikeUrl,
+parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
 retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
@@ -110,7 +110,7 @@ const BibWebContainer = props => {
 		//TODO: optimise in bib
 		const itemCSL = bib.current.itemsCSL.find(icsl => icsl.id === item.key)
 
-		citeproc.current.insertReference(itemCSL);
+		citeproc.current.insertReference(ensureNoBlankItems([itemCSL])[0]);
 		citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
 		citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 	}, [displayFirstCitationMessage, isSentenceCaseStyle]);
@@ -152,11 +152,10 @@ const BibWebContainer = props => {
 			citeproc.current.setStyle(citationStyleXml);
 		} else {
 			citeproc.current = await getCiteproc(citationStyleXml);
-			console.log(citeproc.current);
 		}
 
 		citeproc.current.includeUncited("All");
-		citeproc.current.insertReferences(bib.current.itemsCSL);
+		citeproc.current.insertReferences(ensureNoBlankItems(bib.current.itemsCSL));
 
 		// we also init every single item as a separate cluster for fallback rendering
 		citeproc.current.initClusters(
@@ -167,11 +166,9 @@ const BibWebContainer = props => {
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
 		if(styleHasBibliography) {
-			setBibliography({
-				items: citeproc.current.makeBibliography(),
-				meta: citeproc.current.bibliographyMeta(),
-				lookup: itemsLookup
-			});
+			const items = citeproc.current.makeBibliography();
+			const meta = citeproc.current.bibliographyMeta();
+			setBibliography({ items, meta, lookup: itemsLookup });
 		} else {
 			const render = citeproc.current.fullRender();
 			setBibliography({
@@ -215,10 +212,6 @@ const BibWebContainer = props => {
 	}, [citationStyles, config, handleError, history, remoteId]);
 
 	const getCopyData = useCallback(async format => {
-		if(format === 'text') {
-			//NOTE: citeprocRS uses 'plain', citeprocJS uses 'text';
-			format = 'plain';
-		}
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
 			bib.current.itemsCSL, citationStyleXml, styleHasBibliography, format
 		);
@@ -229,6 +222,7 @@ const BibWebContainer = props => {
 					formatBib(bibliographyItems, bibliographyMeta) :
 					formatFallback(bibliographyItems) :
 				bibliographyItems.map(i => i.value).join('\n');
+
 
 			if(exportFormats[format].include) {
 				copyDataInclude.current = [
@@ -292,7 +286,6 @@ const BibWebContainer = props => {
 		const diff = citeproc.current.batchedUpdates();
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
-		console.log({ diff });
 
 		if(bib.current.itemsRaw.length === 0) {
 			setBibliography({ items: [], meta: null, lookup: {} });
@@ -517,7 +510,7 @@ const BibWebContainer = props => {
 		bib.current.updateItem(index, updatedItem);
 		setEditorItem(updatedItem);
 
-		citeproc.current.resetReferences(bib.current.itemsCSL);
+		citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
 		updateBibliography();
 
 		// if edited item is itemUnderReview, update it as well
@@ -838,7 +831,7 @@ const BibWebContainer = props => {
 		if(!isReadOnly && document.visibilityState === 'visible') {
 			const storageCitationStyle = localStorage.getItem('zotero-bib-citation-style');
 			bib.current.reloadItems();
-			citeproc.current.resetReferences(bib.current.itemsCSL);
+			citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
 			if(storageCitationStyle === citationStyle) {
 				updateBibliography();
 			} else {
