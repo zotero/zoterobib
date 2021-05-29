@@ -1,66 +1,10 @@
-import React from 'react';
-import ZoteroBib from 'zotero-translation-client';
-import balanced from 'balanced-match';
 import api from 'zotero-api-client';
-// import apiCache from 'zotero-api-client-cache';
-// import load from 'load-script';
-// import formatBib from './cite';
+import balanced from 'balanced-match';
 import baseMappings from 'zotero-base-mappings';
-// import * as citeproc from '@citeproc-rs/wasm';
-// import init, { Driver } from '@citeproc-rs/wasm';
-
-// const cachedApi = api().use(apiCache());
-const cachedApi = api();
-const stylesCache = {};
-var Driver = null;
-
-// const citeproc = require('');
-
-// import "/build/static/js/citeproc-rs/wasm.js";
-// console.log(citeproc.Driver);
-
-// debugger;
-
-// class Fetcher {
-// 	async fetchLocale(lang) {
-// 		const cacheId = `zotero-style-locales-${lang}`;
-// 		var locales = localStorage.getItem(cacheId);
-
-// 		// fix in place for scenarios where potentially bad locales have been cached
-// 		// see issue #236
-// 		if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
-// 			locales = false;
-// 		}
-
-// 		if(locales) {
-// 			return locales;
-// 		} else {
-// 			const response = await fetch(`/static/locales/locales-${lang}.xml`);
-// 			const locales = await response.text();
-// 			localStorage.setItem(cacheId, locales);
-// 			return locales;
-// 		}
-//     }
-// }
-
-
-// const getCSL = async () => {
-// 	if('CSL' in window) {
-// 		return Promise.resolve(window.CSL);
-// 	}
-
-// 	return new Promise((resolve, reject) => {
-// 		load('/static/js/citeproc.js', (err) => {
-// 			if (err) {
-// 				reject(err);
-// 			} else {
-// 				resolve(window.CSL);
-// 			}
-// 		});
-// 	});
-// };
-
 import CiteprocWrapper from './citeproc-wrapper';
+import ZoteroBib from 'zotero-translation-client';
+
+const stylesCache = {};
 
 const ensureNoBlankItems = itemsCSL => itemsCSL.map(item => {
 	if(!('author' in item) && !('title' in item) && !('issued' in item)) {
@@ -74,75 +18,6 @@ const ensureNoBlankItems = itemsCSL => itemsCSL.map(item => {
 		return item;
 	}
 });
-
-//TODO: retrieveItem below contains some logic that has not been ported to the wrapper
-const getCiteproc = async (style, format = 'html') => {
-	return CiteprocWrapper.new({ style, format }, true);
-	// const lang = window ? window.navigator.userLanguage || window.navigator.language : null;
-	// const fetcher = new Fetcher();
-
-	// // const [ CSL, styleXmls ] = await Promise.all([
-	// // 	getCSL(),
-	// // 	retrieveStyle(citationStyle)
-	// // ]);
-
-
-	// try {
-	// 	if(!Driver) {
-	// 		const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/wasm.js");
-	// 		Driver = CreateDriver;
-	// 		await init();
-	// 	}
-
-	// 	console.log({ localeOverride: lang, format, style, fetcher });
-
-	// 	const driverResult = Driver.new({ localeOverride: lang, format, style, fetcher });
-	// 	const driver = driverResult.unwrap();
-	// 	await driver.fetchLocales();
-	// 	return driver;
-	// } catch(err) {
-	// 	console.error(err);
-	// }
-
-	// return new CSL.Engine({
-	// 	retrieveLocale: retrieveLocaleSync,
-	// 	retrieveItem: itemId => {
-	// 		const item = bib.itemsCSL.find(item => item.id === itemId);
-
-	// 		// Don't return URL or accessed information for journal, newspaper, or magazine
-	// 		// articles if there's a page number. Equivalent to export.citePaperJournalArticleURL
-	// 		// being set in Zotero (as it is by default)
-	// 		if (item.type.startsWith('article-') && item.page) {
-	// 			delete item.URL;
-	// 			delete item.accessed;
-	// 		}
-
-	// 		if(!('author' in item) && !('title' in item) && !('issued' in item)) {
-	// 			// there is a risk of this item being skipped by citeproc
-	// 			// in makeBibliography so we inject title to make sure it
-	// 			// can be edited in bib-web
-	// 			return {
-	// 				...item,
-	// 				title: 'Untitled'
-	// 			};
-	// 		} else {
-	// 			return item;
-	// 		}
-	// 	},
-	// 	uppercase_subtitles: isUppercaseSubtitlesStyle(citationStyle, styleXmls)
-	// }, style, lang);
-};
-
-// const syncRequestAsText = url => {
-// 	let xhr = new XMLHttpRequest();
-// 	xhr.open('GET', url, false);
-// 	xhr.send();
-// 	if(xhr.readyState === xhr.DONE && xhr.status === 200) {
-// 		return xhr.responseText;
-// 	} else {
-// 		return false;
-// 	}
-// };
 
 const parseIdentifier = identifier => {
 	identifier = identifier.trim();
@@ -163,17 +38,17 @@ const isLikeUrl = identifier => {
 };
 
 const validateUrl = url => {
+	try {
+		url = new URL(url);
+		return url.toString();
+	} catch(e) {
 		try {
-			url = new URL(url);
+			url = new URL(`http://${url}`);
 			return url.toString();
 		} catch(e) {
-			try {
-				url = new URL(`http://${url}`);
-				return url.toString();
-			} catch(e) {
-				return false;
-			}
+			return false;
 		}
+	}
 };
 
 const getParentStyle = async (styleXml, styleXmls) => {
@@ -213,30 +88,6 @@ const retrieveIndependentStyle = async styleIdOrUrl => {
 	return styles[styles.length - 1];
 }
 
-// const retrieveLocaleSync = lang => {
-// 	const cacheId = `zotero-style-locales-${lang}`;
-// 	var locales = localStorage.getItem(cacheId);
-
-// 	// fix in place for scenarios where potentially bad locales have been cached
-// 	// see issue #236
-// 	if(typeof locales === 'string' && !locales.startsWith('<?xml')) {
-// 		locales = false;
-// 	}
-
-// 	if(!locales) {
-// 		const url = `/static/locales/locales-${lang}.xml`;
-// 		try {
-// 			locales = syncRequestAsText(url);
-// 			localStorage.setItem(cacheId, locales);
-// 		} catch(e) {
-// 			if(!locales) {
-// 				throw new Error('Failed to load locales');
-// 			}
-// 		}
-// 	}
-// 	return locales;
-// };
-
 const retrieveStylesData = async url => {
 	try {
 		const response = await fetchWithCachedFallback(url);
@@ -257,14 +108,14 @@ const fetchWithCachedFallback = async url => {
 }
 
 const getItemTypes = async () => {
-	return (await cachedApi.itemTypes().get()).getData();
+	return (await api().itemTypes().get()).getData();
 };
 
 const getItemTypeMeta = async (itemType) => {
 	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
-		cachedApi.itemTypes().get(),
-		cachedApi.itemTypeFields(itemType).get(),
-		cachedApi.itemTypeCreatorTypes(itemType).get()
+		api().itemTypes().get(),
+		api().itemTypeFields(itemType).get(),
+		api().itemTypeCreatorTypes(itemType).get()
 	]);
 
 	return {
@@ -295,41 +146,33 @@ const validateItem = async item => {
 };
 
 
-//@TODO: implement retry
+// TODO: implement retry
 const fetchFromPermalink = async url => {
-	try {
-		const response = await fetch(url);
-		if(!response.ok) {
-			throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
-		}
-		return await response.json();
-	} catch(e) {
-		throw e;
+	const response = await fetch(url);
+	if(!response.ok) {
+		throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
 	}
+	return await response.json();
 };
 
-//@TODO: implement retry
+// TODO: implement retry
 const saveToPermalink = async (url, data) => {
-	try {
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		});
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
 
-		if(!response.ok) {
-			throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
-		}
-		let { key } = await response.json();
-		if(!key) {
-			throw new Error('Error: Response did not contain a key');
-		}
-		return key;
-	} catch(e) {
-		throw e;
+	if(!response.ok) {
+		throw new Error(`Unexpected response from the server: ${response.status}: ${response.statusText}`);
 	}
+	let { key } = await response.json();
+	if(!key) {
+		throw new Error('Error: Response did not contain a key');
+	}
+	return key;
 };
 
 const getCitations = (bib, citeproc) => {
@@ -381,27 +224,6 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 	citeproc.free();
 
 	return { bibliographyItems, bibliographyMeta };
-
-	// citeprocjs
-	// const items = bib.itemsRaw.map(item => item.key);
-	// console.log({ items, bib });
-	// citeproc.updateItems([]); // workaround for #256
-	// citeproc.updateItems(items);
-	// const bibliography = citeproc.makeBibliography();
-
-	// if(bibliography) {
-	// 	return {
-	// 		items: bib.itemsRaw,
-	// 		isFallback: false,
-	// 		bibliography
-	// 	};
-	// }
-
-	// return {
-	// 	items: bib.itemsRaw,
-	// 	isFallback: true,
-	// 	citations: getCitations(bib, citeproc)
-	// };
 };
 
 const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
@@ -553,23 +375,6 @@ const processSentenceCaseAPAItems = items => {
 	return items;
 };
 
-// const parseTagAndAttrsFromNode = node => {
-// 	let Tag = node.tagName.toLowerCase();
-// 	let attrs = {
-// 		className: node.getAttribute('class') || '',
-// 		style: (node.getAttribute('style') || '')
-// 			.split(';')
-// 			.map(x => x.split(':')
-// 				.map(y => y.trim())
-// 			).reduce((aggr, val) => {
-// 				aggr[val[0].replace(/-([a-z])/g, g => g[1].toUpperCase())] = val[1];
-// 				return aggr;
-// 			}, {})
-// 	};
-
-// 	return { Tag, attrs };
-// };
-
 const processMultipleChoiceItems = async (items, isUrl = false) => {
 	const itemTypes = await getItemTypes();
 	return Object.entries(items)
@@ -606,46 +411,6 @@ const dedupMultipleChoiceItems = items => {
 	return removeDuplicatesBy(i => i.signature, items);
 };
 
-// const getHtmlNodeFromBibliography = bibliographyData => {
-// 	const { citations, bibliography, isFallback } = bibliographyData;
-// 	const html = isFallback ?
-// 		`<ol><li>${citations.join('</li><li>')}</li></ol>` :
-// 		formatBib(bibliography);
-// 	const div = document.createElement('div');
-// 	div.innerHTML = html;
-// 	div.querySelectorAll('a').forEach(link => {
-// 		link.setAttribute('rel', 'nofollow');
-// 	});
-// 	return div;
-// }
-
-// function* makeBibliographyContentIterator(bibliographyData, bibliographyNode) {
-// 	const { items, citations, bibliography, isFallback } = bibliographyData;
-
-// 	if(isFallback) {
-// 		for(let i = 0; i < items.length; i++) {
-// 			const item = items[i];
-// 			const content = <span dangerouslySetInnerHTML={ { __html: citations[i] } } />;
-// 			yield [item, content];
-// 		}
-// 	} else {
-// 		const nodeArray = Array.from(bibliographyNode.firstChild.children);
-// 		for(let i = 0; i < nodeArray.length; i++) {
-// 			const child = nodeArray[i];
-// 			const [ itemId ] = bibliography[0]['entry_ids'][i];
-// 			const { Tag, attrs } = parseTagAndAttrsFromNode(child);
-// 			const item = items.find(i => i.key === itemId);
-// 			const content = <Tag
-// 				dangerouslySetInnerHTML={ { __html: child.innerHTML } }
-// 				{ ...attrs }
-// 			/>
-// 			yield [item, content];
-// 		}
-// 	}
-// }
-
-
-// @TODO: deduplicate with web-library
 const noop = () => {};
 
 const reverseMap = map => {
@@ -707,35 +472,23 @@ export {
 	ensureNoBlankItems,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
-	getOneTimeBibliographyOrFallback,
 	getCitation,
-	getCiteproc,
+	getExpandedCitationStyles,
 	getItemsCSL,
-	// getCSL,
-	// getHtmlNodeFromBibliography,
 	getItemTypeMeta,
 	getItemTypes,
-	getExpandedCitationStyles,
+	getOneTimeBibliographyOrFallback,
 	isLikeUrl,
-	// isNoteStyle,
-	// isNumericStyle,
-	// isSentenceCaseStyle,
-	// isUppercaseSubtitlesStyle,
-	// makeBibliographyContentIterator,
 	noop,
 	parseIdentifier,
-	// parseTagAndAttrsFromNode,
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
-	// retrieveLocaleSync,
 	retrieveIndependentStyle,
-	// retrieveStyle,
 	retrieveStylesData,
 	reverseMap,
 	saveToPermalink,
-	// syncRequestAsText,
+	splice,
 	validateItem,
 	validateUrl,
-	splice,
 };
