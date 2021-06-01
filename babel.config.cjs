@@ -1,5 +1,9 @@
 const presets = [
-	["@babel/preset-env", { "debug": !!process.env.DEBUG || false, "corejs": 3, "useBuiltIns": "usage" }],
+	["@babel/preset-env", {
+		"debug": !!process.env.DEBUG || false,
+		"corejs": 3,
+		"useBuiltIns": "usage",
+	}],
 	"@babel/preset-react"
 ];
 
