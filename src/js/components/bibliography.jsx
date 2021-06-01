@@ -35,8 +35,8 @@ KeyHandlers.displayName = 'KeyHandlers';
 KeyHandlers.propTypes = { onKeyHandle: PropTypes.func };
 
 const BibliographyItem = memo(props => {
-	const { dropdownsOpen, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
-	onEditCitation, onFocus, onToggleDropdown, rawItem, renderedItem, } = props;
+	const { dropdownsOpen, formattedItem, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
+	onEditCitation, onFocus, onToggleDropdown, rawItem, } = props;
 
 	return (
 		<li key={ rawItem.key }
@@ -46,7 +46,7 @@ const BibliographyItem = memo(props => {
 			onClick={ onEditCitation }
 			tabIndex={ 0 }
 		>
-			<div className="csl-entry-container" dangerouslySetInnerHTML={ { __html: renderedItem.value } } />
+			<div className="csl-entry-container" dangerouslySetInnerHTML={ { __html: formattedItem } } />
 			<Dropdown
 				isOpen={ dropdownsOpen.includes(rawItem.key) }
 				toggle={ onToggleDropdown }
@@ -108,6 +108,7 @@ BibliographyItem.displayName = 'BibliographyItem';
 
 BibliographyItem.propTypes = {
 	dropdownsOpen: PropTypes.array,
+	formattedItem: PropTypes.string,
 	isNoteStyle: PropTypes.bool,
 	isNumericStyle: PropTypes.bool,
 	onCopyCitationDialogOpen: PropTypes.func,
@@ -116,7 +117,6 @@ BibliographyItem.propTypes = {
 	onFocus: PropTypes.func,
 	onToggleDropdown: PropTypes.func,
 	rawItem: PropTypes.object,
-	renderedItem: PropTypes.object,
 }
 
 const Bibliography = props => {
@@ -126,9 +126,21 @@ const Bibliography = props => {
 	const { isNoteStyle, isNumericStyle, isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
 	styleHasBibliography } = props;
 
-	const bibliographyRendered = useMemo(() => isReadOnly ?
-		styleHasBibliography ? formatBib(bibliography.items, bibliography.meta) : formatFallback(bibliography.items)
-		: null, [bibliography.items, bibliography.meta, isReadOnly, styleHasBibliography]);
+	const bibliographyRendered = useMemo(() => {
+			return (styleHasBibliography && bibliography.meta) ?
+				formatBib(bibliography.items, bibliography.meta) :
+				formatFallback(bibliography.items)
+		}, [bibliography, styleHasBibliography]
+	);
+
+	const bibliographyRenderedNodes = useMemo(() => {
+		const div = document.createElement('div');
+		div.innerHTML = bibliographyRendered;
+		div.querySelectorAll('a').forEach(link => {
+			link.setAttribute('rel', 'nofollow');
+		});
+		return div.firstChild.children;
+	}, [bibliographyRendered]);
 
 	const handleEditCitation = useCallback((ev) => {
 		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
@@ -203,11 +215,11 @@ const Bibliography = props => {
 				</React.Fragment>
 			) : (
 				<ul className="bibliography" key="bibliography">
-					{ bibliography.items.map(renderedItem => (
+					{ bibliography.items.map((renderedItem, index) => (
 						<BibliographyItem
 							key={ renderedItem.id }
 							rawItem={ bibliography.lookup[renderedItem.id] }
-							renderedItem={ renderedItem }
+							formattedItem={ bibliographyRenderedNodes[index]?.innerHTML || renderedItem.value }
 							dropdownsOpen = { dropdownsOpen }
 							isNoteStyle = { isNoteStyle }
 							isNumericStyle = { isNumericStyle }
