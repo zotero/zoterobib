@@ -12,9 +12,10 @@ import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
 import ZBib from './zbib';
-import { useCitationStyle, usePrevious } from '../hooks';
+import { usePrevious } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 import CiteprocWrapper from '../citeproc-wrapper';
+import { getStyleProperties } from '../get-style-properties';
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -66,16 +67,16 @@ const BibWebContainer = props => {
 	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
 	const [isConfirmedStyle, setIsConfirmedStyle] = useState(true);
 	const [isBibliographyStale, setIsBibliographyStale] = useState(false);
+	const [styleProperties, setStyleProperties] = useState(null);
 
-	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle, isUppercaseSubtitlesStyle } =
-		useCitationStyle(citationStyle, citationStyleXml);
+	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle } = (styleProperties ?? {});
 	const wasSentenceCaseStyle = usePrevious(isSentenceCaseStyle);
 
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 
 	const useLegacy = useRef(true);
 
-	const isStyleReady = !!citationStyleXml;
+	const isStyleReady = !!citationStyleXml && !!styleProperties;
 	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
 	const isReadOnly = !!remoteId;
 
@@ -206,13 +207,15 @@ const BibWebContainer = props => {
 		try {
 			const remoteData = await fetchFromPermalink(`${config.storeURL}/${remoteId}`);
 			if(remoteData && 'items' in remoteData) {
-				const citationStyle = remoteData.citationStyle || citationStyle;
+				if(remoteData.citationStyle) {
+					setCitationStyle(remoteData.citationStyle);
 
-				var citationStyleMeta = citationStyles.find(cs => cs.name === citationStyle);
-				if(!citationStyleMeta) {
-					const stylesData = await retrieveStylesData(config.stylesURL);
-					const newStyleMeta = stylesData.find(sd => sd.name === citationStyle);
-					setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+					var citationStyleMeta = citationStyles.find(cs => cs.name === remoteData.citationStyle);
+					if(!citationStyleMeta) {
+						const stylesData = await retrieveStylesData(config.stylesURL);
+						const newStyleMeta = stylesData.find(sd => sd.name === remoteData.citationStyle);
+						setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+					}
 				}
 
 				bib.current = new ZoteroBib({
@@ -644,11 +647,15 @@ const BibWebContainer = props => {
 			initialItems: bib.current.itemsRaw
 		});
 
+		localStorage.setItem('zotero-bib-citation-style', citationStyle);
+		localStorage.setItem('zotero-bib-extra-citation-styles', JSON.stringify(citationStyles.filter(cs => !cs.isCore)));
+		localStorage.setItem('zotero-bib-title', title);
+
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
 		buildBibliography(); // because engine settings has changed, we need to force rebuild
 
 		history.replace('/');
-	}, [buildBibliography, config, history]);
+	}, [buildBibliography, citationStyle, citationStyles, history, config, title]);
 
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
@@ -718,6 +725,7 @@ const BibWebContainer = props => {
 	}, [citationStyles]);
 
 	const handleStyleSwitchConfirm = useCallback(() => {
+		console.log('manual confirm');
 		setIsConfirmedStyle(true);
 		setActiveDialog(null);
 		revertCitationStyle.current = null;
@@ -859,7 +867,7 @@ const BibWebContainer = props => {
 			const storageCitationStyle = localStorage.getItem('zotero-bib-citation-style');
 			bib.current.reloadItems();
 			citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
-			if(storageCitationStyle === citationStyle) {
+			if(!storageCitationStyle || storageCitationStyle === citationStyle) {
 				updateBibliography();
 			} else {
 				setCitationStyle(storageCitationStyle);
@@ -910,6 +918,9 @@ const BibWebContainer = props => {
 
 	useEffect(() => {
 		if(typeof(prevCitationStyleXml) !== 'undefined' && citationStyleXml !== prevCitationStyleXml) {
+			if(citationStyleXml) {
+				setStyleProperties(getStyleProperties(citationStyleXml));
+			}
 			setIsBibliographyStale(true);
 		}
 	}, [citationStyleXml, prevCitationStyleXml]);
@@ -923,21 +934,23 @@ const BibWebContainer = props => {
 
 	useEffect(() => {
 		if(citationStyleXml === null && !isFetchingStyleXml) {
-			setIsConfirmedStyle(false);
+			console.log('needs to be confirmed');
+			setIsConfirmedStyle(isReadOnly ? true : false);
 			fetchCitationStyleXml();
 		}
-	}, [citationStyleXml, fetchCitationStyleXml, isFetchingStyleXml]);
+	}, [citationStyleXml, fetchCitationStyleXml, isReadOnly, isFetchingStyleXml]);
 
 	useEffect(() => {
-		if(typeof(wasSentenceCaseStyle) !== 'undefined' && isSentenceCaseStyle && !wasSentenceCaseStyle) {
+		if(typeof(wasSentenceCaseStyle) !== 'undefined' && isSentenceCaseStyle && !wasSentenceCaseStyle && !isConfirmedStyle) {
 			setActiveDialog('CONFIRM_SENTENCE_CASE_STYLE');
 		}
-	}, [isSentenceCaseStyle, wasSentenceCaseStyle, citationStyleXml, prevCitationStyleXml]);
+	}, [isConfirmedStyle, isSentenceCaseStyle, wasSentenceCaseStyle, citationStyleXml, prevCitationStyleXml]);
 
 	useEffect(() => {
 		// Check if new style isSentenceCaseStyle which would require user confirmation. Auto-confirm if it's not.
 		// Also auto-confirm if this is first rendering because we're not showin confirmation dialog in such case.
 		if(!firstRenderComplete.current || (citationStyleXml && citationStyleXml !== prevCitationStyleXml && !isSentenceCaseStyle)) {
+			console.log('autoconfirm');
 			setIsConfirmedStyle(true);
 		}
 	}, [isSentenceCaseStyle, wasSentenceCaseStyle, citationStyleXml, prevCitationStyleXml]);
@@ -950,10 +963,10 @@ const BibWebContainer = props => {
 	}, [displayWelcomeMessage, isReadOnly, remoteId])
 
 	useEffect(() => {
-		if(title !== prevTitle && typeof(prevTitle) !== 'undefined') {
+		if(title !== prevTitle && typeof(prevTitle) !== 'undefined' && !isReadOnly) {
 			localStorage.setItem('zotero-bib-title', title);
 		}
-	}, [title, prevTitle]);
+	}, [isReadOnly, title, prevTitle]);
 
 	useEffect(() => {
 		if(isDataReady && isStyleReady && isCiteprocReady && !isQueryHandled && location.pathname === '/import') {

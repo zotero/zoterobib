@@ -1,4 +1,6 @@
 import load from 'load-script';
+import { getStyleProperties } from './get-style-properties.js'
+
 const isWasmSupported = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
 var Driver = null;
 
@@ -71,7 +73,7 @@ class CiteprocWrapper {
 			this.driver = new this.CSL.Engine({
 				retrieveLocale: retrieveLocaleSync,
 				retrieveItem: itemId => this.itemsStore[itemId],
-				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
+				uppercase_subtitles: getStyleProperties(opts.style)?.isUppercaseSubtitlesStyle,
 			}, opts.style, opts.lang);
 			this.driver.setOutputFormat(opts.format);
 			this.driver.opt.development_extensions.wrap_url_and_doi = opts.wrap_url_and_doi;
@@ -302,7 +304,7 @@ class CiteprocWrapper {
 			this.driver = new this.CSL.Engine({
 				retrieveLocale: retrieveLocaleSync,
 				retrieveItem: itemId => this.itemsStore[itemId],
-				// uppercase_subtitles: isUppercaseSubtitlesStyle(style) // TODO
+				uppercase_subtitles: getStyleProperties(this.opts.style)?.isUppercaseSubtitlesStyle
 			}, this.opts.style, this.opts.lang);
 			this.driver.setOutputFormat(this.opts.format);
 			this.driver.opt.development_extensions.wrap_url_and_doi = this.opts.wrap_url_and_doi;
