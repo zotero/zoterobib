@@ -978,19 +978,17 @@ const BibWebContainer = props => {
 	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
 
+		const params = new URLSearchParams(location.search);
+		//citeproc-rs is opt-in, i.e. if truthy then useLegacy = false, defaults to true
+		useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));
+
 		if(remoteId) {
 			fetchRemoteBibliography();
 		} else {
 			bib.current = new ZoteroBib(config);
 			bib.current.reloadItems();
 
-			console.log(location);
-
-			const params = new URLSearchParams(location.search);
 			const prefilledIdentifier = params.get('q') || '';
-
-			//citeproc-rs is opt-in, i.e. if truthy then useLegacy = false, defaults to true
-			useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
 		}
