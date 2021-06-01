@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Container from './components/container';
 
-//@TODO fix naming convention (bib vs this.bib)
 class ZoteroBibComponent extends React.Component {
 	render() {
 		return (

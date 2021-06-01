@@ -82,7 +82,6 @@ class CiteprocWrapper {
 
 	batchedUpdates() {
 		if(this.isLegacy) {
-			// TODO: implement for citeproc JS
 			const legacyDriverBib = this.driver.makeBibliography();
 			var bibliography = null;
 

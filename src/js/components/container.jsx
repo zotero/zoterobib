@@ -367,7 +367,7 @@ const BibWebContainer = props => {
 
 	const handleCitationStyleChanged = useCallback(async ev => {
 		const newCitationStyle = ev.value;
-		// this.clearMessages(); //@TODO
+		setMessages([]);
 		setItemUnderReview(null);
 		if(newCitationStyle === 'install') {
 			setActiveDialog('STYLE_INSTALLER');
