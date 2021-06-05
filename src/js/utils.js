@@ -51,43 +51,6 @@ const validateUrl = url => {
 	}
 };
 
-const getParentStyle = async (styleXml, styleXmls) => {
-	const matches = styleXml.match(/<link.*?href="?(https?:\/\/[\w.\-/]*)"?.*?rel="?independent-parent"?.*?\/>/i);
-	if(matches) {
-		// try to extract style id, fallback using url as id
-		const idMatches = matches[1].match(/https?:\/\/www\.zotero\.org\/styles\/([\w-]*)/i);
-		await retrieveStyle(idMatches ? idMatches[1] : matches[1], styleXmls);
-	}
-};
-
-const retrieveStyle = async (styleIdOrUrl, styleXmls = []) => {
-	var style;
-	// cache styles in memory to avoid going for the disk cache on each call
-	if(styleIdOrUrl in stylesCache) {
-		style = stylesCache[styleIdOrUrl];
-	} else {
-		const url = styleIdOrUrl.match(/https?:\/\/[\w.\-/]*/gi) ? styleIdOrUrl : `https://www.zotero.org/styles/${styleIdOrUrl}`;
-		try {
-			const response = await fetchWithCachedFallback(url);
-			if(!response.ok) { throw new Error(); }
-			style = await response.text();
-		} catch(_) {
-			if(!style) {
-				throw new Error('Failed to load style');
-			}
-		}
-	}
-	styleXmls.push(style);
-	await getParentStyle(style, styleXmls);
-	stylesCache[styleIdOrUrl] = style;
-	return styleXmls;
-};
-
-const retrieveIndependentStyle = async styleIdOrUrl => {
-	const styles = await retrieveStyle(styleIdOrUrl);
-	return styles[styles.length - 1];
-}
-
 const retrieveStylesData = async url => {
 	try {
 		const response = await fetchWithCachedFallback(url);
@@ -484,7 +447,6 @@ export {
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
-	retrieveIndependentStyle,
 	retrieveStylesData,
 	reverseMap,
 	saveToPermalink,

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react';
 import ZoteroBib from 'zotero-translation-client';
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
@@ -6,8 +6,8 @@ import SmoothScroll from 'smooth-scroll';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
 getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isLikeUrl,
-parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveIndependentStyle,
-retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
+parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveStylesData,
+saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
@@ -15,7 +15,8 @@ import ZBib from './zbib';
 import { usePrevious } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 import CiteprocWrapper from '../citeproc-wrapper';
-import { getStyleProperties } from '../get-style-properties';
+import { confirmStyle, fetchAndSelectStyle } from '../actions';
+import { styleReducer } from '../reducers';
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
@@ -36,14 +37,20 @@ const BibWebContainer = props => {
 	const wasDataReady = usePrevious(isDataReady);
 	const [messages, setMessages] = useState([]);
 	const [bibliography, setBibliography] = useState({ items: [], meta: null, lookup: {} });
-	const [citationStyle, setCitationStyle] = useState(
-		localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name
-	);
-	const prevCitationStyle = usePrevious(citationStyle);
-	const [citationStyleXml, setCitationStyleXml] = useState(null);
-	const [isFetchingStyleXml, setIsFetchingStyleXml] = useState(false);
-	const prevCitationStyleXml = usePrevious(citationStyleXml);
 
+	const [style, dispatchStyle] = useReducer(styleReducer, {
+		selected: undefined,
+		xml: undefined,
+		isFetching: false,
+		styleHasBibliography: undefined,
+		isNumericStyle: undefined,
+		isNoteStyle: undefined,
+		isUppercaseSubtitlesStyle: undefined,
+		isSentenceCaseStyle: undefined,
+		isConfirmed: undefined,
+	});
+
+	const prevCitationStyle = usePrevious(style.selected);
 	const [isStylesDataLoading, setIsStylesDataLoading] = useState(false);
 	const [stylesData, setStylesData] = useState(null);
 
@@ -65,18 +72,13 @@ const BibWebContainer = props => {
 	const [lastDeletedItem, setLastDeletedItem] = useState(null);
 	const [permalink, setPermalink] = useState(null);
 	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
-	const [isConfirmedStyle, setIsConfirmedStyle] = useState(true);
 	const [isBibliographyStale, setIsBibliographyStale] = useState(false);
-	const [styleProperties, setStyleProperties] = useState(null);
 
-	const { styleHasBibliography, isNoteStyle, isNumericStyle, isSentenceCaseStyle } = (styleProperties ?? {});
-	const wasSentenceCaseStyle = usePrevious(isSentenceCaseStyle);
-
+	const wasSentenceCaseStyle = usePrevious(style.isSentenceCaseStyle);
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
-
 	const useLegacy = useRef(true);
+	const isStyleReady = style.selected && !style.isFetching;
 
-	const isStyleReady = !!citationStyleXml && !!styleProperties;
 	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
 	const isReadOnly = !!remoteId;
 
@@ -101,7 +103,7 @@ const BibWebContainer = props => {
 	}, [config, remoteId]);
 
 	const addItem = useCallback((item, showFirstCitationMessage = true)  => {
-		if(isSentenceCaseStyle) {
+		if(style.isSentenceCaseStyle) {
 			bib.current.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
 			bib.current.addItem(item);
@@ -116,23 +118,23 @@ const BibWebContainer = props => {
 		const itemCSL = bib.current.itemsCSL.find(icsl => icsl.id === item.key)
 
 		citeproc.current.insertReference(ensureNoBlankItems([itemCSL])[0]);
-		if(!styleHasBibliography) {
+		if(!style.styleHasBibliography) {
 			citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
 			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 		}
-	}, [displayFirstCitationMessage, isSentenceCaseStyle, styleHasBibliography]);
+	}, [displayFirstCitationMessage, style.isSentenceCaseStyle, style.styleHasBibliography]);
 
 	const deleteItem = useCallback(itemId => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		if(bib.current.removeItem(item)) {
 			citeproc.current.removeReference(itemId);
 
-			if(!styleHasBibliography) {
+			if(!style.styleHasBibliography) {
 				citeproc.current.removeCluster(itemId);
 				citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 			}
 		}
-	}, [styleHasBibliography]);
+	}, [style.styleHasBibliography]);
 
 	const displayFirstCitationMessage = useCallback(() => {
 		const message = {
@@ -159,10 +161,10 @@ const BibWebContainer = props => {
 		setIsCiteprocReady(false);
 
 		if(citeproc.current) {
-			citeproc.current.setStyle(citationStyleXml);
+			citeproc.current.setStyle(style.xml);
 		} else {
 			citeproc.current = await CiteprocWrapper.new({
-				style: citationStyleXml,
+				style: style.xml,
 				format: 'html',
 				wrap_url_and_doi: isReadOnly
 			}, useLegacy.current);
@@ -174,7 +176,7 @@ const BibWebContainer = props => {
 
 		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
 
-		if(styleHasBibliography) {
+		if(style.styleHasBibliography) {
 			citeproc.current.initClusters([]);
 			const items = citeproc.current.makeBibliography();
 			const meta = citeproc.current.bibliographyMeta();
@@ -197,18 +199,17 @@ const BibWebContainer = props => {
 			});
 		}
 
-
 		setIsBibliographyStale(false);
 		setIsCiteprocReady(true);
 		firstRenderComplete.current = true;
-	}, [citationStyleXml, isReadOnly, styleHasBibliography]);
+	}, [style.xml, isReadOnly, style.styleHasBibliography]);
 
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
 			const remoteData = await fetchFromPermalink(`${config.storeURL}/${remoteId}`);
 			if(remoteData && 'items' in remoteData) {
 				if(remoteData.citationStyle) {
-					setCitationStyle(remoteData.citationStyle);
+					await fetchAndSelectStyle(dispatchStyle, remoteData.citationStyle, { isConfirmed: true });
 
 					var citationStyleMeta = citationStyles.find(cs => cs.name === remoteData.citationStyle);
 					if(!citationStyleMeta) {
@@ -235,12 +236,12 @@ const BibWebContainer = props => {
 
 	const getCopyData = useCallback(async format => {
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-			bib.current.itemsCSL, citationStyleXml, styleHasBibliography, useLegacy.current, { format }
+			bib.current.itemsCSL, style.xml, style.styleHasBibliography, useLegacy.current, { format }
 		);
 
 		if(bibliographyItems) {
 			const copyData = format === 'html' ?
-				styleHasBibliography ?
+				style.styleHasBibliography ?
 					formatBib(bibliographyItems, bibliographyMeta) :
 					formatFallback(bibliographyItems) :
 				bibliographyItems.map(i => i.value).join('\n');
@@ -261,7 +262,7 @@ const BibWebContainer = props => {
 		}
 
 		return '';
-	}, [citationStyleXml, styleHasBibliography]);
+	}, [style.xml, style.styleHasBibliography]);
 
 	const getFileData = useCallback(async format => {
 		var fileContents, separator, bibStyle, preamble = '';
@@ -282,7 +283,7 @@ const BibWebContainer = props => {
 			}
 		} else {
 			const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-				bib.current.itemsCSL, citationStyleXml, styleHasBibliography, useLegacy.current, { format }
+				bib.current.itemsCSL, style.xml, style.styleHasBibliography, useLegacy.current, { format }
 			);
 
 			if(format === 'rtf') {
@@ -300,7 +301,7 @@ const BibWebContainer = props => {
 			{ type: exportFormats[format].mime }
 		);
 		return file;
-	}, [handleError, citationStyleXml, styleHasBibliography]);
+	}, [handleError, style.xml, style.styleHasBibliography]);
 
 	const updateBibliography = useCallback(() => {
 		const t0 = performance.now();
@@ -315,7 +316,7 @@ const BibWebContainer = props => {
 			return;
 		}
 
-		if(diff.bibliography && styleHasBibliography) {
+		if(diff.bibliography && style.styleHasBibliography) {
 			var newBibliographyItems;
 			if(diff.bibliography.entryIds) {
 				newBibliographyItems = diff.bibliography.entryIds.map(entryId => ({
@@ -337,7 +338,7 @@ const BibWebContainer = props => {
 				lookup: itemsLookup,
 				items: newBibliographyItems
 			});
-		} else if(!styleHasBibliography) {
+		} else if(!style.styleHasBibliography) {
 			const newBibliographyItems = [];
 			diff.clusters.forEach(([id, value]) => {
 				const existingEntry = bibliography.items.find(bibItem => bibItem.id === id);
@@ -354,7 +355,7 @@ const BibWebContainer = props => {
 				items: [...bibliography.items.filter(i => i.id in itemsLookup), ...newBibliographyItems]
 			});
 		}
-	}, [bibliography, styleHasBibliography]);
+	}, [bibliography, style.styleHasBibliography]);
 
 	const handleError = useCallback((errorMessage, errorData) => {
 		const message = {
@@ -384,7 +385,7 @@ const BibWebContainer = props => {
 				setIsStylesDataLoading(false);
 			}
 		} else {
-			setCitationStyle(newCitationStyle);
+			fetchAndSelectStyle(dispatchStyle, newCitationStyle);
 			localStorage.setItem('zotero-bib-citation-style', newCitationStyle);
 		}
 	}, [config.stylesURL, handleError]);
@@ -439,13 +440,13 @@ const BibWebContainer = props => {
 		setItemUnderReview({
 			item: itemToConfirm.item,
 			...(await getOneTimeBibliographyOrFallback(
-				getItemsCSL([itemToConfirm.item]), citationStyleXml, styleHasBibliography, useLegacy.current
+				getItemsCSL([itemToConfirm.item]), style.xml, style.styleHasBibliography, useLegacy.current
 			))
 		});
 		setActiveDialog(null);
 		setItemToConfirm(null);
 		updateBibliography();
-	}, [addItem, citationStyleXml, itemToConfirm, styleHasBibliography, updateBibliography]);
+	}, [addItem, style.xml, itemToConfirm, style.styleHasBibliography, updateBibliography]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
@@ -466,7 +467,7 @@ const BibWebContainer = props => {
 	const handleDeleteCitations = useCallback(() => {
 		bib.current.clearItems();
 		citeproc.current.resetReferences([]);
-		if(!styleHasBibliography) {
+		if(!style.styleHasBibliography) {
 			citeproc.current.initClusters([]);
 		}
 		setMessages([]);
@@ -474,7 +475,7 @@ const BibWebContainer = props => {
 		setPermalink(null);
 		setTitle('');
 		updateBibliography();
-	}, [styleHasBibliography, updateBibliography]);
+	}, [style.styleHasBibliography, updateBibliography]);
 
 	const handleDismiss = useCallback(id => {
 		const message = messages.find(m => m.id === id);
@@ -519,7 +520,7 @@ const BibWebContainer = props => {
 			return;
 		}
 
-		if(isSentenceCaseStyle) {
+		if(style.isSentenceCaseStyle) {
 			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
 
 			if(!(itemKey in itemsMetaData)) {
@@ -544,7 +545,7 @@ const BibWebContainer = props => {
 		if(itemUnderReview && itemUnderReview.key === itemKey) {
 			setItemUnderReview(updatedItem);
 		}
-	}, [handleError, itemUnderReview, isSentenceCaseStyle, updateBibliography]);
+	}, [handleError, itemUnderReview, style.isSentenceCaseStyle, updateBibliography]);
 
 	const handleMultipleChoiceCancel = useCallback(() => {
 		setActiveDialog(null);
@@ -592,8 +593,8 @@ const BibWebContainer = props => {
 		} else {
 			return await handleTranslateIdentifier(selectedItem.key);
 		}
-	// citationStyleXml is required here to break circular dependency. TODO: refactor so it isn't
-	}, [citationStyleXml, handleTranslateIdentifier, identifier]);
+	// citationStyleXml is required here to break circular dependency. TODO: refactor so it isn't TODO: test if style.xml does it?
+	}, [style.xml, handleTranslateIdentifier, identifier]);
 
 	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
@@ -609,11 +610,11 @@ const BibWebContainer = props => {
 		setItemUnderReview({
 			item,
 			...(await getOneTimeBibliographyOrFallback(
-			getItemsCSL([item]), citationStyleXml, styleHasBibliography, useLegacy.current
+			getItemsCSL([item]), style.xml, style.styleHasBibliography, useLegacy.current
 			))
 		});
 		updateBibliography();
-	}, [addItem, citationStyleXml, multipleItems, styleHasBibliography, updateBibliography]);
+	}, [addItem, style.xml, multipleItems, style.styleHasBibliography, updateBibliography]);
 
 	const handleOpenEditor = useCallback((itemId = null) => {
 		if(itemUnderReview && itemId && itemId != itemUnderReview.key) {
@@ -647,15 +648,16 @@ const BibWebContainer = props => {
 			initialItems: bib.current.itemsRaw
 		});
 
-		localStorage.setItem('zotero-bib-citation-style', citationStyle);
+		localStorage.setItem('zotero-bib-citation-style', style.selected);
 		localStorage.setItem('zotero-bib-extra-citation-styles', JSON.stringify(citationStyles.filter(cs => !cs.isCore)));
 		localStorage.setItem('zotero-bib-title', title);
 
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
-		buildBibliography(); // because engine settings has changed, we need to force rebuild
+		setIsBibliographyStale(true);
+		// buildBibliography(); // because engine settings has changed, we need to force rebuild
 
 		history.replace('/');
-	}, [buildBibliography, citationStyle, citationStyles, history, config, title]);
+	}, [style.selected, citationStyles, history, config, title]);
 
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
@@ -687,7 +689,7 @@ const BibWebContainer = props => {
 		try {
 			const key = await saveToPermalink(config.storeURL, {
 				title: title,
-				citationStyle: citationStyle,
+				citationStyle: style.selected,
 				items: bib.current.itemsRaw
 			});
 			setPermalink(`${window.location.origin}/${key}`);
@@ -696,7 +698,7 @@ const BibWebContainer = props => {
 			history.push('/');
 			handleError('Failed to upload bibliography', e);
 		}
-	}, [citationStyle, config, handleError, history, title]);
+	}, [style.selected, config, handleError, history, title]);
 
 	const handleScroll = useCallback(() => {
 		if(!messages.find(m => m.kind === 'WELCOME_MESSAGE')) {
@@ -716,7 +718,7 @@ const BibWebContainer = props => {
 	const handleStyleInstallerSelect = useCallback((newStyleMeta) => {
 		const newCitationStyles = getExpandedCitationStyles(citationStyles, newStyleMeta);
 		setCitationStyles(newCitationStyles);
-		setCitationStyle(newStyleMeta.name);
+		fetchAndSelectStyle(dispatchStyle, newStyleMeta.name);
 		localStorage.setItem(
 			'zotero-bib-extra-citation-styles',
 			JSON.stringify(newCitationStyles.filter(cs => !cs.isCore))
@@ -725,15 +727,14 @@ const BibWebContainer = props => {
 	}, [citationStyles]);
 
 	const handleStyleSwitchConfirm = useCallback(() => {
-		console.log('manual confirm');
-		setIsConfirmedStyle(true);
+		confirmStyle(dispatchStyle);
 		setActiveDialog(null);
 		revertCitationStyle.current = null;
 	}, []);
 
 	const handleStyleSwitchCancel = useCallback(() => {
 		if(revertCitationStyle.current) {
-			setCitationStyle(revertCitationStyle.current);
+			fetchAndSelectStyle(dispatchStyle, revertCitationStyle.current);
 			localStorage.setItem('zotero-bib-citation-style', revertCitationStyle.current);
 		}
 		setActiveDialog(null);
@@ -790,7 +791,7 @@ const BibWebContainer = props => {
 							const multipleItems = {
 								items: rootItems,
 							...(await getOneTimeBibliographyOrFallback(
-									getItemsCSL(rootItems), citationStyleXml, styleHasBibliography, useLegacy.current
+									getItemsCSL(rootItems), style.xml, style.styleHasBibliography, useLegacy.current
 								))
 							};
 
@@ -805,7 +806,7 @@ const BibWebContainer = props => {
 							const itemToConfirm = {
 								item: translationResponse.items[0],
 								...(await getOneTimeBibliographyOrFallback(
-								getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography, useLegacy.current
+								getItemsCSL([translationResponse.items[0]]), style.xml, style.styleHasBibliography, useLegacy.current
 								))
 							};
 
@@ -823,7 +824,7 @@ const BibWebContainer = props => {
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
-							getItemsCSL([translationResponse.items[0]]), citationStyleXml, styleHasBibliography, useLegacy.current
+							getItemsCSL([translationResponse.items[0]]), style.xml, style.styleHasBibliography, useLegacy.current
 							))
 						});
 
@@ -850,7 +851,7 @@ const BibWebContainer = props => {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
 		}
-	}, [addItem, citationStyleXml, handleError, messages, styleHasBibliography, updateBibliography]);
+	}, [addItem, style.xml, handleError, messages, style.styleHasBibliography, updateBibliography]);
 
 	const handleUndoDelete = useCallback(() => {
 		if(lastDeletedItem) {
@@ -867,13 +868,13 @@ const BibWebContainer = props => {
 			const storageCitationStyle = localStorage.getItem('zotero-bib-citation-style');
 			bib.current.reloadItems();
 			citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
-			if(!storageCitationStyle || storageCitationStyle === citationStyle) {
+			if(!storageCitationStyle || storageCitationStyle === style.selected) {
 				updateBibliography();
 			} else {
-				setCitationStyle(storageCitationStyle);
+				fetchAndSelectStyle(dispatchStyle, storageCitationStyle);
 			}
 		}
-	}, [citationStyle, isReadOnly, updateBibliography]);
+	}, [style.selected, isReadOnly, updateBibliography]);
 
 	const handleSaveToZoteroShow = useCallback(() => {
 		setActiveDialog('SAVE_TO_ZOTERO');
@@ -882,13 +883,6 @@ const BibWebContainer = props => {
 	const handleSaveToZoteroHide = useCallback(() => {
 		setActiveDialog(null);
 	}, []);
-
-	const fetchCitationStyleXml = useCallback(async () => {
-		setIsFetchingStyleXml(true);
-		const nextCitationStyle = await retrieveIndependentStyle(citationStyle);
-		setCitationStyleXml(nextCitationStyle);
-		setIsFetchingStyleXml(false);
-	}, [citationStyle]);
 
 	useEffect(() => {
 		if(!isCiteprocReady || !citationToCopy) {
@@ -905,10 +899,10 @@ const BibWebContainer = props => {
 	}, [isCiteprocReady, citationCopyModifiers, citationToCopy]);
 
 	useEffect(() => {
-		if(isBibliographyStale && isStyleReady && isConfirmedStyle && isDataReady) {
+		if(isBibliographyStale && isStyleReady && style.isConfirmed && isDataReady) {
 			buildBibliography();
 		}
-	}, [buildBibliography, isBibliographyStale, isStyleReady, isConfirmedStyle, isDataReady]);
+	}, [buildBibliography, isBibliographyStale, isStyleReady, style.isConfirmed, isDataReady]);
 
 	useEffect(() => {
 		if(typeof(wasDataReady) !== 'undefined' && isDataReady !== wasDataReady) {
@@ -917,43 +911,17 @@ const BibWebContainer = props => {
 	}, [isDataReady, wasDataReady]);
 
 	useEffect(() => {
-		if(typeof(prevCitationStyleXml) !== 'undefined' && citationStyleXml !== prevCitationStyleXml) {
-			if(citationStyleXml) {
-				setStyleProperties(getStyleProperties(citationStyleXml));
-			}
+		if(typeof(prevCitationStyle) !== 'undefined' && style.selected !== prevCitationStyle) {
+			revertCitationStyle.current = prevCitationStyle;
 			setIsBibliographyStale(true);
 		}
-	}, [citationStyleXml, prevCitationStyleXml]);
+	}, [style.selected, prevCitationStyle]);
 
 	useEffect(() => {
-		if(typeof(prevCitationStyle) !== 'undefined' && citationStyle !== prevCitationStyle) {
-			revertCitationStyle.current = prevCitationStyle;
-			setCitationStyleXml(null);
-		}
-	}, [citationStyle, prevCitationStyle]);
-
-	useEffect(() => {
-		if(citationStyleXml === null && !isFetchingStyleXml) {
-			console.log('needs to be confirmed');
-			setIsConfirmedStyle(isReadOnly ? true : false);
-			fetchCitationStyleXml();
-		}
-	}, [citationStyleXml, fetchCitationStyleXml, isReadOnly, isFetchingStyleXml]);
-
-	useEffect(() => {
-		if(typeof(wasSentenceCaseStyle) !== 'undefined' && isSentenceCaseStyle && !wasSentenceCaseStyle && !isConfirmedStyle) {
+		if(typeof(wasSentenceCaseStyle) !== 'undefined' && style.isSentenceCaseStyle && !wasSentenceCaseStyle && !style.isConfirmed) {
 			setActiveDialog('CONFIRM_SENTENCE_CASE_STYLE');
 		}
-	}, [isConfirmedStyle, isSentenceCaseStyle, wasSentenceCaseStyle, citationStyleXml, prevCitationStyleXml]);
-
-	useEffect(() => {
-		// Check if new style isSentenceCaseStyle which would require user confirmation. Auto-confirm if it's not.
-		// Also auto-confirm if this is first rendering because we're not showin confirmation dialog in such case.
-		if(!firstRenderComplete.current || (citationStyleXml && citationStyleXml !== prevCitationStyleXml && !isSentenceCaseStyle)) {
-			console.log('autoconfirm');
-			setIsConfirmedStyle(true);
-		}
-	}, [isSentenceCaseStyle, wasSentenceCaseStyle, citationStyleXml, prevCitationStyleXml]);
+	}, [style.isConfirmed, style.isSentenceCaseStyle, wasSentenceCaseStyle]);
 
 	useEffect(() => {
 		if(!remoteId && !isReadOnly && !localStorage.getItem('zotero-bib-visited')) {
@@ -1004,6 +972,11 @@ const BibWebContainer = props => {
 			const prefilledIdentifier = params.get('q') || '';
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
+			fetchAndSelectStyle(
+				dispatchStyle,
+				localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
+				{ isConfirmed: true }
+			);
 		}
 	}, []);
 
@@ -1014,12 +987,12 @@ const BibWebContainer = props => {
 		bibliography = { bibliography }
 		citationCopyModifiers = { citationCopyModifiers }
 		citationHtml = { citationHtml }
-		citationStyle = { citationStyle }
+		citationStyle = { style.selected }
 		citationStyles = { citationStyles }
 		editorItem = { editorItem }
 		identifier = { identifier }
-		isNoteStyle = { isNoteStyle }
-		isNumericStyle = { isNumericStyle }
+		isNoteStyle = { style.isNoteStyle }
+		isNumericStyle = { style.isNumericStyle }
 		isReadOnly={ isReadOnly }
 		isReady={ isReady }
 		isStylesDataLoading = { isStylesDataLoading }
@@ -1073,7 +1046,7 @@ const BibWebContainer = props => {
 		onSaveToZoteroHide = { handleSaveToZoteroHide }
 		permalink = { permalink }
 		stylesData={ stylesData }
-		styleHasBibliography={ styleHasBibliography }
+		styleHasBibliography={ style.styleHasBibliography }
 		title = { title }
 	/>);
 }
