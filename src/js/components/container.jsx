@@ -77,7 +77,7 @@ const BibWebContainer = props => {
 	const wasSentenceCaseStyle = usePrevious(style.isSentenceCaseStyle);
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 	const useLegacy = useRef(true);
-	const isStyleReady = style.selected && !style.isFetching;
+	const isStyleReady = style.selected && style.isConfirmed && !style.isFetching;
 
 	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
 	const isReadOnly = !!remoteId;
@@ -654,7 +654,6 @@ const BibWebContainer = props => {
 
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
 		setIsBibliographyStale(true);
-		// buildBibliography(); // because engine settings has changed, we need to force rebuild
 
 		history.replace('/');
 	}, [style.selected, citationStyles, history, config, title]);
@@ -734,7 +733,7 @@ const BibWebContainer = props => {
 
 	const handleStyleSwitchCancel = useCallback(() => {
 		if(revertCitationStyle.current) {
-			fetchAndSelectStyle(dispatchStyle, revertCitationStyle.current);
+			fetchAndSelectStyle(dispatchStyle, revertCitationStyle.current, { isConfirmed: true });
 			localStorage.setItem('zotero-bib-citation-style', revertCitationStyle.current);
 		}
 		setActiveDialog(null);
@@ -918,7 +917,7 @@ const BibWebContainer = props => {
 	}, [style.selected, prevCitationStyle]);
 
 	useEffect(() => {
-		if(typeof(wasSentenceCaseStyle) !== 'undefined' && style.isSentenceCaseStyle && !wasSentenceCaseStyle && !style.isConfirmed) {
+		if(style.isConfirmed === false) {
 			setActiveDialog('CONFIRM_SENTENCE_CASE_STYLE');
 		}
 	}, [style.isConfirmed, style.isSentenceCaseStyle, wasSentenceCaseStyle]);
