@@ -1,70 +1,66 @@
-/* eslint-disable react/no-deprecated */
-// @TODO: migrate to getDerivedStateFromProps()
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import Input from './form/input';
 import Button from './ui/button';
+import { usePrevious } from '../hooks';
 
-class IdInput extends React.PureComponent {
-	state = {
-		identifier: ''
-	}
+const IdInput = ({ identifier, isTranslating, onTranslationRequest }) => {
+	const inputRef = useRef(null);
+	const [value, setValue] = useState(identifier);
+	const prevIdentifier = usePrevious(identifier);
+	const wasTranslating = usePrevious(isTranslating)
 
-	componentDidMount() {
-		this.setState({ identifier: this.props.identifier });
-	}
+	const handleChange = useCallback(newValue => {
+		setValue(newValue);
+	}, []);
 
-	componentWillReceiveProps(nextProps) {
-		if(this.props.isTranslating && !nextProps.isTranslating) {
-			this.inputField.focus();
-		}
-		if(this.props.identifier && !nextProps.identifier) {
-			this.setState({ identifier: nextProps.identifier });
-		}
-	}
-
-	handleChange(identifier) {
-		this.setState({ identifier });
-	}
-
-	handleCite() {
-		const { identifier } = this.state;
-		if(identifier.length > 0 && !this.props.isTranslating) {
-			this.props.onTranslationRequest(identifier);
+	const handleCite = () => {
+		if(value.length > 0 && !isTranslating) {
+			onTranslationRequest(value);
 		}
 	}
 
-	render() {
-		return (
-			<div className="id-input-container">
-				<Input
-					autoFocus
-					className="form-control form-control-lg id-input"
-					isBusy={ this.props.isTranslating }
-					onBlur={ () => true /* do not commit on blur */ }
-					onChange={ this.handleChange.bind(this) }
-					onCommit={ this.handleCite.bind(this) }
-					placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title"
-					ref = { i => this.inputField = i }
-					tabIndex={ 0 }
-					type="text"
-					value={ this.state.identifier }
-				/>
-				<Button
-					className="btn-lg btn-secondary"
-					onClick={ this.handleCite.bind(this) }
-				>
-					Cite
-				</Button>
-			</div>
-		);
-	}
+	useEffect(() => {
+		if(typeof(prevIdentifier !== 'undefined') && identifier !== prevIdentifier) {
+			setValue(identifier);
+		}
+	}, [identifier, prevIdentifier]);
 
-	static propTypes = {
-		identifier: PropTypes.string,
-		isTranslating: PropTypes.bool,
-		onTranslationRequest: PropTypes.func.isRequired,
-	}
+	useEffect(() => {
+		if(wasTranslating && !isTranslating) {
+			inputRef.current.focus();
+		}
+	}, [isTranslating, wasTranslating]);
+
+	return (
+		<div className="id-input-container">
+			<Input
+				autoFocus
+				className="form-control form-control-lg id-input"
+				isBusy={ isTranslating }
+				onBlur={ () => true /* do not commit on blur */ }
+				onChange={ handleChange }
+				onCommit={ handleCite }
+				placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title"
+				ref = { inputRef }
+				tabIndex={ 0 }
+				type="text"
+				value={ value }
+			/>
+			<Button
+				className="btn-lg btn-secondary"
+				onClick={ handleCite }
+			>
+				Cite
+			</Button>
+		</div>
+	);
 }
 
-export default IdInput;
+IdInput.propTypes = {
+	identifier: PropTypes.string,
+	isTranslating: PropTypes.bool,
+	onTranslationRequest: PropTypes.func.isRequired,
+}
+
+export default memo(IdInput);
