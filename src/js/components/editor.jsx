@@ -11,7 +11,7 @@ import baseMappings from 'zotero-base-mappings';
 import Button from './ui/button';
 import ItemBox from './itembox';
 import Spinner from './ui/spinner';
-import { getItemTypeMeta } from '../utils';
+import { getItemTypeMeta } from '../api-utils';
 import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
 import Modal from './modal';

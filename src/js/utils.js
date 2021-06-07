@@ -1,10 +1,10 @@
-import api from 'zotero-api-client';
 import balanced from 'balanced-match';
 import baseMappings from 'zotero-base-mappings';
-import CiteprocWrapper from './citeproc-wrapper';
 import ZoteroBib from 'zotero-translation-client';
 
-const stylesCache = {};
+import CiteprocWrapper from './citeproc-wrapper';
+import { getItemTypes, getItemTypeMeta } from './api-utils';
+
 
 const ensureNoBlankItems = itemsCSL => itemsCSL.map(item => {
 	if(!('author' in item) && !('title' in item) && !('issued' in item)) {
@@ -69,24 +69,6 @@ const fetchWithCachedFallback = async url => {
 		return await fetch(url, { 'cache': 'force-cache' });
 	}
 }
-
-const getItemTypes = async () => {
-	return (await api().itemTypes().get()).getData();
-};
-
-const getItemTypeMeta = async (itemType) => {
-	var [itemTypeR, itemTypeFieldsR, creatorTypesR] = await Promise.all([
-		api().itemTypes().get(),
-		api().itemTypeFields(itemType).get(),
-		api().itemTypeCreatorTypes(itemType).get()
-	]);
-
-	return {
-		itemTypes: itemTypeR.getData(),
-		itemTypeFields: itemTypeFieldsR.getData(),
-		itemTypeCreatorTypes: creatorTypesR.getData()
-	};
-};
 
 const validateItem = async item => {
 	const { itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(item.itemType);
@@ -438,7 +420,6 @@ export {
 	getCitation,
 	getExpandedCitationStyles,
 	getItemsCSL,
-	getItemTypeMeta,
 	getItemTypes,
 	getOneTimeBibliographyOrFallback,
 	isLikeUrl,
