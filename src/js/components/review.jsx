@@ -4,8 +4,10 @@ import Button from './ui/button';
 import { formatBib, formatFallback } from '../cite';
 
 const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, onReviewDismiss, styleHasBibliography }) => {
-	const { bibliographyItems, bibliographyMeta } = itemUnderReview;
-	const html = styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems);
+	const { bibliographyItems, bibliographyMeta } = itemUnderReview || {};
+	const html = itemUnderReview ?
+		styleHasBibliography ? formatBib(bibliographyItems, bibliographyMeta) : formatFallback(bibliographyItems) :
+		'';
 
 	return isTranslating ? (
 		<section className="section section-review review">

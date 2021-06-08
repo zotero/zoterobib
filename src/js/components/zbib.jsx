@@ -69,7 +69,7 @@ class ZBib extends React.PureComponent {
 							</section>
 						)
 					}
-					{ this.props.itemUnderReview &&  <Review { ...this.props} /> }
+					{ (this.props.isTranslating || this.props.itemUnderReview) &&  <Review { ...this.props} /> }
 					<BibliographySection { ...this.props} />
 
 					{
