@@ -593,8 +593,7 @@ const BibWebContainer = props => {
 		} else {
 			return await handleTranslateIdentifier(selectedItem.key);
 		}
-	// citationStyleXml is required here to break circular dependency. TODO: refactor so it isn't TODO: test if style.xml does it?
-	}, [style.xml, handleTranslateIdentifier, identifier]);
+	}, [handleTranslateIdentifier, identifier]);
 
 	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
