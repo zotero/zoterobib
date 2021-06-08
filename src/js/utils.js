@@ -168,7 +168,7 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 
 	citeproc.free();
 
-	return { bibliographyItems, bibliographyMeta };
+	return { bibliographyItems, bibliographyMeta, styleHasBibliography };
 };
 
 const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
