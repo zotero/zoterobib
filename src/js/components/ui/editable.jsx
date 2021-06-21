@@ -1,49 +1,63 @@
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import escapeHtml from 'escape-html';
-
 import Input from '../form/input';
-import SelectInput from '../form/select';
 import TextAreaInput from '../form/text-area';
+import Select from '../form/select';
 import { noop } from '../../utils';
+import { pick } from '../../immutable';
+
 
 class EditableContent extends React.PureComponent {
-	get content() {
-		return escapeHtml(this.props.value).replace(/\n/g, '<br />');
+	get hasValue() {
+		const { input, value } = this.props;
+		return !!(value || input && input.props.value);
+	}
+
+	get isSelect() {
+		const { input, inputComponent } = this.props;
+		return inputComponent === Select || input && input.type == Select;
+	}
+
+	get isTextarea() {
+		const { input, inputComponent } = this.props;
+		return inputComponent === TextAreaInput || input && input.type === TextAreaInput;
 	}
 
 	get displayValue() {
-		const { options, value, display, placeholder } = this.props;
+		const { options, display, input } = this.props;
+		const value = this.props.value || input && input.props.value;
+		const placeholder = this.props.placeholder || input && input.props.placeholder;
 
-		return value ?
-			options && options.find(e => e.value == value).label || display ||  value :
-			placeholder;
+		if(!this.hasValue) { return placeholder; }
+		if(display) { return display; }
+
+		if(this.isSelect && options) {
+			const displayValue = options.find(e => e.value == value);
+			return displayValue ? displayValue.label : value;
+		}
+
+		return value;
 	}
 
 	render() {
-		if(this.props.inputComponent === TextAreaInput) {
-			return <span dangerouslySetInnerHTML={ { __html: this.content } } />;
-		} else {
-			const className = {
-				'editable-content': true,
-				'placeholder': !this.props.value && this.props.placeholder
-			};
-			return (
-				<span className={ cx(className) }>{ this.displayValue }</span>
-			);
-		}
+		const className = {
+			'editable-content': true,
+			'placeholder': !this.hasValue
+		};
+
+		return <div title={ this.props.title } className={ cx(className) }>{ this.displayValue }</div>;
 	}
 
 	static defaultProps = {
-		value: ''
+		value: '',
+		placeholder: ''
 	};
 
 	static propTypes = {
 		display: PropTypes.string,
-		inputComponent: PropTypes.func,
+		input: PropTypes.element,
+		inputComponent: PropTypes.elementType,
 		options: PropTypes.array,
 		placeholder: PropTypes.string,
 		value: PropTypes.oneOfType([
@@ -53,19 +67,8 @@ class EditableContent extends React.PureComponent {
 	};
 }
 
+
 class Editable extends React.PureComponent {
-	setInput(input) {
-		this.props.inputRef(input);
-	}
-
-	handleClick(event) {
-		this.props.onEditableClick(event);
-	}
-
-	handleFocus(event) {
-		this.props.onEditableFocus(event);
-	}
-
 	get isActive() {
 		return (this.props.isActive || this.props.isBusy) && !this.props.isDisabled;
 	}
@@ -75,46 +78,53 @@ class Editable extends React.PureComponent {
 	}
 
 	get className() {
+		// input type auto-detection doesn't work if element is nested (which it can be, see
+		// BoxFieldInput). This causes #440. TODO: drop auto-detection and always use explicit prop
+		// to define textarea/select editables
+		const { input, inputComponent, isSelect, isTextArea } = this.props;
 		return {
 			'editable': true,
 			'editing': this.isActive,
-			'textarea': this.props.inputComponent === TextAreaInput,
-			'select': this.props.inputComponent === SelectInput
+			'textarea': inputComponent === TextAreaInput || (input && input.type === TextAreaInput) || isTextArea,
+			'select': inputComponent === Select || (input && input.type === Select) || isSelect,
 		};
 	}
 
 	renderContent() {
 		const hasChildren = typeof this.props.children !== 'undefined';
 		return (
-			<span className="editable-value">
+			<React.Fragment>
 				{
-					hasChildren ?
-						this.props.children :
-						<EditableContent { ...this.props } />
+				hasChildren ?
+					this.props.children :
+					<EditableContent { ...this.props } />
 				}
-			</span>
+			</React.Fragment>
 		);
 	}
 
 	renderControls() {
-		const InputComponent = this.props.inputComponent;
-		return (
-			<InputComponent
-				className="editable-control"
-				isReadOnly={ this.isReadOnly }
-				ref={ this.setInput.bind(this) }
-				{ ...this.props }
+		const { input: InputElement, inputComponent: InputComponent } = this.props;
+		if(InputElement) {
+			return InputElement;
+		} else {
+			const { className, ...props } = this.props;
+			return <InputComponent
+				className={ cx(className, "editable-control") }
+				{ ...props }
 			/>
-		);
+		}
 	}
 
 	render() {
+		const { isDisabled, tabIndex, ...rest } = this.props;
 		return (
 			<div
-				tabIndex={ this.isActive ? null : 0 }
-				onMouseDown={ this.handleClick.bind(this) }
-				onFocus={ this.handleFocus.bind(this) }
-				className={ cx(this.className) }
+				tabIndex={ isDisabled ? null : this.isActive ? null : tabIndex }
+				onClick={ event => this.props.onClick(event) }
+				onFocus={ event => this.props.onFocus(event) }
+				className={ cx(this.className, { 'disabled': isDisabled }) }
+				{ ...pick(rest, p => p.startsWith('data-')) }
 			>
 				{ this.isActive ? this.renderControls() : this.renderContent() }
 			</div>
@@ -122,19 +132,22 @@ class Editable extends React.PureComponent {
 	}
 	static defaultProps = {
 		inputComponent: Input,
-		inputRef: noop,
-		onEditableClick: noop,
-		onEditableFocus: noop,
+		onClick: noop,
+		onFocus: noop,
+		tabIndex: 0,
 	};
 
 	static propTypes = {
 		children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
-		inputComponent: PropTypes.func,
-		inputRef: PropTypes.func,
+		input: PropTypes.element,
+		inputComponent: PropTypes.elementType,
 		isActive: PropTypes.bool,
 		isBusy: PropTypes.bool,
 		isDisabled: PropTypes.bool,
 		isReadOnly: PropTypes.bool,
+		isSelect: PropTypes.bool,
+		isTextArea: PropTypes.bool,
+		tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	};
 }
 

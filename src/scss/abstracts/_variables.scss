@@ -33,7 +33,9 @@ $shade-4: #bbb;
 $shade-5: #999;
 $shade-6: #777;
 $shade-7: #222;
-
+$shade-8:  #333;
+$shade-9:  #111;
+$shade-10: #000;
 
 //
 // Body
@@ -55,6 +57,9 @@ $font-family-base: $font-family-sans-serif;
 
 $font-size-base: 16px;
 $line-height-base: 1.5;
+
+$line-height-large: 26px;
+$line-height-large-touch: 42px;
 
 $font-size-lg: 24px;
 $font-size-sm: 14px;
@@ -79,6 +84,8 @@ $link-transition: 0.15s ease;
 $lead-font-size:        24px;
 $lead-font-size-mobile: 20px;
 $lead-font-weight:      300;
+
+$text-color: $shade-9;
 
 
 //
@@ -134,7 +141,9 @@ $menu-bg: $body-bg;
 $menu-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.2);
 $menu-border-radius: $border-radius-sm;
 $menu-item-hover-bg: $shade-1;
-
+$menu-item-selected-bg: $shade-2;
+$menu-devider: $shade-2;
+$menu-no-results-color: $shade-5;
 
 //
 // Z-index master list
@@ -225,6 +234,13 @@ $input-border-width: $border-width;
 
 $input-transition: 0.15s ease;
 
+// Forms
+$form-bg-touch:             $shade-1;
+$input-color:               $text-color;
+$input-bg:                  $body-bg;
+$input-border-color-touch:  $shade-5;
+$checkbox-border-touch:     $shade-4;
+$checkbox-checked-bg-touch: $secondary;
 
 //
 // Icon

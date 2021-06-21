@@ -1,170 +1,142 @@
-'use strict';
-
-import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { noop } from '../../utils';
+import PropTypes from 'prop-types';
+import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import Spinner from '../ui/spinner';
+import { noop } from '../../utils';
+import { pick } from '../../immutable';
+import { usePrevious } from '../../hooks';
 
-class Input extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: props.value
-		};
-	}
+const NATIVE_INPUT_PROPS = ['autoFocus', 'form', 'id', 'inputMode', 'max', 'maxLength',
+'min', 'minLength', 'name', 'placeholder', 'type', 'spellCheck', 'step', 'tabIndex'];
 
-	cancel(event = null) {
-		this.props.onCancel(this.hasChanged, event);
-	}
+const Input = memo(forwardRef((props, ref) => {
+	const { className = 'form-control', inputGroupClassName, isBusy, isDisabled, isReadOnly,
+	isRequired, onBlur = noop, onCancel = noop, onCommit = noop, onChange = noop, onFocus = noop,
+	onKeyDown = noop, selectOnFocus, validationError, value: initialValue, ...rest } = props;
+	const [value, setValue] = useState(initialValue || '');
+	const input = useRef(null);
+	const prevInitialValue = usePrevious(initialValue);
+	const prevValidationError = usePrevious(validationError);
 
-	commit(event = null) {
-		this.props.onCommit(this.state.value, this.hasChanged, event);
-	}
+	const hasBeenCancelled = useRef(false);
+	const hasBeenCommitted = useRef(false);
 
-	focus() {
-		if(this.input != null) {
-			this.input.focus();
-			this.props.selectOnFocus && this.input.select();
+	//reset on every render
+	hasBeenCancelled.current = false;
+	hasBeenCommitted.current = false;
+
+	const groupClassName = cx({
+		'input-group': true,
+		'input': true,
+		'busy': isBusy
+	}, inputGroupClassName);
+
+	useImperativeHandle(ref, () => ({
+		focus: () => {
+			input.current.focus();
+			if(selectOnFocus) {
+				input.current.select();
+			}
 		}
-	}
+	}));
 
-	componentWillReceiveProps({ value }) {
-		if (value !== this.props.value) {
-			this.setState({ value });
-		}
-	}
+	const handleChange = useCallback(ev => {
+		setValue(ev.currentTarget.value);
+		onChange(ev.currentTarget.value);
+	}, [onChange]);
 
-	handleChange({ target }) {
-		this.setState({ value: target.value });
-		this.props.onChange(target.value);
-	}
-
-	handleBlur(event) {
-		const shouldCancel = this.props.onBlur(event);
-		shouldCancel ? this.cancel(event) : this.commit(event);
-	}
-
-	handleFocus(event) {
-		this.props.selectOnFocus && event.target.select();
-		this.props.onFocus(event);
-	}
-
-	handleKeyDown(event) {
-		switch (event.key) {
-			case 'Escape':
-				this.cancel(event);
-			break;
-			case 'Enter':
-				this.commit(event);
-			break;
-		default:
+	const handleBlur = useCallback(ev => {
+		if(ev.relatedTarget && ev.relatedTarget.dataset.suggestion) {
 			return;
 		}
-	}
+		if (hasBeenCancelled.current || hasBeenCommitted.current) {
+			return;
+		}
+		const shouldCancel = onBlur(event);
+		if(shouldCancel) {
+			onCancel(value !== initialValue, ev);
+			input.current.blur();
+		} else {
+			onCommit(value, value !== initialValue, ev);
+		}
+	}, [initialValue, onBlur, onCancel, onCommit, value]);
 
-	get hasChanged() {
-		return this.state.value !== this.props.value;
-	}
+	const handleFocus = useCallback(ev => {
+		if(selectOnFocus) {
+			ev.currentTarget.select();
+		}
+		onFocus(ev);
+	}, [onFocus, selectOnFocus]);
 
-	get className() {
-		return {
-			'input-group': true,
-			'busy': this.props.isBusy
-		};
-	}
+	const handleKeyDown = useCallback(ev => {
+		switch (event.key) {
+			case 'Escape':
+				onCancel(ev, value !== initialValue);
+				input.current.blur();
+			break;
+			case 'Enter':
+				onCommit(value, value !== initialValue, ev);
+			break;
+		}
+		onKeyDown(ev);
+	}, [initialValue, onCancel, onCommit, onKeyDown, value])
 
-	renderInput() {
-		const extraProps = Object.keys(this.props).reduce((aggr, key) => {
-			if(key.match(/^(aria-|data-).*/)) {
-				aggr[key] = this.props[key];
-			}
-			return aggr;
-		}, {});
-		return (
-			<input
-				autoFocus={ this.props.autoFocus }
-				className={ cx('form-control', this.props.className) }
-				disabled={ this.props.isDisabled }
-				form={ this.props.form }
-				id={ this.props.id }
-				inputMode={ this.props.inputMode }
-				max={ this.props.max }
-				maxLength={ this.props.maxLength }
-				min={ this.props.min }
-				minLength={ this.props.minLength }
-				name={ this.props.name }
-				onBlur={ this.handleBlur.bind(this) }
-				onChange={ this.handleChange.bind(this) }
-				onFocus={ this.handleFocus.bind(this) }
-				onKeyDown={ this.handleKeyDown.bind(this) }
-				placeholder={ this.props.placeholder }
-				readOnly={ this.props.isReadOnly }
-				ref={ input => this.input = input }
-				required={ this.props.isRequired }
-				spellCheck={ this.props.spellCheck }
-				step={ this.props.step }
-				tabIndex={ this.props.tabIndex }
-				type={ this.props.type }
-				value={ this.state.value }
-				{ ...extraProps }
-			/>
-		);
-	}
+	useEffect(() => {
+		if(initialValue !== prevInitialValue) {
+			setValue(initialValue);
+		}
+	}, [initialValue, prevInitialValue]);
 
-	renderSpinner() {
-		return this.props.isBusy ? <Spinner /> : null;
-	}
+	useEffect(() => {
+		if(validationError !== prevValidationError && input.current.setCustomValidity) {
+			input.current.setCustomValidity(validationError ? validationError : '');
+		}
+	}, [validationError, prevValidationError]);
 
-	render() {
-		return (
-			<div className={ cx(this.className) }>
-				{ this.renderInput() }
-				{ this.renderSpinner() }
-			</div>
-		);
-	}
-
-	static defaultProps = {
-		onBlur: noop,
-		onCancel: noop,
-		onChange: noop,
-		onCommit: noop,
-		onFocus: noop,
-		tabIndex: -1,
-		type: 'text',
-		value: '',
+	const inputProps = {
+		className,
+		disabled: isDisabled,
+		onBlur: handleBlur,
+		onChange: handleChange,
+		onFocus: handleFocus,
+		onKeyDown: handleKeyDown,
+		readOnly: isReadOnly,
+		ref: input,
+		required: isRequired,
+		value,
+		...pick(rest, NATIVE_INPUT_PROPS),
+		...pick(rest, key => key.match(/^(aria-|data-|on[A-Z]).*/))
 	};
 
-	static propTypes = {
-		autoFocus: PropTypes.bool,
-		className: PropTypes.string,
-		id: PropTypes.string,
-		isBusy: PropTypes.bool,
-		isDisabled: PropTypes.bool,
-		isReadOnly: PropTypes.bool,
-		isRequired: PropTypes.bool,
-		onBlur: PropTypes.func.isRequired,
-		onCancel: PropTypes.func.isRequired,
-		onChange: PropTypes.func.isRequired,
-		onCommit: PropTypes.func.isRequired,
-		onFocus: PropTypes.func.isRequired,
-		placeholder: PropTypes.string,
-		selectOnFocus: PropTypes.bool,
-		tabIndex: PropTypes.number,
-		type: PropTypes.string.isRequired,
-		value: PropTypes.string.isRequired,
-		form: PropTypes.string,
-		inputMode: PropTypes.string,
-		max: PropTypes.number,
-		maxLength: PropTypes.number,
-		min: PropTypes.number,
-		minLength: PropTypes.number,
-		name: PropTypes.string,
-		spellCheck: PropTypes.bool,
-		step: PropTypes.number,
-	};
-}
+	var inputComponent = <input { ...inputProps } />;
+
+	return (
+		<div className={ groupClassName }>
+			{ inputComponent }
+			{ isBusy ? <Spinner /> : null }
+		</div>
+	);
+}));
+
+Input.displayName = 'Input';
+
+Input.propTypes = {
+	className: PropTypes.string,
+	inputGroupClassName: PropTypes.string,
+	isBusy: PropTypes.bool,
+	isDisabled: PropTypes.bool,
+	isReadOnly: PropTypes.bool,
+	isRequired: PropTypes.bool,
+	onBlur: PropTypes.func,
+	onCancel: PropTypes.func,
+	onChange: PropTypes.func,
+	onCommit: PropTypes.func,
+	onFocus: PropTypes.func,
+	onKeyDown: PropTypes.func,
+	selectOnFocus: PropTypes.bool,
+	validationError: PropTypes.string,
+	value: PropTypes.string,
+};
 
 export default Input;

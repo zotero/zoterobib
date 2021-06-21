@@ -1,33 +1,40 @@
-'use strict';
-
 import cx from 'classnames';
-import Icon from './icon';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { forwardRef, memo } from 'react';
+
 import { noop } from '../../utils';
 
-class Button extends React.Component {
-	render() {
-		const { children, onClick, className, ...props } = this.props;
+const Button = memo(forwardRef((props, ref) => {
+	const { children, className, icon, ...rest } = props;
 		const classNames = cx('btn', className, {
-			'btn-icon': React.Children.toArray(this.props.children).some(c => c.type === Icon)
+			'btn-icon': icon
 		});
 		return (
-			<button  className={ classNames } onClick={ onClick } { ...props }>
+			<button
+				className={ classNames }
+				ref={ ref }
+				{ ...rest }
+			>
 				{ children }
 			</button>
 		);
-	}
+}));
 
-	static defaultProps = {
-		onClick: noop
-	}
+Button.displayName = "Button";
 
-	static propTypes = {
-		children: PropTypes.node,
-		className: PropTypes.string,
-		onClick: PropTypes.func
-	}
-}
+Button.defaultProps = {
+	onBlur: noop,
+	onClick: noop,
+	onFocus: noop,
+};
+
+Button.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+	icon: PropTypes.bool,
+	onBlur: PropTypes.func,
+	onClick: PropTypes.func,
+	onFocus: PropTypes.func,
+};
 
 export default Button;

@@ -411,6 +411,25 @@ const getItemsCSL = items => {
 	return bib.itemsCSL;
 };
 
+const scrollIntoViewIfNeeded = (element, container, opts = {}) => {
+	const containerTop = container.scrollTop;
+	const containerBottom = containerTop + container.clientHeight;
+	const elementTop = element.offsetTop;
+	const elementBottom = elementTop + element.clientHeight;
+
+	if(elementTop < containerTop || elementBottom > containerBottom) {
+		const before = container.scrollTop;
+		element.scrollIntoView(opts);
+		const after = container.scrollTop;
+		return after - before;
+	}
+	return 0;
+}
+
+const enumerateObjects = (objects, key = 'id', start = 0) => {
+	return objects.map((o, i) => ({ ...o, [key]: i + start }));
+}
+
 export {
 	calcOffset,
 	dedupMultipleChoiceItems,
@@ -431,7 +450,9 @@ export {
 	retrieveStylesData,
 	reverseMap,
 	saveToPermalink,
+	scrollIntoViewIfNeeded,
 	splice,
 	validateItem,
 	validateUrl,
+	enumerateObjects,
 };

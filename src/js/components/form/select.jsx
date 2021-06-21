@@ -1,158 +1,136 @@
-'use strict';
-
-import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { noop } from '../../utils';
+import PropTypes from 'prop-types';
+import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 
+import Select from '../ui/select';
 import Spinner from '../ui/spinner';
-import { default as Select } from 'react-select';
+import { usePrevious } from '../../hooks';
+import { pick } from '../../immutable';
 
-class SelectInput extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: props.value
-		};
-	}
+const SelectInput = forwardRef((props, ref) => {
+	const { autoFocus, className, clearable, isDisabled, isReadOnly, isRequired, id, placeholder, tabIndex,
+		inputGroupClassName, isBusy, value: initialValue, options, onBlur, onCancel, onCommit, onChange,
+		onFocus, useNative, ...rest } = props;
+	const [value, setValue]  = useState(initialValue);
+	const prevInitialValue = usePrevious(initialValue);
+	const input = useRef(null);
 
-	cancel(event = null) {
-		this.props.onCancel(this.hasChanged, event);
-	}
+	const groupClassName = cx({
+		'busy': isBusy,
+		'input-group': true,
+		'select': true,
+		[inputGroupClassName]: !!inputGroupClassName
+	});
 
-	commit(event = null, value = null, force = false) {
-		this.props.onCommit(value || this.state.value, force ? true : this.hasChanged, event);
-	}
-
-	focus() {
-		if(this.input != null) {
-			this.input.focus();
+	useImperativeHandle(ref, () => ({
+		focus: () => {
+			input.current.focus();
 		}
-	}
+	}));
 
-	componentWillReceiveProps({ value }) {
-		if (value !== this.props.value) {
-			this.setState({ value });
+	const handleBlur = useCallback(ev => {
+		if(onBlur) {
+			onBlur(ev);
 		}
-	}
-
-	handleChange(value) {
-		value = value !== null || (value === null && this.props.clearable) ?
-			value : this.props.value;
-		this.setState({ value });
-
-		if(this.props.onChange(value) || this.forceCommitOnNextChange) {
-			this.commit(null, value, value !== this.props.value);
+		if(onCancel) {
+			onCancel(value !== initialValue, ev);
 		}
-		this.forceCommitOnNextChange = false;
-	}
+	}, [initialValue, onCancel, onBlur, value]);
 
-	handleBlur(event) {
-		this.props.onBlur(event);
-		this.cancel();
-		if(this.props.autoBlur) {
-			this.forceCommitOnNextChange = true;
+	// const handleFocus = useCallback(() => {}, []);
+	const handleKeyDown = useCallback(ev => {
+		if(ev.key === 'Escape' && onCancel) {
+			onCancel();
 		}
-	}
+	}, [onCancel]);
 
-	handleFocus(event) {
-		this.props.onFocus(event);
-	}
+	const handleChange = useCallback((newValue, ev) => {
+		newValue = newValue !== null || (newValue === null && clearable) ?
+			newValue : initialValue;
 
-	handleKeyDown(event) {
-		switch (event.key) {
-			case 'Escape':
-				this.cancel(event);
-			break;
-		default:
-			return;
+		setValue(newValue);
+
+		if(onChange(newValue)) {
+			if(!ev) {
+				const source = input.current && typeof input.current.getElement === 'function' ?
+					input.current.getElement() : input.current.input;
+				ev = {
+					type: 'change',
+					currentTarget: source,
+					target: source
+				}
+			}
+			onCommit(newValue, newValue !== initialValue, ev);
 		}
-	}
+	}, [clearable, initialValue, onChange, onCommit]);
 
-	get hasChanged() {
-		return this.state.value !== this.props.value;
-	}
+	const handleNativeChange = useCallback(ev => handleChange(ev.target.value, ev), [handleChange]);
 
-	get defaultSelectProps() {
-		return {
-			simpleValue: true,
-			clearable: false,
-		};
-	}
+	const commonProps = { disabled: isDisabled, onBlur: handleBlur, onFocus, readOnly:
+	isReadOnly, ref, required: isRequired, id, value, tabIndex };
 
-	get className() {
-		return {
-			'input-group': true,
-			'busy': this.props.isBusy
-		};
-	}
+	useEffect(() => {
+		if(initialValue !== prevInitialValue && initialValue !== value) {
+			setValue(initialValue);
+		}
+	}, [initialValue, value, prevInitialValue]);
 
-	renderInput() {
-		return <Select
-			{ ...this.defaultSelectProps }
-			{ ...this.props }
-			autoFocus= { this.props.autoFocus }
-			className={ cx('form-control', this.props.className) }
-			disabled={ this.props.isDisabled }
-			id={ this.props.id }
-			onBlur={ this.handleBlur.bind(this) }
-			onChange={ this.handleChange.bind(this) }
-			onFocus={ this.handleFocus.bind(this) }
-			onInputKeyDown={ this.handleKeyDown.bind(this) }
-			options={ this.props.options }
-			placeholder={ this.props.placeholder }
-			readOnly={ this.props.isReadOnly }
-			ref={ input => this.input = input }
-			required={ this.props.isRequired }
-			tabIndex={ this.props.tabIndex }
-			value={ this.state.value }
-		/>;
-	}
+	return (
+		<div className={ groupClassName }>
+			{ useNative ? (
+				<div className="native-select-wrap" >
+					<select
+						{ ...commonProps }
+						{ ...({ autoFocus, placeholder })}
+						onKeyDown={ handleKeyDown }
+						onChange={ handleNativeChange }
+						ref={ input }
+						{ ... pick(rest, p => p.startsWith('data-')) }
+					>
+						{ options.map(({ value, label }) => (
+							<option key={ value } value={ value }>{ label }</option>)
+						)}
+					</select>
+					<div className={ className }>
+						{ (options.find(o => o.value === value) || options[0] || {}).label }
+					</div>
+				</div>
+			) : (
+				<Select
+					{ ...props }
+					{ ...commonProps }
+					onInputKeyDown={ handleKeyDown }
+					onChange={ handleChange }
+					ref={ input }
+					{ ... pick(rest, p => p.startsWith('data-')) }
+				/>
+			) }
+			{ isBusy ? <Spinner className="small" /> : null }
+		</div>
+	);
+});
 
-	renderSpinner() {
-		return this.props.isBusy ? <Spinner /> : null;
-	}
+SelectInput.propTypes = {
+	autoFocus: PropTypes.bool,
+	className: PropTypes.string,
+	clearable: PropTypes.bool,
+	id: PropTypes.string,
+	inputGroupClassName: PropTypes.string,
+	isBusy: PropTypes.bool,
+	isDisabled: PropTypes.bool,
+	isReadOnly: PropTypes.bool,
+	isRequired: PropTypes.bool,
+	onBlur: PropTypes.func,
+	onCancel: PropTypes.func,
+	onChange: PropTypes.func.isRequired,
+	onCommit: PropTypes.func.isRequired,
+	onFocus: PropTypes.func,
+	options: PropTypes.array.isRequired,
+	placeholder: PropTypes.string,
+	searchable: PropTypes.bool,
+	tabIndex: PropTypes.number,
+	useNative: PropTypes.bool,
+	value: PropTypes.string.isRequired,
+};
 
-	render() {
-		return (
-			<div className={ cx(this.className) }>
-				{ this.renderInput() }
-				{ this.renderSpinner() }
-			</div>
-		);
-	}
-
-	static defaultProps = {
-		onBlur: noop,
-		onCancel: noop,
-		onChange: noop,
-		onCommit: noop,
-		onFocus: noop,
-		options: [],
-		selectProps: {},
-		tabIndex: -1,
-		value: '',
-	};
-
-	static propTypes = {
-		autoFocus: PropTypes.bool,
-		className: PropTypes.string,
-		id: PropTypes.string,
-		isBusy: PropTypes.bool,
-		isDisabled: PropTypes.bool,
-		isReadOnly: PropTypes.bool,
-		isRequired: PropTypes.bool,
-		onBlur: PropTypes.func.isRequired,
-		onCancel: PropTypes.func.isRequired,
-		onChange: PropTypes.func.isRequired,
-		onCommit: PropTypes.func.isRequired,
-		onFocus: PropTypes.func.isRequired,
-		options: PropTypes.array.isRequired,
-		placeholder: PropTypes.string,
-		selectProps: PropTypes.object.isRequired,
-		tabIndex: PropTypes.number,
-		value: PropTypes.string.isRequired,
-	};
-}
-
-export default SelectInput;
+export default memo(SelectInput);
