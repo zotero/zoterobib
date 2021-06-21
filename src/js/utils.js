@@ -120,28 +120,6 @@ const saveToPermalink = async (url, data) => {
 	return key;
 };
 
-const getCitations = (bib, citeproc) => {
-	const items = bib.itemsRaw.map(item => item.key);
-	const citations = [];
-	//@NOTE: this is deprecated but seems to be the only way to reset registry
-	//       otherwise previous calls to appendCitationCluster aggregate incorrectly
-	//		 Alternatively we could do even more hackier:
-	//		 citeproc.registry = new CSL.Registry(citeproc)
-	citeproc.restoreProcessorState();
-	citeproc.updateItems(items);
-
-	bib.itemsRaw.forEach(item => {
-		let outList = citeproc.appendCitationCluster({
-			'citationItems': [{ 'id': item.key }],
-			'properties': {}
-		}, true);
-		outList.forEach(listItem => {
-			citations[listItem[0]] = listItem[1];
-		});
-	});
-	return citations;
-};
-
 const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, useLegacy, opts = {}) => {
 	var bibliographyItems, bibliographyMeta = null;
 
@@ -169,48 +147,6 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 	citeproc.free();
 
 	return { bibliographyItems, bibliographyMeta, styleHasBibliography };
-};
-
-const getCitation = (bib, itemId, modifiers, formats, citeproc, isWarm = false) => {
-	const items = bib.itemsRaw.map(item => item.key);
-	if(!isWarm) {
-		citeproc.restoreProcessorState(items.map((key, i) => {
-			return {
-				citationID: key,
-				citationItems: [{ 'id': key }],
-				properties: {
-					index: i
-				}
-			};
-		}));
-	}
-
-	const index = items.indexOf(itemId);
-	const pre = items.slice(0, index).map((key, i) => ([key, i]));
-	const post = items.slice(index + 1).map((key, i) => ([key, i]));
-	const citation = {
-		'citationItems': [{ 'id': itemId }],
-		'properties': {}
-	};
-
-	if(modifiers) {
-		for(let i in modifiers) {
-			let prop = i == 'suppressAuthor' ? 'suppress-author' : i;
-			citation.citationItems[0][prop] = modifiers[i];
-		}
-	}
-
-	const output = {};
-	const validFormats = ['text', 'html'];
-
-	if (!formats || !formats.length) {
-		formats = validFormats;
-	}
-
-	for (let format of formats.filter(f => validFormats.includes(f))) {
-		output[format] = citeproc.previewCitationCluster(citation, pre, post, format);
-	}
-	return output;
 };
 
 const whitelist = [
@@ -436,7 +372,6 @@ export {
 	ensureNoBlankItems,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
-	getCitation,
 	getExpandedCitationStyles,
 	getItemsCSL,
 	getItemTypes,
