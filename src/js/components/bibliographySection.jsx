@@ -86,7 +86,7 @@ class BibliographySection extends React.PureComponent {
 									autoFocus
 									selectOnFocus
 								/>
-								<Button>
+								<Button icon>
 									<Icon type={ '28/pencil' } width="28" height="28" />
 								</Button>
 							</h2>

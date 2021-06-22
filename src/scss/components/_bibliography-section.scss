@@ -73,7 +73,13 @@
 				flex: 1 1 auto;
 			}
 
-			.editable-value {
+			.editable {
+				@media (min-width: $bp-md) {
+					justify-content: center;
+				}
+			}
+
+			.editable-content {
 				line-height: $headings-line-height;
 				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2) 0;
 				text-align: left;
