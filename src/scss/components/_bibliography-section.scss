@@ -81,27 +81,24 @@
 
 			.editable-content {
 				line-height: $headings-line-height;
-				padding: (($space-xxl - floor($h2-font-size-mobile * $headings-line-height)) / 2) 0;
+				padding: 8px 0;
 				text-align: left;
 				word-wrap: break-word;
-				min-width: 0; // Fix word-wrap
 
 				@media (min-width: $bp-md) {
-					padding: (($space-xxxl - $h2-font-size * $headings-line-height) / 2) 0;
 					text-align: inherit;
 				}
 			}
 
 			.editable-control {
-				border: 1px solid $input-focus-color;
+				border-width: 1px;
 				box-shadow: 0 0 0 2px $secondary;
 				line-height: normal; // Heading line-height would clip decenders
-				margin: 0;
-				padding: 4px $space-md 3px;
+				padding: 8px 0;
 				text-align: left;
+				margin: -5.5px;
 
 				@media (min-width: $bp-md) {
-					padding: 6px $space-lg 7px;
 					text-align: inherit;
 				}
 			}

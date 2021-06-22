@@ -37,6 +37,8 @@ $shade-8:  #333;
 $shade-9:  #111;
 $shade-10: #000;
 
+$focus-color: $secondary;
+
 //
 // Body
 //
@@ -103,6 +105,8 @@ $space-xxxl: 64px;
 $space-max:  96px;
 
 
+
+
 //
 // Grid
 //
@@ -130,6 +134,12 @@ $grid-breakpoints: (
 //
 // Components
 //
+
+$padding-x-sm: $space-sm;
+$padding-x-md: $space-md;
+
+$default-padding-x:       $space-sm;
+$default-padding-x-touch: $space-md;
 
 $border-radius:    4px;
 $border-radius-sm: 3px;
@@ -258,6 +268,20 @@ $outline-color:  $secondary;
 $outline-width:  3px;
 $outline-offset: 2px;
 
+// Editable
+// --------------------------------------------------
+
+$editable-border-width:  $outline-width;
+$editable-padding:       2px;
+$editable-border-radius: 3px;
+
+$editable-color:             $text-color;
+$editable-bg:                $shade-0;
+$editable-border-color:      $secondary;
+$editable-hover-percent:     0.04;
+$editable-hover-bg:          rgba($shade-10, $editable-hover-percent);
+$editable-backdrop-bg:       $shade-1;
+$editable-backdrop-hover-bg: darken($shade-1, ($editable-hover-percent * 100%));
 
 //
 // Icons
@@ -382,3 +406,13 @@ $preview-border-color: $review-border-color;
 
 $about-bg:    $blue-dark;
 $about-color: $shade-0;
+
+// Metadata list
+$key-color:                $shade-6;
+$handle-color-touch:       $shade-4;
+$handle-color-mouse:       $shade-6;
+$metadata-heading-color:   $shade-5;
+$metadata-separator-color: $shade-3;
+
+$creator-color-transition: .5s cubic-bezier(1,0,.5,.5);
+$creator-color-transition-delay: .1s;

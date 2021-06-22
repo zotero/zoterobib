@@ -96,9 +96,10 @@ class ItemBox extends React.PureComponent {
 			return this.renderCreators(field);
 		} else {
 			const isActive = this.state.activeEntry === field.key;
+			const isSelect = field.options && Array.isArray(field.options);
 			const className = {
 				'empty': !field.value || !field.value.length,
-				'select': field.options && Array.isArray(field.options),
+				'select': isSelect,
 				'editing': isActive,
 				'abstract': field.key === 'abstractNote',
 				'extra': field.key === 'extra',
@@ -117,7 +118,7 @@ class ItemBox extends React.PureComponent {
 				options: field.options || null,
 				selectOnFocus: !this.props.isForm,
 				value: field.value || '',
-				className: 'form-control form-control-sm',
+				className: isSelect ? '' : 'form-control form-control-sm',
 				id: field.key,
 				[this.props.isForm ? 'ref' : 'inputRef']: component => this.fieldComponents[field.key] = component,
 			};
