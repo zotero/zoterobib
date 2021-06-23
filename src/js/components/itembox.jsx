@@ -118,7 +118,7 @@ class ItemBox extends React.PureComponent {
 				options: field.options || null,
 				selectOnFocus: !this.props.isForm,
 				value: field.value || '',
-				className: isSelect ? '' : 'form-control form-control-sm',
+				className: 'form-control form-control-sm',
 				id: field.key,
 				[this.props.isForm ? 'ref' : 'inputRef']: component => this.fieldComponents[field.key] = component,
 			};

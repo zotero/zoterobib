@@ -57,7 +57,7 @@
 			right: $input-btn-padding-x-sm + $input-border-width;
 		}
 
-		&.Select + .icon-spin {
+		&.select-component + .icon-spin {
 			right:
 				$input-btn-padding-x-sm
 				+ $input-border-width
@@ -93,16 +93,16 @@
 	border-radius: $input-border-radius-lg;
 
 	.busy & {
-		&:not(.Select) {
+		&:not(.select-component) {
 			padding-right: $input-padding-x-lg + $space-lg + 1px;
 		}
 	}
 
-	&.Select {
+	&.select-component {
 		padding: 0;
 		border: none;
 
-		.Select-control {
+		.select-control {
 			padding: $input-padding-y-lg $input-padding-x-lg;
 		}
 	}
@@ -112,16 +112,16 @@
 	padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 
 	.busy & {
-		&:not(.Select) {
+		&:not(.select-component) {
 			padding-right: $input-btn-padding-x-sm + $space-md + 1px;
 		}
 	}
 
-	&.Select {
+	&.select-component {
 		padding: 0;
 		border: none;
 
-		.Select-control {
+		.select-control {
 			padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
 		}
 	}

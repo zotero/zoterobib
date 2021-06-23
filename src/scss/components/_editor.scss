@@ -74,30 +74,29 @@
 				max-width: 100%; // Fix truncation
 			}
 
-			// Select
-			.Select {
+			.select-component {
 				&:hover {
-					.Select-control {
+					.select-control {
 						color: $link-color;
 					}
 
-					.Select-arrow {
+					.select-arrow {
 						background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
 					}
 				}
 
 				&.is-focused {
-					.Select-control {
+					.select-control {
 						box-shadow: none;
 						color: $secondary;
 					}
 
-					.Select-arrow {
+					.select-arrow {
 						background: url("/static/images/bg-icons/16/chevron-11-down-secondary.svg");
 					}
 				}
 
-				.Select-control {
+				.select-control {
 					cursor: pointer;
 					border-color: transparent;
 					border-width: $input-border-width 0;
@@ -109,30 +108,30 @@
 					}
 				}
 
-				.Select-multi-value-wrapper {
+				.select-multi-value-wrapper {
 					flex: 0 0 auto;
 					max-width: 100%; // Fix truncation
 				}
 
-				.Select-value {
+				.select-value {
 					flex: 0 0 auto;
 					position: static;
 					padding: 0;
 					max-width: 100%; // Fix truncation
 				}
 
-				.Select-input {
+				.select-input {
 					position: absolute;
 				}
 
-				.Select-arrow-zone {
+				.select-arrow-container {
 					@media (min-width: $bp-md) {
 						order: -1;
 						margin: 0;
 					}
 				}
 
-				.Select-arrow {
+				.select-arrow {
 					margin-left: $space-min;
 					background: url("/static/images/bg-icons/16/chevron-11-down-777.svg");
 
@@ -142,14 +141,14 @@
 					}
 				}
 
-				.Select-menu-outer {
+				.select-menu-outer {
 					text-align: left;
 					width: auto;
 					white-space: nowrap;
 					right: auto;
 				}
 
-				.Select-option {
+				.select-option:not(.select-divider) {
 					padding: $input-btn-padding-y-sm $input-btn-padding-x-lg;
 				}
 			}

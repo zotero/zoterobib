@@ -140,13 +140,12 @@
 
 			.select-arrow {
 				background-image: image-url("bg-icons/16/chevron-11-down-777.svg");
-				// display: none;
 
-				// @include state(".creators-entry:hover") {
+				@include state(".creators-entry:hover") {
 					@include state(".select-component:not(.is-disabled)") {
 						display: block;
 					}
-				// }
+				}
 
 				@include state(".select-component:hover") {
 					background-image: image-url("bg-icons/16/chevron-11-down-secondary.svg");
@@ -174,7 +173,10 @@
 				padding-right: $creators-value-padding-right-touch;
 			}
 
-			@include state(".editing .creators-entry.single, .editing .creators-entry.virtual") {
+			@include state(".editing .creators-entry.single") {
+				padding-right: $creators-value-padding-right-touch + $space-xs;
+			}
+			@include state(".editing .creators-entry.virtual") {
 				padding-right: $creators-value-padding-right-touch + $space-xs;
 			}
 
@@ -230,14 +232,6 @@
 			padding: 0;
 			border: none;
 			flex: 0 0 auto;
-
-			@include state(".creators-entry:not(:focus-within)") {
-				visibility: hidden;
-			}
-
-			@include state(".creators-entry:hover", ".creators-entry:focus-within") {
-				visibility: visible;
-			}
 
 			&:focus {
 				outline: none;

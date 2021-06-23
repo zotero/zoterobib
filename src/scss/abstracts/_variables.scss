@@ -258,6 +258,7 @@ $checkbox-checked-bg-touch: $secondary;
 
 $icon-color: $secondary;
 $icon-spin-size: $space-xl;
+$icon-spin-size-sm: $space-md;
 
 
 //
@@ -408,11 +409,15 @@ $about-bg:    $blue-dark;
 $about-color: $shade-0;
 
 // Metadata list
+$metadata-list-offset:             33%;
 $key-color:                $shade-6;
 $handle-color-touch:       $shade-4;
 $handle-color-mouse:       $shade-6;
 $metadata-heading-color:   $shade-5;
 $metadata-separator-color: $shade-3;
 
+// Creators
+$creators-last-name-max-width:       67%;
+$creators-value-padding-right-touch: 31px;
 $creator-color-transition: .5s cubic-bezier(1,0,.5,.5);
 $creator-color-transition-delay: .1s;
