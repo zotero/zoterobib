@@ -121,8 +121,8 @@
 	.style-selector {
 		text-align: left;
 
-		.Select {
-			.Select-control {
+		.select-component {
+			.select-control {
 				border-color: transparent;
 				background: $style-selector-bg;
 				color: $style-selector-color;
@@ -140,7 +140,7 @@
 			}
 
 			&.is-focused {
-				.Select-control {
+				.select-control {
 					box-shadow: 0 0 0 2px $secondary;
 					outline: none;
 
@@ -150,38 +150,38 @@
 				}
 			}
 
-			&.Select--single {
-				.Select-value-label {
+			&.single {
+				.select-value-label {
 					overflow: inherit;
 					text-overflow: inherit;
 					white-space: inherit;
 				}
 			}
 
-			.Select-value {
+			.select-value {
 				position: static;
 				padding: 0;
 			}
 
-			.Select-input {
+			.select-input {
 				position: absolute;
 			}
 
-			.Select-arrow-zone {
+			.select-arrow-container {
 				margin-right: 0;
 			}
 
-			.Select-arrow {
+			.select-arrow {
 				background: image-url("bg-icons/16/chevron-11-down-light.svg");
 			}
 
-			.Select-menu-outer {
+			.select-menu-outer {
 				padding: $space-xs 0;
 				left: 0;
 				right: 0;
 			}
 
-			.Select-option {
+			.select-option:not(.select-divider) {
 				padding: $space-min $input-btn-padding-x-lg;
 
 				&:last-child {

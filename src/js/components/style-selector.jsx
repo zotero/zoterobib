@@ -1,40 +1,45 @@
-import React from 'react';
+import React, { useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { default as Select } from 'react-select';
+
+import Select, { SelectDivider, SelectOption } from './ui/select';
 import { citationStylesCount } from '../../../data/citation-styles-data.json';
 
-class StyleSelector extends React.Component {
-	render() {
-		return (
-			<div className={ cx('style-selector', this.props.className ) }>
+const StyleSelector = ({ className, citationStyle, citationStyles, onCitationStyleChanged }) => {
+	const handleMoreStylesTrigger = useCallback(
+		() => onCitationStyleChanged('install'), [onCitationStyleChanged]
+	);
+
+	return (
+			<div className={ cx('style-selector', className ) }>
 				<Select
 					clearable={ false }
 					searchable={ false}
-					value={ this.props.citationStyle }
+					value={ citationStyle }
 					options={ [
-						...this.props.citationStyles.map(cs => ({
+						...citationStyles.map(cs => ({
 							value: cs.name,
 							label: cs.title
 						})),
-						{
-							value: 'install',
-							label: `${(Math.floor(citationStylesCount / 100) * 100).toLocaleString()}+ other styles available…`
-						}
 					] }
-					onChange={ this.props.onCitationStyleChanged }
-				/>
+					onChange={ onCitationStyleChanged }
+				>
+					<SelectDivider />
+					<SelectOption
+						onTrigger={ handleMoreStylesTrigger }
+						option={ { label: `${(Math.floor(citationStylesCount / 100) * 100).toLocaleString()}+ other styles available…`, value: 'install' } }
+						/>
+				</Select>
 			</div>
 		);
-	}
+}
 
-	static propTypes = {
-		className: PropTypes.string,
-		citationStyle: PropTypes.string,
-		citationStyles: PropTypes.array,
-		onCitationStyleChanged: PropTypes.func
-	}
+StyleSelector.propTypes = {
+	className: PropTypes.string,
+	citationStyle: PropTypes.string,
+	citationStyles: PropTypes.array,
+	onCitationStyleChanged: PropTypes.func
 }
 
 
-export default StyleSelector;
+export default memo(StyleSelector);

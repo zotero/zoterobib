@@ -369,8 +369,7 @@ const BibWebContainer = props => {
 		}
 	}, [messages]);
 
-	const handleCitationStyleChanged = useCallback(async ev => {
-		const newCitationStyle = ev.value;
+	const handleCitationStyleChanged = useCallback(async newCitationStyle => {
 		setMessages([]);
 		setItemUnderReview(null);
 		if(newCitationStyle === 'install') {
