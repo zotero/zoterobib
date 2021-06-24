@@ -31,6 +31,7 @@ const BibWebContainer = props => {
 	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
 	const firstRenderComplete = useRef(false);
+	const lastDeletedItem = useRef(null);
 	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
@@ -69,7 +70,6 @@ const BibWebContainer = props => {
 	const [moreItemsLink, setMoreItemsLink] = useState(null);
 	const [multipleChoiceItems, setMultipleChoiceItems] = useState(null);
 	const [editorItem, setEditorItem] = useState(null);
-	const [lastDeletedItem, setLastDeletedItem] = useState(null);
 	const [permalink, setPermalink] = useState(null);
 	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
 	const [isBibliographyStale, setIsBibliographyStale] = useState(false);
@@ -106,6 +106,7 @@ const BibWebContainer = props => {
 		if(style.isSentenceCaseStyle) {
 			bib.current.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
+			console.log({ item });
 			bib.current.addItem(item);
 		}
 
@@ -449,11 +450,11 @@ const BibWebContainer = props => {
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
+		lastDeletedItem.current = item;
 		setItemUnderReview(null);
 		setPermalink(null);
 		deleteItem(itemId);
 		updateBibliography();
-		setLastDeletedItem({ ...item });
 		const message = {
 			id: getNextMessageId(),
 			action: 'Undo',
@@ -480,7 +481,7 @@ const BibWebContainer = props => {
 		const message = messages.find(m => m.id === id);
 		if(message) {
 			if(message.kind === 'UNDO_DELETE') {
-				setLastDeletedItem(null);
+				lastDeletedItem.current = null;
 			}
 			setMessages(messages.filter(m => m.id !== id));
 		}
@@ -671,7 +672,7 @@ const BibWebContainer = props => {
 	};
 
 	const handleReviewDelete = useCallback(() => {
-		handleDeleteEntry(itemUnderReview.key);
+		handleDeleteEntry(itemUnderReview.item.key);
 	}, [handleDeleteEntry, itemUnderReview]);
 
 	const handleReviewDismiss = useCallback(() => {
@@ -851,14 +852,15 @@ const BibWebContainer = props => {
 	}, [addItem, style.xml, handleError, messages, style.styleHasBibliography, updateBibliography]);
 
 	const handleUndoDelete = useCallback(() => {
-		if(lastDeletedItem) {
-			addItem(lastDeletedItem);
+		console.log(lastDeletedItem.current);
+		if(lastDeletedItem.current) {
+			addItem(lastDeletedItem.current);
 			updateBibliography();
 			setMessages(messages.filter(m => m.kind !== 'UNDO_DELETE'));
 			setPermalink(null);
-			setLastDeletedItem(null);
+			lastDeletedItem.current = null;
 		}
-	}, [addItem, lastDeletedItem, messages, updateBibliography]);
+	}, [addItem, messages, updateBibliography]);
 
 	const handleVisibilityChange = useCallback(() => {
 		if(!isReadOnly && document.visibilityState === 'visible') {
