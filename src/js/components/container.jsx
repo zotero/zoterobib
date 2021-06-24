@@ -106,7 +106,6 @@ const BibWebContainer = props => {
 		if(style.isSentenceCaseStyle) {
 			bib.current.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
-			console.log({ item });
 			bib.current.addItem(item);
 		}
 
@@ -852,7 +851,6 @@ const BibWebContainer = props => {
 	}, [addItem, style.xml, handleError, messages, style.styleHasBibliography, updateBibliography]);
 
 	const handleUndoDelete = useCallback(() => {
-		console.log(lastDeletedItem.current);
 		if(lastDeletedItem.current) {
 			addItem(lastDeletedItem.current);
 			updateBibliography();
