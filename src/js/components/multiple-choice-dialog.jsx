@@ -116,6 +116,7 @@ class MultipleChoiceDialog extends React.Component {
 							Please select a citation from the list
 						</h4>
 						<Button
+							icon
 							className="close"
 							onClick={ this.handleCancel.bind(this) }
 						>

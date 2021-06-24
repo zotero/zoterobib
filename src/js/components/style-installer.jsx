@@ -223,6 +223,7 @@ class StyleInstaller extends React.Component {
 						Add a Citation Style
 					</h4>
 					<Button
+						icon
 						className="close"
 						onClick={ this.handleCancel.bind(this) }
 					>

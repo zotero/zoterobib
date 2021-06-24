@@ -79,6 +79,7 @@ const MultipleItemsDialog = props => {
 						Please select a citation from the list
 					</h4>
 					<Button
+						icon
 						className="close"
 						onClick={ handleCancel }
 					>

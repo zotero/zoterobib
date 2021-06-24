@@ -83,6 +83,7 @@ const BibliographyItem = memo(props => {
 			</Dropdown>
 			{ !isNumericStyle && (
 				<Button
+					icon
 					title={ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
 					className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 					onClick={ onCopyCitationDialogOpen }
@@ -91,6 +92,7 @@ const BibliographyItem = memo(props => {
 				</Button>
 			) }
 			<Button
+				icon
 				title="Delete Entry"
 				className="btn-outline-secondary btn-remove"
 				onClick={ onDeleteCitation }

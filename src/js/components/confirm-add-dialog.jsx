@@ -26,7 +26,7 @@ class ConfirmAddDialog extends React.Component {
 			<Modal
 				isOpen={ activeDialog === 'CONFIRM_ADD_DIALOG' }
 				contentLabel="Select the entry to add:"
-				className="multiple-choice-dialog modal modal-lg"
+				className="confirm-add-dialog modal modal-lg"
 				onRequestClose={ onConfirmAddCancel }
 			>
 				<KeyHandler
@@ -45,6 +45,7 @@ class ConfirmAddDialog extends React.Component {
 							Add this citation to your bibliography?
 						</h4>
 						<Button
+							icon
 							className="close"
 							onClick={ onConfirmAddCancel }
 						>

@@ -2,7 +2,8 @@
 // Multiple choice dialog
 //
 
-.multiple-choice-dialog {
+.multiple-choice-dialog,
+.confirm-add-dialog {
 	.results {
 		margin: 0 -$modal-inner-padding-mobile;
 		padding: 0;
