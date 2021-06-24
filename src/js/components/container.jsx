@@ -144,7 +144,7 @@ const BibWebContainer = props => {
 			message: 'Your first citation has been added. Citations are stored locally in your browser.',
 			href: '/faq#where-is-my-bibliography-stored'
 		};
-		setMessages([...messages, message]);
+		setMessages([...messages.filter(m => m.kind !== 'WELCOME_MESSAGE'), message]);
 	}, [messages]);
 
 	const displayWelcomeMessage = useCallback(() => {
