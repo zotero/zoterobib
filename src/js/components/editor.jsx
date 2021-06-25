@@ -86,8 +86,6 @@ const getFieldsAndItems = (item, itemTypeFields, itemTypes) => {
 }
 
 const editorReducer = (state, action) => {
-
-
 	if(action.type === REQUEST_META) {
 		return { ...state, isLoading: action.skipLoading ? false : true }
 	}

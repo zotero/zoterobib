@@ -1,222 +1,213 @@
-/* eslint-disable react/no-deprecated */
-// @TODO: migrate to getDerivedStateFromProps()
-import React from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { default as KeyHandler } from 'react-key-handler';
-import { KEYDOWN } from 'react-key-handler';
-import Spinner from './ui/spinner';
+import React, { useCallback, useEffect, useReducer, useRef, memo } from 'react';
+import { default as KeyHandler, KEYDOWN } from 'react-key-handler';
+
 import Button from './ui/button';
 import Icon from './ui/icon';
 import Input from './form/input';
-import cx from 'classnames';
 import Modal from './modal';
 import SearchWorker from 'web-worker:../search-worker.js';
+import Spinner from './ui/spinner';
+import { usePrevious } from '../hooks';
+
 const searchWorker = new SearchWorker();
 
+const READY = 'READY';
+const FILTER_UPDATE = 'FILTER_UPDATE';
+const COMPLETE_SEARCH = 'COMPLETE_SEARCH';
+const BEGIN_SEARCH = 'BEGIN_SEARCH';
+const CHANGE_SELECTION_DOWN = 'CHANGE_SELECTION_DOWN';
+const CHANGE_SELECTION_UP = 'CHANGE_SELECTION_UP';
 
-class StyleInstaller extends React.Component {
-	state = {
+const reducer = (state, action) => {
+	if(action.type === READY) {
+		return { ...state, isReady: true };
+	} else if(action.type === COMPLETE_SEARCH) {
+		return { ...state, items: action.items, isSearching: false }
+	} else if(action.type === FILTER_UPDATE) {
+		return { ...state, filter: action.filter }
+	} else if(action.type === BEGIN_SEARCH) {
+		return { ...state, filter: action.filter, selectedIndex: null }
+	} else if(action.type === CHANGE_SELECTION_DOWN) {
+		const selectedIndex = state.selectedIndex === null ? 0 : Math.min(state.selectedIndex + 1, state.items.length)
+		return { ...state, selectedIndex };
+	} else if(action.type === CHANGE_SELECTION_UP) {
+		const selectedIndex = state.selectedIndex === null ? 0 : Math.min(state.selectedIndex + 1, state.items.length)
+		return { ...state, selectedIndex };
+	}
+	return state;
+}
+
+const StyleItem = memo(props => {
+	const { name, title, isCore = false, onDelete, onInstall, isActive, isInstalled, isSelected } = props;
+	return (
+		<li
+			data-style={ name }
+			className={ cx('style', { selected: isSelected }) }
+		>
+			<div className="style-title">
+				{ title }
+			</div>
+			{
+				isActive ? (
+					<Button className="btn btn-sm btn-outline-light" disabled>
+						Active
+					</Button>
+				) : isCore ? (
+					<Button className="btn btn-sm btn-outline-light" disabled>
+						Default
+					</Button>
+				) : isInstalled ? (
+					<Button
+						className="btn btn-sm btn-outline-primary"
+						onClick={ onDelete }>
+						Remove
+					</Button>
+				) : (
+					<Button
+						className="btn btn-sm btn-outline-secondary"
+						onClick={ onInstall }>
+						Add
+					</Button>
+				)
+			}
+		</li>
+	);
+});
+
+StyleItem.displayName = 'StyleItem';
+
+StyleItem.propTypes = {
+	isActive: PropTypes.bool,
+	isCore: PropTypes.bool,
+	isInstalled: PropTypes.bool,
+	name: PropTypes.string,
+	onDelete: PropTypes.func,
+	onInstall: PropTypes.func,
+	title: PropTypes.string,
+	isSelected: PropTypes.bool,
+}
+
+const StyleInstaller = props => {
+	const { activeDialog, citationStyle: activeCitationStyle, citationStyles, isStylesDataLoading,
+	onStyleInstallerSelect, onStyleInstallerDelete, onStyleInstallerCancel, stylesData } = props;
+	const wasStylesDataLoading = usePrevious(isStylesDataLoading);
+	const timeout = useRef(null);
+	const [state, dispatch] = useReducer(reducer, {
+		filter: '',
 		isReady: false,
 		isSearching: false,
+		items: [],
 		selectedIndex: null,
-		filterInput: '',
-		filter: '',
-		items: [], //TODO: rename to "style" or something
-	}
+	});
 
-	handleWorkerMessage = (event) => {
+	const isOpen = activeDialog === 'STYLE_INSTALLER';
+
+	const handleWorkerMessage = useCallback(event => {
 		const [messageKind, payload] = event.data;
 		switch(messageKind) {
 			case 'READY':
-				this.setState({
-					isReady: true
-				});
+				dispatch({ type: READY });
 			break;
 			case 'FILTER_COMPLETE':
-				this.setState({
-					isSearching: false,
-					items: payload
-				});
+				dispatch({ type: COMPLETE_SEARCH, items: payload });
 			break;
 		}
-	}
+	}, []);
 
-	componentDidMount() {
-		searchWorker.addEventListener('message', this.handleWorkerMessage);
-	}
-
-	componentWillUnmount() {
-		searchWorker.removeEventListener('message', this.handleWorkerMessage);
-		if(this.timeout) {
-			clearTimeout(this.timeout);
-			delete this.timeout;
+	const handleFilterChange = useCallback((newValue) => {
+		if(timeout.current) {
+			clearTimeout(timeout.current);
 		}
-	}
-
-	componentWillReceiveProps({ isStylesDataLoading, stylesData }) {
-		if(!isStylesDataLoading && this.props.isStylesDataLoading != isStylesDataLoading) {
-			searchWorker.postMessage(['LOAD', stylesData]);
-		}
-	}
-
-	componentDidUpdate(_, { isSearching }) {
-		if(this.state.isSearching && this.state.isSearching !== isSearching) {
-			const filter = this.state.filterInput.toLowerCase();
-			searchWorker.postMessage(['FILTER', filter]);
-		}
-	}
-
-	handleFilterChange(newValue) {
-		if(this.timeout) {
-			clearTimeout(this.timeout);
-		}
-		this.setState({
-			filterInput: newValue
-		});
+		dispatch({ type: FILTER_UPDATE, filter: newValue })
 
 		if(newValue.length > 2) {
-			this.timeout = setTimeout(() => {
-				this.setState({
-					isSearching: true,
-					selectedIndex: null
-				});
+			timeout.current = setTimeout(() => {
+				dispatch({ type: BEGIN_SEARCH, filter: newValue });
+				searchWorker.postMessage(['FILTER', newValue]);
 			}, 250);
 		}
-	}
+	}, []);
 
-	handleEscapeKey(ev) {
-		this.handleCancel();
+	const handleInstall = useCallback(ev => {
+		const styleName = ev.currentTarget.closest('[data-style]').dataset.style;
+		const style = state.items.find(cs => cs.name === styleName);
+		ev.stopPropagation();
+		onStyleInstallerSelect(style);
+		handleCancel();
+	}, [handleCancel, onStyleInstallerSelect, state.items]);
+
+	const handleDelete = useCallback(ev => {
+		const styleName = ev.currentTarget.closest('[data-style]').dataset.style;
+		ev.stopPropagation();
+		onStyleInstallerDelete(styleName);
+	}, [onStyleInstallerDelete]);
+
+	const handleCancel = useCallback(() => {
+		clearTimeout(timeout.current);
+		timeout.current = null;
+		dispatch({ type: FILTER_UPDATE, filter: '' });
+		onStyleInstallerCancel();
+	}, [onStyleInstallerCancel]);
+
+	const handleEscapeKey = useCallback((ev) => {
+		handleCancel();
 		ev.preventDefault();
-	}
+	}, [handleCancel]);
 
-	handleArrowDownKey(ev) {
-		this.setState({
-			selectedIndex: this.state.selectedIndex === null ? 0 : Math.min(this.state.selectedIndex + 1, this.state.items.length)
-		});
+	const handleArrowDownKey = useCallback((ev) => {
+		dispatch({ type: CHANGE_SELECTION_DOWN })
 		ev.preventDefault();
-	}
+	}, []);
 
-	handleArrowUpKey(ev) {
-		this.setState({
-			selectedIndex: Math.max(this.state.selectedIndex - 1, 0)
-		});
+	const handleArrowUpKey = useCallback((ev) => {
+		dispatch({ type: CHANGE_SELECTION_UP })
 		ev.preventDefault();
-	}
+	}, []);
 
-	handleEnterKey(ev) {
-		this.handleInstall(this.state.items[this.state.selectedIndex], ev);
+	const handleEnterKey = useCallback((ev) => {
+		handleInstall(state.items[state.selectedIndex], ev);
 		ev.preventDefault();
-	}
+	}, [handleInstall, state.items, state.selectedIndex]);
 
-	handleInputKeydown(ev) {
+	const handleInputKeydown = useCallback((ev) => {
 		switch(ev.key) {
-			case 'Escape': this.handleEscapeKey(ev); break;
-			case 'ArrowDown': this.handleArrowDownKey(ev); break;
-			case 'ArrowUp': this.handleArrowUpKey(ev); break;
-			case 'Enter': this.handleEnterKey(ev); break;
+			case 'Escape': handleEscapeKey(ev); break;
+			case 'ArrowDown': handleArrowDownKey(ev); break;
+			case 'ArrowUp': handleArrowUpKey(ev); break;
+			case 'Enter': handleEnterKey(ev); break;
 		}
-	}
+	}, [handleEscapeKey, handleArrowDownKey, handleArrowUpKey, handleEnterKey]);
 
-	handleInstall(style, ev) {
-		ev.stopPropagation();
-		this.props.onStyleInstallerSelect(style);
-		this.handleCancel();
-	}
+	useEffect(() => {
+		if(wasStylesDataLoading === true && isStylesDataLoading === false) {
+			searchWorker.postMessage(['LOAD', stylesData]);
+		}
+	}, [isStylesDataLoading, wasStylesDataLoading, stylesData]);
 
-	handleDelete(style, ev) {
-		ev.stopPropagation();
-		this.props.onStyleInstallerDelete(style);
-	}
+	useEffect(() => {
+		searchWorker.addEventListener('message', handleWorkerMessage);
+		return () => {
+			searchWorker.removeEventListener('message', handleWorkerMessage);
+		}
+	}, [handleWorkerMessage]);
 
-	handleCancel() {
-		clearTimeout(this.timeout);
-		delete this.timeout;
-		this.setState({
-			filterInput: '',
-			filter: ''
-		});
-		this.props.onStyleInstallerCancel();
-	}
+	useEffect(() => {
+		return () => {
+			clearTimeout(timeout.current);
+			timeout.current = null
+		}
+	}, []);
 
-	get keyHandlers() {
-		return (
-			<React.Fragment>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="Escape"
-					onKeyHandle={ this.handleEscapeKey.bind(this) }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="ArrowDown"
-					onKeyHandle={ this.handleArrowDownKey.bind(this) }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="ArrowUp"
-					onKeyHandle={ this.handleArrowUpKey.bind(this) }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="Enter"
-					onKeyHandle={ this.handleEnterKey.bind(this) }
-				/>
-			</React.Fragment>
-		);
-	}
-
-	get className() {
-		return {
-			'style-installer': true,
-			'modal': true,
-			'modal-lg': true,
-			'loading': !this.state.isReady
-		};
-	}
-
-	renderStyleItem(style) {
-		const styleData = this.props.citationStyles.find(cs => cs.name === style.name);
-		const isInstalled = typeof styleData !== 'undefined';
-		const isCore = isInstalled && styleData.isCore || false;
-		const isActive = style.name === this.props.citationStyle;
-		const isSelected = this.state.items[this.state.selectedIndex] ? this.state.items[this.state.selectedIndex].name === style.name : false;
-		return (
-			<li
-				className={ cx('style', { selected: isSelected }) }
-				key={ style.name }
-			>
-				<div className="style-title">
-					{ style.title }
-				</div>
-				{
-					isActive ? (
-						<Button className="btn btn-sm btn-outline-light" disabled>
-							Active
-						</Button>
-					) : isCore ? (
-						<Button className="btn btn-sm btn-outline-light" disabled>
-							Default
-						</Button>
-					) : isInstalled ? (
-						<Button
-							className="btn btn-sm btn-outline-primary"
-							onClick={ this.handleDelete.bind(this, style) }>
-							Remove
-						</Button>
-					) : (
-						<Button
-							className="btn btn-sm btn-outline-secondary"
-							onClick={ this.handleInstall.bind(this, style) }>
-							Add
-						</Button>
-					)
-				}
-			</li>
-		);
-	}
-
-	renderModalContent() {
-		return(
+	return (
+		<Modal
+			isOpen={ isOpen }
+			contentLabel="Citation Style Picker"
+			className={ cx('style-installer', 'modal', 'modal-lg', { loading: !state.isReady }) }
+			onRequestClose={ handleCancel }
+		>
+			{ state.isReady ? (
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
@@ -225,7 +216,7 @@ class StyleInstaller extends React.Component {
 					<Button
 						icon
 						className="close"
-						onClick={ this.handleCancel.bind(this) }
+						onClick={ handleCancel }
 					>
 						<Icon type={ '24/remove' } width="24" height="24" />
 					</Button>
@@ -234,51 +225,81 @@ class StyleInstaller extends React.Component {
 					<Input
 						autoFocus
 						className="form-control form-control-lg"
-						onChange={ this.handleFilterChange.bind(this) }
-						onKeyDown={ this.handleInputKeydown.bind(this) }
+						onChange={ handleFilterChange }
+						onKeyDown={ handleInputKeydown }
 						placeholder="Enter three or more characters to search"
 						type="text"
-						value={ this.state.filterInput }
-						isBusy={ this.state.isSearching }
+						value={ state.filter }
+						isBusy={ state.isSearching }
 					/>
 						<ul className="style-list">
 							{
-								this.state.filterInput.length > 2 ?
-								this.state.items.map(this.renderStyleItem.bind(this)) :
-									this.props.citationStyles.map(this.renderStyleItem.bind(this))
+								state.filter.length > 2 ?
+								state.items.map(style => {
+									const styleData = citationStyles.find(cs => cs.name === style.name);
+									return <StyleItem
+										key={ style.name }
+										onDelete = { handleDelete }
+										onInstall = { handleInstall }
+										isActive = { style.name === activeCitationStyle }
+										isSelected={ state.items[state.selectedIndex] ? state.items[state.selectedIndex].name === style.name : false }
+										isInstalled = { !!styleData }
+										{ ...style }
+										{ ...styleData }
+									/>
+								}) : citationStyles.map(style => (
+									<StyleItem
+										key={ style.name }
+										onDelete = { handleDelete }
+										onInstall = { handleInstall }
+										isActive = { style.name === activeCitationStyle }
+										isSelected = { state.items[state.selectedIndex] ? state.items[state.selectedIndex].name === style.name : false }
+										isInstalled = { true }
+										{ ...style }
+									/>
+								))
 							}
 						</ul>
 				</div>
 			</div>
-		);
-	}
-
-	render() {
-		const isOpen = this.props.activeDialog === 'STYLE_INSTALLER';
-		return (
-			<Modal
-				isOpen={ isOpen }
-				contentLabel="Citation Style Picker"
-				className={ cx(this.className) }
-				onRequestClose={ this.handleCancel.bind(this) }
-			>
-				{ this.state.isReady ? this.renderModalContent() : <Spinner /> }
-				{ isOpen && this.keyHandlers }
-			</Modal>
-		);
-	}
-
-	static propTypes = {
-		citationStyle: PropTypes.string,
-		citationStyles: PropTypes.array,
-		activeDialog: PropTypes.string,
-		isStylesDataLoading: PropTypes.bool,
-		onStyleInstallerCancel: PropTypes.func.isRequired,
-		onStyleInstallerDelete: PropTypes.func.isRequired,
-		onStyleInstallerSelect: PropTypes.func.isRequired,
-		stylesData: PropTypes.array,
-	}
+		) : <Spinner /> }
+		{ isOpen && (
+			<React.Fragment>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Escape"
+					onKeyHandle={ handleEscapeKey }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="ArrowDown"
+					onKeyHandle={ handleArrowDownKey }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="ArrowUp"
+					onKeyHandle={ handleArrowUpKey }
+				/>
+				<KeyHandler
+					keyEventName={ KEYDOWN }
+					keyValue="Enter"
+					onKeyHandle={ handleEnterKey }
+				/>
+			</React.Fragment>
+		) }
+		</Modal>
+	);
 }
 
+StyleInstaller.propTypes = {
+	activeDialog: PropTypes.string,
+	citationStyle: PropTypes.string,
+	citationStyles: PropTypes.array,
+	isStylesDataLoading: PropTypes.bool,
+	onStyleInstallerCancel: PropTypes.func.isRequired,
+	onStyleInstallerDelete: PropTypes.func.isRequired,
+	onStyleInstallerSelect: PropTypes.func.isRequired,
+	stylesData: PropTypes.array,
+}
 
-export default StyleInstaller;
+export default memo(StyleInstaller);

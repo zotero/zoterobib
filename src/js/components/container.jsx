@@ -708,8 +708,8 @@ const BibWebContainer = props => {
 		}
 	}, [messages]);
 
-	const handleStyleInstallerDelete = useCallback((deleteStyleMeta) => {
-		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleMeta.name ));
+	const handleStyleInstallerDelete = useCallback(deleteStyleName => {
+		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleName ));
 	}, [citationStyles]);
 
 	const handleStyleInstallerSelect = useCallback((newStyleMeta) => {
