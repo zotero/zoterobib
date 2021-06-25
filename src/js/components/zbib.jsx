@@ -140,6 +140,7 @@ class ZBib extends React.PureComponent {
 									Save to Zotero
 								</h4>
 								<Button
+									icon
 									className="close"
 									onClick={ this.props.onSaveToZoteroHide }
 								>
