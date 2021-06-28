@@ -27,6 +27,15 @@ const ERROR_FETCH_STYLE = 'ERROR_FETCH_STYLE';
 const RECEIVE_FETCH_STYLE = 'RECEIVE_FETCH_STYLE';
 const REQUEST_FETCH_STYLE = 'REQUEST_FETCH_STYLE';
 const SELECT_CURRENT_STYLE = 'SELECT_CURRENT_STYLE';
+const BEGIN_BUILD_BIBLIOGRAPHY = 'BEGIN_BUILD_BIBLIOGRAPHY';
+const COMPLETE_BUILD_BIBLIOGRAPHY = 'COMPLETE_BUILD_BIBLIOGRAPHY';
+const COMPLETE_REFRESH_BIBLIOGRAPHY = 'COMPLETE_BUILD_BIBLIOGRAPHY';
+const BIBLIOGRAPHY_SOURCE_REPLACED = 'BIBLIOGRAPHY_SOURCE_REPLACED';
+const BIBLIOGRAPHY_SOURCE_CHANGED = 'BIBLIOGRAPHY_SOURCE_CHANGED';
+const CLEAR_MESSAGE = 'CLEAR_MESSAGE';
+const REPLACE_MESSAGE = 'REPLACE_MESSAGE';
+const POST_MESSAGE = 'POST_MESSAGE';
+const CLEAR_ALL_MESSAGES = 'CLEAR_ALL_MESSAGES';
 
 const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	dispatch({ type: REQUEST_FETCH_STYLE, styleName });
@@ -65,7 +74,6 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 
 const confirmStyle = dispatch => dispatch({ type: CONFIRM_CURRENT_STYLE });
 
-
 const reducer = (state, action) => {
 	switch(action.type) {
 		case REQUEST_FETCH_STYLE:
@@ -76,6 +84,7 @@ const reducer = (state, action) => {
 		case SELECT_CURRENT_STYLE:
 			return {
 				...state,
+				bibliographyNeedsRebuild: true,
 				selected: action.styleName,
 				xml: action.styleXml,
 				isConfirmed: typeof(action.isConfirmed) === 'boolean' ? action.isConfirmed : !action.styleProps.isSentenceCaseStyle,
@@ -89,6 +98,50 @@ const reducer = (state, action) => {
 				...state,
 				isConfirmed: true
 			}
+		case BEGIN_BUILD_BIBLIOGRAPHY:
+			return {
+				...state,
+				isCiteprocReady: false,
+			}
+		case COMPLETE_BUILD_BIBLIOGRAPHY:
+			return {
+				...state,
+				bibliography: pick(action, ['items', 'meta', 'lookup']),
+				isCiteprocReady: true,
+				bibliographyNeedsRebuild: false,
+				bibliographyNeedsRefresh: false,
+			}
+		case COMPLETE_REFRESH_BIBLIOGRAPHY:
+			return {
+				...state,
+				bibliography: pick(action, ['items', 'lookup']),
+				bibliographyNeedsRefresh: false,
+			}
+		case BIBLIOGRAPHY_SOURCE_REPLACED:
+			return {
+				...state, isCiteprocReady: false, bibliographyNeedsRebuild: true,
+			}
+		case BIBLIOGRAPHY_SOURCE_CHANGED:
+			return {
+				...state, bibliographyNeedsRefresh: true,
+			}
+		case CLEAR_MESSAGE:
+			return {
+				...state,
+				messages: state.messages.filter(m => 'id' in action ? m.id !== action.id : m.kind !== action.kind)
+			}
+		case REPLACE_MESSAGE:
+			return {
+				...state,
+				messages: [...state.messages.filter(m => m.kind !== action.kind), action.message]
+			}
+		case POST_MESSAGE:
+			return {
+				...state,
+				messages: [...state.messages, action.message]
+			}
+		case CLEAR_ALL_MESSAGES:
+			return { ...state, messages: [] }
 	}
 	return state;
 }
@@ -103,14 +156,11 @@ const BibWebContainer = props => {
 	const copyData = useRef(null);
 	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
-	const firstRenderComplete = useRef(false);
 	const lastDeletedItem = useRef(null);
-	const [isCiteprocReady, setIsCiteprocReady] = useState(false);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
 	const wasDataReady = usePrevious(isDataReady);
-	const [messages, setMessages] = useState([]);
-	const [bibliography, setBibliography] = useState({ items: [], meta: null, lookup: {} });
+	const isReadOnly = !!remoteId;
 
 	const [state, dispatch] = useReducer(reducer, {
 		selected: undefined,
@@ -122,6 +172,11 @@ const BibWebContainer = props => {
 		isUppercaseSubtitlesStyle: undefined,
 		isSentenceCaseStyle: undefined,
 		isConfirmed: undefined,
+		bibliography: { items: [], meta: null, lookup: {} },
+		bibliographyNeedsRefresh: false,
+		bibliographyNeedsRebuild: false,
+		isCiteprocReady: false,
+		messages: [],
 	});
 
 	const prevCitationStyle = usePrevious(state.selected);
@@ -145,15 +200,13 @@ const BibWebContainer = props => {
 	const [editorItem, setEditorItem] = useState(null);
 	const [permalink, setPermalink] = useState(null);
 	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
-	const [isBibliographyStale, setIsBibliographyStale] = useState(false);
 
 	const wasSentenceCaseStyle = usePrevious(state.isSentenceCaseStyle);
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 	const useLegacy = useRef(true);
 	const isStyleReady = state.selected && state.isConfirmed && !state.isFetching;
 
-	const isReady = isStyleReady && isCiteprocReady && isDataReady && isQueryHandled;
-	const isReadOnly = !!remoteId;
+	const isReady = isStyleReady && state.isCiteprocReady && isDataReady && isQueryHandled;
 
 	const [citationStyles, setCitationStyles] = useState([
 		...coreCitationStyles.map(cs => ({
@@ -174,6 +227,95 @@ const BibWebContainer = props => {
 			return null;
 		}
 	}, [config, remoteId]);
+
+	const buildBibliography = useCallback(async () => {
+		dispatch({ type: BEGIN_BUILD_BIBLIOGRAPHY });
+
+		if(citeproc.current) {
+			citeproc.current.setStyle(state.xml);
+		} else {
+			citeproc.current = await CiteprocWrapper.new({
+				style: state.xml,
+				format: 'html',
+				wrap_url_and_doi: isReadOnly
+			}, useLegacy.current);
+		}
+
+		const t0 = performance.now();
+		citeproc.current.includeUncited("All");
+		citeproc.current.insertReferences(ensureNoBlankItems(bib.current.itemsCSL));
+
+		let items, meta;
+		const lookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
+
+
+		if(state.styleHasBibliography) {
+			citeproc.current.initClusters([]);
+			items = citeproc.current.makeBibliography();
+			meta = citeproc.current.bibliographyMeta();
+			const t1 = performance.now();
+			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
+		} else {
+			// init every single item as a separate cluster for fallback rendering
+			citeproc.current.initClusters(
+				bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
+			);
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
+			const render = citeproc.current.fullRender();
+			const t1 = performance.now();
+			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
+			items = bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] }));
+			meta = null;
+		}
+
+		dispatch({ type: COMPLETE_BUILD_BIBLIOGRAPHY, items, meta, lookup });
+	}, [isReadOnly, state.xml, state.styleHasBibliography]);
+
+	const updateBibliography = useCallback(() => {
+		const t0 = performance.now();
+		const diff = citeproc.current.batchedUpdates();
+		const t1 = performance.now();
+		console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; Bibliography update took ${(t1 - t0).toFixed(2)} milliseconds.`);
+
+		if(bib.current.itemsRaw.length === 0) {
+			dispatch({ type: COMPLETE_REFRESH_BIBLIOGRAPHY, items: [], lookup: {} });
+			return;
+		}
+
+		const lookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
+		let items;
+
+		if(diff.bibliography && state.styleHasBibliography) {
+			if(diff.bibliography.entryIds) {
+				items = diff.bibliography.entryIds.map(entryId => ({
+					id: entryId,
+					value: entryId in diff.bibliography.updatedEntries ?
+						diff.bibliography.updatedEntries[entryId] :
+						state.bibliography.items.find(bibItem => bibItem.id === entryId).value
+				}));
+			} else {
+				items = state.bibliography.items.map(bibItem => {
+					return bibItem.id in diff.bibliography.updatedEntries ?
+						{ id: bibItem.id, value: diff.bibliography.updatedEntries[bibItem.id] } :
+						bibItem;
+				});
+			}
+
+		} else if(!state.styleHasBibliography) {
+			const newBibliographyItems = [];
+			diff.clusters.forEach(([id, value]) => {
+				const existingEntry = state.bibliography.items.find(bibItem => bibItem.id === id);
+				if(existingEntry) {
+					existingEntry.value = value;
+				} else {
+					newBibliographyItems.push({ id, value });
+				}
+			});
+
+			items = [...state.bibliography.items.filter(i => i.id in lookup), ...newBibliographyItems];
+		}
+		dispatch({ type: COMPLETE_REFRESH_BIBLIOGRAPHY, lookup, items });
+	}, [state.styleHasBibliography, state.bibliography]);
 
 	const addItem = useCallback((item, showFirstCitationMessage = true)  => {
 		if(state.isSentenceCaseStyle) {
@@ -217,8 +359,8 @@ const BibWebContainer = props => {
 			message: 'Your first citation has been added. Citations are stored locally in your browser.',
 			href: '/faq#where-is-my-bibliography-stored'
 		};
-		setMessages([...messages.filter(m => m.kind !== 'WELCOME_MESSAGE'), message]);
-	}, [messages]);
+		dispatch({ type: REPLACE_MESSAGE, kind: 'WELCOME_MESSAGE', message });
+	}, []);
 
 	const displayWelcomeMessage = useCallback(() => {
 		const message = {
@@ -227,55 +369,8 @@ const BibWebContainer = props => {
 			kind: 'WELCOME_MESSAGE',
 			message: 'ZoteroBib is a free service that helps you quickly create a bibliography in any citation style.',
 		};
-		setMessages([...messages, message]);
-	}, [messages]);
-
-	const buildBibliography = useCallback(async () => {
-		setIsCiteprocReady(false);
-
-		if(citeproc.current) {
-			citeproc.current.setStyle(state.xml);
-		} else {
-			citeproc.current = await CiteprocWrapper.new({
-				style: state.xml,
-				format: 'html',
-				wrap_url_and_doi: isReadOnly
-			}, useLegacy.current);
-		}
-
-		const t0 = performance.now();
-		citeproc.current.includeUncited("All");
-		citeproc.current.insertReferences(ensureNoBlankItems(bib.current.itemsCSL));
-
-		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
-
-		if(state.styleHasBibliography) {
-			citeproc.current.initClusters([]);
-			const items = citeproc.current.makeBibliography();
-			const meta = citeproc.current.bibliographyMeta();
-			const t1 = performance.now();
-			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
-			setBibliography({ items, meta, lookup: itemsLookup });
-		} else {
-			// init every single item as a separate cluster for fallback rendering
-			citeproc.current.initClusters(
-				bib.current.itemsRaw.map(item => ({ id: item.key, cites: [ { id: item.key } ] }))
-			);
-			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
-			const render = citeproc.current.fullRender();
-			const t1 = performance.now();
-			console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; ${bib.current.itemsRaw.length} items; Bibliography generation took ${(t1 - t0).toFixed(2)} milliseconds.`);
-			setBibliography({
-				items: bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] })),
-				meta: null,
-				lookup: itemsLookup
-			});
-		}
-
-		setIsBibliographyStale(false);
-		setIsCiteprocReady(true);
-		firstRenderComplete.current = true;
-	}, [state.xml, isReadOnly, state.styleHasBibliography]);
+		dispatch({ type: POST_MESSAGE, message });
+	}, []);
 
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
@@ -376,74 +471,20 @@ const BibWebContainer = props => {
 		return file;
 	}, [handleError, state.xml, state.styleHasBibliography]);
 
-	const updateBibliography = useCallback(() => {
-		const t0 = performance.now();
-		const diff = citeproc.current.batchedUpdates();
-		const t1 = performance.now();
-		console.log(`Engine: ${useLegacy.current ? 'JS' : 'RS'}; Bibliography update took ${(t1 - t0).toFixed(2)} milliseconds.`);
-
-		const itemsLookup = bib.current.itemsRaw.reduce((acc, item) => { acc[item.key] = item; return acc }, {});
-
-		if(bib.current.itemsRaw.length === 0) {
-			setBibliography({ items: [], meta: null, lookup: {} });
-			return;
-		}
-
-		if(diff.bibliography && state.styleHasBibliography) {
-			var newBibliographyItems;
-			if(diff.bibliography.entryIds) {
-				newBibliographyItems = diff.bibliography.entryIds.map(entryId => ({
-					id: entryId,
-					value: entryId in diff.bibliography.updatedEntries ?
-						diff.bibliography.updatedEntries[entryId] :
-						bibliography.items.find(bibItem => bibItem.id === entryId).value
-				}));
-			} else {
-				newBibliographyItems = bibliography.items.map(bibItem => {
-					return bibItem.id in diff.bibliography.updatedEntries ?
-						{ id: bibItem.id, value: diff.bibliography.updatedEntries[bibItem.id] } :
-						bibItem;
-				});
-			}
-
-			setBibliography({
-				...bibliography,
-				lookup: itemsLookup,
-				items: newBibliographyItems
-			});
-		} else if(!state.styleHasBibliography) {
-			const newBibliographyItems = [];
-			diff.clusters.forEach(([id, value]) => {
-				const existingEntry = bibliography.items.find(bibItem => bibItem.id === id);
-				if(existingEntry) {
-					existingEntry.value = value;
-				} else {
-					newBibliographyItems.push({ id, value });
-				}
-			});
-
-			setBibliography({
-				...bibliography,
-				lookup: itemsLookup,
-				items: [...bibliography.items.filter(i => i.id in itemsLookup), ...newBibliographyItems]
-			});
-		}
-	}, [bibliography, state.styleHasBibliography]);
-
 	const handleError = useCallback((errorMessage, errorData) => {
 		const message = {
 			id: getNextMessageId(),
 			kind: 'ERROR',
 			message: errorMessage,
 		};
-		setMessages([...messages, message]);
+		dispatch({ type: POST_MESSAGE, message });
 		if(errorData) {
 			console.error(errorData); //eslint-disable-line no-console
 		}
-	}, [messages]);
+	}, []);
 
 	const handleCitationStyleChanged = useCallback(async newCitationStyle => {
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		if(newCitationStyle === 'install') {
 			setActiveDialog('STYLE_INSTALLER');
@@ -463,7 +504,7 @@ const BibWebContainer = props => {
 	}, [config.stylesURL, handleError]);
 
 	const handleCitationCopyDialogOpen = useCallback(itemId => {
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		setActiveDialog('COPY_CITATION');
 		setCitationToCopy(itemId);
@@ -517,8 +558,8 @@ const BibWebContainer = props => {
 		});
 		setActiveDialog(null);
 		setItemToConfirm(null);
-		updateBibliography();
-	}, [addItem, state.xml, itemToConfirm, state.styleHasBibliography, updateBibliography]);
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+	}, [addItem, state.xml, itemToConfirm, state.styleHasBibliography]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
@@ -526,15 +567,15 @@ const BibWebContainer = props => {
 		setItemUnderReview(null);
 		setPermalink(null);
 		deleteItem(itemId);
-		updateBibliography();
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 		const message = {
 			id: getNextMessageId(),
 			action: 'Undo',
 			kind: 'UNDO_DELETE',
 			message: 'Item Deleted',
 		};
-		setMessages([ ...messages.filter(m => m.kind !== 'UNDO_DELETE'), message ]);
-	}, [deleteItem, messages, updateBibliography]);
+		dispatch({ type: REPLACE_MESSAGE, kind: 'UNDO_DELETE', message });
+	}, [deleteItem]);
 
 	const handleDeleteCitations = useCallback(() => {
 		bib.current.clearItems();
@@ -542,22 +583,22 @@ const BibWebContainer = props => {
 		if(!state.styleHasBibliography) {
 			citeproc.current.initClusters([]);
 		}
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		setPermalink(null);
 		setTitle('');
-		updateBibliography();
-	}, [state.styleHasBibliography, updateBibliography]);
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+	}, [state.styleHasBibliography]);
 
 	const handleDismiss = useCallback(id => {
-		const message = messages.find(m => m.id === id);
+		const message = state.messages.find(m => m.id === id);
 		if(message) {
 			if(message.kind === 'UNDO_DELETE') {
 				lastDeletedItem.current = null;
 			}
-			setMessages(messages.filter(m => m.id !== id));
+			dispatch({ type: CLEAR_MESSAGE, id });
 		}
-	}, [messages]);
+	}, [state.messages]);
 
 	const handleGetStartedClick = useCallback(ev => {
 		const target = document.querySelector('.zotero-bib-container');
@@ -573,9 +614,9 @@ const BibWebContainer = props => {
 	const handleItemCreated = useCallback((item) => {
 		addItem(item, false);
 		setEditorItem(item);
-		updateBibliography();
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 		setPermalink(null);
-	}, [addItem, updateBibliography]);
+	}, [addItem]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
 		const index = bib.current.itemsRaw.findIndex(item => item.key === itemKey);
@@ -611,13 +652,13 @@ const BibWebContainer = props => {
 		setEditorItem(updatedItem);
 
 		citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
-		updateBibliography();
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 
 		// if edited item is itemUnderReview, update it as well
 		if(itemUnderReview && itemUnderReview.key === itemKey) {
 			setItemUnderReview(updatedItem);
 		}
-	}, [handleError, itemUnderReview, state.isSentenceCaseStyle, updateBibliography]);
+	}, [handleError, itemUnderReview, state.isSentenceCaseStyle]);
 
 	const handleMultipleChoiceCancel = useCallback(() => {
 		setActiveDialog(null);
@@ -684,15 +725,15 @@ const BibWebContainer = props => {
 			getItemsCSL([item]), state.xml, state.styleHasBibliography, useLegacy.current
 			))
 		});
-		updateBibliography();
-	}, [addItem, state.xml, multipleItems, state.styleHasBibliography, updateBibliography]);
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+	}, [addItem, state.xml, multipleItems, state.styleHasBibliography]);
 
 	const handleOpenEditor = useCallback((itemId = null) => {
 		if(itemUnderReview && itemId && itemId != itemUnderReview.key) {
 			setItemUnderReview(null);
 		}
 
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId));
 		setActiveDialog('EDITOR');
 	}, [itemUnderReview]);
@@ -724,9 +765,8 @@ const BibWebContainer = props => {
 		localStorage.setItem('zotero-bib-title', title);
 
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
-		setIsBibliographyStale(true);
-
 		history.replace('/');
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
 	}, [state.selected, citationStyles, history, config, title]);
 
 	const handleReadMoreClick = useCallback(event => {
@@ -736,8 +776,8 @@ const BibWebContainer = props => {
 			offset: calcOffset(),
 			speed: 1000, speedAsDuration: true,
 		});
-		setMessages(messages.filter(m => m.kind !== 'WELCOME_MESSAGE'));
-	}, [messages]);
+		dispatch({ type: CLEAR_MESSAGE, kind: 'WELCOME_MESSAGE' });
+	}, []);
 
 	const handleStyleInstallerCancel = () => {
 		setActiveDialog(null);
@@ -771,15 +811,15 @@ const BibWebContainer = props => {
 	}, [state.selected, config, handleError, history, title]);
 
 	const handleScroll = useCallback(() => {
-		if(!messages.find(m => m.kind === 'WELCOME_MESSAGE')) {
+		if(!state.messages.find(m => m.kind === 'WELCOME_MESSAGE')) {
 			return;
 		}
 		const target = document.querySelector('.zbib-illustration');
 		const isScrolledToIllustration = window.pageYOffset > target.offsetTop;
 		if(isScrolledToIllustration) {
-			setMessages(messages.filter(m => m.kind !== 'WELCOME_MESSAGE'));
+			dispatch({ type: CLEAR_MESSAGE, kind: 'WELCOME_MESSAGE '});
 		}
-	}, [messages]);
+	}, [state.messages]);
 
 	const handleStyleInstallerDelete = useCallback(deleteStyleName => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleName ));
@@ -812,7 +852,7 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleTitleChange = useCallback(title => {
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		setPermalink(null);
 		setTitle(title);
@@ -821,7 +861,7 @@ const BibWebContainer = props => {
 	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
 		identifier = parseIdentifier(identifier);
 
-		setMessages([]);
+		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setIdentifier(identifier);
 		setIsTranslating(true);
 		setItemUnderReview(null);
@@ -848,10 +888,10 @@ const BibWebContainer = props => {
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
 						if(translationResponse.items.length === 0) {
-							setMessages([
-								...messages,
-								{ id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
-							]);
+							dispatch({
+								type: POST_MESSAGE,
+								message: { id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
+							});
 							setIsTranslating(false);
 							return;
 						}
@@ -890,7 +930,7 @@ const BibWebContainer = props => {
 						addItem(translationResponse.items[0]);
 						setIdentifier('');
 						setIsTranslating(false);
-						updateBibliography();
+						dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
@@ -921,17 +961,17 @@ const BibWebContainer = props => {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
 		}
-	}, [addItem, state.xml, handleError, messages, state.styleHasBibliography, updateBibliography]);
+	}, [addItem, state.xml, handleError, state.styleHasBibliography]);
 
 	const handleUndoDelete = useCallback(() => {
 		if(lastDeletedItem.current) {
 			addItem(lastDeletedItem.current);
-			updateBibliography();
-			setMessages(messages.filter(m => m.kind !== 'UNDO_DELETE'));
+			dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+			dispatch({ type: CLEAR_MESSAGE, kind: 'UNDO_DELETE' });
 			setPermalink(null);
 			lastDeletedItem.current = null;
 		}
-	}, [addItem, messages, updateBibliography]);
+	}, [addItem]);
 
 	const handleVisibilityChange = useCallback(() => {
 		if(!isReadOnly && document.visibilityState === 'visible') {
@@ -939,12 +979,12 @@ const BibWebContainer = props => {
 			bib.current.reloadItems();
 			citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
 			if(!storageCitationStyle || storageCitationStyle === state.selected) {
-				updateBibliography();
+				dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 			} else {
 				fetchAndSelectStyle(dispatch, storageCitationStyle);
 			}
 		}
-	}, [state.selected, isReadOnly, updateBibliography]);
+	}, [state.selected, isReadOnly]);
 
 	const handleSaveToZoteroShow = useCallback(() => {
 		setActiveDialog('SAVE_TO_ZOTERO');
@@ -955,7 +995,7 @@ const BibWebContainer = props => {
 	}, []);
 
 	useEffect(() => {
-		if(!isCiteprocReady || !citationToCopy) {
+		if(!state.isCiteprocReady || !citationToCopy) {
 			return;
 		}
 
@@ -966,24 +1006,29 @@ const BibWebContainer = props => {
 				citeproc.current.previewCitationCluster(cites, positions, 'html')
 			);
 		}, 0);
-	}, [isCiteprocReady, citationCopyModifiers, citationToCopy]);
+	}, [state.isCiteprocReady, citationCopyModifiers, citationToCopy]);
 
 	useEffect(() => {
-		if(isBibliographyStale && isStyleReady && state.isConfirmed && isDataReady) {
+		if(state.bibliographyNeedsRebuild && isStyleReady && state.isConfirmed && isDataReady) {
 			buildBibliography();
 		}
-	}, [buildBibliography, isBibliographyStale, isStyleReady, state.isConfirmed, isDataReady]);
+	}, [buildBibliography, state.bibliographyNeedsRebuild, isStyleReady, state.isConfirmed, isDataReady]);
 
 	useEffect(() => {
 		if(typeof(wasDataReady) !== 'undefined' && isDataReady !== wasDataReady) {
-			setIsBibliographyStale(true);
+			dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
 		}
 	}, [isDataReady, wasDataReady]);
 
 	useEffect(() => {
+		if(state.bibliographyNeedsRefresh) {
+			updateBibliography();
+		}
+	}, [updateBibliography, state.bibliographyNeedsRefresh])
+
+	useEffect(() => {
 		if(typeof(prevCitationStyle) !== 'undefined' && state.selected !== prevCitationStyle) {
 			revertCitationStyle.current = prevCitationStyle;
-			setIsBibliographyStale(true);
 		}
 	}, [state.selected, prevCitationStyle]);
 
@@ -1007,14 +1052,14 @@ const BibWebContainer = props => {
 	}, [isReadOnly, title, prevTitle]);
 
 	useEffect(() => {
-		if(isDataReady && isStyleReady && isCiteprocReady && !isQueryHandled && location.pathname === '/import') {
+		if(isDataReady && isStyleReady && state.isCiteprocReady && !isQueryHandled && location.pathname === '/import') {
 			history.replace('/');
 			setIsQueryHandled(true);
 			(async () => {
 				await handleTranslateIdentifier(identifier, null, true);
 			})();
 		}
-	}, [handleTranslateIdentifier, history, identifier, isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, location]);
+	}, [handleTranslateIdentifier, history, identifier, state.isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, location]);
 
 	useEffect(() => {
 		document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -1054,7 +1099,7 @@ const BibWebContainer = props => {
 	return (<ZBib
 		getCopyData = { getCopyData }
 		getFileData = { getFileData }
-		bibliography = { bibliography }
+		bibliography = { state.bibliography }
 		citationCopyModifiers = { citationCopyModifiers }
 		citationHtml = { citationHtml }
 		citationStyle = { state.selected }
@@ -1071,7 +1116,7 @@ const BibWebContainer = props => {
 		itemToConfirm = { itemToConfirm }
 		itemUnderReview = { itemUnderReview }
 		localCitationsCount = { localCitationsCount }
-		messages={ messages }
+		messages={ state.messages }
 		moreItemsLink = { moreItemsLink }
 		multipleChoiceItems = { multipleChoiceItems }
 		multipleItems= { multipleItems }
