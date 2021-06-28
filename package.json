@@ -85,6 +85,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.4.2",
     "@rollup/plugin-wasm": "^5.1.2",
+    "@welldone-software/why-did-you-render": "^6.2.0",
     "autoprefixer": "^10.2.6",
     "babel-eslint": "^10.1.0",
     "babelify": "^10.0.0",

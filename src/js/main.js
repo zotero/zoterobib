@@ -1,3 +1,4 @@
+import './wdyr';
 import SmoothScroll from 'smooth-scroll';
 import ZoteroBibComponent from './bib-component';
 
