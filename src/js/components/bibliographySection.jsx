@@ -1,167 +1,145 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
+import React, { useCallback, useState, memo } from 'react';
 
-import Editable from './ui/editable';
-import Button from './ui/button';
-import Icon from './ui/icon';
-import StyleSelector from './style-selector';
 import Bibliography from './bibliography';
-import DeleteAllButton from './delete-all-button';
-import Spinner from './ui/spinner';
+import Button from './ui/button';
 import Confirmation from './confirmation';
+import DeleteAllButton from './delete-all-button';
+import Editable from './ui/editable';
+import Icon from './ui/icon';
+import Spinner from './ui/spinner';
+import StyleSelector from './style-selector';
+import { pick } from '../immutable'
 
-class BibliographySection extends React.PureComponent {
-	state = {
-		isConfirmingOverride: false,
-		isEditingTitle: false
-	}
+const BibliographySection = props => {
+	const { bibliography, isReadOnly, isReady, localCitationsCount, onOverride, onTitleChanged, title } = props;
+	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
+	const [isEditingTitle, setIsEditingTitle] = useState(false);
 
-	handleTitleEdit() {
-		this.setState({
-			isEditingTitle: true
-		});
-	}
+	const handleTitleEdit = useCallback(() => {
+		setIsEditingTitle(true);
+	}, []);
 
-	handleTitleCommit(newValue, hasChanged) {
+	const handleTitleCommit = useCallback((newValue, hasChanged) => {
 		if(hasChanged) {
-			this.props.onTitleChanged(newValue);
+			onTitleChanged(newValue);
 		}
-		this.setState({
-			isEditingTitle: false
-		});
-	}
+		setIsEditingTitle(false);
+	}, [onTitleChanged]);
 
-	handleTitleCancel() {
-		this.setState({
-			isEditingTitle: false
-		});
-	}
+	const handleTitleCancel = useCallback(() => {
+		setIsEditingTitle(false);
+	}, []);
 
-	handleEditBibliography() {
-		if(this.props.localCitationsCount > 0) {
-			this.setState({ isConfirmingOverride: true });
+	const handleEditBibliography = useCallback(() => {
+		if(localCitationsCount > 0) {
+			setIsConfirmingOverride(true);
 		} else {
-			this.props.onOverride();
+			onOverride();
 		}
-	}
+	}, [localCitationsCount, onOverride]);
 
-	handleOverride() {
-		this.props.onOverride();
-	}
+	const handleOverride = useCallback(() => {
+		onOverride();
+	}, [onOverride]);
 
-	handleCancel() {
-		this.setState({ isConfirmingOverride: false });
-	}
+	const handleCancel = useCallback(() => {
+		setIsConfirmingOverride(false);
+	}, []);
 
-	renderBibliography() {
-		if (this.props.isReady && this.props.bibliography.items.length === 0) {
-			return (
-				<React.Fragment>
-					<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
-					<h2 className="empty-title"><span style={{ 'letterSpacing': '-0.092em' }}>Y</span>our bibliography is empty.</h2>
-					<p className="lead empty-lead"><span style={{ 'letterSpacing': '-0.111em' }}>T</span>o add a source, paste or type its URL, ISBN, DOI, PMID, arXiv ID, or title into the search box above.</p>
-				</React.Fragment>
-			);
-		} else {
-			return (
-				<React.Fragment>
-					{
-						this.props.isReadOnly ? (
-							<h1 className="h2 bibliography-title">
-								{ this.props.title || 'Bibliography' }
-							</h1>
-						) : (
-							<h2 onClick={ this.handleTitleEdit.bind(this) }
-								onFocus={ this.handleTitleEdit.bind(this) }
-								tabIndex={ this.state.isEditingTitle ? null : 0 }
-								className="bibliography-title"
+	return (
+		<section
+			className={ cx('section', 'section-bibliography',
+				{ 'loading': !isReady, 'empty': isReady && bibliography.items.length === 0 })
+			}
+		>
+			<div className="container">
+				{ (isReady && bibliography.items.length === 0) ? (
+					<React.Fragment>
+						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
+						<h2 className="empty-title"><span style={{ 'letterSpacing': '-0.092em' }}>Y</span>our bibliography is empty.</h2>
+						<p className="lead empty-lead"><span style={{ 'letterSpacing': '-0.111em' }}>T</span>o add a source, paste or type its URL, ISBN, DOI, PMID, arXiv ID, or title into the search box above.</p>
+					</React.Fragment>
+				) : (
+					<React.Fragment>
+						{
+							isReadOnly ? (
+								<h1 className="h2 bibliography-title">
+									{ title || 'Bibliography' }
+								</h1>
+							) : (
+								<h2 onClick={ handleTitleEdit }
+									onFocus={ handleTitleEdit }
+									tabIndex={ isEditingTitle ? null : 0 }
+									className="bibliography-title"
+								>
+									<Editable
+										placeholder="Bibliography"
+										value={ title || '' }
+										isActive={ isEditingTitle }
+										onCommit={ handleTitleCommit }
+										onCancel={ handleTitleCancel }
+										autoFocus
+										selectOnFocus
+									/>
+									<Button icon>
+										<Icon type={ '28/pencil' } width="28" height="28" />
+									</Button>
+								</h2>
+							)
+						}
+						{
+							!isReadOnly && <StyleSelector { ...props } />
+						}
+						{
+							isReady ? <Bibliography { ...pick(props, ['isNoteStyle',
+							'isNumericStyle', 'isReadOnly', 'bibliography',
+							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
+							'styleHasBibliography'])} /> : (
+								<div className="spinner-container">
+									<Spinner />
+								</div>
+							)
+						}
+						{
+							!isReadOnly && isReady && <DeleteAllButton { ...props } />
+						}
+						<Confirmation
+							isOpen={ isReadOnly && isConfirmingOverride }
+							onConfirm={ handleOverride }
+							onCancel={ handleCancel }
+							title="Clear existing bibliography?"
+							confirmLabel="Continue"
 							>
-								<Editable
-									placeholder="Bibliography"
-									value={ this.props.title || '' }
-									isActive={ this.state.isEditingTitle }
-									onCommit={ this.handleTitleCommit.bind(this) }
-									onCancel={ this.handleTitleCancel.bind(this) }
-									autoFocus
-									selectOnFocus
-								/>
-								<Button icon>
-									<Icon type={ '28/pencil' } width="28" height="28" />
-								</Button>
-							</h2>
-						)
-					}
-					{
-						!this.props.isReadOnly && <StyleSelector { ...this.props } />
-					}
-					{
-						this.props.isReady ? <Bibliography { ...this.props } /> : (
-							<div className="spinner-container">
-								<Spinner />
-							</div>
-						)
-					}
-					{
-						!this.props.isReadOnly && this.props.isReady && <DeleteAllButton { ...this.props } />
-					}
-					<Confirmation
-						isOpen={ this.props.isReadOnly && this.state.isConfirmingOverride }
-						onConfirm={ this.handleOverride.bind(this) }
-						onCancel={ this.handleCancel.bind(this) }
-						title="Clear existing bibliography?"
-						confirmLabel="Continue"
-						>
-							<p>
-								There is an existing bibliography with { this.props.localCitationsCount } { this.props.localCitationsCount > 1 ? 'entries' : 'entry' } in the editor. If you continue, the existing bibliography will be replaced with this one.
-							</p>
-					</Confirmation>
-				</React.Fragment>
-			);
-		}
-	}
-
-	get className() {
-		return {
-			'section': true,
-			'section-bibliography': true,
-			'loading': !this.props.isReady,
-			'empty': this.props.isReady && this.props.bibliography.items.length === 0
-		};
-	}
-
-	render() {
-		return (
-			<section className={ cx(this.className) }>
-				<div className="container">
-					{ this.renderBibliography() }
-					{
-						this.props.isReady && this.props.isReadOnly && (
-							<Button
-								onClick={ this.handleEditBibliography.bind(this) }
-								className="btn-sm btn-outline-secondary">
-								Edit Bibliography
-							</Button>
-						)
-					}
-				</div>
-			</section>
-		);
-	}
-
-	static defaultProps = {
-		bibliography: {},
-	}
-
-	static propTypes = {
-		bibliography: PropTypes.object,
-		isReady: PropTypes.bool,
-		isReadOnly: PropTypes.bool,
-		localCitationsCount: PropTypes.number,
-		onOverride: PropTypes.func.isRequired,
-		onTitleChanged: PropTypes.func.isRequired,
-		title: PropTypes.string,
-	}
+								<p>
+									There is an existing bibliography with { localCitationsCount } { localCitationsCount > 1 ? 'entries' : 'entry' } in the editor. If you continue, the existing bibliography will be replaced with this one.
+								</p>
+						</Confirmation>
+					</React.Fragment>
+				)
+			}
+			{ (isReady && isReadOnly) && (
+				<Button
+					onClick={ handleEditBibliography }
+					className="btn-sm btn-outline-secondary">
+					Edit Bibliography
+				</Button>
+			) }
+			</div>
+		</section>
+	);
 }
 
-export default BibliographySection;
+
+BibliographySection.propTypes = {
+	bibliography: PropTypes.object,
+	isReadOnly: PropTypes.bool,
+	isReady: PropTypes.bool,
+	localCitationsCount: PropTypes.number,
+	onOverride: PropTypes.func.isRequired,
+	onTitleChanged: PropTypes.func.isRequired,
+	title: PropTypes.string,
+}
+
+export default memo(BibliographySection);
