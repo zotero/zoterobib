@@ -9,5 +9,5 @@ if (process.env.NODE_ENV === 'development') {
 		logOnDifferentValues: true,
 		// trackAllPureComponents: true,
 	});
-	console.warn('whyDidYouRender instal`led');
+	console.warn('whyDidYouRender installed');
 }
