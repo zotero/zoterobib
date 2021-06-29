@@ -65,12 +65,14 @@ class ZBib extends React.PureComponent {
 								</nav>
 								<div className="container">
 									<Brand />
-									<CiteTools { ...this.props } />
+									<CiteTools { ...pick(this.props, ['isTranslating', 'onEditorOpen', 'onTranslationRequest', 'identifier']) } />
 								</div>
 							</section>
 						)
 					}
-					{ (this.props.isTranslating || this.props.itemUnderReview) &&  <Review { ...this.props} /> }
+					{(this.props.isTranslating || this.props.itemUnderReview) && (
+						<Review { ...pick(this.props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
+					)}
 					<BibliographySection { ...pick(this.props, ['bibliography', 'isReadOnly',
 						'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged', 'title',
 						'citationStyle', 'citationStyles', 'onCitationStyleChanged', 'isNoteStyle',
@@ -81,7 +83,9 @@ class ZBib extends React.PureComponent {
 						<section className="section section-export">
 							<div className="container">
 								<h2>Export</h2>
-								<ExportTools { ...this.props } />
+								<ExportTools { ...pick(this.props, ['bibliography', 'getCopyData',
+									'getFileData', 'isReadOnly', 'onSaveToZoteroShow']) }
+								/>
 							</div>
 						</section>
 					}
@@ -94,7 +98,7 @@ class ZBib extends React.PureComponent {
 										Link to this version
 										<WhatsThis />
 									</h2>
-									<PermalinkTools { ...this.props } />
+									<PermalinkTools { ...pick(this.props, ['bibliography', 'onSave', 'permalink']) } />
 								</div>
 							</section>
 						)
@@ -112,7 +116,7 @@ class ZBib extends React.PureComponent {
 
 					{
 						!this.props.isReadOnly && (
-							<About { ...this.props } />
+							<About onGetStartedClick={ this.props.onGetStartedClick } />
 						)
 					}
 
@@ -158,12 +162,24 @@ class ZBib extends React.PureComponent {
 							</div>
 						</div>
 					</Modal>
-					<CopyCitationDialog { ...this.props} />
-					<Editor { ...this.props } />
-					<MultipleChoiceDialog { ...this.props } />
-					<StyleInstaller { ...this.props } />
-					<ConfirmAddDialog { ...this.props } />
-					<MultipleItemDialog { ...this.props } />
+					<CopyCitationDialog { ...pick(this.props, ['activeDialog', 'citationHtml',
+						'citationCopyModifiers', 'isNoteStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
+						'onCitationModifierChange']) }
+					/>
+					<Editor { ...pick(this.props, ['activeDialog', 'editorItem', 'onEditorClose',
+						'onError', 'onItemCreated', 'onItemUpdate']) }
+					/>
+					<MultipleChoiceDialog { ...pick(this.props, ['activeDialog',
+						'isTranslatingMore', 'moreItemsLink', 'multipleChoiceItems',
+						'onMultipleChoiceCancel', 'onMultipleChoiceMore', 'onMultipleChoiceSelect']) }
+					/>
+					<StyleInstaller { ...pick(this.props, ['activeDialog', 'citationStyle',
+						'citationStyles', 'isStylesDataLoading', 'onStyleInstallerCancel',
+						'onStyleInstallerDelete', 'onStyleInstallerSelect', 'stylesData']) } />
+					<ConfirmAddDialog { ...pick(this.props, ['activeDialog', 'onConfirmAddCancel',
+						'onConfirmAddConfirm', 'itemToConfirm', 'styleHasBibliography']) } />
+					<MultipleItemDialog { ...pick(this.props, ['activeDialog', 'multipleItems',
+						'multipleChoiceItems', 'onMultipleItemsCancel', 'onMultipleItemsSelect']) } />
 				</div>
 			</div>
 		);
