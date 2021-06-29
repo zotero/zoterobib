@@ -26,7 +26,6 @@ const CONFIRM_CURRENT_STYLE = 'CONFIRM_CURRENT_STYLE';
 const ERROR_FETCH_STYLE = 'ERROR_FETCH_STYLE';
 const RECEIVE_FETCH_STYLE = 'RECEIVE_FETCH_STYLE';
 const REQUEST_FETCH_STYLE = 'REQUEST_FETCH_STYLE';
-const SELECT_CURRENT_STYLE = 'SELECT_CURRENT_STYLE';
 const BEGIN_BUILD_BIBLIOGRAPHY = 'BEGIN_BUILD_BIBLIOGRAPHY';
 const COMPLETE_BUILD_BIBLIOGRAPHY = 'COMPLETE_BUILD_BIBLIOGRAPHY';
 const COMPLETE_REFRESH_BIBLIOGRAPHY = 'COMPLETE_BUILD_BIBLIOGRAPHY';
@@ -67,9 +66,6 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 		type: RECEIVE_FETCH_STYLE, styleName, styleXml, styleProps, ...opts
 	});
 
-	dispatch({
-		type: SELECT_CURRENT_STYLE, styleName, styleXml, styleProps, ...opts
-	});
 }
 
 const confirmStyle = dispatch => dispatch({ type: CONFIRM_CURRENT_STYLE });
@@ -78,12 +74,12 @@ const reducer = (state, action) => {
 	switch(action.type) {
 		case REQUEST_FETCH_STYLE:
 			return { ...state, isFetching: true };
-		case RECEIVE_FETCH_STYLE:
 		case ERROR_FETCH_STYLE:
 			return { ...state, isFetching: false };
-		case SELECT_CURRENT_STYLE:
+		case RECEIVE_FETCH_STYLE:
 			return {
 				...state,
+				isFetching: false,
 				bibliographyNeedsRebuild: true,
 				selected: action.styleName,
 				xml: action.styleXml,
@@ -206,7 +202,7 @@ const BibWebContainer = props => {
 	const useLegacy = useRef(true);
 	const isStyleReady = state.selected && state.isConfirmed && !state.isFetching;
 
-	const isReady = isStyleReady && state.isCiteprocReady && isDataReady && isQueryHandled;
+	const isReady = isStyleReady && state.isCiteprocReady && isDataReady && isQueryHandled && !state.bibliographyNeedsRebuild;
 
 	const [citationStyles, setCitationStyles] = useState([
 		...coreCitationStyles.map(cs => ({
