@@ -90,7 +90,7 @@ const BibliographySection = props => {
 							)
 						}
 						{
-							!isReadOnly && <StyleSelector { ...props } />
+							!isReadOnly && <StyleSelector { ...pick(props, ['citationStyle', 'citationStyles', 'onCitationStyleChanged']) } />
 						}
 						{
 							isReady ? <Bibliography { ...pick(props, ['isNoteStyle',
@@ -103,7 +103,7 @@ const BibliographySection = props => {
 							)
 						}
 						{
-							!isReadOnly && isReady && <DeleteAllButton { ...props } />
+							!isReadOnly && isReady && <DeleteAllButton { ...pick(props, ['bibliography', 'onDeleteCitations']) } />
 						}
 						<Confirmation
 							isOpen={ isReadOnly && isConfirmingOverride }

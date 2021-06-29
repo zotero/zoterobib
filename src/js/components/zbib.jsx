@@ -24,6 +24,7 @@ import StyleInstaller from './style-installer';
 import UserTypeDetector from '../enhancers/user-type-detector';
 import WhatsThis from './whats-this';
 import Footer from './footer';
+import { pick } from '../immutable';
 
 class ZBib extends React.PureComponent {
 	get className() {
@@ -70,8 +71,12 @@ class ZBib extends React.PureComponent {
 						)
 					}
 					{ (this.props.isTranslating || this.props.itemUnderReview) &&  <Review { ...this.props} /> }
-					<BibliographySection { ...this.props} />
-
+					<BibliographySection { ...pick(this.props, ['bibliography', 'isReadOnly',
+						'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged', 'title',
+						'citationStyle', 'citationStyles', 'onCitationStyleChanged', 'isNoteStyle',
+						'isNumericStyle', 'onCitationCopyDialogOpen', 'onDeleteEntry',
+						'onDeleteCitations', 'onEditorOpen', 'styleHasBibliography']) }
+					/>
 					{
 						<section className="section section-export">
 							<div className="container">
