@@ -13,7 +13,7 @@ import Button from './ui/button';
 
 const formatsInDropdown = ['rtf', 'html', 'ris', 'bibtex', 'zotero'];
 
-const ExportOption = ({ isCopied, format, handleCopyClick, handleDownloadClick }) => {
+const ExportOption = memo(({ isCopied, format, handleCopyClick, handleDownloadClick }) => {
 	if(exportFormats[format].isCopyable) {
 		return (
 			<DropdownItem
@@ -40,9 +40,17 @@ const ExportOption = ({ isCopied, format, handleCopyClick, handleDownloadClick }
 			</DropdownItem>
 		);
 	}
-}
+});
 
-const ExportDialog = props => {
+ExportOption.displayName = 'ExportOption';
+ExportOption.propTypes = {
+	format: PropTypes.string,
+	handleCopyClick: PropTypes.func,
+	handleDownloadClick: PropTypes.func,
+	isCopied: PropTypes.bool,
+};
+
+const ExportTools = props => {
 	const { bibliography, getCopyData, getFileData, onSaveToZoteroShow } = props;
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [clipboardConfirmations, setClipboardConfirmations] = useState({});
@@ -140,13 +148,12 @@ const ExportDialog = props => {
 	)
 }
 
-ExportDialog.propTypes = {
+ExportTools.propTypes = {
 	bibliography: PropTypes.object,
 	getCopyData: PropTypes.func.isRequired,
 	getFileData: PropTypes.func.isRequired,
 	isReadOnly: PropTypes.bool,
-	match: PropTypes.object,
 	onSaveToZoteroShow: PropTypes.func.isRequired,
 }
 
-export default memo(ExportDialog);
+export default memo(ExportTools);
