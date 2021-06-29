@@ -18,6 +18,13 @@ import CiteprocWrapper from '../citeproc-wrapper';
 import { pick } from '../immutable';
 import { getStyleProperties } from '../get-style-properties';
 
+const defaultItem = {
+	version: 0,
+	itemType: 'book',
+	tags: [],
+	creators: []
+};
+
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
 const stylesCache = new Map();
@@ -730,7 +737,8 @@ const BibWebContainer = props => {
 		}
 
 		dispatch({ type: CLEAR_ALL_MESSAGES });
-		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId));
+
+		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId) || defaultItem);
 		setActiveDialog('EDITOR');
 	}, [itemUnderReview]);
 
@@ -788,7 +796,7 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleReviewEdit = useCallback(() => {
-		handleOpenEditor(itemUnderReview.key);
+		handleOpenEditor(itemUnderReview.item.key);
 	}, [handleOpenEditor, itemUnderReview]);
 
 	const handleSave = useCallback(async () => {

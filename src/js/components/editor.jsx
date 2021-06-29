@@ -14,13 +14,6 @@ import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
 import { usePrevious } from '../hooks';
 
-const defaultItem = {
-	version: 0,
-	itemType: 'book',
-	tags: [],
-	creators: []
-};
-
 const REQUEST_META = 'REQUEST_META';
 const RECEIVE_META = 'RECEIVE_META';
 const ERROR_META = 'ERROR_META';
@@ -139,14 +132,14 @@ const editorReducer = (state, action) => {
 }
 
 const Editor = props => {
-	const { activeDialog, editorItem, onEditorClose, onError, onItemCreated, onItemUpdate } = props;
+	const { activeDialog, className, editorItem, onEditorClose, onError, onItemCreated, onItemUpdate } = props;
 	const prevEditorItem = usePrevious(editorItem);
 	const itemBox = useRef(null);
 	const hasCreatedItem = useRef(null);
 	const [editor, dispatchEditor] = useReducer(editorReducer, {
 		isLoading: true,
 		fields: [],
-		item: editorItem ?? defaultItem,
+		item: editorItem,
 	});
 
 
@@ -262,7 +255,7 @@ const Editor = props => {
 
 	useEffect(() => {
 		if(editorItem !== prevEditorItem) {
-			dispatchEditor({ type: ITEM_UPDATED, item: editorItem || defaultItem });
+			dispatchEditor({ type: ITEM_UPDATED, item: editorItem });
 		}
 		if(typeof prevEditorItem !== 'undefined' && editorItem?.itemType && prevEditorItem?.itemType !== editorItem?.itemType) {
 			const skipLoading = editorItem?.itemType && prevEditorItem?.itemType;
@@ -297,7 +290,7 @@ const Editor = props => {
 					</Button>
 				</div>
 				<div className="modal-body">
-					<div className={ cx('editor', props.className ) }>
+					<div className={ cx('editor', className ) }>
 						<ItemBox
 							creatorTypes={ editor.itemTypeCreatorTypes }
 							fields={ editor.fields }
