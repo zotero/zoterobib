@@ -123,7 +123,7 @@ const saveToPermalink = async (url, data) => {
 const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, useLegacy, opts = {}) => {
 	var bibliographyItems, bibliographyMeta = null;
 
-	const citeproc = await await CiteprocWrapper.new({
+	const citeproc = await CiteprocWrapper.new({
 		format: 'html',
 		style: citationStyleXml,
 		wrap_url_and_doi: false,
