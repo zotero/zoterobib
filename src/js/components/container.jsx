@@ -698,19 +698,6 @@ const BibWebContainer = props => {
 		}
 	}, [handleError, identifier, moreItemsLink, multipleChoiceItems]);
 
-	const handleMultipleChoiceSelect = useCallback(async selectedItem => {
-		setActiveDialog(null);
-		setMultipleChoiceItems(null);
-
-		if(selectedItem.source === 'url') {
-			return await handleTranslateIdentifier(identifier,
-				{ [selectedItem.key]: selectedItem.value.title }
-			);
-		} else {
-			return await handleTranslateIdentifier(selectedItem.key);
-		}
-	}, [handleTranslateIdentifier, identifier]);
-
 	const handleMultipleItemsCancel = useCallback(() => {
 		setActiveDialog(null);
 		setMultipleItems(null);
@@ -966,6 +953,19 @@ const BibWebContainer = props => {
 			setIsTranslating(false);
 		}
 	}, [addItem, state.xml, handleError, state.styleHasBibliography]);
+
+	const handleMultipleChoiceSelect = useCallback(async selectedItem => {
+		setActiveDialog(null);
+		setMultipleChoiceItems(null);
+
+		if(selectedItem.source === 'url') {
+			return await handleTranslateIdentifier(identifier,
+				{ [selectedItem.key]: selectedItem.value.title }
+			);
+		} else {
+			return await handleTranslateIdentifier(selectedItem.key);
+		}
+	}, [handleTranslateIdentifier, identifier]);
 
 	const handleUndoDelete = useCallback(() => {
 		if(lastDeletedItem.current) {
