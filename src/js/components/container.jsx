@@ -48,21 +48,21 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	let nextStyleName = styleName, styleXml, styleProps;
 
 	do {
-		if(stylesCache.has(styleName)) {
-			styleXml = stylesCache.get(styleName);
+		if(stylesCache.has(nextStyleName)) {
+			styleXml = stylesCache.get(nextStyleName);
 		} else {
-			const url = `https://www.zotero.org/styles/${styleName}`;
+			const url = `https://www.zotero.org/styles/${nextStyleName}`;
 			try {
 				const response = await fetchWithCachedFallback(url);
 				if(!response.ok) {
-					throw new Error(`Failed to fetch ${styleName} from ${url}`);
+					throw new Error(`Failed to fetch ${nextStyleName} from ${url}`);
 				}
 				styleXml = await response.text();
 			} catch(error) {
-				dispatch({ type: ERROR_FETCH_STYLE, styleName, error });
+				dispatch({ type: ERROR_FETCH_STYLE, nextStyleName, error });
 				throw error;
 			}
-			stylesCache.set(styleName, styleXml);
+			stylesCache.set(nextStyleName, styleXml);
 		}
 		styleProps = getStyleProperties(styleXml);
 		const { parentStyleName } = styleProps
@@ -819,6 +819,7 @@ const BibWebContainer = props => {
 	const handleStyleInstallerSelect = useCallback((newStyleMeta) => {
 		const newCitationStyles = getExpandedCitationStyles(citationStyles, newStyleMeta);
 		setCitationStyles(newCitationStyles);
+
 		fetchAndSelectStyle(dispatch, newStyleMeta.name);
 		localStorage.setItem(
 			'zotero-bib-extra-citation-styles',
