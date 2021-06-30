@@ -147,7 +147,7 @@ const MultipleChoiceDialog = props => {
 MultipleChoiceDialog.propTypes = {
 	activeDialog: PropTypes.string,
 	isTranslatingMore: PropTypes.bool,
-	moreItemsLink: PropTypes.object,
+	moreItemsLink: PropTypes.string,
 	multipleChoiceItems: PropTypes.array,
 	onMultipleChoiceCancel: PropTypes.func.isRequired,
 	onMultipleChoiceMore: PropTypes.func.isRequired,

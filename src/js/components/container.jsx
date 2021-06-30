@@ -675,8 +675,8 @@ const BibWebContainer = props => {
 	const handleMultipleChoiceMore = useCallback(async () => {
 		setIsTranslatingMore(true);
 		try {
-			let { result, items, links } = await bib.current.translateIdentifier(identifier, {
-				endpoint: moreItemsLink.url,
+			let { result, items, next } = await bib.current.translateIdentifier(identifier, {
+				endpoint: moreItemsLink,
 				add: false
 			});
 
@@ -685,7 +685,7 @@ const BibWebContainer = props => {
 				case ZoteroBib.MULTIPLE_CHOICES:
 					setIsTranslatingMore(false);
 					setActiveDialog('MULTIPLE_CHOICE_DIALOG');
-					setMoreItemsLink('next' in links ? links.next : null);
+					setMoreItemsLink(next);
 					setMultipleChoiceItems(dedupMultipleChoiceItems([
 						...multipleChoiceItems,
 						...(await processMultipleChoiceItems(items))
@@ -938,7 +938,7 @@ const BibWebContainer = props => {
 					case ZoteroBib.MULTIPLE_CHOICES:
 						setIsTranslating(false);
 						setActiveDialog('MULTIPLE_CHOICE_DIALOG');
-						setMoreItemsLink('next' in translationResponse.links ? translationResponse.links.next : null);
+						setMoreItemsLink(translationResponse.next);
 						setMultipleChoiceItems(dedupMultipleChoiceItems(
 							await processMultipleChoiceItems(translationResponse.items, isUrl)
 						));
