@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useReducer, useRef, memo } from 'react';
 import { default as KeyHandler } from 'react-key-handler';
 import { KEYDOWN } from 'react-key-handler';
+import { useDebouncedCallback } from 'use-debounce';
 
 import Button from './ui/button';
 import ItemBox from './itembox';
@@ -136,12 +137,16 @@ const Editor = props => {
 	const prevEditorItem = usePrevious(editorItem);
 	const itemBox = useRef(null);
 	const hasCreatedItem = useRef(null);
+	const accumulatedPatch = useRef({});
+	const debouncedApplyAccumulatedPatchRef = useRef(useDebouncedCallback(itemKey => {
+		onItemUpdate(itemKey, accumulatedPatch.current);
+		accumulatedPatch.current = {};
+	}, 1000));
 	const [editor, dispatchEditor] = useReducer(editorReducer, {
 		isLoading: true,
 		fields: [],
 		item: editorItem,
 	});
-
 
 	const itemTitle = editor.item ?
 		editor.item[editor.item.itemType in baseMappings && baseMappings[editor.item.itemType]['title'] || 'title'] : '';
@@ -238,10 +243,12 @@ const Editor = props => {
 				});
 			}
 		}
-		onItemUpdate(editor.item.key, patch);
-	}, [editor.item, onItemCreated, onItemUpdate]);
+		accumulatedPatch.current = { ...accumulatedPatch.current, ...patch };
+		debouncedApplyAccumulatedPatchRef.current(editor.item.key);
+	}, [editor.item, onItemCreated]);
 
 	const handleClose = useCallback(() => {
+		debouncedApplyAccumulatedPatchRef.current.flush();
 		onEditorClose(hasCreatedItem.current);
 	}, [onEditorClose]);
 

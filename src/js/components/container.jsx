@@ -316,7 +316,11 @@ const BibWebContainer = props => {
 			});
 
 			items = [...state.bibliography.items.filter(i => i.id in lookup), ...newBibliographyItems];
+		} else {
+			// updateBibliography called but diff is empty so no action required
+			return;
 		}
+
 		dispatch({ type: COMPLETE_REFRESH_BIBLIOGRAPHY, lookup, items });
 	}, [state.styleHasBibliography, state.bibliography]);
 
