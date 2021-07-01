@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useReducer, useRef, memo } from 'react';
-import { default as KeyHandler, KEYDOWN } from 'react-key-handler';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
@@ -17,8 +16,6 @@ const READY = 'READY';
 const FILTER_UPDATE = 'FILTER_UPDATE';
 const COMPLETE_SEARCH = 'COMPLETE_SEARCH';
 const BEGIN_SEARCH = 'BEGIN_SEARCH';
-const CHANGE_SELECTION_DOWN = 'CHANGE_SELECTION_DOWN';
-const CHANGE_SELECTION_UP = 'CHANGE_SELECTION_UP';
 
 const reducer = (state, action) => {
 	if(action.type === READY) {
@@ -28,13 +25,7 @@ const reducer = (state, action) => {
 	} else if(action.type === FILTER_UPDATE) {
 		return { ...state, filter: action.filter }
 	} else if(action.type === BEGIN_SEARCH) {
-		return { ...state, filter: action.filter, selectedIndex: null }
-	} else if(action.type === CHANGE_SELECTION_DOWN) {
-		const selectedIndex = state.selectedIndex === null ? 0 : Math.min(state.selectedIndex + 1, state.items.length)
-		return { ...state, selectedIndex };
-	} else if(action.type === CHANGE_SELECTION_UP) {
-		const selectedIndex = state.selectedIndex === null ? 0 : Math.min(state.selectedIndex + 1, state.items.length)
-		return { ...state, selectedIndex };
+		return { ...state, filter: action.filter, isSearching: true, selectedIndex: null }
 	}
 	return state;
 }
@@ -151,34 +142,12 @@ const StyleInstaller = props => {
 		onStyleInstallerCancel();
 	}, [onStyleInstallerCancel]);
 
-	const handleEscapeKey = useCallback((ev) => {
-		handleCancel();
-		ev.preventDefault();
-	}, [handleCancel]);
-
-	const handleArrowDownKey = useCallback((ev) => {
-		dispatch({ type: CHANGE_SELECTION_DOWN })
-		ev.preventDefault();
-	}, []);
-
-	const handleArrowUpKey = useCallback((ev) => {
-		dispatch({ type: CHANGE_SELECTION_UP })
-		ev.preventDefault();
-	}, []);
-
-	const handleEnterKey = useCallback((ev) => {
-		handleInstall(state.items[state.selectedIndex], ev);
-		ev.preventDefault();
-	}, [handleInstall, state.items, state.selectedIndex]);
-
 	const handleInputKeydown = useCallback((ev) => {
-		switch(ev.key) {
-			case 'Escape': handleEscapeKey(ev); break;
-			case 'ArrowDown': handleArrowDownKey(ev); break;
-			case 'ArrowUp': handleArrowUpKey(ev); break;
-			case 'Enter': handleEnterKey(ev); break;
+		if(ev.key === 'Escape') {
+			handleCancel();
+			ev.preventDefault();
 		}
-	}, [handleEscapeKey, handleArrowDownKey, handleArrowUpKey, handleEnterKey]);
+	}, [handleCancel]);
 
 	useEffect(() => {
 		if(wasStylesDataLoading === true && isStylesDataLoading === false) {
@@ -263,30 +232,6 @@ const StyleInstaller = props => {
 				</div>
 			</div>
 		) : <Spinner /> }
-		{ isOpen && (
-			<React.Fragment>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="Escape"
-					onKeyHandle={ handleEscapeKey }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="ArrowDown"
-					onKeyHandle={ handleArrowDownKey }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="ArrowUp"
-					onKeyHandle={ handleArrowUpKey }
-				/>
-				<KeyHandler
-					keyEventName={ KEYDOWN }
-					keyValue="Enter"
-					onKeyHandle={ handleEnterKey }
-				/>
-			</React.Fragment>
-		) }
 		</Modal>
 	);
 }
