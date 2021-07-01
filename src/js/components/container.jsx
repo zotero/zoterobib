@@ -620,7 +620,7 @@ const BibWebContainer = props => {
 
 	const handleItemCreated = useCallback((item) => {
 		addItem(item, false);
-		setEditorItem(item);
+		setEditorItem({ ...item });
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 		setPermalink(null);
 	}, [addItem]);
@@ -656,7 +656,7 @@ const BibWebContainer = props => {
 			localStorage.setItem('zotero-bib-items-metadata', JSON.stringify(itemsMetaData));
 		}
 		bib.current.updateItem(index, updatedItem);
-		setEditorItem(updatedItem);
+		setEditorItem({ ...updatedItem });
 
 		citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
@@ -728,8 +728,7 @@ const BibWebContainer = props => {
 		}
 
 		dispatch({ type: CLEAR_ALL_MESSAGES });
-
-		setEditorItem(bib.current.itemsRaw.find(i => i.key === itemId) || defaultItem);
+		setEditorItem({ ...(bib.current.itemsRaw.find(i => i.key === itemId) || defaultItem) });
 		setActiveDialog('EDITOR');
 	}, [itemUnderReview]);
 
