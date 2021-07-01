@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Button from './ui/button';

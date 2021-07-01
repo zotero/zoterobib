@@ -60,10 +60,8 @@ class EditableContent extends React.PureComponent {
 		inputComponent: PropTypes.elementType,
 		options: PropTypes.array,
 		placeholder: PropTypes.string,
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.number
-		])
+		title: PropTypes.string,
+		value: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
 	};
 }
 
@@ -139,6 +137,7 @@ class Editable extends React.PureComponent {
 
 	static propTypes = {
 		children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
+		className: PropTypes.string,
 		input: PropTypes.element,
 		inputComponent: PropTypes.elementType,
 		isActive: PropTypes.bool,
@@ -147,6 +146,8 @@ class Editable extends React.PureComponent {
 		isReadOnly: PropTypes.bool,
 		isSelect: PropTypes.bool,
 		isTextArea: PropTypes.bool,
+		onClick: PropTypes.func,
+		onFocus: PropTypes.func,
 		tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	};
 }

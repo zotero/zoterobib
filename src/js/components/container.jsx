@@ -3,6 +3,7 @@ import ZoteroBib from 'zotero-translation-client';
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
+import PropTypes from 'prop-types';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
 fetchWithCachedFallback, getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL,
@@ -1101,7 +1102,7 @@ const BibWebContainer = props => {
 				{ isConfirmed: true }
 			);
 		}
-	}, []);
+	}, []); //eslint-disable-line react-hooks/exhaustive-deps
 
 
 	return (<ZBib
@@ -1172,6 +1173,10 @@ const BibWebContainer = props => {
 		styleHasBibliography={ state.styleHasBibliography }
 		title = { title }
 	/>);
+}
+
+BibWebContainer.propTypes = {
+	config: PropTypes.object
 }
 
 export default memo(BibWebContainer);

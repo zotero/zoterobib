@@ -304,6 +304,7 @@ const Select = forwardRef((props, ref) => {
 Select.displayName = 'Select';
 
 Select.propTypes = {
+	children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]),
 	className: PropTypes.string,
 	disabled: PropTypes.bool,
 	id: PropTypes.string,

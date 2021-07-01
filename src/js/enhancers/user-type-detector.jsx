@@ -55,6 +55,8 @@ var UserTypeDetector = ComposedComponent => class extends React.PureComponent {
 	render() {
 		return <ComposedComponent {...this.props } { ...this.state } />;
 	}
+
+	static displayName = "UserTypeDetector";
 };
 
 export default UserTypeDetector;

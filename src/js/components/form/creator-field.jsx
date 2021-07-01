@@ -55,7 +55,7 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 			value={ value }
 			{ ... pick(rest, p => p.startsWith('data-')) }
 		>
-			{ creatorsCount > 1 && (
+			{ creatorsCount > 1 ? (
 				<React.Fragment>
 					<SelectDivider />
 					{ (index > 1) && (
@@ -74,7 +74,7 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 						option={ { label: 'Move Down', value: '_down' } }
 					/> ) }
 				</React.Fragment>
-			) }
+			) : null }
 		</SelectInput>
 	);
 }));
@@ -399,6 +399,7 @@ CreatorField.propTypes = {
 	isReadOnly: PropTypes.bool,
 	isSingle: PropTypes.bool,
 	isVirtual: PropTypes.bool,
+	onAddMany: PropTypes.func,
 	onChange: PropTypes.func,
 	onCreatorAdd: PropTypes.func,
 	onCreatorRemove: PropTypes.func,

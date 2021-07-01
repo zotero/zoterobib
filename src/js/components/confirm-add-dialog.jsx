@@ -10,7 +10,7 @@ import { formatBib, formatFallback } from '../cite';
 class ConfirmAddDialog extends React.Component {
 	render() {
 		const { activeDialog, onConfirmAddCancel, onConfirmAddConfirm, itemToConfirm,
-		styleHasBibliography } = this.props;
+			styleHasBibliography } = this.props;
 
 		if(!itemToConfirm || activeDialog !== 'CONFIRM_ADD_DIALOG') {
 			return null;
@@ -77,6 +77,7 @@ class ConfirmAddDialog extends React.Component {
 		itemToConfirm: PropTypes.object,
 		onConfirmAddCancel: PropTypes.func.isRequired,
 		onConfirmAddConfirm: PropTypes.func.isRequired,
+		styleHasBibliography: PropTypes.bool,
 	}
 }
 
