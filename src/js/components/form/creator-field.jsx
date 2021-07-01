@@ -98,7 +98,16 @@ CreatorTypeSelector.propTypes = {
 const CreatorFieldInputWrap = memo(forwardRef((props, ref) => {
 	const { active, creator, index, inModal, isForm, isReadOnly, label, name, onCancel, onAddMany,
 	onEditableCommit, onFieldClick, onFieldFocus, } = props;
+	const ignoreNextChange = useRef(null);
 	const shouldUseEditable = !isForm && !inModal;
+
+	const handleEditableCommit = useCallback((newValue, hasChanged, srcEvent) => {
+		if(ignoreNextChange.current !== srcEvent.target) {
+			onEditableCommit(newValue, hasChanged, srcEvent);
+		}
+		ignoreNextChange.current = null;
+
+	}, [onEditableCommit]);
 
 	const handlePaste = useCallback(ev => {
 		const clipboardData = ev.clipboardData || window.clipboardData;
@@ -126,7 +135,8 @@ const CreatorFieldInputWrap = memo(forwardRef((props, ref) => {
 			[name]: creator[name].slice(0, selectionStart) + entries[entries.length - 1] + creator[name].slice(selectionEnd)
 		};
 
-		onAddMany([...additionalCreators, lastCreator], index);
+		ignoreNextChange.current = ev.target;
+		onAddMany([...additionalCreators, lastCreator], index, ev);
 	}, [creator, index, inModal, name, onAddMany]);
 
 	const formField = <Input
@@ -137,7 +147,7 @@ const CreatorFieldInputWrap = memo(forwardRef((props, ref) => {
 		isDisabled={ isReadOnly }
 		onCancel={ onCancel }
 		onClick={ onFieldClick }
-		onCommit={ onEditableCommit }
+		onCommit={ handleEditableCommit }
 		onFocus={ onFieldFocus }
 		placeholder={ label }
 		ref={ ref }
