@@ -180,16 +180,19 @@ const Bibliography = props => {
 	}, [focusedItem, onEditorOpen]);
 
 	const handleToggleDropdown = useCallback(ev => {
-		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
-		const isOpen = dropdownsOpen.includes(itemId);
-		const newDropdownsOpen = isOpen ?
-			dropdownsOpen.filter(i => i !== itemId) :
-			[ ...dropdownsOpen, itemId];
+		var newDropdownsOpen;
+		try {
+			const itemId = ev.currentTarget.closest('[data-key]').dataset.key
+			newDropdownsOpen = dropdownsOpen.includes(itemId) ?
+				dropdownsOpen.filter(i => i !== itemId) :
+				[ ...dropdownsOpen, itemId];
+			ev.preventDefault();
+			ev.stopPropagation();
+		} catch(_) {
+			newDropdownsOpen = [];
+		}
 
 		setDropdownsOpen(newDropdownsOpen);
-
-		ev.preventDefault();
-		ev.stopPropagation();
 	}, [dropdownsOpen]);
 
 	const handleCopyCitationDialogOpen = useCallback(ev => {
