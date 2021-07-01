@@ -31,7 +31,7 @@
 		}
 
 		@include state(".empty .editable") {
-			&:before {
+			&::before {
 				content: "\00a0";
 			}
 		}
@@ -44,9 +44,7 @@
 		text-align: inherit;
 		letter-spacing: inherit;
 		margin: -($editable-border-width + $editable-padding);
-		width: calc(
-			100% + #{2 * ($editable-border-width + $editable-padding)}
-		);
+		width: calc(100% + #{2 * ($editable-border-width + $editable-padding)});
 		padding: $editable-padding;
 		border: $editable-border-width solid $editable-border-color;
 		color: $editable-color;
@@ -59,9 +57,7 @@
 
 		@include state(".busy .editable-control") {
 			margin: -$editable-border-width;
-			width: calc(
-				100% + #{2 * ($input-border-width + $editable-padding)}
-			);
+			width: calc(100% + #{2 * ($input-border-width + $editable-padding)});
 			border: $input-border-width solid transparent;
 			background-color: transparent;
 
@@ -101,6 +97,9 @@
 	&.textarea {
 		.editable-content {
 			word-wrap: break-word;
+			// Compensate border
+			margin-top: -1px;
+			margin-bottom: -1px;
 		}
 
 		// Correct shade for 'backdrop'
@@ -125,12 +124,6 @@
 			line-height: $line-height-base;
 			padding-top: 0;
 			padding-bottom: 0;
-		}
-
-		// Compensate border
-		.editable-content {
-			margin-top: -1px;
-			margin-bottom: -1px;
 		}
 
 		// Compensate border

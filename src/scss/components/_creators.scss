@@ -6,16 +6,17 @@
 .creators-entry {
 	position: relative;
 
-	&.color-exit, &.color-exit .select-value {
+	&.color-exit,
+	&.color-exit .select-value {
 		color: $blue;
 	}
 
-	&.color-exit-active, &.color-exit-active .select-value {
+	&.color-exit-active,
+	&.color-exit-active .select-value {
 		color: inherit;
 		transition: color $creator-color-transition;
 		transition-delay: $creator-color-transition-delay;
 	}
-
 
 	@include state(".panel.editing .creators-entry") {
 		$handle-width: 2 * $default-padding-x-touch + $space-lg + $input-border-width;
@@ -81,9 +82,11 @@
 	.key {
 		@media (max-width: $bp-md - 1px) {
 			@include state(".editing .creators-entry.virtual") {
-				flex-basis: calc((100% - #{2 * $default-padding-x-touch
-					+ $input-border-width + $space-lg}) * #{$metadata-list-offset / 100%}
-				); // Align with creators
+				flex-basis:
+					calc(
+						(100% - #{2 * $default-padding-x-touch + $input-border-width + $space-lg})
+						* #{$metadata-list-offset / 100%}
+					); // Align with creators
 			}
 		}
 
