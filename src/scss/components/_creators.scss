@@ -87,7 +87,9 @@
 			}
 		}
 
-		justify-content: flex-end;
+		@media (min-width: $bp-md) {
+			justify-content: flex-end;
+		}
 
 		.input-group {
 			flex: 0 0 auto;
@@ -109,6 +111,11 @@
 				border: none;
 				padding: 0;
 				box-shadow: none;
+
+				@media (max-width: $bp-md - 1px) {
+					flex-direction: row-reverse;
+					padding: ($input-btn-padding-y-sm + 1px) 0;
+				}
 
 				@include state(".select-component:hover", ".select-component.is-focused") {
 					@include state(".select-component:not(.is-disabled)") {
@@ -185,13 +192,14 @@
 			}
 		}
 
+		@media (min-width: $bp-md) {
+			> *:not(:first-child) {
+				margin-left: 2px;
+			}
 
-		> *:not(:first-child) {
-			margin-left: 2px;
-		}
-
-		> *:not(:last-child) {
-			margin-right: 2px;
+			> *:not(:last-child) {
+				margin-right: 2px;
+			}
 		}
 
 		.editable {
