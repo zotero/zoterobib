@@ -3,6 +3,8 @@
 // --------------------------------------------------
 
 // Creators field
+@use "sass:math";
+
 .creators-entry {
 	position: relative;
 
@@ -85,7 +87,7 @@
 				flex-basis:
 					calc(
 						(100% - #{2 * $default-padding-x-touch + $input-border-width + $space-lg})
-						* #{$metadata-list-offset / 100%}
+						* #{math.div($metadata-list-offset, 100%)}
 					); // Align with creators
 			}
 		}

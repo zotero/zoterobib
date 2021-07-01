@@ -8,7 +8,7 @@
 	text-align: left;
 
 	.write & {
-		margin: $space-lg (-$grid-gutter-width / 2);
+		margin: $space-lg (-$grid-gutter-width * 0.5);
 
 		@media (min-width: $bp-md) {
 			margin: $space-lg 0;

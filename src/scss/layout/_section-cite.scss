@@ -13,7 +13,7 @@
 
 	.meta-nav {
 		position: absolute;
-		right: $grid-gutter-width / 2;
+		right: $grid-gutter-width * 0.5;
 		top: $space-sm;
 		cursor: pointer;
 

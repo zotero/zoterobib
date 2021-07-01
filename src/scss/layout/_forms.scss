@@ -14,10 +14,10 @@
 .form-row {
 	display: flex;
 	flex-wrap: wrap;
-	margin: 0 (-$form-gutter-width / 2);
+	margin: 0 (-$form-gutter-width * 0.5);
 
 	> [class*=col-] {
-		padding: 0 ($form-gutter-width / 2);
+		padding: 0 ($form-gutter-width * 0.5);
 	}
 
 	.col-xs-6 {
@@ -146,6 +146,6 @@ label {
 
 	[type] {
 		font-size: inherit;
-		margin: $space-min ($space-min + $space-min / 2) 0 0;
+		margin: $space-min ($space-min + $space-min * 0.5) 0 0;
 	}
 }

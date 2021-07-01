@@ -1,5 +1,5 @@
 footer {
-	padding: (43px - 6px) ($grid-gutter-width / 2) (43px - 5px);
+	padding: (43px - 6px) ($grid-gutter-width * 0.5) (43px - 5px);
 	text-align: center;
 	border-top: 1px solid $shade-2;
 
@@ -22,8 +22,8 @@ footer {
 		&::before {
 			content: "";
 			position: absolute;
-			left: $grid-gutter-width / 2;
-			right: $grid-gutter-width / 2;
+			left: $grid-gutter-width * 0.5;
+			right: $grid-gutter-width * 0.5;
 			top: -1px;
 			height: 1px;
 			background-color: $shade-2;

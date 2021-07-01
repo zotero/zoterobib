@@ -8,7 +8,7 @@
 	justify-content: space-between;
 	align-items: center;
 	color: $message-color;
-	padding: $space-xl ($grid-gutter-width / 2);
+	padding: $space-xl ($grid-gutter-width * 0.5);
 	text-align: center;
 	font-size: $message-font-size-mobile;
 	font-weight: 300;
@@ -19,7 +19,7 @@
 		flex-direction: row;
 		font-size: $message-font-size;
 		line-height: $line-height-base + 0.1;
-		padding: ($space-xxl - 11px) ($grid-gutter-width / 2) ($space-xxl - 11px) 92px;
+		padding: ($space-xxl - 11px) ($grid-gutter-width * 0.5) ($space-xxl - 11px) 92px;
 
 		&::before {
 			content: ""; // Center/right justification hack
@@ -52,7 +52,7 @@
 			order: 0;
 			width: $space-xxxl;
 			height: $space-xxxl;
-			margin: (-$space-xl / 2) $space-sm (-$space-xl / 2) 0;
+			margin: (-$space-xl * 0.5) $space-sm (-$space-xl * 0.5) 0;
 		}
 
 		&:focus {

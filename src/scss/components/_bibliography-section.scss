@@ -29,10 +29,10 @@
 	}
 
 	.empty-title {
-		margin-bottom: $lead-font-size-mobile / 2;
+		margin-bottom: $lead-font-size-mobile * 0.5;
 
 		@media (min-width: $bp-md) {
-			margin-bottom: $lead-font-size / 2;
+			margin-bottom: $lead-font-size * 0.5;
 		}
 	}
 

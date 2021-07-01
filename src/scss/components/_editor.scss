@@ -54,11 +54,11 @@
 			padding-left: $space-xs;
 
 			> *:not(:first-child) {
-				margin-left: $space-min / 2;
+				margin-left: $space-min * 0.5;
 			}
 
 			> *:not(:last-child) {
-				margin-right: $space-min / 2;
+				margin-right: $space-min * 0.5;
 			}
 		}
 	}
@@ -159,11 +159,11 @@
 
 			@media (min-width: $bp-md) {
 				> *:not(:first-child) {
-					margin-left: $space-min / 2;
+					margin-left: $space-min * 0.5;
 				}
 
 				> *:not(:last-child) {
-					margin-right: $space-min / 2;
+					margin-right: $space-min * 0.5;
 				}
 			}
 
@@ -194,7 +194,7 @@
 
 				@media (min-width: $bp-md) {
 					flex: 0 0 auto;
-					margin-right: $space-min / 2;
+					margin-right: $space-min * 0.5;
 
 					&:last-child {
 						margin-right: 0;

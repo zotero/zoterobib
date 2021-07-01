@@ -4,7 +4,7 @@
 
 .back-link {
 	position: absolute;
-	left: $grid-gutter-width / 2;
+	left: $grid-gutter-width * 0.5;
 	top: $space-sm;
 
 	@media (max-width: $bp-md - 1px) {
