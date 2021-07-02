@@ -42,7 +42,7 @@ const CopyCitationDialog = props => {
 	[citationCopyModifiers, onCitationModifierChange]);
 
 	const handleSuppressAuthorChange = useCallback(
-		ev => onCitationModifierChange({ ...citationCopyModifiers, 'suppress-author': ev.currentTarget.checked }),
+		ev => onCitationModifierChange({ ...citationCopyModifiers, mode: ev.currentTarget.checked ? 'SuppressAuthor' : undefined }),
 	[citationCopyModifiers, onCitationModifierChange]);
 
 	const handleCancel = useCallback(() => {
@@ -129,7 +129,7 @@ const CopyCitationDialog = props => {
 									<input
 										disabled={ isCopied }
 										type="checkbox"
-										checked={ 'suppress-author' in citationCopyModifiers ? citationCopyModifiers['suppress-author'] : false }
+										checked={ citationCopyModifiers.mode === 'SuppressAuthor' }
 										onChange={ handleSuppressAuthorChange }
 									/>
 									Omit Author

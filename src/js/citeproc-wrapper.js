@@ -50,6 +50,16 @@ const retrieveLocaleSync = lang => {
 	return locales;
 };
 
+const fixCitesCompatiblity = cites => {
+	return cites.map(cluster => {
+		if(cluster.mode === 'SuppressAuthor') {
+			cluster['suppress-author'] = true;
+		}
+		delete cluster.mode;
+		return cluster;
+	});
+}
+
 const syncRequestAsText = url => {
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', url, false);
@@ -100,7 +110,7 @@ class CiteprocWrapper {
 			const clusters = this.driver.rebuildProcessorState(
 				this.clustersStore.map(cluster => ({
 					citationID: cluster.id,
-					citationItems: cluster.cites
+					citationItems: fixCitesCompatiblity(cluster.cites)
 				}))
 			).map(cluster => ([cluster[0], cluster[2]]));
 
@@ -166,7 +176,7 @@ class CiteprocWrapper {
 			const allClusters = this.driver.rebuildProcessorState(
 				this.clustersStore.map(cluster => ({
 					citationID: cluster.id,
-					citationItems: cluster.cites
+					citationItems: fixCitesCompatiblity(cluster.cites)
 				}))
 			).reduce((acc, cluster) => {
 				acc[cluster[0]] = cluster[2];
@@ -237,7 +247,7 @@ class CiteprocWrapper {
 				format = 'text';
 			}
 			// TODO: pre and post (2nd, 3rd args) from positions?
-			return this.driver.previewCitationCluster({ citationItems: cites }, [], [], format);
+			return this.driver.previewCitationCluster({ citationItems: fixCitesCompatiblity(cites) }, [], [], format);
 		} else {
 			return this.driver.previewCitationCluster(cites, positions, format).unwrap();
 		}
