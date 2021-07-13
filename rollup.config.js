@@ -57,7 +57,7 @@ if(process.env.DEBUG) {
 }
 
 if(isProduction) {
-	config.plugins.push(terser());
+	config.plugins.push(terser({ safari10: true }));
 	config.external.push('./wdyr'); //exclude why-did-you-render from production
 }
 
