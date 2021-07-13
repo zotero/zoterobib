@@ -46,7 +46,7 @@ const config = {
 		babel({
 			exclude: "node_modules/**",
 			extensions: ['.js', '.jsx'],
-			babelHelpers: 'bundled'
+			babelHelpers: 'runtime'
 		}),
 		filesize({ showMinifiedSize: false, showGzippedSize: !!process.env.DEBUG }),
 	]

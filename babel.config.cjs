@@ -1,8 +1,7 @@
 const presets = [
 	["@babel/preset-env", {
 		"debug": !!process.env.DEBUG || false,
-		"corejs": 3,
-		"useBuiltIns": "usage",
+		"useBuiltIns": false,
 	}],
 	"@babel/preset-react"
 ];
@@ -10,7 +9,13 @@ const presets = [
 const plugins = [
 	["@babel/plugin-proposal-decorators", { "legacy": true }],
 	["@babel/plugin-proposal-class-properties", { "loose" : true }],
-	["@babel/plugin-proposal-private-methods", { "loose": true }]
+	["@babel/plugin-proposal-private-methods", { "loose": true }],
+	["@babel/plugin-transform-runtime", {
+		"absoluteRuntime": false,
+		"corejs": 3,
+		"helpers": true,
+		"regenerator": false,
+	}]
 
 ];
 
