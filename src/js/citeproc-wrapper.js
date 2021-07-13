@@ -338,6 +338,26 @@ const getCSL = async () => {
 	});
 };
 
+const getCiteprocRSLoader = async () => {
+	// Loading citeproc-rs involves using dynamic module import (await import(...)) which will
+	// trigger a syntax error while the code is being parsed in some older browsers even though zbib
+	// would work perfectly fine in such browser with citeprocJS. For this reason we host this code
+	// separately and load it here only in a scenario where citeproc-rs is to be used.
+	if('getCiteprocRS' in window) {
+		return Promise.resolve(window.getCiteprocRS);
+	}
+
+	return new Promise((resolve, reject) => {
+		load('/static/js/citeproc-rs-loader.js', { type: 'module' }, err => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(window.getCiteprocRS);
+			}
+		});
+	});
+}
+
 CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and_doi = false }, useLegacy = null) => {
 	lang = lang ? lang : window ? window.navigator.userLanguage || window.navigator.language : null;
 	useLegacy = useLegacy === null ? !isWasmSupported : useLegacy;
@@ -351,7 +371,8 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and
 			return new CiteprocWrapper(true, CSL, { style, format, lang, wrap_url_and_doi });
 		} else {
 			if(!Driver) {
-				const { default: init, Driver: CreateDriver } = await import("/static/js/citeproc-rs/citeproc_rs_wasm.js");
+				const citeprocLoader = await getCiteprocRSLoader();
+				const { init, CreateDriver } = await citeprocLoader();
 				Driver = CreateDriver;
 				await init();
 			}
