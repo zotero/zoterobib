@@ -38,4 +38,7 @@ const handler = (req, resp) => {
 	}
 };
 
-http.createServer(handler).listen(port);
+http.createServer(handler).listen(port, () => {
+	console.log(`>>> Listening on https://0.0.0.0:${port}/`);
+	console.log(`    Translation server proxied to ${translateURL}\n`);
+});
