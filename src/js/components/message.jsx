@@ -1,17 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { useLocation } from "react-router-dom";
 import { default as KeyHandler } from 'react-key-handler';
 import { KEYDOWN } from 'react-key-handler';
 import Icon from './ui/icon';
 import Button from './ui/button';
-import { usePrevious } from '../hooks/';
 
 const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUndoDelete }) => {
-	const location = useLocation();
-	const prevLocation = usePrevious(location);
 	let category;
 
 	switch(kind) {
@@ -31,12 +27,6 @@ const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUnd
 	const handleDismiss = useCallback(() => {
 		onDismiss(id);
 	}, [id, onDismiss]);
-
-	useEffect(() => {
-		if(prevLocation !== location && typeof(prevLocation)  !== 'undefined') {
-			onDismiss(id);
-		}
-	}, [id, location, onDismiss, prevLocation]);
 
 	return (
 		<div className={ cx('message', category) }>

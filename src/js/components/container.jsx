@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react';
 import ZoteroBib from 'zotero-translation-client';
-import { useParams, useLocation, useHistory } from "react-router-dom";
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
@@ -152,9 +151,7 @@ const reducer = (state, action) => {
 
 
 const BibWebContainer = props => {
-	const { id: remoteId } = useParams();
-	const history = useHistory();
-	const location = useLocation();
+	const remoteId = window.location.pathname.match(/\/([0-9a-fA-f]{32})/)?.[1];
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const copyData = useRef(null);
@@ -203,7 +200,7 @@ const BibWebContainer = props => {
 	const [multipleChoiceItems, setMultipleChoiceItems] = useState(null);
 	const [editorItem, setEditorItem] = useState(null);
 	const [permalink, setPermalink] = useState(null);
-	const [isQueryHandled, setIsQueryHandled] = useState(location.pathname !== '/import');
+	const [isQueryHandled, setIsQueryHandled] = useState(window.location.pathname !== '/import');
 
 	const wasSentenceCaseStyle = usePrevious(state.isSentenceCaseStyle);
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
@@ -405,10 +402,10 @@ const BibWebContainer = props => {
 				setIsDataReady(true);
 			}
 		} catch(e) {
-			history.push('/');
+			window.history.pushState(null, null, '/');
 			handleError('Failed to load citations by id', e);
 		}
-	}, [citationStyles, config, handleError, history, remoteId]);
+	}, [citationStyles, config, handleError, remoteId]);
 
 	const getCopyData = useCallback(async format => {
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
@@ -760,9 +757,9 @@ const BibWebContainer = props => {
 		localStorage.setItem('zotero-bib-title', title);
 
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
-		history.replace('/');
+		history.replaceState(null, null, '/');
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
-	}, [state.selected, citationStyles, history, config, title]);
+	}, [state.selected, citationStyles, config, title]);
 
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
@@ -800,10 +797,10 @@ const BibWebContainer = props => {
 			setPermalink(`${window.location.origin}/${key}`);
 		} catch(e) {
 			setPermalink(null);
-			history.push('/');
+			window.history.pushState(null, null, '/')
 			handleError('Failed to upload bibliography', e);
 		}
-	}, [state.selected, config, handleError, history, title]);
+	}, [state.selected, config, handleError, title]);
 
 	const handleScroll = useCallback(() => {
 		if(!state.messages.find(m => m.kind === 'WELCOME_MESSAGE')) {
@@ -1061,14 +1058,14 @@ const BibWebContainer = props => {
 	}, [isReadOnly, title, prevTitle]);
 
 	useEffect(() => {
-		if(isDataReady && isStyleReady && state.isCiteprocReady && !isQueryHandled && location.pathname === '/import') {
-			history.replace('/');
+		if(isDataReady && isStyleReady && state.isCiteprocReady && !isQueryHandled && window.location.pathname === '/import') {
+			window.history.replaceState(null, null, '/');
 			setIsQueryHandled(true);
 			(async () => {
 				await handleTranslateIdentifier(identifier, null, true);
 			})();
 		}
-	}, [handleTranslateIdentifier, history, identifier, state.isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, location]);
+	}, [handleTranslateIdentifier, identifier, state.isCiteprocReady, isDataReady, isStyleReady, isQueryHandled]);
 
 	useEffect(() => {
 		document.addEventListener('visibilitychange', handleVisibilityChange);

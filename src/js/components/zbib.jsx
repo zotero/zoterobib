@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import cx from 'classnames';
 
 import About from './about';
@@ -214,4 +213,4 @@ class ZBib extends React.PureComponent {
 	}
 }
 
-export default withRouter(UserTypeDetector(ZBib));
+export default UserTypeDetector(ZBib);
