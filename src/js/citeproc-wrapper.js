@@ -1,5 +1,5 @@
 import load from 'load-script';
-import { getStyleProperties } from './get-style-properties.js'
+import { getStyleProperties } from './common/citation-style';
 
 const isWasmSupported = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
 var Driver = null;

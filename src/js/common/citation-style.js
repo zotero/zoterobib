@@ -1,4 +1,7 @@
+import { fetchWithCachedFallback } from '../utils'
+
 const stylePropertiesCache = new Map();
+const stylesCache = new Map();
 
 const getStyleName = (xmlDoc, rel) => {
 	const parentStyleUrl = xmlDoc.querySelector(`info > link[rel="${rel}"]`)?.getAttribute('href');
@@ -40,4 +43,27 @@ const getStyleProperties = citationStyleXml => {
 	return stylePropertiesCache.get(citationStyleXml);
 }
 
-export { getStyleProperties };
+const fetchAndParseIndependentStyle = async styleName => {
+	let nextStyleName = styleName, styleXml, styleProps;
+
+	do {
+		if(stylesCache.has(nextStyleName)) {
+			styleXml = stylesCache.get(nextStyleName);
+		} else {
+			const url = `https://www.zotero.org/styles/${nextStyleName}`;
+			const response = await fetchWithCachedFallback(url);
+			if(!response.ok) {
+				throw new Error(`Failed to fetch ${nextStyleName} from ${url}`);
+			}
+			styleXml = await response.text();
+			stylesCache.set(nextStyleName, styleXml);
+		}
+		styleProps = getStyleProperties(styleXml);
+		const { parentStyleName } = styleProps
+		nextStyleName = parentStyleName;
+	} while(nextStyleName);
+
+	return { styleName, styleXml, styleProps };
+}
+
+export { fetchAndParseIndependentStyle, getStyleProperties };

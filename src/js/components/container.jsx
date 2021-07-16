@@ -5,9 +5,9 @@ import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
-fetchWithCachedFallback, getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL,
-isLikeUrl, parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems,
-retrieveStylesData, saveToPermalink, validateItem, validateUrl } from '../utils';
+getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isLikeUrl,
+parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveStylesData,
+saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
@@ -16,7 +16,7 @@ import { usePrevious } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 import CiteprocWrapper from '../citeproc-wrapper';
 import { pick } from '../immutable';
-import { getStyleProperties } from '../get-style-properties';
+import { fetchAndParseIndependentStyle } from '../common/citation-style';
 
 const defaultItem = {
 	version: 0,
@@ -27,7 +27,7 @@ const defaultItem = {
 
 var msgId = 0;
 const getNextMessageId = () => ++msgId < Number.MAX_SAFE_INTEGER ? msgId : (msgId = 0);
-const stylesCache = new Map();
+
 
 const CONFIRM_CURRENT_STYLE = 'CONFIRM_CURRENT_STYLE';
 const ERROR_FETCH_STYLE = 'ERROR_FETCH_STYLE';
@@ -45,34 +45,14 @@ const CLEAR_ALL_MESSAGES = 'CLEAR_ALL_MESSAGES';
 
 const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	dispatch({ type: REQUEST_FETCH_STYLE, styleName });
-	let nextStyleName = styleName, styleXml, styleProps;
-
-	do {
-		if(stylesCache.has(nextStyleName)) {
-			styleXml = stylesCache.get(nextStyleName);
-		} else {
-			const url = `https://www.zotero.org/styles/${nextStyleName}`;
-			try {
-				const response = await fetchWithCachedFallback(url);
-				if(!response.ok) {
-					throw new Error(`Failed to fetch ${nextStyleName} from ${url}`);
-				}
-				styleXml = await response.text();
-			} catch(error) {
-				dispatch({ type: ERROR_FETCH_STYLE, nextStyleName, error });
-				throw error;
-			}
-			stylesCache.set(nextStyleName, styleXml);
-		}
-		styleProps = getStyleProperties(styleXml);
-		const { parentStyleName } = styleProps
-		nextStyleName = parentStyleName;
-	} while(nextStyleName);
-
-	dispatch({
-		type: RECEIVE_FETCH_STYLE, styleName, styleXml, styleProps, ...opts
-	});
-
+	try {
+		const { styleName: independentStyleName, styleXml, styleProps } = await fetchAndParseIndependentStyle(styleName);
+		dispatch({
+			type: RECEIVE_FETCH_STYLE, styleName: independentStyleName, styleXml, styleProps, ...opts
+		});
+	} catch (error) {
+		dispatch({ type: ERROR_FETCH_STYLE, styleName, error });
+	}
 }
 
 const confirmStyle = dispatch => dispatch({ type: CONFIRM_CURRENT_STYLE });
