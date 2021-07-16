@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 
 import { usePrevious } from '../hooks';
+import { omit } from '../immutable';
 
 var initialPadding = parseFloat(document.body.style.paddingRight);
 initialPadding = Number.isNaN(initialPadding) ? 0 : initialPadding;
@@ -26,7 +27,7 @@ const resetScrollbar = () => {
 }
 
 const Modal = props => {
-	const { isOpen } = props;
+	const { isOpen, onAfterOpen = null } = props;
 	const contentRef = useRef(null);
 	const wasOpen = usePrevious(isOpen);
 
@@ -34,7 +35,10 @@ const Modal = props => {
 		// remove maxHeight hack that prevents scroll on focus
 		contentRef.current.style.maxHeight = null;
 		contentRef.current.style.overflowY = null;
-	}, []);
+		if(onAfterOpen) {
+			onAfterOpen(contentRef);
+		}
+	}, [onAfterOpen]);
 
 	useEffect(() => {
 		if(isOpen && !wasOpen) {
@@ -58,12 +62,13 @@ const Modal = props => {
 		appElement={ document.querySelector('.zotero-bib-inner') }
 		className="modal-body"
 		overlayClassName="modal-backdrop"
-		{ ...props }
+		{ ...omit(props, ['onAfterOpen']) }
 	/>;
 }
 
 Modal.propTypes = {
-	isOpen: PropTypes.bool
+	isOpen: PropTypes.bool,
+	onAfterOpen: PropTypes.func,
 }
 
 export default memo(Modal);

@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, memo } from 'react';
-import { default as KeyHandler, KEYDOWN } from 'react-key-handler';
+import React, { useCallback, memo } from 'react';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
 import Modal from './modal';
 import Spinner from './ui/spinner';
+import { isTriggerEvent } from '../common/event';
 
-const ChoiceItem = memo(({ item, onFocus, onClick }) => {
+const ChoiceItem = memo(({ item, onItemSelect }) => {
 	let badge = null;
 	let title = item.value.title || '';
 
@@ -35,8 +35,8 @@ const ChoiceItem = memo(({ item, onFocus, onClick }) => {
 		<li
 			className="result"
 			data-signature={ item.signature }
-			onFocus={ onFocus }
-			onClick={ onClick }
+			onKeyDown={ onItemSelect }
+			onClick={ onItemSelect }
 			tabIndex={ 0 }
 		>
 			{ badge && <span className="badge badge-light d-sm-none">{ badge }</span> }
@@ -57,8 +57,7 @@ const ChoiceItem = memo(({ item, onFocus, onClick }) => {
 
 ChoiceItem.propTypes = {
 	item: PropTypes.object,
-	onClick: PropTypes.func,
-	onFocus: PropTypes.func,
+	onItemSelect: PropTypes.func,
 }
 
 ChoiceItem.displayName = 'ChoiceItem';
@@ -68,20 +67,14 @@ const getItem = (ev, items) => items.find(item => item.signature === ev.currentT
 const MultipleChoiceDialog = props => {
 	const { activeDialog, isTranslatingMore, moreItemsLink, multipleChoiceItems,
 	onMultipleChoiceCancel, onMultipleChoiceMore, onMultipleChoiceSelect } = props;
-	const focusedItem = useRef(null);
 
-	const handleItemClick = useCallback(ev => {
-		const item = getItem(ev, multipleChoiceItems);
-		onMultipleChoiceSelect(item);
+	const handleItemSelect = useCallback(ev => {
+		console.log({ ev });
+		if(isTriggerEvent(ev)) {
+			const item = getItem(ev, multipleChoiceItems);
+			onMultipleChoiceSelect(item);
+		}
 	}, [multipleChoiceItems, onMultipleChoiceSelect]);
-
-	const handleItemFocus = useCallback(ev => {
-		focusedItem.current = getItem(ev, multipleChoiceItems);
-	}, [multipleChoiceItems]);
-
-	const handleKeyboardSelect = useCallback(() => {
-		onMultipleChoiceSelect(focusedItem.current);
-	}, [onMultipleChoiceSelect]);
 
 	return (multipleChoiceItems && activeDialog === 'MULTIPLE_CHOICE_DIALOG') ? (
 		<Modal
@@ -90,16 +83,6 @@ const MultipleChoiceDialog = props => {
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ onMultipleChoiceCancel }
 		>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ onMultipleChoiceCancel }
-			/>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Enter"
-				onKeyHandle={ handleKeyboardSelect }
-			/>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
@@ -119,8 +102,7 @@ const MultipleChoiceDialog = props => {
 							<ChoiceItem
 								key={ item.signature }
 								item={ item }
-								onFocus={ handleItemFocus }
-								onClick={ handleItemClick }
+								onItemSelect={ handleItemSelect }
 							/>
 						)) }
 					</ul>

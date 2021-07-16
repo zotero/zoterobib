@@ -1,15 +1,14 @@
-import React, { useMemo, useCallback, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-import { default as KeyHandler } from 'react-key-handler';
-import { KEYDOWN } from 'react-key-handler';
+import React, { useMemo, useCallback, memo } from 'react';
+
 import Button from './ui/button';
-import Modal from './modal';
 import Icon from './ui/icon';
+import Modal from './modal';
 import { formatBib, formatFallback } from '../cite';
+import { isTriggerEvent } from '../common/event';
 
 const MultipleItemsDialog = props => {
 	const { activeDialog, multipleItems, onMultipleItemsSelect, onMultipleItemsCancel,  } = props;
-	const focusedItem = useRef(null);
 
 	const bibliographyRendered = useMemo(() => {
 		if(!multipleItems) {
@@ -34,18 +33,10 @@ const MultipleItemsDialog = props => {
 		return div.firstChild.children;
 	}, [bibliographyRendered]);
 
-	const handleFocus = useCallback(ev => {
-		focusedItem.current = ev.currentTarget.dataset.key;
-	}, [])
-
-	const handleKeyboardConfirm = useCallback(() => {
-		if(focusedItem.current) {
-			onMultipleItemsSelect(focusedItem.current);
+	const handleItemSelect = useCallback(ev => {
+		if(isTriggerEvent(ev)) {
+			onMultipleItemsSelect(ev.currentTarget.dataset.key);
 		}
-	}, [onMultipleItemsSelect])
-
-	const handleAdd = useCallback(ev => {
-		onMultipleItemsSelect(ev.currentTarget.dataset.key);
 	}, [onMultipleItemsSelect])
 
 	const handleCancel = useCallback(() => {
@@ -63,16 +54,6 @@ const MultipleItemsDialog = props => {
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ handleCancel }
 		>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ handleCancel }
-			/>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Enter"
-				onKeyHandle={ handleKeyboardConfirm }
-			/>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
@@ -93,8 +74,8 @@ const MultipleItemsDialog = props => {
 								<li key={ item.id }
 									data-key={ item.id }
 									className="result"
-									onFocus={ handleFocus }
-									onClick={ handleAdd }
+									onKeyDown={ handleItemSelect }
+									onClick={ handleItemSelect }
 									tabIndex={ 0 }
 								>
 									<div

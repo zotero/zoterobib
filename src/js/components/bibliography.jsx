@@ -1,50 +1,27 @@
 import React, { useCallback, useState, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { default as KeyHandler } from 'react-key-handler';
-import { KEYDOWN } from 'react-key-handler';
 import { default as Dropdown } from 'reactstrap/lib/Dropdown';
 import { default as DropdownToggle } from 'reactstrap/lib/DropdownToggle';
 import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
+
 import Button from './ui/button';
 import Icon from './ui/icon';
 import { formatBib, formatFallback } from '../cite';
-
-
-const KeyHandlers = memo(({ onKeyHandle }) => {
-	return (
-		<React.Fragment>
-			<KeyHandler
-				key="key-handler-enter"
-				keyEventName={ KEYDOWN }
-				keyValue="Enter"
-				onKeyHandle={ onKeyHandle }
-			/>
-			<KeyHandler
-				key="key-handler-space"
-				keyEventName={ KEYDOWN }
-				keyValue=" "
-				onKeyHandle={ onKeyHandle }
-			/>
-		</React.Fragment>
-	);
-});
-
-KeyHandlers.displayName = 'KeyHandlers';
-KeyHandlers.propTypes = { onKeyHandle: PropTypes.func };
+import { isTriggerEvent } from '../common/event';
 
 const BibliographyItem = memo(props => {
 	const { dropdownsOpen, formattedItem, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
-	onEditCitation, onFocus, onToggleDropdown, rawItem, } = props;
+	onSelectCitation, onEditCitationClick, onToggleDropdown, rawItem, } = props;
 
 	return (
 		<li key={ rawItem.key }
 			data-key={ rawItem.key }
 			className="citation"
-			onFocus={ onFocus }
-			onClick={ onEditCitation }
+			onClick={ onSelectCitation }
 			tabIndex={ 0 }
+			onKeyDown={ onSelectCitation }
 		>
 			<div className="csl-entry-container" dangerouslySetInnerHTML={ { __html: formattedItem } } />
 			<Dropdown
@@ -68,7 +45,7 @@ const BibliographyItem = memo(props => {
 						</DropdownItem>
 					) }
 					<DropdownItem
-						onClick={ onEditCitation }
+						onClick={ onEditCitationClick }
 						className="btn"
 					>
 						Edit
@@ -115,15 +92,14 @@ BibliographyItem.propTypes = {
 	isNumericStyle: PropTypes.bool,
 	onCopyCitationDialogOpen: PropTypes.func,
 	onDeleteCitation: PropTypes.func,
-	onEditCitation: PropTypes.func,
-	onFocus: PropTypes.func,
+	onEditCitationClick: PropTypes.func,
+	onSelectCitation: PropTypes.func,
 	onToggleDropdown: PropTypes.func,
 	rawItem: PropTypes.object,
 }
 
 const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
-	const [focusedItem, setFocusedItem] = useState(null);
 
 	const { isNoteStyle, isNumericStyle, isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
 	styleHasBibliography } = props;
@@ -144,11 +120,17 @@ const Bibliography = props => {
 		return div.firstChild.children;
 	}, [bibliographyRendered]);
 
-	const handleEditCitation = useCallback((ev) => {
+	const handleSelectCitation = useCallback((ev) => {
 		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
-		const  selection = window.getSelection();
+		const selection = window.getSelection();
 
-		if(selection.toString().length) {
+		// ignore keydown events on buttons
+		if(ev.type === 'keydown' && ev.currentTarget !== ev.target) {
+			return;
+		}
+
+		// ignore click event fired when selecting text
+		if(ev.type === 'click' && selection.toString().length) {
 			try {
 				if(ev.target.closest('.citation') === selection.anchorNode.parentNode.closest('.citation')) {
 					return;
@@ -157,27 +139,21 @@ const Bibliography = props => {
 				// selection.anchorNode.parentNode might fail in which case we open the editor
 			}
 		}
-		if(!isReadOnly) {
+		if(!isReadOnly && itemId && isTriggerEvent(ev)) {
 			onEditorOpen(itemId);
 		}
 	}, [isReadOnly, onEditorOpen]);
+
+	const handleEditCitationClick = useCallback((ev) => {
+		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
+		onEditorOpen(itemId);
+	}, [onEditorOpen]);
 
 	const handleDeleteCitation = useCallback(ev => {
 		ev.stopPropagation();
 		onDeleteEntry(ev.currentTarget.closest('[data-key]').dataset.key);
 	}, [onDeleteEntry]);
 
-	const handleFocus = useCallback(ev => {
-		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
-		setFocusedItem(itemId);
-	}, []);
-
-	const handleKeyboard = useCallback((ev) => {
-		if(document.activeElement.className == 'citation' && focusedItem) {
-			onEditorOpen(focusedItem);
-			ev.preventDefault();
-		}
-	}, [focusedItem, onEditorOpen]);
 
 	const handleToggleDropdown = useCallback(ev => {
 		var newDropdownsOpen;
@@ -208,7 +184,6 @@ const Bibliography = props => {
 
 	return (
 		<React.Fragment>
-			<KeyHandlers onKeyHandle={ handleKeyboard } />
 			{ isReadOnly ? (
 				<React.Fragment>
 					<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
@@ -230,8 +205,8 @@ const Bibliography = props => {
 							isNumericStyle = { isNumericStyle }
 							onCopyCitationDialogOpen = { handleCopyCitationDialogOpen }
 							onDeleteCitation = { handleDeleteCitation }
-							onEditCitation = { handleEditCitation }
-							onFocus = { handleFocus }
+							onSelectCitation = { handleSelectCitation }
+							onEditCitationClick = { handleEditCitationClick }
 							onToggleDropdown = { handleToggleDropdown }
 						/>
 					)) }

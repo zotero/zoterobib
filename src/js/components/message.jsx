@@ -1,9 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { default as KeyHandler } from 'react-key-handler';
-import { KEYDOWN } from 'react-key-handler';
 import Icon from './ui/icon';
 import Button from './ui/button';
 
@@ -56,11 +54,6 @@ const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onUnd
 			>
 				<Icon type={ '24/remove' } width="24" height="24" />
 			</button>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ handleDismiss }
-			/>
 		</div>
 	);
 }
@@ -76,4 +69,4 @@ Message.propTypes = {
 	onUndoDelete: PropTypes.func,
 }
 
-export default Message;
+export default memo(Message);

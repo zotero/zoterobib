@@ -1,14 +1,12 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
-import { default as KeyHandler, KEYDOWN } from 'react-key-handler';
 
 import Button from './ui/button';
 import Input from './form/input';
 import Modal from './modal';
 import Select from './form/select';
 import Spinner from './ui/spinner';
-
 
 const locators = [
 	'page', 'book', 'chapter', 'column', 'figure', 'folio', 'issue', 'line', 'note', 'opus',
@@ -169,11 +167,6 @@ const CopyCitationDialog = props => {
 				</div>
 				</div>
 			) : <Spinner /> }
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ handleCancel }
-			/>
 		</Modal>
 	);
 }

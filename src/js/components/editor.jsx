@@ -2,8 +2,6 @@ import baseMappings from 'zotero-base-mappings';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useReducer, useRef, memo } from 'react';
-import { default as KeyHandler } from 'react-key-handler';
-import { KEYDOWN } from 'react-key-handler';
 import { useDebouncedCallback } from 'use-debounce';
 
 import Button from './ui/button';
@@ -278,11 +276,6 @@ const Editor = props => {
 			className={ cx('editor-container modal modal-lg', { loading: editor.isLoading })}
 			onRequestClose={ handleClose }
 		>
-			<KeyHandler
-				keyEventName={ KEYDOWN }
-				keyValue="Escape"
-				onKeyHandle={ handleClose }
-			/>
 			{ editor.isLoading ? <Spinner /> : (
 				<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">

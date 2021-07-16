@@ -813,6 +813,12 @@ const BibWebContainer = props => {
 		}
 	}, [state.messages]);
 
+	const handleKeyDown = useCallback(ev => {
+		if(ev.key === 'Escape' && ev.target.tagName !== 'INPUT') {
+			dispatch({ type: CLEAR_ALL_MESSAGES });
+		}
+	}, []);
+
 	const handleStyleInstallerDelete = useCallback(deleteStyleName => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleName ));
 	}, [citationStyles]);
@@ -1076,6 +1082,11 @@ const BibWebContainer = props => {
 		document.addEventListener('scroll', handleScroll);
 		return () => document.removeEventListener('scroll', handleScroll);
 	}, [handleScroll]);
+
+	useEffect(() => {
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [handleKeyDown]);
 
 	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
