@@ -13,7 +13,8 @@ import StyleSelector from './style-selector';
 import { pick } from '../immutable'
 
 const BibliographySection = props => {
-	const { bibliography, isReadOnly, isReady, localCitationsCount, onOverride, onTitleChanged, title } = props;
+	const { bibliography, isReadOnly, isReady, hydrateItemsCount, isHydrated, localCitationsCount,
+	onOverride, onTitleChanged, title } = props;
 	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 
@@ -51,10 +52,10 @@ const BibliographySection = props => {
 	return (
 		<section
 			className={ cx('section', 'section-bibliography',
-				{ 'loading': !isReady, 'empty': isReady && bibliography.items.length === 0 })
+				{ 'loading': !isReady && !isHydrated, 'empty': isReady && bibliography.items.length === 0 })
 			}
 		>
-			<div className="container">
+			<div className="container" suppressHydrationWarning={ true }>
 				{ (isReady && bibliography.items.length === 0) ? (
 					<React.Fragment>
 						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
@@ -93,17 +94,19 @@ const BibliographySection = props => {
 							!isReadOnly && <StyleSelector { ...pick(props, ['citationStyle', 'citationStyles', 'onCitationStyleChanged']) } />
 						}
 						{
-							isReady ? <Bibliography { ...pick(props, ['isNoteStyle',
-							'isNumericStyle', 'isReadOnly', 'bibliography',
-							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
-							'styleHasBibliography'])} /> : (
+							(isReady || isHydrated) ? <Bibliography { ...pick(props,
+							['isNoteStyle', 'isNumericStyle', 'hydrateItemsCount', 'isHydrated', 'isReadOnly',
+							'bibliography', 'onCitationCopyDialogOpen', 'onDeleteEntry',
+							'onEditorOpen', 'styleHasBibliography'])} /> : (
 								<div className="spinner-container">
 									<Spinner />
 								</div>
 							)
 						}
 						{
-							!isReadOnly && isReady && <DeleteAllButton { ...pick(props, ['bibliography', 'onDeleteCitations']) } />
+							!isReadOnly && (isReady || isHydrated) && (
+								<DeleteAllButton { ...pick(props, ['bibliography', 'onDeleteCitations']) } />
+							)
 						}
 						<Confirmation
 							isOpen={ isReadOnly && isConfirmingOverride }
@@ -119,7 +122,7 @@ const BibliographySection = props => {
 					</React.Fragment>
 				)
 			}
-			{ (isReady && isReadOnly) && (
+			{ ((isReady || isHydrated) && isReadOnly) && (
 				<Button
 					onClick={ handleEditBibliography }
 					className="btn-sm btn-outline-secondary">

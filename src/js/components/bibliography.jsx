@@ -186,9 +186,16 @@ const Bibliography = props => {
 		<React.Fragment>
 			{ isReadOnly ? (
 				<React.Fragment>
-					<div className="bibliography read-only" dangerouslySetInnerHTML={ { __html: bibliographyRendered } } />
+					<div
+						suppressHydrationWarning={ true }
+						className="bibliography read-only"
+						dangerouslySetInnerHTML={ { __html: bibliographyRendered } }
+					/>
 					{ bibliography.items.map(renderedItem => (
-					<script key={ renderedItem.id } type="application/vnd.zotero.data+json">
+					<script
+						suppressHydrationWarning={ true }
+						key={ renderedItem.id }
+						type="application/vnd.zotero.data+json">
 							{ JSON.stringify(bibliography.lookup[renderedItem.id]) }
 					</script>
 					)) }

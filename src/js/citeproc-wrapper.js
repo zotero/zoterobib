@@ -358,23 +358,27 @@ const getCiteprocRSLoader = async () => {
 	});
 }
 
-CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and_doi = false }, useLegacy = null) => {
+CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and_doi = false }, useLegacy = null, DriverORCSL = null) => {
 	lang = lang ? lang : window ? window.navigator.userLanguage || window.navigator.language : null;
 	useLegacy = useLegacy === null ? !isWasmSupported : useLegacy;
 
 	try {
 		if(useLegacy) {
-			const CSL = await getCSL();
+			const CSL = DriverORCSL ?? await getCSL();
 			if(format === 'plain') {
 				format = 'text';
 			}
 			return new CiteprocWrapper(true, CSL, { style, format, lang, wrap_url_and_doi });
 		} else {
 			if(!Driver) {
-				const citeprocLoader = await getCiteprocRSLoader();
-				const { init, CreateDriver } = await citeprocLoader();
-				Driver = CreateDriver;
-				await init();
+				if(DriverORCSL) {
+					Driver = DriverORCSL;
+				} else {
+					const citeprocLoader = await getCiteprocRSLoader();
+					const { init, CreateDriver } = await citeprocLoader();
+					Driver = CreateDriver;
+					await init();
+				}
 			}
 			const fetcher = new Fetcher();
 			// NOTE: wrap_url_and_doi is not supported in citeproc rs (yet?)

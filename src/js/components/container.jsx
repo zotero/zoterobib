@@ -142,6 +142,12 @@ const BibWebContainer = props => {
 	const [activeDialog, setActiveDialog] = useState(null);
 	const wasDataReady = usePrevious(isDataReady);
 	const isReadOnly = !!remoteId;
+	const hydrateItemsCount = props.hydrateItemsCount;
+	const isHydrated = typeof props.hydrateItemsCount !== 'undefined';
+
+	if(isHydrated && !isReadOnly) {
+		throw new Error(`BibWebContainer bootstrapped incorrectly. RemoteID must be present to hydrate. Path: ${window.location.pathname}`);
+	}
 
 	const [state, dispatch] = useReducer(reducer, {
 		selected: undefined,
@@ -153,7 +159,9 @@ const BibWebContainer = props => {
 		isUppercaseSubtitlesStyle: undefined,
 		isSentenceCaseStyle: undefined,
 		isConfirmed: undefined,
-		bibliography: { items: [], meta: null, lookup: {} },
+		bibliography: isHydrated ?
+			{ items: Array(hydrateItemsCount).fill().map((_, id) => ({ id, value: '' })), meta: null, lookup: {} } :
+			{ items: [], meta: null, lookup: {} },
 		bibliographyNeedsRefresh: false,
 		bibliographyNeedsRebuild: false,
 		isCiteprocReady: false,
@@ -1102,10 +1110,12 @@ const BibWebContainer = props => {
 		citationStyle = { state.selected }
 		citationStyles = { citationStyles }
 		editorItem = { editorItem }
+		hydrateItemsCount={ hydrateItemsCount }
 		identifier = { identifier }
 		isNoteStyle = { state.isNoteStyle }
 		isNumericStyle = { state.isNumericStyle }
 		isReadOnly={ isReadOnly }
+		isHydrated={ isHydrated }
 		isReady={ isReady }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }

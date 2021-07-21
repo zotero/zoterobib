@@ -28,12 +28,14 @@ ErrorBoundary.propTypes = {
 class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
-			<ErrorBoundary><Container config = { this.props.config } /></ErrorBoundary>
+			<ErrorBoundary><Container {...this.props } /></ErrorBoundary>
 		);
 	}
 
 	static init(domEl, config={}) {
-		ReactDOM.render(<ZoteroBibComponent config={ config } />, domEl);
+		'hydrateItemsCount' in domEl.dataset ?
+			ReactDOM.hydrate(<ZoteroBibComponent hydrateItemsCount={ domEl.dataset.hydrateItemsCount } config={ config } />, domEl) :
+			ReactDOM.render(<ZoteroBibComponent config={ config } />, domEl);
 	}
 
 	static propTypes = {

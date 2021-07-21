@@ -74,9 +74,10 @@ class ZBib extends React.PureComponent {
 					)}
 					<BibliographySection { ...pick(this.props, ['bibliography', 'isReadOnly',
 						'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged', 'title',
-						'citationStyle', 'citationStyles', 'onCitationStyleChanged', 'isNoteStyle',
-						'isNumericStyle', 'onCitationCopyDialogOpen', 'onDeleteEntry',
-						'onDeleteCitations', 'onEditorOpen', 'styleHasBibliography']) }
+						'citationStyle', 'citationStyles', 'onCitationStyleChanged', 'isHydrated',
+						'isNoteStyle', 'isNumericStyle', 'onCitationCopyDialogOpen',
+						'onDeleteEntry', 'onDeleteCitations', 'onEditorOpen',
+						'styleHasBibliography']) }
 					/>
 					{
 						<section className="section section-export">
