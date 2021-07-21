@@ -121,6 +121,13 @@ const StyleInstaller = props => {
 		}
 	}, []);
 
+	const handleCancel = useCallback(() => {
+		clearTimeout(timeout.current);
+		timeout.current = null;
+		dispatch({ type: FILTER_UPDATE, filter: '' });
+		onStyleInstallerCancel();
+	}, [onStyleInstallerCancel]);
+
 	const handleInstall = useCallback(ev => {
 		const styleName = ev.currentTarget.closest('[data-style]').dataset.style;
 		const style = state.items.find(cs => cs.name === styleName);
@@ -134,13 +141,6 @@ const StyleInstaller = props => {
 		ev.stopPropagation();
 		onStyleInstallerDelete(styleName);
 	}, [onStyleInstallerDelete]);
-
-	const handleCancel = useCallback(() => {
-		clearTimeout(timeout.current);
-		timeout.current = null;
-		dispatch({ type: FILTER_UPDATE, filter: '' });
-		onStyleInstallerCancel();
-	}, [onStyleInstallerCancel]);
 
 	const handleInputKeydown = useCallback((ev) => {
 		if(ev.key === 'Escape') {
