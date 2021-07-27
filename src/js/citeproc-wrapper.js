@@ -43,7 +43,7 @@ const retrieveLocaleSync = lang => {
 			localStorage.setItem(cacheId, locales);
 		} catch(e) {
 			if(!locales) {
-				throw new Error('Failed to load locales');
+				throw new Error(`Failed to load locales ${lang}`);
 			}
 		}
 	}
