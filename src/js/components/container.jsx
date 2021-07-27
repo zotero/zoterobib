@@ -143,9 +143,13 @@ const BibWebContainer = props => {
 	const wasDataReady = usePrevious(isDataReady);
 	const isReadOnly = !!remoteId;
 	const hydrateItemsCount = props.hydrateItemsCount;
-	const isHydrated = typeof props.hydrateItemsCount !== 'undefined';
 
-	if(isHydrated && !isReadOnly) {
+	// isHydrated is true during hydration render. It is used throughout app to pretend we're ready
+	// (without any data) so that rendered components (almost) match static markup (otherwise we
+	// would be showing spinners etc.). Once app is hydrated, we operate normally.
+	const isHydrated = useRef(typeof props.hydrateItemsCount !== 'undefined');
+
+	if(isHydrated.current && !isReadOnly) {
 		throw new Error(`BibWebContainer bootstrapped incorrectly. RemoteID must be present to hydrate. Path: ${window.location.pathname}`);
 	}
 
@@ -159,7 +163,7 @@ const BibWebContainer = props => {
 		isUppercaseSubtitlesStyle: undefined,
 		isSentenceCaseStyle: undefined,
 		isConfirmed: undefined,
-		bibliography: isHydrated ?
+		bibliography: isHydrated.current ?
 			{ items: Array(hydrateItemsCount).fill().map((_, id) => ({ id, value: '' })), meta: null, lookup: {} } :
 			{ items: [], meta: null, lookup: {} },
 		bibliographyNeedsRefresh: false,
@@ -744,6 +748,8 @@ const BibWebContainer = props => {
 		localStorage.setItem('zotero-bib-extra-citation-styles', JSON.stringify(citationStyles.filter(cs => !cs.isCore)));
 		localStorage.setItem('zotero-bib-title', title);
 
+		isHydrated.current = false;
+
 		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
 		history.replaceState(null, null, '/');
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
@@ -1115,7 +1121,7 @@ const BibWebContainer = props => {
 		isNoteStyle = { state.isNoteStyle }
 		isNumericStyle = { state.isNumericStyle }
 		isReadOnly={ isReadOnly }
-		isHydrated={ isHydrated }
+		isHydrated={ isHydrated.current }
 		isReady={ isReady }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }
