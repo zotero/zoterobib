@@ -379,7 +379,25 @@ const pickBestLocale = (userLocales, supportedLocales, fallback = 'en-US') => {
 	}
 
 	for(let i = 0; i < userLocales.length; i++) {
-		let locale = normalizeLocaleName(userLocales[i]);
+		const locale = normalizeLocaleName(userLocales[i]);
+		const langCode = locale.substr(0,2);
+		const possibleLocales = supportedLocales.filter(supportedLocale => supportedLocale.substr(0, 2) === langCode);
+
+		if(possibleLocales.length === 1) {
+			return possibleLocales[0];
+		} else if(possibleLocales.length > 0) {
+			if(possibleLocales.includes(locale)) {
+				return locale;
+			}
+			const canonical = `${langCode}-${langCode.toUpperCase()}`;
+			if(possibleLocales.includes(canonical)) {
+				return canonical;
+			}
+
+			possibleLocales.sort();
+			return possibleLocales[0];
+		}
+
 		const matchingLocale = supportedLocales.find(supportedLocale => supportedLocale.startsWith(locale));
 		if(matchingLocale) {
 			return matchingLocale;
