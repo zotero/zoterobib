@@ -1,5 +1,7 @@
 import load from 'load-script';
 import { getStyleProperties } from './common/citation-style';
+import supportedLocales from '../../data/supported-locales.json';
+import { pickBestLocale } from './utils';
 
 const isWasmSupported = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
 var Driver = null;
@@ -359,7 +361,8 @@ const getCiteprocRSLoader = async () => {
 }
 
 CiteprocWrapper.new = async ({ style, format = 'html', lang = null, wrap_url_and_doi = false }, useLegacy = null, DriverORCSL = null) => {
-	lang = lang ? lang : window ? window.navigator.userLanguage || window.navigator.language : null;
+	const userLocales = lang ? lang : window ? (window.navigator.languages || window.navigator.userLanguage || window.navigator.language) : null;
+	lang = pickBestLocale(userLocales, supportedLocales);
 	useLegacy = useLegacy === null ? !isWasmSupported : useLegacy;
 
 	try {

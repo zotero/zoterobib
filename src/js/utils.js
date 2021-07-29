@@ -366,10 +366,33 @@ const enumerateObjects = (objects, key = 'id', start = 0) => {
 	return objects.map((o, i) => ({ ...o, [key]: i + start }));
 }
 
+const normalizeLocaleName = locale => {
+	const localeSplit = locale.split('-');
+	return locale = localeSplit.length > 1 ?
+		`${localeSplit[0].toLowerCase()}-${localeSplit[1].toUpperCase()}` :
+		localeSplit[0].toLowerCase();
+}
+
+const pickBestLocale = (userLocales, supportedLocales, fallback = 'en-US') => {
+	if(!Array.isArray(userLocales)) {
+		userLocales = [userLocales];
+	}
+
+	for(let i = 0; i < userLocales.length; i++) {
+		let locale = normalizeLocaleName(userLocales[i]);
+		const matchingLocale = supportedLocales.find(supportedLocale => supportedLocale.startsWith(locale));
+		if(matchingLocale) {
+			return matchingLocale;
+		}
+	}
+	return fallback;
+}
+
 export {
 	calcOffset,
 	dedupMultipleChoiceItems,
 	ensureNoBlankItems,
+	enumerateObjects,
 	fetchFromPermalink,
 	fetchWithCachedFallback,
 	getExpandedCitationStyles,
@@ -379,6 +402,7 @@ export {
 	isLikeUrl,
 	noop,
 	parseIdentifier,
+	pickBestLocale,
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,
@@ -389,5 +413,4 @@ export {
 	splice,
 	validateItem,
 	validateUrl,
-	enumerateObjects,
 };
