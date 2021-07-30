@@ -14,7 +14,7 @@
     "prebuild": "npm run clean -s && mkdir -p build/static/",
     "clean": "rimraf build",
     "clean:data": "rimraf data",
-    "build": "run-p \"build:collect-locale\" \"build:styles-json\" && run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:static -s' && npm run build:postprocess",
+    "build": "run-p \"build:collect-locale\" \"build:styles-json\" && NODE_ENV=production run-p 'build:js -s' 'build:scss -s' 'build:html -s' 'build:static -s' && npm run build:postprocess",
     "build:js": "mkdir -p build/static && NODE_ENV=production rollup -c",
     "build:scss": "for f in src/scss/*.scss; do sass --no-source-map $f build/static/`basename $f .scss`.css; done;",
     "build:html": "node scripts/build-html.cjs",
