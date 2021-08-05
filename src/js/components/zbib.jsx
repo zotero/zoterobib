@@ -46,10 +46,8 @@ class ZBib extends React.PureComponent {
 						{ this.props.messages.map(message => (
 							<Message
 								{ ...message }
+								{ ...pick(this.props, ['onDismiss', 'onUndoDelete', 'onReadMore', 'onShowDuplicate'])}
 								key={ message.id }
-								onDismiss = { this.props.onDismiss }
-								onUndoDelete = { this.props.onUndoDelete }
-								onReadMore = { this.props.onReadMore }
 							/>
 							))
 						}

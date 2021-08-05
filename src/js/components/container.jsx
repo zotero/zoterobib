@@ -5,7 +5,7 @@ import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
-getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isLikeUrl,
+getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isDuplicate, isLikeUrl,
 parseIdentifier, processMultipleChoiceItems, processSentenceCaseAPAItems, retrieveStylesData,
 saveToPermalink, validateItem, validateUrl } from '../utils';
 import { coreCitationStyles } from '../../../data/citation-styles-data.json';
@@ -138,6 +138,7 @@ const BibWebContainer = props => {
 	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
 	const lastDeletedItem = useRef(null);
+	const duplicate = useRef(null);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
 	const wasDataReady = usePrevious(isDataReady);
@@ -315,6 +316,17 @@ const BibWebContainer = props => {
 	}, [state.styleHasBibliography, state.bibliography]);
 
 	const addItem = useCallback((item, showFirstCitationMessage = true)  => {
+		duplicate.current = isDuplicate(item, bib.current.itemsRaw);
+		if(duplicate.current) {
+			const message = {
+				action: 'Show Duplicate',
+				id: getNextMessageId(),
+				kind: 'DUPLICATE',
+				message: 'Possible duplicate already exists in the bibliography',
+			};
+			dispatch({ type: REPLACE_MESSAGE, kind: 'DUPLICATE', message });
+		}
+
 		if(state.isSentenceCaseStyle) {
 			bib.current.addItem(processSentenceCaseAPAItems([item])[0]);
 		} else {
@@ -765,6 +777,20 @@ const BibWebContainer = props => {
 		dispatch({ type: CLEAR_MESSAGE, kind: 'WELCOME_MESSAGE' });
 	}, []);
 
+	const handleShowDuplicate = useCallback(event => {
+		if(duplicate.current) {
+			setActiveDialog(null);
+			const target = document.querySelector(`[data-key="${duplicate.current.key}"]`);
+			(new SmoothScroll()).animateScroll(target, event.currentTarget, {
+				header: '.message',
+				offset: calcOffset(),
+				speed: 1000, speedAsDuration: true,
+			});
+			duplicate.current = null;
+		}
+		dispatch({ type: CLEAR_MESSAGE, kind: 'DUPLICATE' });
+	}, []);
+
 	const handleStyleInstallerCancel = () => {
 		setActiveDialog(null);
 	};
@@ -1158,6 +1184,7 @@ const BibWebContainer = props => {
 		onReviewDismiss = { handleReviewDismiss }
 		onReviewEdit = { handleReviewEdit }
 		onSave = { handleSave }
+		onShowDuplicate={ handleShowDuplicate }
 		onStyleInstallerCancel = { handleStyleInstallerCancel }
 		onStyleInstallerDelete = { handleStyleInstallerDelete }
 		onStyleInstallerSelect = { handleStyleInstallerSelect }

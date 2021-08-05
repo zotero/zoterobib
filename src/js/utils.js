@@ -406,6 +406,17 @@ const pickBestLocale = (userLocales, supportedLocales, fallback = 'en-US') => {
 	return fallback;
 }
 
+const isDuplicate = (newItem, items = []) => {
+	const result = items.find(item =>
+		(item.ISBN && (item.ISBN === newItem.ISBN)) ||
+		(item.DOI && (item.DOI === newItem.DOI)) ||
+		(item.ISSN && (item.ISSN === newItem.ISSN)) ||
+		(item.url && (item.url === newItem.url)) ||
+		(item.title && (item.title === newItem.title))
+	);
+	return result ?? false;
+}
+
 export {
 	calcOffset,
 	dedupMultipleChoiceItems,
@@ -417,6 +428,7 @@ export {
 	getItemsCSL,
 	getItemTypes,
 	getOneTimeBibliographyOrFallback,
+	isDuplicate,
 	isLikeUrl,
 	noop,
 	parseIdentifier,
