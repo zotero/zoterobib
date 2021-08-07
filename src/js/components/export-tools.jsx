@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 
 import exportFormats from '../constants/export-formats';
 import Button from './ui/button';
+import { isTriggerEvent } from '../common/event';
 
 const formatsInDropdown = ['rtf', 'html', 'ris', 'bibtex', 'zotero'];
 
@@ -93,6 +94,10 @@ const ExportTools = props => {
 	}, [isDropdownOpen]);
 
 	const handleCopyClick = useCallback(async ev => {
+		if(!isTriggerEvent(ev)) {
+			return;
+		}
+
 		const format = ev.currentTarget.dataset.format;
 		const isTopLevelButton = 'main' in ev.currentTarget.dataset;
 		if(isTopLevelButton) {
@@ -120,6 +125,7 @@ const ExportTools = props => {
 					disabled={ bibliography.items.length === 0 }
 					className='btn btn-secondary btn-xl copy-to-clipboard'
 					onClick={ handleCopyClick }
+					onKeyDown={ handleCopyClick }
 				>
 					<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 						<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['plain'].label }</span>
