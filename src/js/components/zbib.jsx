@@ -82,7 +82,7 @@ class ZBib extends React.PureComponent {
 							<div className="container">
 								<h2>Export</h2>
 								<ExportTools { ...pick(this.props, ['bibliography', 'getCopyData',
-									'getFileData', 'isReadOnly', 'onSaveToZoteroShow']) }
+									'onDownloadFile', 'isReadOnly', 'onSaveToZoteroShow']) }
 								/>
 							</div>
 						</section>

@@ -6,7 +6,6 @@ import Dropdown from 'reactstrap/lib/Dropdown';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import DropdownMenu from 'reactstrap/lib/DropdownMenu';
 import DropdownItem from 'reactstrap/lib/DropdownItem';
-import { saveAs } from 'file-saver';
 
 import exportFormats from '../constants/export-formats';
 import Button from './ui/button';
@@ -52,7 +51,7 @@ ExportOption.propTypes = {
 };
 
 const ExportTools = props => {
-	const { bibliography, getCopyData, getFileData, onSaveToZoteroShow } = props;
+	const { bibliography, getCopyData, onDownloadFile, onSaveToZoteroShow } = props;
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [clipboardConfirmations, setClipboardConfirmations] = useState({});
 	const dropdownTimer = useRef(null);
@@ -76,10 +75,8 @@ const ExportTools = props => {
 			return;
 		}
 
-		const file = await getFileData(format);
-		saveAs(file);
-
-	}, [getFileData, onSaveToZoteroShow]);
+		onDownloadFile(format);
+	}, [onDownloadFile, onSaveToZoteroShow]);
 
 	const handleToggleDropdown = useCallback(ev => {
 		const isFromCopyTrigger = ev.target && ev.target.closest('.clipboard-trigger');
@@ -157,8 +154,8 @@ const ExportTools = props => {
 ExportTools.propTypes = {
 	bibliography: PropTypes.object,
 	getCopyData: PropTypes.func.isRequired,
-	getFileData: PropTypes.func.isRequired,
 	isReadOnly: PropTypes.bool,
+	onDownloadFile: PropTypes.func.isRequired,
 	onSaveToZoteroShow: PropTypes.func.isRequired,
 }
 

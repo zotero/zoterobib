@@ -3,6 +3,7 @@ import ZoteroBib from 'zotero-translation-client';
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
+import { saveAs } from 'file-saver';
 
 import { calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink,
 getOneTimeBibliographyOrFallback, getExpandedCitationStyles, getItemsCSL, isDuplicate, isLikeUrl,
@@ -441,7 +442,7 @@ const BibWebContainer = props => {
 		return '';
 	}, [state.xml, state.styleHasBibliography]);
 
-	const getFileData = useCallback(async format => {
+	const handleDownloadFile = useCallback(async format => {
 		var fileContents, separator, bibStyle, preamble = '';
 
 		if(format === 'ris') {
@@ -472,12 +473,18 @@ const BibWebContainer = props => {
 		}
 
 		const fileName = `citations.${exportFormats[format].extension}`;
-		const file = new File(
-			[fileContents],
-			fileName,
-			{ type: exportFormats[format].mime }
-		);
-		return file;
+		try {
+			const file = new File(
+				[fileContents],
+				fileName,
+				{ type: exportFormats[format].mime }
+			);
+			saveAs(file);
+		} catch(_) {
+			// Old Edge & Safari, see #237
+			const blob = new Blob([fileContents], { type: exportFormats[format].mime });
+			saveAs(blob, fileName);
+		}
 	}, [handleError, state.xml, state.styleHasBibliography]);
 
 	const handleError = useCallback((errorMessage, errorData) => {
@@ -1135,7 +1142,6 @@ const BibWebContainer = props => {
 
 	return (<ZBib
 		getCopyData = { getCopyData }
-		getFileData = { getFileData }
 		bibliography = { state.bibliography }
 		citationCopyModifiers = { citationCopyModifiers }
 		citationHtml = { citationHtml }
@@ -1169,6 +1175,7 @@ const BibWebContainer = props => {
 		onDeleteCitations = { handleDeleteCitations }
 		onDeleteEntry = { handleDeleteEntry }
 		onDismiss = { handleDismiss }
+		onDownloadFile = { handleDownloadFile }
 		onEditorClose = { handleCloseEditor }
 		onEditorOpen = { handleOpenEditor }
 		onError = { handleError }
