@@ -839,6 +839,14 @@ const BibWebContainer = props => {
 		}
 	}, []);
 
+	const handleGlobalClick = useCallback(ev => {
+		if(ev.target.closest('.message')) {
+			// ignore clicks inside the message
+			return;
+		}
+		dispatch({ type: CLEAR_ALL_MESSAGES });
+	}, []);
+
 	const handleStyleInstallerDelete = useCallback(deleteStyleName => {
 		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleName ));
 	}, [citationStyles]);
@@ -1107,6 +1115,11 @@ const BibWebContainer = props => {
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, [handleKeyDown]);
+
+	useEffect(() => {
+		document.addEventListener('click', handleGlobalClick);
+		return () => document.removeEventListener('click', handleGlobalClick);
+	}, [handleGlobalClick]);
 
 	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
