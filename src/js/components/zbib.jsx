@@ -62,7 +62,7 @@ class ZBib extends React.PureComponent {
 								</nav>
 								<div className="container">
 									<Brand />
-									<CiteTools { ...pick(this.props, ['isTranslating', 'onEditorOpen', 'onTranslationRequest', 'identifier']) } />
+									<CiteTools { ...pick(this.props, ['isTranslating', 'onEditorOpen', 'onTranslationCancel', 'onTranslationRequest', 'identifier']) } />
 								</div>
 							</section>
 						)

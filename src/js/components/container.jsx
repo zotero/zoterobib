@@ -130,11 +130,11 @@ const reducer = (state, action) => {
 	return state;
 }
 
-
 const BibWebContainer = props => {
 	const remoteId = window.location.pathname.match(/\/([0-9a-fA-f]{32})/)?.[1];
 	const citeproc = useRef(null);
 	const bib = useRef(null);
+	const abortController = useRef(null);
 	const copyData = useRef(null);
 	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
@@ -893,6 +893,13 @@ const BibWebContainer = props => {
 		setItemUnderReview(null);
 		setPermalink(null);
 
+		const opts = { add: false };
+
+		if(typeof(AbortController) === 'function') {
+			abortController.current = new AbortController();
+			opts.init = { signal: abortController.current.signal };
+		}
+
 		let isUrl = !!multipleSelectedItems || isLikeUrl(identifier);
 		if(identifier || isUrl) {
 			try {
@@ -903,12 +910,12 @@ const BibWebContainer = props => {
 						setIdentifier(url);
 					}
 					if(multipleSelectedItems) {
-						translationResponse = await bib.current.translateUrlItems(url, multipleSelectedItems, { add: false });
+						translationResponse = await bib.current.translateUrlItems(url, multipleSelectedItems, opts);
 					} else {
-						translationResponse = await bib.current.translateUrl(url, { add: false });
+						translationResponse = await bib.current.translateUrl(url, opts);
 					}
 				} else {
-					translationResponse = await bib.current.translateIdentifier(identifier, { add: false });
+					translationResponse = await bib.current.translateIdentifier(identifier, opts);
 				}
 
 				switch(translationResponse.result) {
@@ -980,6 +987,9 @@ const BibWebContainer = props => {
 				}
 			}
 			catch(e) {
+				if(e instanceof DOMException && e.message === 'The user aborted a request.') {
+					return;
+				}
 				handleError('An error occurred while citing this source.', e);
 				setIsTranslating(false);
 			}
@@ -988,6 +998,13 @@ const BibWebContainer = props => {
 			setIsTranslating(false);
 		}
 	}, [addItem, state.xml, handleError, state.styleHasBibliography]);
+
+	const handleTranslationCancel = useCallback(() => {
+		if(abortController.current) {
+			abortController.current.abort();
+			setIsTranslating(false);
+		}
+	}, []);
 
 	const handleMultipleChoiceSelect = useCallback(async selectedItem => {
 		setActiveDialog(null);
@@ -1200,6 +1217,7 @@ const BibWebContainer = props => {
 		onReadMore = { handleReadMoreClick }
 		onStyleSwitchCancel = { handleStyleSwitchCancel }
 		onStyleSwitchConfirm = { handleStyleSwitchConfirm }
+		onTranslationCancel = { handleTranslationCancel }
 		onTranslationRequest = { handleTranslateIdentifier }
 		onCitationStyleChanged={ handleCitationStyleChanged }
 		onOverride={ handleOverride }
