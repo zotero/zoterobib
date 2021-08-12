@@ -9,25 +9,39 @@ const canCancel = typeof(AbortController) === 'function';
 
 const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCancel, onTranslationRequest }) => {
 	const inputRef = useRef(null);
-	const [value, setValue] = useState(identifier);
+	const [entry, setEntry] = useState(identifier);
 	const prevIdentifier = usePrevious(identifier);
 	const wasTranslating = usePrevious(isTranslating)
 
 	const handleChange = useCallback(newValue => {
-		setValue(newValue);
+		setEntry(newValue);
 	}, []);
 
 	const handleCiteOrCancel = useCallback(() => {
 		if(isTranslating) {
 			onTranslationCancel();
-		} else if(value.length > 0 && !isTranslating) {
-			onTranslationRequest(value);
+		} else if(entry.length > 0 && !isTranslating) {
+			onTranslationRequest();
 		}
-	}, [value, isTranslating, onTranslationCancel, onTranslationRequest]);
+	}, [entry, isTranslating, onTranslationCancel, onTranslationRequest]);
+
+	const handlePaste = useCallback((ev) => {
+		const clipboardData = ev.clipboardData || window.clipboardData;
+		const pastedData = clipboardData.getData('Text');
+
+		if(!pastedData.includes('\n')) {
+			return;
+		}
+
+		ev.preventDefault();
+		setEntry(pastedData);
+		onTranslationRequest(pastedData, null, false, true);
+
+	}, [onTranslationRequest]);
 
 	useEffect(() => {
 		if(typeof(prevIdentifier !== 'undefined') && identifier !== prevIdentifier) {
-			setValue(identifier);
+			setEntry(identifier);
 		}
 	}, [identifier, prevIdentifier]);
 
@@ -47,11 +61,12 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 					onBlur={ () => true /* do not commit on blur */ }
 					onChange={ handleChange }
 					onCommit={ handleCiteOrCancel }
+					onPaste={ handlePaste }
 					placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title"
 					ref = { inputRef }
 					tabIndex={ 0 }
 					type="text"
-					value={ value }
+					value={ entry }
 				/>
 				<Button
 					className="btn-lg btn-secondary"

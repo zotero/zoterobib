@@ -884,8 +884,10 @@ const BibWebContainer = props => {
 		setTitle(title);
 	}, []);
 
-	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false) => {
-		identifier = parseIdentifier(identifier);
+	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false, shouldImport = false) => {
+		if(!shouldImport) {
+			identifier = parseIdentifier(identifier);
+		}
 
 		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setIdentifier(identifier);
@@ -900,7 +902,7 @@ const BibWebContainer = props => {
 			opts.init = { signal: abortController.current.signal };
 		}
 
-		let isUrl = !!multipleSelectedItems || isLikeUrl(identifier);
+		let isUrl = !!multipleSelectedItems || (!shouldImport && isLikeUrl(identifier));
 		if(identifier || isUrl) {
 			try {
 				var translationResponse;
@@ -914,6 +916,8 @@ const BibWebContainer = props => {
 					} else {
 						translationResponse = await bib.current.translateUrl(url, opts);
 					}
+				} else if(shouldImport) {
+					translationResponse = await bib.current.translateImport(identifier, opts);
 				} else {
 					translationResponse = await bib.current.translateIdentifier(identifier, opts);
 				}
