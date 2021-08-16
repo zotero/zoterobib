@@ -1,4 +1,5 @@
 import { fetchWithCachedFallback } from '../utils'
+import { omit } from '../immutable';
 
 const stylePropertiesCache = new Map();
 const stylesCache = new Map();
@@ -35,35 +36,42 @@ const getStyleProperties = citationStyleXml => {
 		const isNoteStyle = xmlDoc.querySelector('info > category[citation-format^="note"]') !== null;
 		const isUppercaseSubtitlesStyle = checkUppercase(citationStyleName) || checkUppercase(parentStyleName);
 		const isSentenceCaseStyle = checkSentenceCase(citationStyleName) || checkSentenceCase(parentStyleName);
+		const defaultLocale = xmlDoc.querySelector('style')?.getAttribute('default-locale');
 
-		stylePropertiesCache.set(citationStyleXml, { citationStyleName, parentStyleName, styleHasBibliography,
-			isNumericStyle, isNoteStyle, isUppercaseSubtitlesStyle, isSentenceCaseStyle, });
+		stylePropertiesCache.set(citationStyleXml, { citationStyleName, defaultLocale,
+			parentStyleName, styleHasBibliography, isNumericStyle, isNoteStyle,
+			isUppercaseSubtitlesStyle, isSentenceCaseStyle, });
 	}
 
 	return stylePropertiesCache.get(citationStyleXml);
 }
 
-const fetchAndParseIndependentStyle = async styleName => {
-	let nextStyleName = styleName, styleXml, styleProps;
-
-	do {
-		if(stylesCache.has(nextStyleName)) {
-			styleXml = stylesCache.get(nextStyleName);
-		} else {
-			const url = `https://www.zotero.org/styles/${nextStyleName}`;
-			const response = await fetchWithCachedFallback(url);
-			if(!response.ok) {
-				throw new Error(`Failed to fetch ${nextStyleName} from ${url}`);
-			}
-			styleXml = await response.text();
-			stylesCache.set(nextStyleName, styleXml);
+const fetchAndParseStyle = async styleName => {
+	let styleXml, styleProps;
+	if(stylesCache.has(styleName)) {
+		styleXml = stylesCache.get(styleName);
+	} else {
+		const url = `https://www.zotero.org/styles/${styleName}`;
+		const response = await fetchWithCachedFallback(url);
+		if(!response.ok) {
+			throw new Error(`Failed to fetch ${styleName} from ${url}`);
 		}
-		styleProps = getStyleProperties(styleXml);
-		const { parentStyleName } = styleProps
-		nextStyleName = parentStyleName;
-	} while(nextStyleName);
+		styleXml = await response.text();
+		stylesCache.set(styleName, styleXml);
+	}
+	styleProps = getStyleProperties(styleXml);
+	return { styleName, styleXml, styleProps }
+}
 
-	return { styleName, styleXml, styleProps };
+const fetchAndParseIndependentStyle = async styleName => {
+	const { styleXml, styleProps } = await fetchAndParseStyle(styleName);
+	const { styleXml: parentStyleXml, styleProps: parentStyleProps } = (styleProps.parentStyleName ?
+		await fetchAndParseStyle(styleProps.parentStyleName) : {});
+
+	return { styleName, styleXml, parentStyleXml, styleProps: {
+		...styleProps,
+		...omit((parentStyleProps || {}), ['parentStyleName', 'defaultLocale']),
+	}};
 }
 
 export { fetchAndParseIndependentStyle, getStyleProperties };

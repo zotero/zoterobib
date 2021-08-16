@@ -47,9 +47,9 @@ const CLEAR_ALL_MESSAGES = 'CLEAR_ALL_MESSAGES';
 const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	dispatch({ type: REQUEST_FETCH_STYLE, styleName });
 	try {
-		const { styleName: independentStyleName, styleXml, styleProps } = await fetchAndParseIndependentStyle(styleName);
+		const styleData = await fetchAndParseIndependentStyle(styleName);
 		dispatch({
-			type: RECEIVE_FETCH_STYLE, styleName: independentStyleName, styleXml, styleProps, ...opts
+			type: RECEIVE_FETCH_STYLE, ...styleData, ...opts
 		});
 	} catch (error) {
 		dispatch({ type: ERROR_FETCH_STYLE, styleName, error });
@@ -69,9 +69,11 @@ const reducer = (state, action) => {
 				...state,
 				isFetching: false,
 				bibliographyNeedsRebuild: true,
-				selected: action.styleName,
-				xml: action.styleXml,
+				selected: action.styleName, // in case of dependant style, this is the name of the parent style
+				xml: action.parentStyleXml ?? action.styleXml,
+				isDependent: !!action.styleProps.parentStyleName,
 				isConfirmed: typeof(action.isConfirmed) === 'boolean' ? action.isConfirmed : !action.styleProps.isSentenceCaseStyle,
+				localeOverride: action.styleProps.parentStyleName ? action.styleProps.defaultLocale : null,
 				...pick(
 					action.styleProps,
 					['styleHasBibliography', 'isNumericStyle', 'isNoteStyle', 'isUppercaseSubtitlesStyle', 'isSentenceCaseStyle']
@@ -159,6 +161,8 @@ const BibWebContainer = props => {
 		selected: undefined,
 		xml: undefined,
 		isFetching: false,
+		isDependent: false,
+		localeOverride: null,
 		styleHasBibliography: undefined,
 		isNumericStyle: undefined,
 		isNoteStyle: undefined,
@@ -226,15 +230,13 @@ const BibWebContainer = props => {
 	const buildBibliography = useCallback(async () => {
 		dispatch({ type: BEGIN_BUILD_BIBLIOGRAPHY });
 
-		if(citeproc.current) {
-			citeproc.current.setStyle(state.xml);
-		} else {
-			citeproc.current = await CiteprocWrapper.new({
-				style: state.xml,
-				format: 'html',
-				wrap_url_and_doi: isReadOnly
-			}, useLegacy.current);
-		}
+		//TODO: if citeproc.current use setStyle on CiteprocWrapper, once it supports localeOverride
+		citeproc.current = await CiteprocWrapper.new({
+			style: state.xml,
+			format: 'html',
+			localeOverride: state.localeOverride,
+			wrap_url_and_doi: isReadOnly
+		}, useLegacy.current);
 
 		const t0 = performance.now();
 		citeproc.current.includeUncited("All");
