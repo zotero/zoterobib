@@ -847,7 +847,12 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleStyleInstallerDelete = useCallback(deleteStyleName => {
-		setCitationStyles(citationStyles.filter(cs => cs.name !== deleteStyleName ));
+		const newCitationStyles = citationStyles.filter(cs => cs.name !== deleteStyleName);
+		setCitationStyles(newCitationStyles);
+		localStorage.setItem(
+			'zotero-bib-extra-citation-styles',
+			JSON.stringify(newCitationStyles.filter(cs => !cs.isCore))
+		);
 	}, [citationStyles]);
 
 	const handleStyleInstallerSelect = useCallback((newStyleMeta) => {
