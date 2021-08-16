@@ -10,7 +10,7 @@ self.addEventListener('message', function(ev) {
 			self.postMessage(['READY', null]);
 		break;
 		case 'FILTER':
-			filter = payload;
+			filter = payload.toLowerCase();
 			matches =  data.filter(
 				style => style.name.toLowerCase().includes(filter)
 					|| style.title.toLowerCase().includes(filter)
