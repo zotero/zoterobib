@@ -21,7 +21,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 		if(isTranslating) {
 			onTranslationCancel();
 		} else if(entry.length > 0 && !isTranslating) {
-			onTranslationRequest();
+			onTranslationRequest(entry);
 		}
 	}, [entry, isTranslating, onTranslationCancel, onTranslationRequest]);
 
@@ -58,6 +58,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 					autoFocus
 					className="form-control form-control-lg id-input"
 					isBusy={ isTranslating }
+					isReadOnly={ isTranslating }
 					onBlur={ () => true /* do not commit on blur */ }
 					onChange={ handleChange }
 					onCommit={ handleCiteOrCancel }
