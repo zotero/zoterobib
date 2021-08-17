@@ -186,7 +186,7 @@ const BibWebContainer = props => {
 	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
 	const [citationHtml, setCitationHtml] = useState(null);
 
-	const [title, setTitle] = useState(remoteId ? '' : localStorage.getItem('zotero-bib-title') || '');
+	const [title, setTitle] = useState(props.title || (remoteId ? '' : localStorage.getItem('zotero-bib-title') || ''));
 	const prevTitle = usePrevious(title);
 	const [identifier, setIdentifier] = useState('');
 	const [isTranslating, setIsTranslating] = useState(false);
