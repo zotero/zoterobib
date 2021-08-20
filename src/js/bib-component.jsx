@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
+
 import Container from './components/container';
 import CrashHandler from './components/crash-handler';
+import messages from '../../lang/en-US.json';
+
 
 class ErrorBoundary extends React.PureComponent {
 	constructor(props) {
@@ -28,7 +32,11 @@ ErrorBoundary.propTypes = {
 class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
-			<ErrorBoundary><Container {...this.props } /></ErrorBoundary>
+			<ErrorBoundary>
+				<IntlProvider messages={ messages }>
+					<Container {...this.props } />
+				</IntlProvider>
+			</ErrorBoundary>
 		);
 	}
 

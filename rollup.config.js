@@ -8,6 +8,8 @@ import sizes from 'rollup-plugin-sizes';
 import wasm from '@rollup/plugin-wasm';
 import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 import { terser } from 'rollup-plugin-terser';
+import alias from '@rollup/plugin-alias';
+import virtual from '@rollup/plugin-virtual';
 
 const isProduction = process.env.NODE_ENV?.startsWith('prod');
 
@@ -57,8 +59,18 @@ if(process.env.DEBUG) {
 }
 
 if(isProduction) {
+	config.plugins.splice(0, 0, alias({
+		entries: [{
+			find: '@formatjs/icu-messageformat-parser',
+			replacement: '@formatjs/icu-messageformat-parser/no-parser'
+		}]
+	}));
 	config.plugins.push(terser({ safari10: true }));
 	config.external.push('./wdyr'); //exclude why-did-you-render from production
+} else {
+	config.plugins.splice(0, 0, virtual({
+		'../../lang/en-US.json': 'export default {}',
+	}),)
 }
 
 export default config;

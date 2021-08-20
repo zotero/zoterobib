@@ -16,8 +16,10 @@ const plugins = [
 		"corejs": 3,
 		"helpers": true,
 		"regenerator": false,
-	}]
-
+	}],
+	["formatjs", { removeDefaultMessage: !!process.env.NODE_ENV?.startsWith('prod') }]
 ];
+
+
 
 module.exports = { presets, plugins };
