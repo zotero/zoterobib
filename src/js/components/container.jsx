@@ -216,8 +216,9 @@ const BibWebContainer = props => {
 	citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 
 	const localCitationsCount = useMemo(() => {
-		// parse citations from localstorage so we know how many there are.toUpperCase
-		// if not remoteid, we don't care so save don't waste time parsing
+		// parse citations from localStorage so we know how many there are. if remoteId is not
+		// specified, we don't care so save don't waste time parsing (to get the count, use
+		// state.bibliography.items.length instead)
 		if(remoteId) {
 			const localBib = new ZoteroBib(config);
 			localBib.reloadItems();

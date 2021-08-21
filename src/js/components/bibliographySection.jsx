@@ -105,7 +105,10 @@ const BibliographySection = props => {
 						}
 						{
 							!isReadOnly && (isReady || isHydrated) && (
-								<DeleteAllButton { ...pick(props, ['bibliography', 'onDeleteCitations']) } />
+								<DeleteAllButton
+									bibliographyCount={ props.bibliography.items.length }
+									{ ...pick(props, ['onDeleteCitations']) }
+								/>
 							)
 						}
 						<Confirmation

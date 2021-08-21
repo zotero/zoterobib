@@ -1,61 +1,60 @@
-import React from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from './ui/button';
 import Confirmation from './confirmation';
 
-class DeleteAllButton extends React.Component {
-	state = {
-		isConfirmingDeleteAll: false
-	}
+const DeleteAllButton = props => {
+	const { bibliographyCount, onDeleteCitations } = props;
+	const [isConfirmingDeleteAll, setIsConfirmingDeleteAll] = useState(false);
 
-	handleDeleteAll() {
-		this.setState({ isConfirmingDeleteAll: true });
-	}
+	const handleDeleteAll = useCallback(() => {
+		setIsConfirmingDeleteAll(true);
+	}, []);
 
-	handleConfirmDeleteAll() {
-		this.setState({ isConfirmingDeleteAll: false });
-		this.props.onDeleteCitations();
-	}
+	const handleConfirmDeleteAll = useCallback(() => {
+		setIsConfirmingDeleteAll(false);
+		onDeleteCitations();
+	}, [onDeleteCitations]);
 
-	handleCancelDeleteAll() {
-		this.setState({ isConfirmingDeleteAll: false });
-	}
+	const handleCancelDeleteAll = useCallback(() => {
+		setIsConfirmingDeleteAll(false);
+	}, []);
 
-	render() {
-		const entriesCount = this.props.bibliography.items.length;
-		return [
+
+	return (
+		<React.Fragment>
 			<Button
 				key="delete-all-button"
 				className="btn-sm btn-outline-primary"
-				onClick={ this.handleDeleteAll.bind(this) }
+				onClick={ handleDeleteAll }
 			>
 				Delete All
-			</Button>,
+			</Button>
 			<Confirmation
 				key="delete-all-confirmation"
-				isOpen={ this.state.isConfirmingDeleteAll }
-				onConfirm={ this.handleConfirmDeleteAll.bind(this) }
-				onCancel={ this.handleCancelDeleteAll.bind(this) }
+				isOpen={ isConfirmingDeleteAll }
+				onConfirm={ handleConfirmDeleteAll }
+				onCancel={ handleCancelDeleteAll }
 				title="Clear Bibliography?"
 				confirmLabel="Delete"
 				>
 					<p>
-						{ entriesCount > 0 && (
+						{ bibliographyCount > 0 && (
 							<span>
-								{ entriesCount } { entriesCount > 1 ? 'entries' : 'entry' } will be deleted.
+								{ bibliographyCount } { bibliographyCount > 1 ? 'entries' : 'entry' } will be deleted.
 							</span>
 						)
 						}
 					</p>
 			</Confirmation>
-		];
-	}
+		</React.Fragment>
+	);
+};
 
-	static propTypes = {
-		bibliography: PropTypes.object,
-		onDeleteCitations: PropTypes.func.isRequired,
-	}
+DeleteAllButton.propTypes = {
+	bibliographyCount: PropTypes.number.isRequired,
+	onDeleteCitations: PropTypes.func.isRequired,
 }
 
-export default DeleteAllButton;
+export default memo(DeleteAllButton);
