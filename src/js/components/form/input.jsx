@@ -72,7 +72,7 @@ const Input = memo(forwardRef((props, ref) => {
 	const handleKeyDown = useCallback(ev => {
 		switch (event.key) {
 			case 'Escape':
-				onCancel(ev, value !== initialValue);
+				onCancel(ev, value !== initialValue, ev);
 				input.current.blur();
 			break;
 			case 'Enter':

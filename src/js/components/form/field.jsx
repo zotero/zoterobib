@@ -1,31 +1,43 @@
-'use strict';
-
-import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
+import React, { forwardRef, memo } from 'react';
 
-class Field extends React.PureComponent {
-	render() {
-		const [label, value] = React.Children.toArray(this.props.children);
-		return (
-			<li
-				className={ cx('metadata', this.props.className) }
-			>
-				<div className="key">
-					{ label }
-				</div>
-				<div className="value">
-					{ value }
-				</div>
-			</li>
-		);
-	}
+import { noop } from '../../utils';
+import { pick } from '../../immutable';
 
-	static propTypes = {
-		children: PropTypes.array.isRequired,
-		className: PropTypes.string,
-		isActive: PropTypes.bool,
-	};
-}
+const Field = memo(forwardRef((props, ref) => {
+	const { children, className, dragHandle=null, onClick = noop, onKeyDown = noop, tabIndex } = props;
+	const [label, value] = React.Children.toArray(children);
+
+	return (
+		<li
+			tabIndex={ tabIndex }
+			onClick={ onClick }
+			onKeyDown={ onKeyDown }
+			className={ cx('metadata', className) }
+			ref={ ref }
+			{ ...pick(props, p => p.startsWith('data-')) }
+		>
+			<div className="key">
+				{ label }
+			</div>
+			<div className="value">
+				{ value }
+			</div>
+			{ dragHandle }
+		</li>
+	);
+}));
+
+Field.displayName = 'Field';
+
+Field.propTypes = {
+	children: PropTypes.array.isRequired,
+	className: PropTypes.string,
+	dragHandle: PropTypes.element,
+	onClick: PropTypes.func,
+	onKeyDown: PropTypes.func,
+	tabIndex: PropTypes.number,
+};
 
 export default Field;

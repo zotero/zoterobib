@@ -1,15 +1,12 @@
-'use strict';
-
-import React from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
+import React, { forwardRef, memo, useCallback, useImperativeHandle, useRef, useState } from 'react';
 
 import Creators from './form/creators';
 import Editable from './ui/editable';
 import Field from './form/field';
 import Input from './form/input';
 import SelectInput from './form/select';
-import Spinner from './ui/spinner';
 import TextAreaInput from './form/text-area';
 
 const pickInputComponent = field => {
@@ -21,165 +18,177 @@ const pickInputComponent = field => {
 	}
 };
 
-class ItemBox extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			activeEntry: null,
-		};
-		this.fieldComponents = {};
+const FieldLabel = memo(({ field }) => {
+	switch(field.key) {
+		case 'url':
+			return (
+				<a rel='nofollow' href={ field.value }>
+					{ field.label }
+				</a>
+			);
+		case 'DOI':
+			return (
+				<a rel='nofollow' href={ 'http://dx.doi.org/' + field.value }>
+					{ field.label }
+				</a>
+			);
+		default:
+			return field.label;
+	}
+});
+
+FieldLabel.displayName = 'FieldLabel';
+
+FieldLabel.propTypes = {
+	field: PropTypes.object
+};
+
+const ItemBoxField = memo(forwardRef((props, ref) => {
+	const { field, isActive, isForm, onCancel, onCommit } = props;
+
+	const isSelect = field.options && Array.isArray(field.options);
+	const className = {
+		'empty': !field.value || !field.value.length,
+		'select': isSelect,
+		'editing': isActive,
+		'abstract': field.key === 'abstractNote',
+		'extra': field.key === 'extra',
+	};
+	const display = field.key === 'itemType' ?
+		field.options.find(o => o.value === field.value) :
+		null;
+	const fieldProps = {
+		autoFocus: !isForm,
+		display: display ? display.label : null,
+		inputComponent: pickInputComponent(field),
+		isActive,
+		isBusy: field.processing || false,
+		onCancel: onCancel,
+		onCommit: onCommit,
+		options: field.options || null,
+		selectOnFocus: !isForm,
+		value: field.value || '',
+		className: 'form-control form-control-sm',
+		id: field.key,
+		[isForm ? 'ref' : 'inputRef']: ref,
+	};
+
+	if(isForm) {
+		fieldProps['tabIndex'] = 0;
 	}
 
-	focusField(name = 'itemType') {
-		if(name in this.fieldComponents) {
-			this.fieldComponents[name].focus();
-			return true;
-		} else {
-			return false;
+	if(fieldProps.inputComponent === SelectInput) {
+		fieldProps['onChange'] = () => true; //commit on change
+	}
+
+	if(fieldProps.inputComponent !== SelectInput) {
+		fieldProps['onBlur'] = () => false; //commit on blur
+	}
+	if(fieldProps.inputComponent === TextAreaInput) {
+		fieldProps['rows'] = 5;
+	}
+
+	const FormField = isForm ? fieldProps.inputComponent : Editable;
+
+	return (
+		<Field
+			className={ cx(className) }
+			data-key={ field.key }
+		>
+			<label htmlFor={ field.key} >
+				<FieldLabel field={ field } />
+			</label>
+			<FormField { ...fieldProps } />
+		</Field>
+	);
+}));
+
+ItemBoxField.displayName = 'ItemBoxField';
+
+ItemBoxField.propTypes = {
+	field: PropTypes.object,
+	isActive: PropTypes.bool,
+	isForm: PropTypes.bool,
+	onCancel: PropTypes.func.isRequired,
+	onCommit: PropTypes.func.isRequired,
+};
+
+const ItemBox = memo(forwardRef((props, ref) => {
+	const { creatorTypes, fields = [], isEditing, isForm, onSave } = props;
+	const [activeEntry, setActiveEntry] = useState(null);
+	const itemTypeField = useRef(null);
+
+	useImperativeHandle(ref, () => ({
+		focus: () => {
+			itemTypeField.current.focus();
 		}
-	}
+	}));
 
-	handleCancel(key) {
-		if(key === this.state.activeEntry) {
-			this.setState({ activeEntry: null });
+	const handleCancel = useCallback((_isChanged, ev) => {
+		const key = ev.target && ev.target.closest('[data-key]')?.dataset.key;
+		if(key === activeEntry) {
+			setActiveEntry(null);
 		}
-	}
+	}, [activeEntry]);
 
-	handleEditableCommit(key, newValue, isChanged, srcEvent) {
+	const saveField = useCallback((key, newValue, isChanged, srcEvent) => {
 		if(isChanged) {
-			this.props.onSave(key, newValue);
+			onSave(key, newValue);
 		}
-		if(key === this.state.activeEntry) {
-			this.setState({ activeEntry: null });
+		if(key === activeEntry) {
+			setActiveEntry(null);
 		}
-		if(this.props.isForm && srcEvent) {
-			if(srcEvent.type == 'keydown' && srcEvent.key == 'Enter') {
+		if(isForm && srcEvent) {
+			if(srcEvent.type === 'keydown' && srcEvent.key == 'Enter') {
 				srcEvent.target.blur();
 			}
 		}
-	}
+	}, [activeEntry, isForm, onSave]);
 
-	renderCreators(field) {
-		return (
-			<Creators
-				key={ field.key }
-				name={ field.key }
-				creatorTypes = { this.props.creatorTypes }
-				value={ field.value || [] }
-				onSave={ this.handleEditableCommit.bind(this, field.key) }
-				isForm={ this.props.isForm }
-			/>
-		);
-	}
+	const handleCommit = useCallback((newValue, isChanged, ev) => {
+		const key = ev.target.closest('[data-key]').dataset.key;
+		saveField(key, newValue, isChanged);
+	}, [saveField]);
 
-	renderLabelContent(field) {
-		switch(field.key) {
-			case 'url':
-				return (
-					<a rel='nofollow' href={ field.value }>
-						{ field.label }
-					</a>
-				);
-			case 'DOI':
-				return (
-					<a rel='nofollow' href={ 'http://dx.doi.org/' + field.value }>
-						{ field.label }
-					</a>
-				);
-			default:
-				return field.label;
-		}
-	}
+	const handleCreatorsCommit = useCallback((newValue, isChanged) => {
+		saveField('creators', newValue, isChanged);
+	}, [saveField])
 
-	renderField(field) {
-		if(field.key === 'creators') {
-			return this.renderCreators(field);
-		} else {
-			const isActive = this.state.activeEntry === field.key;
-			const isSelect = field.options && Array.isArray(field.options);
-			const className = {
-				'empty': !field.value || !field.value.length,
-				'select': isSelect,
-				'editing': isActive,
-				'abstract': field.key === 'abstractNote',
-				'extra': field.key === 'extra',
-			};
-			const display = field.key === 'itemType' ?
-				field.options.find(o => o.value === field.value) :
-				null;
-			const props = {
-				autoFocus: !this.props.isForm,
-				display: display ? display.label : null,
-				inputComponent: pickInputComponent(field),
-				isActive,
-				isBusy: field.processing || false,
-				onCancel: this.handleCancel.bind(this, field.key),
-				onCommit: this.handleEditableCommit.bind(this, field.key),
-				options: field.options || null,
-				selectOnFocus: !this.props.isForm,
-				value: field.value || '',
-				className: 'form-control form-control-sm',
-				id: field.key,
-				[this.props.isForm ? 'ref' : 'inputRef']: component => this.fieldComponents[field.key] = component,
-			};
-
-			if(this.props.isForm) {
-				props['tabIndex'] = 0;
-			}
-
-			if(props.inputComponent === SelectInput) {
-				props['onChange'] = () => true; //commit on change
-			}
-
-			if(props.inputComponent !== SelectInput) {
-				props['onBlur'] = () => false; //commit on blur
-			}
-			if(props.inputComponent === TextAreaInput) {
-				props['rows'] = 5;
-			}
-
-			const FormField = this.props.isForm ? props.inputComponent : Editable;
-
-			return (
-				<Field
-					className={ cx(className) }
-					isActive={ isActive }
+	return (
+		<ol className={cx('metadata-list', 'horizontal', { editing: isEditing }) }>
+			{ fields.map(field => (
+				field.key === 'creators' ?
+				<Creators
 					key={ field.key }
-				>
-					<label htmlFor={ field.key} >
-						{ this.renderLabelContent(field) }
-					</label>
-					<FormField { ...props } />
-				</Field>
-			);
-		}
-	}
+					name={ field.key }
+					creatorTypes = { creatorTypes }
+					value={ field.value || [] }
+					onSave={ handleCreatorsCommit }
+					isForm={ isForm }
+				/> :
+				<ItemBoxField
+					field={ field }
+					isActive={ field.key === activeEntry }
+					key={ field.key }
+					onCancel={ handleCancel }
+					onCommit={ handleCommit }
+					isForm={ isForm }
+					{ ...(field.key === 'itemType' ? { ref: itemTypeField } : {}) }
+				/>
+			)) }
+		</ol>
+	);
 
-	render() {
-		if(this.props.isLoading) {
-			return <Spinner />;
-		}
+}));
 
-		return (
-			<ol className={cx('metadata-list', 'horizontal', { editing: this.props.isEditing }) }>
-				{ this.props.fields.map(this.renderField.bind(this)) }
-			</ol>
-		);
-	}
-}
-
-ItemBox.defaultProps = {
-	fields: [],
-	onSave: v => Promise.resolve(v)
-};
+ItemBox.displayName = 'ItemBox';
 
 ItemBox.propTypes = {
 	creatorTypes: PropTypes.array,
 	fields: PropTypes.array,
 	isEditing: PropTypes.bool, // relevant on small screens only
 	isForm: PropTypes.bool,
-	isLoading: PropTypes.bool,
-	onSave: PropTypes.func
+	onSave: PropTypes.func.isRequired
 };
 
 export default ItemBox;
