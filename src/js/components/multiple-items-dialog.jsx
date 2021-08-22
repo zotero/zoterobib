@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useMemo, useCallback, memo } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
@@ -57,7 +58,7 @@ const MultipleItemsDialog = props => {
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						Please select a citation from the list
+						<FormattedMessage id="zbib.multipleItems.prompt" defaultMessage="Please select a citation from the list" />
 					</h4>
 					<Button
 						icon

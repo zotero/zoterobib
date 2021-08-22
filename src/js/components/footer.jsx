@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-class Footer extends React.PureComponent {
-	render() {
-		return (
-			<footer>
-				<nav className="social-nav">
-					Stay in touch! Follow <a href="https://twitter.com/zotero">@zotero</a> on Twitter.
-				</nav>
-				<small className="copyright">
-					© 2018–2020 Zotero &nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
-				</small>
-			</footer>
-		);
-	}
-}
+const Footer = () => (
+	<footer>
+		<nav className="social-nav">
+			<FormattedMessage
+				id="zbib.footer.follow"
+				defaultMessage="Stay in touch! Follow <link>@zotero</link> on Twitter."
+				values={ {
+					link: chunk => <a href="https://twitter.com/zotero">{ chunk }</a> //eslint-disable-line react/display-name
+				} }
+			/>
+		</nav>
+		<small className="copyright">
+			© 2018–2020 Zotero &nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
+		</small>
+	</footer>
+);
 
-export default Footer;
+export default memo(Footer);

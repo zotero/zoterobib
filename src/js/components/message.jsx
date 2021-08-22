@@ -69,6 +69,7 @@ Message.propTypes = {
 	onDismiss: PropTypes.func.isRequired,
 	onReadMore: PropTypes.func,
 	onUndoDelete: PropTypes.func,
+	onShowDuplicate: PropTypes.func,
 }
 
 export default memo(Message);

@@ -2,6 +2,7 @@ import copy from 'copy-to-clipboard';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState, memo } from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Spinner from './ui/spinner';
@@ -9,6 +10,7 @@ import Spinner from './ui/spinner';
 const PermalinkTools = ({ bibliography, onSave, permalink }) => {
 	const [isSavingPermalink, setIsSavingPermalink] = useState(false);
 	const [isRecentlyCopied, setIsRecentlyCopied] = useState(false);
+	const intl = useIntl();
 
 	const handleCreateLink = useCallback(async () => {
 		if(!permalink) {
@@ -41,12 +43,15 @@ const PermalinkTools = ({ bibliography, onSave, permalink }) => {
 				data-clipboard-text={ permalink }
 				onClick={ handleCopy }
 			>
-				{ isRecentlyCopied ? 'Copied!' : 'Copy URL' }
+				{ isRecentlyCopied ?
+					intl.formatMessage({ id: 'zbib.permalink.copyFeedback', defaultMessage: 'Copied!'}) :
+					intl.formatMessage({ id: 'zbib.permalink.copyURL', defaultMessage: 'Copy URL'})
+				}
 			</Button>
 			<a
 				className="btn btn-lg btn-block btn-secondary"
 				href={ permalink }>
-				View
+				<FormattedMessage id="zbib.permalink.view" defaultMessage="View" />
 			</a>
 		</div>
 		) : (
@@ -55,7 +60,7 @@ const PermalinkTools = ({ bibliography, onSave, permalink }) => {
 			className="btn-lg btn-outline-secondary btn-min-width"
 			onClick={ handleCreateLink }
 		>
-			Create
+			<FormattedMessage id="zbib.permalink.create" defaultMessage="Create" />
 		</Button>
 	);
 }

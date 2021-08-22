@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from './ui/button';
 import Confirmation from './confirmation';
@@ -7,6 +8,7 @@ import Confirmation from './confirmation';
 const DeleteAllButton = props => {
 	const { bibliographyCount, onDeleteCitations } = props;
 	const [isConfirmingDeleteAll, setIsConfirmingDeleteAll] = useState(false);
+	const intl = useIntl();
 
 	const handleDeleteAll = useCallback(() => {
 		setIsConfirmingDeleteAll(true);
@@ -29,24 +31,28 @@ const DeleteAllButton = props => {
 				className="btn-sm btn-outline-primary"
 				onClick={ handleDeleteAll }
 			>
-				Delete All
+				<FormattedMessage id="zbib.bibliography.deleteAll" defaultMessage="Delete All" />
 			</Button>
 			<Confirmation
 				key="delete-all-confirmation"
 				isOpen={ isConfirmingDeleteAll }
 				onConfirm={ handleConfirmDeleteAll }
 				onCancel={ handleCancelDeleteAll }
-				title="Clear Bibliography?"
-				confirmLabel="Delete"
-				>
-					<p>
-						{ bibliographyCount > 0 && (
-							<span>
-								{ bibliographyCount } { bibliographyCount > 1 ? 'entries' : 'entry' } will be deleted.
-							</span>
-						)
-						}
-					</p>
+				title={ intl.formatMessage({ id: "zbib.confirmDeleteAll.title", defaultMessage: "Clear Bibliography?" }) }
+				confirmLabel={ intl.formatMessage({ id: "zbib.confirmDeleteAll.confirm", defaultMessage: "Delete" }) }
+			>
+				<p>
+					<span>
+						<FormattedMessage
+							id="zbib.confirmDeleteAll.prompt"
+							defaultMessage="{bibliographyCount, plural,
+								one {# entry}
+								other {# entries}
+							} will be deleted."
+							values={ { bibliographyCount } }
+						/>
+					</span>
+				</p>
 			</Confirmation>
 		</React.Fragment>
 	);

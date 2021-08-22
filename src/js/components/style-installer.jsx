@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useReducer, useRef, memo } from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
@@ -43,23 +44,23 @@ const StyleItem = memo(props => {
 			{
 				isActive ? (
 					<Button className="btn btn-sm btn-outline-light" disabled>
-						Active
+						<FormattedMessage id="zbib.styleInstaller.active" defaultMessage="Active" />
 					</Button>
 				) : isCore ? (
 					<Button className="btn btn-sm btn-outline-light" disabled>
-						Default
+						<FormattedMessage id="zbib.styleInstaller.default" defaultMessage="Default" />
 					</Button>
 				) : isInstalled ? (
 					<Button
 						className="btn btn-sm btn-outline-primary"
 						onClick={ onDelete }>
-						Remove
+						<FormattedMessage id="zbib.styleInstaller.remove" defaultMessage="Remove" />
 					</Button>
 				) : (
 					<Button
 						className="btn btn-sm btn-outline-secondary"
 						onClick={ onInstall }>
-						Add
+						<FormattedMessage id="zbib.styleInstaller.add" defaultMessage="Add" />
 					</Button>
 				)
 			}
@@ -92,6 +93,7 @@ const StyleInstaller = props => {
 		items: [],
 		selectedIndex: null,
 	});
+	const intl = useIntl();
 
 	const isOpen = activeDialog === 'STYLE_INSTALLER';
 
@@ -180,7 +182,7 @@ const StyleInstaller = props => {
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						Add a Citation Style
+						<FormattedMessage id="zbib.styleInstaller.title" defaultMessage="Add a Citation Style" />
 					</h4>
 					<Button
 						icon
@@ -196,7 +198,7 @@ const StyleInstaller = props => {
 						className="form-control form-control-lg"
 						onChange={ handleFilterChange }
 						onKeyDown={ handleInputKeydown }
-						placeholder="Enter three or more characters to search"
+						placeholder={ intl.formatMessage({ id: 'zbib.styleInstaller.searchPlaceholder', defaultMessage: 'Enter three or more characters to search' }) }
 						type="text"
 						value={ state.filter }
 						isBusy={ state.isSearching }

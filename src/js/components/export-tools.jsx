@@ -6,6 +6,7 @@ import Dropdown from 'reactstrap/lib/Dropdown';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import DropdownMenu from 'reactstrap/lib/DropdownMenu';
 import DropdownItem from 'reactstrap/lib/DropdownItem';
+import { FormattedMessage } from 'react-intl';
 
 import exportFormats from '../constants/export-formats';
 import Button from './ui/button';
@@ -24,7 +25,9 @@ const ExportOption = memo(({ isCopied, format, handleCopyClick, handleDownloadCl
 			>
 				<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 					<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['html'].label }</span>
-					<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
+					<span className="shorter feedback" aria-hidden={ isCopied }>
+						<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
+					</span>
 				</span>
 			</DropdownItem>
 		);
@@ -126,7 +129,9 @@ const ExportTools = props => {
 				>
 					<span className={ cx('inline-feedback', { 'active': isCopied }) }>
 						<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['plain'].label }</span>
-						<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
+						<span className="shorter feedback" aria-hidden={ isCopied }>
+							<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
+						</span>
 					</span>
 				</Button>
 				<DropdownToggle

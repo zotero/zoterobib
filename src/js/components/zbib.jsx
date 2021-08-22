@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import About from './about';
 import BibliographySection from './bibliographySection';
@@ -24,6 +25,11 @@ import StyleInstaller from './style-installer';
 import WhatsThis from './whats-this';
 import { pick } from '../immutable';
 
+const commonFormats = {
+	b: (chunks) => <b>{chunks}</b>, //eslint-disable-line react/display-name
+	i: (chunks) => <i>{chunks}</i>, //eslint-disable-line react/display-name
+};
+
 const ZBib = props => {
 	const [userType, setUserType] = useState({
 		isKeyboardUser: false,
@@ -31,6 +37,7 @@ const ZBib = props => {
 		isTouchUser: false
 	});
 	const lastTouchStartEvent = useRef(0);
+	const intl = useIntl();
 
 	const className = {
 		'zotero-bib-container': true,
@@ -91,7 +98,9 @@ const ZBib = props => {
 					!props.isReadOnly && (
 						<section className="section section-cite">
 							<nav className="meta-nav">
-								<a onClick={ props.onHelpClick }>Help</a>
+								<a onClick={ props.onHelpClick }>
+									<FormattedMessage id="zbib.help" defaultMessage="Help" />
+								</a>
 								<a href="https://www.zotero.org">Zotero</a>
 							</nav>
 							<div className="container">
@@ -114,7 +123,9 @@ const ZBib = props => {
 				{
 					<section className="section section-export">
 						<div className="container">
-							<h2>Export</h2>
+							<h2>
+								<FormattedMessage id="zbib.export" defaultMessage="Export" />
+							</h2>
 							<ExportTools { ...pick(props, ['bibliography', 'getCopyData',
 								'onDownloadFile', 'isReadOnly', 'onSaveToZoteroShow']) }
 							/>
@@ -127,7 +138,7 @@ const ZBib = props => {
 						<section className="section section-link">
 							<div className="container">
 								<h2>
-									Link to this version
+									<FormattedMessage id="zbib.linkToThis" defaultMessage="Link to this version" />
 									<WhatsThis />
 								</h2>
 								<PermalinkTools { ...pick(props, ['bibliography', 'onSave', 'permalink']) } />
@@ -158,17 +169,38 @@ const ZBib = props => {
 					isOpen={ props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
 					onConfirm={ props.onStyleSwitchConfirm }
 					onCancel={ props.onStyleSwitchCancel }
-					title="Converting Titles to Sentence Case"
-					confirmLabel="OK, I’ll Edit Them"
+					title={ intl.formatMessage({ id: 'zbib.confirmCase.title', defaultMessage:'Converting Titles to Sentence Case' }) }
+					confirmLabel={ intl.formatMessage({ id: 'zbib.confirmCase.confirm', defaultMessage: 'OK, I’ll Edit Them' }) }
 				>
-					<p>The style you’ve selected requires titles to be in sentence case
-					rather than title case. When you use this style, ZoteroBib will
-					convert the titles of entries to sentence case for you, but you’ll
-					need to manually edit some entries to capitalize proper nouns:</p>
+					<p>
+						<FormattedMessage id="zbib.confirmCase.explanation" defaultMessage="The
+						style you’ve selected requires titles to be in sentence case rather than
+						title case. When you use this style, ZoteroBib will convert the titles of
+						entries to sentence case for you, but you’ll need to manually edit some
+						entries to capitalize proper nouns:" />
+					</p>
 
-					<p><b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i></p>
-					<p><b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i></p>
-					<p><b>Sentence case:</b> <i>Circadian mood variations in <span style={{color: '#e52e3d', fontWeight: 'bold'}}>T</span>witter content</i></p>
+					<p>
+						<FormattedMessage
+							id="zbib.confirmCase.titleCaseExample"
+							defaultMessage="<b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i>"
+							values={ commonFormats }
+						/>
+					</p>
+					<p>
+						<FormattedMessage
+							id="zbib.confirmCase.conversionExample"
+							defaultMessage="<b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i>"
+							values={ commonFormats }
+						/>
+					</p>
+					<p>
+						<FormattedMessage
+							id="zbib.confirmCase.sentenceCaseExample"
+							defaultMessage="<b>Sentence case:</b> <i>Circadian mood variations in <r>T</r>witter content</i>"
+							values={ { ...commonFormats, r: chunk => <span style={{color: '#e52e3d', fontWeight: 'bold'}}>{ chunk }</span> } } //eslint-disable-line react/display-name
+						/>
+					</p>
 				</Confirmation>
 				<Modal
 					isOpen={ props.activeDialog === 'SAVE_TO_ZOTERO' }
@@ -178,7 +210,7 @@ const ZBib = props => {
 					<div className="modal-content" tabIndex={ -1 }>
 						<div className="modal-header">
 							<h4 className="modal-title text-truncate">
-								Save to Zotero
+								<FormattedMessage id="zbib.saveToZotero.title" defaultMessage="Save to Zotero" />
 							</h4>
 							<Button
 								icon
@@ -189,8 +221,17 @@ const ZBib = props => {
 							</Button>
 						</div>
 						<div className="modal-body">
-							<p>Once you’ve <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">installed Zotero and the Zotero Connector</a>,
-							you can export your bibliography to Zotero by clicking the “Save to Zotero” button in your browser’s toolbar.</p>
+							<p>
+								<FormattedMessage
+								id="zbib.saveToZotero.message"
+								defaultMessage="Once you’ve <a>installed Zotero and the Zotero
+								Connector</a>, you can export your bibliography to Zotero by
+								clicking the “Save to Zotero” button in your browser’s toolbar."
+								values= { {
+									a: chunk => <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">{ chunk }</a> //eslint-disable-line react/display-name
+								} }
+							/>
+							</p>
 						</div>
 					</div>
 				</Modal>

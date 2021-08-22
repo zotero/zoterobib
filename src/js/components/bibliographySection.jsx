@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState, memo } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Bibliography from './bibliography';
 import Button from './ui/button';
@@ -59,8 +60,26 @@ const BibliographySection = props => {
 				{ (isReady && bibliography.items.length === 0) ? (
 					<React.Fragment>
 						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
-						<h2 className="empty-title"><span style={{ 'letterSpacing': '-0.092em' }}>Y</span>our bibliography is empty.</h2>
-						<p className="lead empty-lead"><span style={{ 'letterSpacing': '-0.111em' }}>T</span>o add a source, paste or type its URL, ISBN, DOI, PMID, arXiv ID, or title into the search box above.</p>
+						<h2 className="empty-title">
+							<FormattedMessage
+								wrapRichTextChunksInFragment={ true }
+								id="zbib.bibliography.emptyTitle"
+								defaultMessage='<i>Y</i>our bibliography is empty.'
+								values={ {
+									i: chunks => <span style={{ 'letterSpacing': '-0.092em' }}>{chunks}</span>, //eslint-disable-line react/display-name
+								}}
+							/>
+						</h2>
+						<p className="lead empty-lead">
+							<FormattedMessage
+								wrapRichTextChunksInFragment={ true }
+								id="zbib.bibliography.emptyLead"
+								defaultMessage='<i>T</i>o add a source, paste or type its URL, ISBN, DOI, PMID, arXiv ID, or title into the search box above'
+								values={ {
+									i: chunks => <span style={{ 'letterSpacing': '-0.111em' }}>{chunks}</span>, //eslint-disable-line react/display-name
+								}}
+							/>
+						</p>
 					</React.Fragment>
 				) : (
 					<React.Fragment>

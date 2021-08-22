@@ -1,6 +1,7 @@
 import React, { useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useIntl } from 'react-intl';
 
 import Select, { SelectDivider, SelectOption } from './ui/select';
 import { citationStylesCount } from '../../../data/citation-styles-data.json';
@@ -9,6 +10,7 @@ const StyleSelector = ({ className, citationStyle, citationStyles, onCitationSty
 	const handleMoreStylesTrigger = useCallback(
 		() => onCitationStyleChanged('install'), [onCitationStyleChanged]
 	);
+	const intl = useIntl();
 
 	return (
 			<div className={ cx('style-selector', className ) }>
@@ -27,7 +29,13 @@ const StyleSelector = ({ className, citationStyle, citationStyles, onCitationSty
 					<SelectDivider />
 					<SelectOption
 						onTrigger={ handleMoreStylesTrigger }
-						option={ { label: `${(Math.floor(citationStylesCount / 100) * 100).toLocaleString()}+ other styles available…`, value: 'install' } }
+						option={ {
+							value: 'install',
+							label: intl.formatMessage({
+								id: 'zbib.styleSelector.otherStyles',
+								defaultMessage: '{citationStylesCount, plural, other {#+ other styles} } available…',
+							}, { citationStylesCount: Math.floor(citationStylesCount / 100) * 100 })
+						}}
 						/>
 				</Select>
 			</div>

@@ -1,5 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
@@ -34,7 +35,7 @@ const ConfirmAddDialog = props => {
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						Add this citation to your bibliography?
+						<FormattedMessage id="zbib.dialog.confirmAddThisCitation" defaultMessage="Add this citation to your bibliography?" />
 					</h4>
 					<Button
 						icon
@@ -57,7 +58,7 @@ const ConfirmAddDialog = props => {
 							onClick={ handleConfirm }
 							onKeyDown = { handleConfirm }
 						>
-							Add
+							<FormattedMessage id="zbib.general.add" defaultMessage="Add" />
 						</Button>
 					</div>
 				</div>

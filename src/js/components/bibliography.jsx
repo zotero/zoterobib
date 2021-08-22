@@ -5,6 +5,7 @@ import { default as Dropdown } from 'reactstrap/lib/Dropdown';
 import { default as DropdownToggle } from 'reactstrap/lib/DropdownToggle';
 import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
 import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
@@ -14,6 +15,10 @@ import { isTriggerEvent } from '../common/event';
 const BibliographyItem = memo(props => {
 	const { dropdownsOpen, formattedItem, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
 	onSelectCitation, onEditCitationClick, onToggleDropdown, rawItem, } = props;
+	const intl = useIntl();
+	const copyText = isNoteStyle ?
+		intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
+		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
 
 	return (
 		<li key={ rawItem.key }
@@ -41,27 +46,27 @@ const BibliographyItem = memo(props => {
 							onClick={ onCopyCitationDialogOpen }
 							className="btn"
 						>
-							{ isNoteStyle ? 'Copy Note' : 'Copy Citation' }
+							{ copyText }
 						</DropdownItem>
 					) }
 					<DropdownItem
 						onClick={ onEditCitationClick }
 						className="btn"
 					>
-						Edit
+						<FormattedMessage id="zbib.general.edit" defaultMessage="Edit" />
 					</DropdownItem>
 					<DropdownItem
 						onClick={ onDeleteCitation }
 						className="btn"
 					>
-						Delete
+						<FormattedMessage id="zbib.general.delete" defaultMessage="Delete" />
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>
 			{ !isNumericStyle && (
 				<Button
 					icon
-					title={ isNoteStyle ? 'Copy Note' : 'Copy Citation'}
+					title={ copyText }
 					className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 					onClick={ onCopyCitationDialogOpen }
 				>

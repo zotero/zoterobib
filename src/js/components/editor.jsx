@@ -3,6 +3,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useReducer, useRef, memo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from './ui/button';
 import ItemBox from './itembox';
@@ -145,6 +146,7 @@ const Editor = props => {
 		fields: [],
 		item: editorItem,
 	});
+	const intl = useIntl();
 
 	const itemTitle = editor.item ?
 		editor.item[editor.item.itemType in baseMappings && baseMappings[editor.item.itemType]['title'] || 'title'] : '';
@@ -155,10 +157,10 @@ const Editor = props => {
 			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(itemType);
 			dispatchEditor({ type: RECEIVE_META, itemTypes, itemTypeFields, itemTypeCreatorTypes });
 		} catch(e) {
-			onError('Failed to obtain metadata. Please check your connection and try again.', e);
+			onError(intl.formatMessage({ id: 'zbib.error.fetchMetadata', defaultMessage: 'Failed to obtain metadata. Please check your connection and try again.' }), e);
 			dispatchEditor({ type: ERROR_META });
 		}
-	}, [onError]);
+	}, [intl, onError]);
 
 	const handleItemUpdate = useCallback(async (fieldKey, newValue) => {
 		// Add Original Date field to book and bookSection #188
@@ -251,12 +253,16 @@ const Editor = props => {
 	}, [onEditorClose]);
 
 	useEffect(() => {
+		if(activeDialog === 'EDITOR' && !editor.isLoading) {
+			itemBox.current?.focus();
+		}
+	}, [activeDialog, editor.isLoading]);
+
+	useEffect(() => {
 		if(activeDialog === 'EDITOR') {
-			itemBox.current?.focusField('itemType');
 			hasCreatedItem.current = false;
 		}
 	}, [activeDialog]);
-
 
 	useEffect(() => {
 		if(editorItem !== prevEditorItem) {
@@ -272,7 +278,7 @@ const Editor = props => {
 	return (
 		<Modal
 			isOpen={ activeDialog === 'EDITOR' }
-			contentLabel="Item Editor"
+			contentLabel={ intl.formatMessage({ id: 'zbib.editor.title', defaultMessage: 'Item Editor' }) }
 			className={ cx('editor-container modal modal-lg', { loading: editor.isLoading })}
 			onRequestClose={ handleClose }
 		>
@@ -286,7 +292,7 @@ const Editor = props => {
 						className="btn-outline-inverse-blue-dark"
 						onClick={ handleClose }
 					>
-						Done
+						<FormattedMessage id="zbib.general.done" defaultMessage="Done" />
 					</Button>
 				</div>
 				<div className="modal-body">
@@ -295,7 +301,6 @@ const Editor = props => {
 							creatorTypes={ editor.itemTypeCreatorTypes }
 							fields={ editor.fields }
 							isForm={ true }
-							isLoading={ editor.isLoading }
 							onSave={ handleItemUpdate }
 							ref={ itemBox }
 						/>

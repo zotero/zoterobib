@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Button from './ui/button';
 import { formatBib, formatFallback } from '../cite';
+import { FormattedMessage } from 'react-intl';
 
 const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, onReviewDismiss, styleHasBibliography }) => {
 	const { bibliographyItems, bibliographyMeta } = itemUnderReview || {};
@@ -11,11 +12,15 @@ const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, 
 
 	return isTranslating ? (
 		<section className="section section-review review">
-			<h2>New item…</h2>
+			<h2>
+				<FormattedMessage id="zbib.review.newItem" defaultMessage="New item…" />
+			</h2>
 		</section>
 	) : (
 		<section className="section section-review review">
-			<h2 className="sr-only">New item …</h2>
+			<h2 className="sr-only">
+				<FormattedMessage id="zbib.review.newItem" defaultMessage="New item…" />
+			</h2>
 			<div className="container">
 				<div dangerouslySetInnerHTML={ { __html: html } } />
 				<div className="actions">
@@ -23,19 +28,19 @@ const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, 
 						className="btn-outline-secondary btn-min-width"
 						onClick={ onReviewDismiss }
 					>
-						Close
+						<FormattedMessage id="zbib.general.close" defaultMessage="Close" />
 					</Button>
 					<Button
 						className="btn-outline-secondary btn-min-width"
 						onClick={ onReviewDelete }
 					>
-						Delete
+						<FormattedMessage id="zbib.general.delete" defaultMessage="Delete" />
 					</Button>
 					<Button
 						className="btn-secondary btn-min-width"
 						onClick={ onReviewEdit }
 					>
-						Edit
+						<FormattedMessage id="zbib.general.edit" defaultMessage="Edit" />
 					</Button>
 				</div>
 			</div>
@@ -52,4 +57,4 @@ Review.propTypes = {
 	styleHasBibliography: PropTypes.bool,
 }
 
-export default Review;
+export default memo(Review);

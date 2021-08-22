@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, memo, useImperativeHandle, useMemo, useCallback, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import Button from '../ui/button';
 import Editable from '../ui/editable';
@@ -15,6 +16,7 @@ import { SelectDivider, SelectOption } from '../ui/select';
 const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 	const { creatorsCount, index, isActive, isDisabled, onCancel, onClick, onCommit, onFocus,
 	onReorder, options, value, ...rest } = props;
+	const intl = useIntl();
 
 	const isFirst = index === 0;
 	const isLast = index === creatorsCount - 1;
@@ -61,17 +63,26 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 					{ (index > 1) && (
 						<SelectOption
 						onTrigger={ handleMoveTop }
-						option={ { label: 'Move to Top', value: '_top' } }
+						option={ {
+							label: intl.formatMessage({ id: 'zbib.creator.moveToTop', defaultMessage: 'Move to Top' }),
+							value: '_top'
+						} }
 					/> ) }
 					{ !isFirst && (
 						<SelectOption
 						onTrigger={ handleMoveUp }
-						option={ { label: 'Move Up', value: '_up' } }
+						option={ {
+							label: intl.formatMessage({ id: 'zbib.creator.moveUp', defaultMessage: 'Move Up' }),
+							value: '_up'
+						} }
 					/> ) }
 					{ !isLast && (
 						<SelectOption
 						onTrigger={ handleMoveDown }
-						option={ { label: 'Move Down', value: '_down' } }
+						option={ {
+							label: intl.formatMessage({ id: 'zbib.creator.moveDown', defaultMessage: 'Move Down' }),
+							value: '_down'
+						} }
 					/> ) }
 				</React.Fragment>
 			) : null }
@@ -193,6 +204,8 @@ const CreatorField = forwardRef((props, ref) => {
 		onCreatorAdd, onCreatorRemove, onCreatorTypeSwitch, onDragStatusChange, onReorder,
 		onReorderCancel, onReorderCommit } = props;
 
+	const intl = useIntl();
+
 	const shouldUseModalCreatorField = false;
 	const [active, setActive] = useState(null);
 	const fieldComponents = useRef({});
@@ -310,7 +323,9 @@ const CreatorField = forwardRef((props, ref) => {
 				{
 					shouldUseModalCreatorField ? (
 						<div className="truncate">
-							{ isVirtual ? isDual ? 'last name, first name' : 'name' :
+							{ isVirtual ? isDual ?
+								intl.formatMessage({ id: 'zbib.creator.placeholderDual', defaultMessage: 'last name, first name' }) :
+								intl.formatMessage({ id: 'zbib.creator.placeholderSingle', defaultMessage: 'name' })  :
 								(creator.name || (creator.firstName + ' ' + creator.lastName).trim())
 							}
 						</div>

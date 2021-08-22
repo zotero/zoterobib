@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Input from './form/input';
@@ -21,7 +22,11 @@ const CopyCitationDialog = props => {
 	onCitationCopyDialogClose, onCitationModifierChange } = props;
 	const [isCopied, setIsCopied] = useState(false);
 	const timeout = useRef(null);
-	const title = isNoteStyle ? 'Copy Note' : 'Copy Citation';
+	const intl = useIntl();
+	const title = isNoteStyle ?
+		intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
+		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
+
 	let isCitationEmpty = false;
 
 	if(typeof citationHtml === 'string') {
@@ -130,13 +135,15 @@ const CopyCitationDialog = props => {
 										checked={ citationCopyModifiers.mode === 'SuppressAuthor' }
 										onChange={ handleSuppressAuthorChange }
 									/>
-									Omit Author
+									<FormattedMessage id="zbib.citation.omitAuthor" defaultMessage="Omit Author" />
 								</label>
 							</div>
 						</div>
 					) }
 					<div>
-						<h5>Preview:</h5>
+						<h5>
+							<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview:" />
+						</h5>
 						<p
 							className="preview"
 							dangerouslySetInnerHTML={ { __html: citationHtml } }
@@ -149,7 +156,7 @@ const CopyCitationDialog = props => {
 							className="btn-outline-secondary"
 							onClick={ handleCancel }
 						>
-							Cancel
+							<FormattedMessage id="zbib.general.cancel" defaultMessage="Cancel" />
 						</Button>
 						<Button
 							disabled={ isCitationEmpty }
@@ -160,7 +167,10 @@ const CopyCitationDialog = props => {
 								<span className="default-text" aria-hidden={ !isCopied }>
 								{ title }
 								</span>
-								<span className="shorter feedback" aria-hidden={ isCopied }>Copied!</span>
+								<span className="shorter feedback" aria-hidden={ isCopied }>
+									<FormattedMessage id="zbib.citation.copiedFeedback" defaultMessage="Copied!" />
+									Copied!
+								</span>
 							</span>
 						</Button>
 					</div>

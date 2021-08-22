@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import PropTypes from 'prop-types';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import Input from './form/input';
 import Button from './ui/button';
@@ -12,6 +13,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 	const [entry, setEntry] = useState(identifier);
 	const prevIdentifier = usePrevious(identifier);
 	const wasTranslating = usePrevious(isTranslating)
+	const intl = useIntl();
 
 	const handleChange = useCallback(newValue => {
 		setEntry(newValue);
@@ -63,7 +65,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 					onChange={ handleChange }
 					onCommit={ handleCiteOrCancel }
 					onPaste={ handlePaste }
-					placeholder="Enter a URL, ISBN, DOI, PMID, arXiv ID, or title"
+					placeholder={ intl.formatMessage({ id: 'zbib.citePrompt' , defaultMessage: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })}
 					ref = { inputRef }
 					tabIndex={ 0 }
 					type="text"
@@ -73,13 +75,16 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 					className="btn-lg btn-secondary"
 					onClick={ handleCiteOrCancel }
 				>
-					{ (isTranslating && canCancel) ? 'Cancel' : 'Cite' }
+					{ (isTranslating && canCancel) ?
+						<FormattedMessage id="zbib.general.cancel" defaultMessage="Cancel" /> :
+						<FormattedMessage id="zbib.general.cite" defaultMessage="Cite" />
+					}
 				</Button>
 			</div>
 			<Button onClick={ onEditorOpen }
 				className="btn-sm btn-outline-secondary"
 			>
-				Manual Entry
+				<FormattedMessage id="zbib.manualEntry" defaultMessage="Manual Entry" />
 			</Button>
 		</div>
 	);
