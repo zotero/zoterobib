@@ -33,7 +33,10 @@ class ZoteroBibComponent extends React.Component {
 	render() {
 		return (
 			<ErrorBoundary>
-				<IntlProvider messages={ messages }>
+				<IntlProvider
+					locale={ process.env.NODE_ENV === 'production' ? 'en-US' : undefined /* in development we always display values of defaultMessage */ }
+					messages={ messages }
+				>
 					<Container {...this.props } />
 				</IntlProvider>
 			</ErrorBoundary>
