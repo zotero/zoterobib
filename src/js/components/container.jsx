@@ -267,7 +267,7 @@ const BibWebContainer = props => {
 		}
 
 		dispatch({ type: COMPLETE_BUILD_BIBLIOGRAPHY, items, meta, lookup });
-	}, [isReadOnly, state.xml, state.styleHasBibliography]);
+	}, [isReadOnly, state.xml, state.localeOverride, state.styleHasBibliography]);
 
 	const updateBibliography = useCallback(() => {
 		const t0 = performance.now();
@@ -1244,7 +1244,9 @@ const BibWebContainer = props => {
 }
 
 BibWebContainer.propTypes = {
-	config: PropTypes.object
+	config: PropTypes.object,
+	hydrateItemsCount: PropTypes.number,
+	title: PropTypes.string,
 }
 
 export default memo(BibWebContainer);

@@ -14,7 +14,7 @@ import StyleSelector from './style-selector';
 import { pick } from '../immutable'
 
 const BibliographySection = props => {
-	const { bibliography, isReadOnly, isReady, hydrateItemsCount, isHydrated, localCitationsCount,
+	const { bibliography, isReadOnly, isReady, isHydrated, localCitationsCount,
 	onOverride, onTitleChanged, title } = props;
 	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -159,6 +159,7 @@ const BibliographySection = props => {
 
 BibliographySection.propTypes = {
 	bibliography: PropTypes.object,
+	isHydrated: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
 	isReady: PropTypes.bool,
 	localCitationsCount: PropTypes.number,
