@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useMemo, useCallback, memo } from 'react';
+import React, { memo, useMemo, useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -10,6 +10,7 @@ import { isTriggerEvent } from '../common/event';
 
 const MultipleItemsDialog = props => {
 	const { activeDialog, multipleItems, onMultipleItemsSelect, onMultipleItemsCancel,  } = props;
+	const [selectedItems, setSelectedItems] = useState([]);
 
 	const bibliographyRendered = useMemo(() => {
 		if(!multipleItems) {
@@ -34,11 +35,22 @@ const MultipleItemsDialog = props => {
 		return div.firstChild.children;
 	}, [bibliographyRendered]);
 
-	const handleItemSelect = useCallback(ev => {
-		if(isTriggerEvent(ev)) {
-			onMultipleItemsSelect(ev.currentTarget.dataset.key);
+	const handleItemSelectionChange = useCallback(ev => {
+		const itemKey = ev.target.closest('[data-key]').dataset.key;
+
+		if(!isTriggerEvent(ev)) {
+			return;
 		}
-	}, [onMultipleItemsSelect])
+
+		setSelectedItems(selectedItems.includes(itemKey) ?
+			selectedItems.filter(i => i != itemKey) :
+			[...selectedItems, itemKey]
+		);
+	}, [selectedItems]);
+
+	const handleAddSelected = useCallback(() => {
+		onMultipleItemsSelect(selectedItems);
+	}, [selectedItems, onMultipleItemsSelect]);
 
 	const handleCancel = useCallback(() => {
 		onMultipleItemsCancel();
@@ -75,8 +87,8 @@ const MultipleItemsDialog = props => {
 								<li key={ item.id }
 									data-key={ item.id }
 									className="result"
-									onKeyDown={ handleItemSelect }
-									onClick={ handleItemSelect }
+									onKeyDown={ handleItemSelectionChange }
+									onClick={ handleItemSelectionChange }
 									tabIndex={ 0 }
 								>
 									<div
@@ -84,10 +96,25 @@ const MultipleItemsDialog = props => {
 										dangerouslySetInnerHTML={
 											{ __html: bibliographyRenderedNodes[index]?.innerHTML || item.value }
 									} />
+									<input
+										checked={ selectedItems.includes(item.id) }
+										onChange={ handleItemSelectionChange }
+										tabIndex={ -1 }
+										type="checkbox"
+									/>
 								</li>
 							))
 						}
 					</ul>
+					<div className="more-items-action">
+						<Button
+							disabled={ selectedItems.length === 0 }
+							className="btn-outline-secondary btn-min-width"
+							onClick={ handleAddSelected }
+						>
+							<FormattedMessage id="zbib.multipleItems.confirm" defaultMessage="Add Selected" />
+						</Button>
+					</div>
 				</div>
 			</div>
 		</Modal>

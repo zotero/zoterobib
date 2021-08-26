@@ -715,20 +715,14 @@ const BibWebContainer = props => {
 		setMultipleItems(null);
 	}, []);
 
-	const handleMultipleItemsSelect = useCallback(async key => {
-		const item = multipleItems.items.find(i => i.key === key);
-		addItem(item);
+	const handleMultipleItemsSelect = useCallback(async keys => {
+		const items = multipleItems.items.filter(i => keys.includes(i.key));
+		items.forEach(i => addItem(i));
 		setActiveDialog(null);
 		setMultipleItems(null);
 		setItemUnderReview(null);
-		setItemUnderReview({
-			item,
-			...(await getOneTimeBibliographyOrFallback(
-			getItemsCSL([item]), state.xml, state.styleHasBibliography, useLegacy.current
-			))
-		});
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
-	}, [addItem, state.xml, multipleItems, state.styleHasBibliography]);
+	}, [addItem, multipleItems]);
 
 	const handleOpenEditor = useCallback((itemId = null) => {
 		if(itemUnderReview && itemId && itemId != itemUnderReview.key) {
