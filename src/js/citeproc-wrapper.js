@@ -237,7 +237,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			const [meta, items] = this.driver.makeBibliography();
 			this.nextMeta = CiteprocWrapper.metaCiteprocJStoRS(meta, this.opts.format);
-			return meta.entry_ids.map((id, index) => ({ id, value: items[index] }));
+			return meta.entry_ids.map((id, index) => ({ id: Array.isArray(id) ? id[0] : id, value: items[index] }));
 		} else {
 			return this.driver.makeBibliography().unwrap();
 		}
