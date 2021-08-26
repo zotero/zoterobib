@@ -98,6 +98,7 @@ const MultipleItemsDialog = props => {
 									} />
 									<input
 										checked={ selectedItems.includes(item.id) }
+										className="checkbox"
 										onChange={ handleItemSelectionChange }
 										tabIndex={ -1 }
 										type="checkbox"
@@ -123,8 +124,8 @@ const MultipleItemsDialog = props => {
 
 MultipleItemsDialog. propTypes = {
 	activeDialog: PropTypes.string,
-	multipleItems: PropTypes.object,
 	multipleChoiceItems: PropTypes.array,
+	multipleItems: PropTypes.object,
 	onMultipleItemsCancel: PropTypes.func.isRequired,
 	onMultipleItemsSelect: PropTypes.func.isRequired,
 }

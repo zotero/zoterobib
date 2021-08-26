@@ -18,6 +18,7 @@
 		border-top: 1px solid $result-border-color;
 		padding: $result-padding;
 		cursor: pointer;
+		display: flex;
 
 		&:hover {
 			background-color: $result-hover-bg;
@@ -60,6 +61,14 @@
 
 		.description {
 			margin: 0;
+		}
+
+		.checkbox {
+			align-self: center;
+		}
+
+		.csl-entry {
+			word-break: break-word;
 		}
 	}
 
