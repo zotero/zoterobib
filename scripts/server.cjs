@@ -33,7 +33,7 @@ const handler = (req, resp) => {
 			resp.setHeader('Content-Type', 'text/html');
 			resp.end(buf);
 		});
-	} else if (req.url.match(/[a-z0-9]{32}/)) {
+	} else if (!process.env.NO_HYDRATE && req.url.match(/[a-z0-9]{32}/)) {
 		fs.readFile(path.join(__dirname, '..', 'build', 'hydrate'), (err, buf) => {
 			resp.setHeader('Content-Type', 'text/html');
 			resp.end(buf);
