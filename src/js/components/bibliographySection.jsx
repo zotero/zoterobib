@@ -53,11 +53,11 @@ const BibliographySection = props => {
 	return (
 		<section
 			className={ cx('section', 'section-bibliography',
-				{ 'loading': !isReady && !isHydrated, 'empty': isReady && bibliography.items.length === 0 })
+				{ 'loading': !isReady && !isHydrated, 'empty': localCitationsCount === 0 })
 			}
 		>
 			<div className="container" suppressHydrationWarning={ true }>
-				{ (isReady && bibliography.items.length === 0) ? (
+				{ (!isReadOnly && localCitationsCount === 0) ? (
 					<React.Fragment>
 						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
 						<h2 className="empty-title">

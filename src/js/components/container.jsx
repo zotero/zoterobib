@@ -142,11 +142,18 @@ const BibWebContainer = props => {
 	const revertCitationStyle = useRef(null);
 	const lastDeletedItem = useRef(null);
 	const duplicate = useRef(null);
+	const initialCitationsCount = useRef(null);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
 	const wasDataReady = usePrevious(isDataReady);
 	const isReadOnly = !!remoteId;
 	const hydrateItemsCount = props.hydrateItemsCount;
+
+	if(bib.current === null) {
+		bib.current = new ZoteroBib(config);
+		bib.current.reloadItems();
+		initialCitationsCount.current = bib.current.items.length;
+	}
 
 	// isHydrated is true during hydration render. It is used throughout app to pretend we're ready
 	// (without any data) so that rendered components (almost) match static markup (otherwise we
@@ -215,18 +222,7 @@ const BibWebContainer = props => {
 	]);
 	citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 
-	const localCitationsCount = useMemo(() => {
-		// parse citations from localStorage so we know how many there are. if remoteId is not
-		// specified, we don't care so save don't waste time parsing (to get the count, use
-		// state.bibliography.items.length instead)
-		if(remoteId) {
-			const localBib = new ZoteroBib(config);
-			localBib.reloadItems();
-			return localBib.items.length;
-		} else {
-			return null;
-		}
-	}, [config, remoteId]);
+	const localCitationsCount = remoteId ? initialCitationsCount.current : bib.current.items.length;
 
 	const buildBibliography = useCallback(async () => {
 		dispatch({ type: BEGIN_BUILD_BIBLIOGRAPHY });
@@ -1154,9 +1150,6 @@ const BibWebContainer = props => {
 		if(remoteId) {
 			fetchRemoteBibliography();
 		} else {
-			bib.current = new ZoteroBib(config);
-			bib.current.reloadItems();
-
 			const prefilledIdentifier = params.get('q') || '';
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
