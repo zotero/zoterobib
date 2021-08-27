@@ -138,7 +138,14 @@ const BibliographySection = props => {
 							confirmLabel="Continue"
 							>
 								<p>
-									There is an existing bibliography with { localCitationsCount } { localCitationsCount > 1 ? 'entries' : 'entry' } in the editor. If you continue, the existing bibliography will be replaced with this one.
+									<FormattedMessage
+										id="zbib.bibliography.override"
+										defaultMessage="There is an existing bibliography with {localCitationsCount, plural,
+											one {# entry}
+											other {# entries}
+											} in the editor. If you continue, the existing bibliography will be replaced with this one."
+										values={ { localCitationsCount } }
+									/>
 								</p>
 						</Confirmation>
 					</React.Fragment>
@@ -148,7 +155,7 @@ const BibliographySection = props => {
 				<Button
 					onClick={ handleEditBibliography }
 					className="btn-sm btn-outline-secondary">
-					Edit Bibliography
+					<FormattedMessage id="zbib.bibliography.edit" defaultMessage="Edit Bibliography" />
 				</Button>
 			) }
 			</div>
