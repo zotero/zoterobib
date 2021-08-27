@@ -47,7 +47,7 @@ class ZoteroBibComponent extends React.Component {
 		'hydrateItemsCount' in domEl.dataset ?
 			ReactDOM.hydrate(
 				<ZoteroBibComponent
-					hydrateItemsCount={ domEl.dataset.hydrateItemsCount }
+					hydrateItemsCount={ parseInt(domEl.dataset.hydrateItemsCount) }
 					title={ domEl.querySelector('.bibliography-title')?.textContent }
 					config={ config }
 				/>, domEl) :
