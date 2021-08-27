@@ -14,8 +14,8 @@ import StyleSelector from './style-selector';
 import { pick } from '../immutable'
 
 const BibliographySection = props => {
-	const { bibliography, isReadOnly, isReady, isHydrated, localCitationsCount,
-	onOverride, onTitleChanged, title } = props;
+	const { isPrintMode, isReadOnly, isReady, isHydrated, localCitationsCount, onOverride,
+	onCancelPrintMode, onTitleChanged, title } = props;
 	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 
@@ -35,12 +35,16 @@ const BibliographySection = props => {
 	}, []);
 
 	const handleEditBibliography = useCallback(() => {
-		if(localCitationsCount > 0) {
-			setIsConfirmingOverride(true);
+		if(isPrintMode) {
+			onCancelPrintMode();
 		} else {
-			onOverride();
+			if(localCitationsCount > 0) {
+				setIsConfirmingOverride(true);
+			} else {
+				onOverride();
+			}
 		}
-	}, [localCitationsCount, onOverride]);
+	}, [isPrintMode, localCitationsCount, onOverride, onCancelPrintMode]);
 
 	const handleOverride = useCallback(() => {
 		onOverride();
@@ -85,9 +89,11 @@ const BibliographySection = props => {
 					<React.Fragment>
 						{
 							isReadOnly ? (
-								<h1 className="h2 bibliography-title">
-									{ title || 'Bibliography' }
-								</h1>
+								title && (
+									<h1 className="h2 bibliography-title">
+										{ title }
+									</h1>
+								)
 							) : (
 								<h2 onClick={ handleTitleEdit }
 									onFocus={ handleTitleEdit }
@@ -154,7 +160,7 @@ const BibliographySection = props => {
 			{ ((isReady || isHydrated) && isReadOnly) && (
 				<Button
 					onClick={ handleEditBibliography }
-					className="btn-sm btn-outline-secondary">
+					className="btn-sm btn-outline-secondary btn-edit-bibliography">
 					<FormattedMessage id="zbib.bibliography.edit" defaultMessage="Edit Bibliography" />
 				</Button>
 			) }
@@ -167,10 +173,12 @@ const BibliographySection = props => {
 BibliographySection.propTypes = {
 	bibliography: PropTypes.object,
 	isHydrated: PropTypes.bool,
+	isPrintMode: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
 	isReady: PropTypes.bool,
 	localCitationsCount: PropTypes.number,
 	onOverride: PropTypes.func.isRequired,
+	onCancelPrintMode: PropTypes.func.isRequired,
 	onTitleChanged: PropTypes.func.isRequired,
 	title: PropTypes.string,
 }

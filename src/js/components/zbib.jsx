@@ -110,15 +110,14 @@ const ZBib = props => {
 						</section>
 					)
 				}
-				{(props.isTranslating || props.itemUnderReview) && (
+				{(!props.isReadOnly && (props.isTranslating || props.itemUnderReview)) && (
 					<Review { ...pick(props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
 				)}
-				<BibliographySection { ...pick(props, ['bibliography', 'isReadOnly',
-					'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged', 'title',
-					'citationStyle', 'citationStyles', 'onCitationStyleChanged', 'isHydrated',
-					'isNoteStyle', 'isNumericStyle', 'onCitationCopyDialogOpen',
-					'onDeleteEntry', 'onDeleteCitations', 'onEditorOpen',
-					'styleHasBibliography']) }
+				<BibliographySection { ...pick(props, ['bibliography', 'isReadOnly', 'isReady',
+					'localCitationsCount', 'onOverride', 'onTitleChanged', 'title', 'citationStyle',
+					'citationStyles', 'onCitationStyleChanged', 'isPrintMode', 'isHydrated',
+					'isNoteStyle', 'isNumericStyle', 'onCitationCopyDialogOpen', 'onDeleteEntry',
+					'onDeleteCitations', 'onEditorOpen', 'onCancelPrintMode', 'styleHasBibliography']) }
 				/>
 				{
 					<section className="section section-export">

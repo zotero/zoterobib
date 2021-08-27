@@ -5,6 +5,10 @@
 .section-export {
 	text-align: center;
 
+	@media print {
+		display: none;
+	}
+
 	.write & {
 		padding-top: $section-padding-mobile - 10px; // t height
 

@@ -2,6 +2,12 @@
 // React-modal
 //
 
+.ReactModalPortal {
+	@media print {
+		display: none;
+	}
+}
+
 .ReactModal__Body--open {
 	overflow: hidden;
 }

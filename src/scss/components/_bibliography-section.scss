@@ -191,6 +191,12 @@
 		}
 	}
 
+	.btn-edit-bibliography {
+		@media print {
+			display: none;
+		}
+	}
+
 	.read-only & {
 		border-top: none;
 		padding-top: $section-padding-mobile - 10px; // t height

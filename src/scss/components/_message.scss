@@ -26,6 +26,10 @@
 		}
 	}
 
+	@media print {
+		display: none;
+	}
+
 	.text {
 		display: flex;
 		flex-direction: column;

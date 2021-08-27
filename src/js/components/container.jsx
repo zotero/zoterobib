@@ -145,8 +145,9 @@ const BibWebContainer = props => {
 	const initialCitationsCount = useRef(null);
 	const [isDataReady, setIsDataReady] = useState(false);
 	const [activeDialog, setActiveDialog] = useState(null);
+	const [isPrintMode, setIsPrintMode] = useState(false);
 	const wasDataReady = usePrevious(isDataReady);
-	const isReadOnly = !!remoteId;
+	const isReadOnly = isPrintMode || !!remoteId;
 	const hydrateItemsCount = props.hydrateItemsCount;
 
 	if(bib.current === null) {
@@ -767,6 +768,10 @@ const BibWebContainer = props => {
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
 	}, [state.selected, citationStyles, config, title]);
 
+	const handleCancelPrintMode = useCallback(() => {
+		setIsPrintMode(false);
+	}, []);
+
 	const handleReadMoreClick = useCallback(event => {
 		const target = document.querySelector('.zbib-illustration');
 		(new SmoothScroll()).animateScroll(target, event.currentTarget, {
@@ -1044,6 +1049,14 @@ const BibWebContainer = props => {
 		}
 	}, [state.selected, isReadOnly]);
 
+	const handleBeforePrint = useCallback(() => {
+		setIsPrintMode(true);
+	}, []);
+
+	const handleAfterPrint = useCallback(() => {
+		setIsPrintMode(false);
+	}, []);
+
 	const handleSaveToZoteroShow = useCallback(() => {
 		setActiveDialog('SAVE_TO_ZOTERO');
 	}, []);
@@ -1135,6 +1148,16 @@ const BibWebContainer = props => {
 	}, [handleKeyDown]);
 
 	useEffect(() => {
+		window.addEventListener('beforeprint', handleBeforePrint);
+		return () => document.removeEventListener('beforeprint', handleBeforePrint);
+	}, [handleBeforePrint]);
+
+	useEffect(() => {
+		window.addEventListener('afterprint', handleAfterPrint);
+		return () => document.removeEventListener('afterprint', handleAfterPrint);
+	}, [handleAfterPrint]);
+
+	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
 
 		const params = new URLSearchParams(location.search);
@@ -1155,7 +1178,6 @@ const BibWebContainer = props => {
 		}
 	}, []); //eslint-disable-line react-hooks/exhaustive-deps
 
-
 	return (<ZBib
 		getCopyData = { getCopyData }
 		bibliography = { state.bibliography }
@@ -1171,6 +1193,7 @@ const BibWebContainer = props => {
 		isReadOnly={ isReadOnly }
 		isHydrated={ isHydrated.current }
 		isReady={ isReady }
+		isPrintMode = { isPrintMode }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }
 		isTranslatingMore= { isTranslatingMore }
@@ -1213,6 +1236,7 @@ const BibWebContainer = props => {
 		onStyleInstallerSelect = { handleStyleInstallerSelect }
 		onTitleChanged = { handleTitleChange }
 		onHelpClick = { handleHelpClick }
+		onCancelPrintMode = { handleCancelPrintMode }
 		onReadMore = { handleReadMoreClick }
 		onStyleSwitchCancel = { handleStyleSwitchCancel }
 		onStyleSwitchConfirm = { handleStyleSwitchConfirm }
