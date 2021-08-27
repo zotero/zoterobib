@@ -57,7 +57,7 @@ const BibliographySection = props => {
 	return (
 		<section
 			className={ cx('section', 'section-bibliography',
-				{ 'loading': !isReady && !isHydrated, 'empty': localCitationsCount === 0 })
+				{ 'loading': !isReady && !isHydrated, 'empty': !isReadOnly && localCitationsCount === 0 })
 			}
 		>
 			<div className="container" suppressHydrationWarning={ true }>
