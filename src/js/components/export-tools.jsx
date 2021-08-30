@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState, memo } from 'react';
 import Dropdown from 'reactstrap/lib/Dropdown';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
-import DropdownMenu from 'reactstrap/lib/DropdownMenu';
+import DropdownMenu from './ui/dropdown-menu';
 import DropdownItem from 'reactstrap/lib/DropdownItem';
 import { FormattedMessage } from 'react-intl';
 
@@ -115,6 +115,7 @@ const ExportTools = props => {
 	return (
 		<div className="export-tools">
 			<Dropdown
+
 				isOpen={ isDropdownOpen }
 				toggle={ handleToggleDropdown }
 				className={ cx('btn-group', { 'success': isCopied }) }
@@ -140,7 +141,7 @@ const ExportTools = props => {
 					>
 					<span className="dropdown-caret" />
 				</DropdownToggle>
-				<DropdownMenu className="dropdown-menu">
+				<DropdownMenu>
 					{ formatsInDropdown.map(format => (
 						<ExportOption
 							format={ format }

@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useMemo, memo } from 'react';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { default as Dropdown } from 'reactstrap/lib/Dropdown';
-import { default as DropdownToggle } from 'reactstrap/lib/DropdownToggle';
-import { default as DropdownMenu } from 'reactstrap/lib/DropdownMenu';
-import { default as DropdownItem } from 'reactstrap/lib/DropdownItem';
+import Dropdown from 'reactstrap/lib/Dropdown';
+import DropdownItem from 'reactstrap/lib/DropdownItem';
+import DropdownMenu from './ui/dropdown-menu';
+import DropdownToggle from 'reactstrap/lib/DropdownToggle';
+import PropTypes from 'prop-types';
+import React, { useCallback, useState, useMemo, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -40,7 +40,7 @@ const BibliographyItem = memo(props => {
 				>
 					<Icon type={ '28/dots' } width="28" height="28" />
 				</DropdownToggle>
-				<DropdownMenu right className="dropdown-menu">
+				<DropdownMenu right>
 					{ !isNumericStyle && (
 						<DropdownItem
 							onClick={ onCopyCitationDialogOpen }

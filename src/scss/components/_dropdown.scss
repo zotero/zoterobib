@@ -14,6 +14,20 @@
 		border-radius: $menu-border-radius;
 		z-index: $zindex-menu;
 		display: none;
+
+		.dropdown-item {
+			&:hover {
+				@include state(".dropdown-menu.is-mouse") {
+					background-color: $menu-item-hover-bg;
+				}
+			}
+
+			&:focus {
+				@include state(".dropdown-menu.is-keyboard") {
+					background-color: $menu-item-hover-bg;
+				}
+			}
+		}
 	}
 
 	&.show {
@@ -41,10 +55,5 @@
 		background-color: transparent;
 		margin: 0;
 		padding: $input-btn-padding-y-sm $input-btn-padding-x-lg;
-
-		&:hover,
-		&:focus {
-			background-color: $menu-item-hover-bg;
-		}
 	}
 }
