@@ -169,7 +169,6 @@ const CopyCitationDialog = props => {
 								</span>
 								<span className="shorter feedback" aria-hidden={ isCopied }>
 									<FormattedMessage id="zbib.citation.copiedFeedback" defaultMessage="Copied!" />
-									Copied!
 								</span>
 							</span>
 						</Button>
