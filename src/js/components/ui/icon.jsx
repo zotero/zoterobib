@@ -1,58 +1,55 @@
-'use strict';
-
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-class Icon extends React.PureComponent {
-	render() {
-		let style = {
-			color: this.props.color,
-			...this.props.style
-		};
-		let basename = this.props.type.split(/[\\/]/).pop();
+const Icon = props => {
+	const style = {
+		color: props.color,
+		...props.style
+	};
 
-		let svgAttr = {
-			className: cx(['icon', `icon-${basename}`, this.props.className]),
-			role: 'img',
-			style
-		};
+	const basename = props.type.split(/[\\/]/).pop();
 
-		if(this.props.width) {
-			svgAttr['width'] = parseInt(this.props.width, 10);
-		}
+	const svgAttr = {
+		className: cx(['icon', `icon-${basename}`, props.className]),
+		role: 'img',
+		style
+	};
 
-		if(this.props.height) {
-			svgAttr['height'] = parseInt(this.props.height, 10);
-		}
-
-		if(this.props.viewBox) {
-			svgAttr['viewBox'] = this.props.viewBox;
-		}
-
-		if(this.props.label) {
-			svgAttr['aria-label'] = this.props.label;
-		}
-
-		return (
-			<svg { ...svgAttr } viewBox={ this.props.viewBox}>
-				<use
-					xlinkHref={ `/static/icons/${this.props.type}.svg#${basename}`}
-				/>
-			</svg>
-		);
+	if(props.width) {
+		svgAttr['width'] = parseInt(props.width, 10);
 	}
 
-	static propTypes = {
-		className: PropTypes.string,
-		color: PropTypes.string,
-		height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-		label: PropTypes.string,
-		style: PropTypes.object,
-		type: PropTypes.string.isRequired,
-		viewBox: PropTypes.string,
-		width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	if(props.height) {
+		svgAttr['height'] = parseInt(props.height, 10);
 	}
+
+	if(props.viewBox) {
+		svgAttr['viewBox'] = props.viewBox;
+	}
+
+	if(props.label) {
+		svgAttr['aria-label'] = props.label;
+	}
+
+	return (
+		<svg { ...svgAttr } viewBox={ props.viewBox}>
+			<use
+				xlinkHref={ `/static/icons/${props.type}.svg#${basename}`}
+			/>
+		</svg>
+	);
 }
 
-export default Icon;
+Icon.propTypes = {
+	className: PropTypes.string,
+	color: PropTypes.string,
+	height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	label: PropTypes.string,
+	style: PropTypes.object,
+	type: PropTypes.string.isRequired,
+	viewBox: PropTypes.string,
+	width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+}
+
+export default memo(Icon);
