@@ -19,6 +19,7 @@
 		padding: $result-padding;
 		cursor: pointer;
 		display: flex;
+		justify-content: space-between;
 
 		&:hover {
 			background-color: $result-hover-bg;
