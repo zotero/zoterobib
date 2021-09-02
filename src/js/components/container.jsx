@@ -149,6 +149,7 @@ const BibWebContainer = props => {
 	const wasDataReady = usePrevious(isDataReady);
 	const isReadOnly = isPrintMode || !!remoteId;
 	const hydrateItemsCount = props.hydrateItemsCount;
+	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 
 	if(bib.current === null) {
 		bib.current = new ZoteroBib(config);
@@ -209,7 +210,6 @@ const BibWebContainer = props => {
 	const [isQueryHandled, setIsQueryHandled] = useState(window.location.pathname !== '/import');
 
 	const wasSentenceCaseStyle = usePrevious(state.isSentenceCaseStyle);
-	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 	const useLegacy = useRef(true);
 	const isStyleReady = state.selected && state.isConfirmed && !state.isFetching;
 
