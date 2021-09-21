@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 
 import Container from './components/container';
 import CrashHandler from './components/crash-handler';
-import messages from '../../lang/en-US.json';
+import messages from '../../lang/compiled/en-US.json';
 
 
 class ErrorBoundary extends React.PureComponent {

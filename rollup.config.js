@@ -69,7 +69,7 @@ if(isProduction) {
 	config.external.push('./wdyr'); //exclude why-did-you-render from production
 } else {
 	config.plugins.splice(0, 0, virtual({
-		'../../lang/en-US.json': 'export default {}',
+		'../../lang/compiled/en-US.json': 'export default {}',
 	}),)
 }
 
