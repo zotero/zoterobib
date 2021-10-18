@@ -34,7 +34,7 @@ const StyleSelector = ({ className, citationStyle, citationStyles, onCitationSty
 							label: intl.formatMessage({
 								id: 'zbib.styleSelector.otherStyles',
 								defaultMessage: '{citationStylesCount, plural, other {#+ other styles} } available…',
-							}, { citationStylesCount: Math.floor(citationStylesCount / 100) * 100 })
+							}, { citationStylesCount: Math.floor(citationStylesCount / 1000) * 1000 })
 						}}
 						/>
 				</Select>

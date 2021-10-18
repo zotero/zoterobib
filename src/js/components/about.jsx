@@ -163,7 +163,7 @@ const About = ({ onGetStartedClick }) => (
 								defaultMessage="Format your bibliography using APA, MLA, Chicago / Turabian,
 									Harvard, or any of the {citationStylesCount, plural, other {#+ other <link>CSL</link> styles} }."
 								values={ {
-									citationStylesCount: Math.floor(citationStylesCount / 100) * 100,
+									citationStylesCount: Math.floor(citationStylesCount / 1000) * 1000,
 									link: chunk => <a href="https://citationstyles.org/">{ chunk }</a> //eslint-disable-line react/display-name
 								} }
 							/>
