@@ -126,7 +126,9 @@ const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styl
 	const citeproc = await CiteprocWrapper.new({
 		format: 'html',
 		style: citationStyleXml,
-		wrap_url_and_doi: false,
+		formatOptions: {
+			linkAnchors: false
+		},
 		...opts
 	}, useLegacy);
 	citeproc.includeUncited("All");

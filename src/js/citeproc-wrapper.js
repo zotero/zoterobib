@@ -88,7 +88,7 @@ class CiteprocWrapper {
 				uppercase_subtitles: getStyleProperties(opts.style)?.isUppercaseSubtitlesStyle,
 			}, opts.style, opts.localeOverride || opts.lang, !!opts.localeOverride);
 			this.driver.setOutputFormat(opts.format);
-			this.driver.opt.development_extensions.wrap_url_and_doi = opts.wrap_url_and_doi;
+			this.driver.opt.development_extensions.wrap_url_and_doi = opts.formatOptions.linkAnchors;
 		} else {
 			this.driver = engine;
 		}
@@ -324,7 +324,7 @@ class CiteprocWrapper {
 				uppercase_subtitles: getStyleProperties(this.opts.style)?.isUppercaseSubtitlesStyle
 			}, this.opts.style, this.opts.localeOverride || this.opts.lang, !!this.opts.localeOverride);
 			this.driver.setOutputFormat(this.opts.format);
-			this.driver.opt.development_extensions.wrap_url_and_doi = this.opts.wrap_url_and_doi;
+			this.driver.opt.development_extensions.wrap_url_and_doi = this.opts.formatOptions.linkAnchors;
 		}
 	}
 }
@@ -365,7 +365,7 @@ const getCiteprocRSLoader = async () => {
 	});
 }
 
-CiteprocWrapper.new = async ({ style, format = 'html', lang = null, localeOverride = null, wrap_url_and_doi = false }, useLegacy = null, DriverORCSL = null) => {
+CiteprocWrapper.new = async ({ style, format = 'html', lang = null, localeOverride = null, formatOptions = { linkAnchors: true } }, useLegacy = null, DriverORCSL = null) => {
 	const userLocales = lang ? lang : window ? (window.navigator.languages || window.navigator.userLanguage || window.navigator.language) : null;
 	lang = pickBestLocale(userLocales, supportedLocales);
 	useLegacy = useLegacy === null ? !isWasmSupported : useLegacy;
@@ -376,7 +376,7 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, localeOverri
 			if(format === 'plain') {
 				format = 'text';
 			}
-			return new CiteprocWrapper(true, CSL, { style, format, lang, localeOverride, wrap_url_and_doi });
+			return new CiteprocWrapper(true, CSL, { style, format, lang, localeOverride, formatOptions });
 		} else {
 			if(!Driver) {
 				if(DriverORCSL) {
@@ -389,11 +389,10 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, localeOverri
 				}
 			}
 			const fetcher = new Fetcher();
-			// NOTE: wrap_url_and_doi is not supported in citeproc rs (yet?)
-			const driverResult = Driver.new({ localeOverride, format, style, fetcher });
+			const driverResult = Driver.new({ localeOverride, format, formatOptions, style, fetcher });
 			const driver = driverResult.unwrap();
 			await driver.fetchLocales();
-			return new CiteprocWrapper(false, driver, { style, format, lang, localeOverride, wrap_url_and_doi, Driver });
+			return new CiteprocWrapper(false, driver, { style, format, lang, localeOverride, formatOptions, Driver });
 		}
 	} catch(err) {
 		console.error(err);

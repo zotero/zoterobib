@@ -233,7 +233,9 @@ const BibWebContainer = props => {
 			style: state.xml,
 			format: 'html',
 			localeOverride: state.localeOverride,
-			wrap_url_and_doi: isReadOnly
+			formatOptions: {
+				linkAnchors: isReadOnly,
+			}
 		}, useLegacy.current);
 
 		const t0 = performance.now();
@@ -763,7 +765,7 @@ const BibWebContainer = props => {
 
 		isHydrated.current = false;
 
-		citeproc.current.recreateEngine({ wrap_url_and_doi: false });
+		citeproc.current.recreateEngine({ formatOptions: { linkAnchors: false } });
 		history.replaceState(null, null, '/');
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_REPLACED });
 	}, [state.selected, citationStyles, config, title]);
