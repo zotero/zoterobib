@@ -41,7 +41,7 @@
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "@babel/runtime-corejs3": "^7.15.4",
-    "@citeproc-rs/wasm": "^0.0.0-canary-502e4f0",
+    "@citeproc-rs/wasm": "^0.0.0-canary-70764c7",
     "balanced-match": "^2.0.0",
     "classnames": "^2.3.1",
     "copy-to-clipboard": "^3.3.1",
