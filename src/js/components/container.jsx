@@ -583,7 +583,6 @@ const BibWebContainer = props => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
 		lastDeletedItem.current = item;
 		setItemUnderReview(null);
-		setPermalink(null);
 		deleteItem(itemId);
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 		const message = {
@@ -603,7 +602,6 @@ const BibWebContainer = props => {
 		}
 		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
-		setPermalink(null);
 		setTitle('');
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 	}, [state.styleHasBibliography]);
@@ -633,7 +631,6 @@ const BibWebContainer = props => {
 		addItem(item, false);
 		setEditorItem({ ...item });
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
-		setPermalink(null);
 	}, [addItem]);
 
 	const handleItemUpdate = useCallback(async (itemKey, patch) => {
@@ -1033,7 +1030,6 @@ const BibWebContainer = props => {
 			addItem(lastDeletedItem.current);
 			dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 			dispatch({ type: CLEAR_MESSAGE, kind: 'UNDO_DELETE' });
-			setPermalink(null);
 			lastDeletedItem.current = null;
 		}
 	}, [addItem]);
@@ -1084,6 +1080,7 @@ const BibWebContainer = props => {
 	useEffect(() => {
 		if(state.bibliographyNeedsRebuild && isStyleReady && state.isConfirmed && isDataReady) {
 			buildBibliography();
+			setPermalink(null);
 		}
 	}, [buildBibliography, state.bibliographyNeedsRebuild, isStyleReady, state.isConfirmed, isDataReady]);
 
@@ -1096,6 +1093,7 @@ const BibWebContainer = props => {
 	useEffect(() => {
 		if(state.bibliographyNeedsRefresh) {
 			updateBibliography();
+			setPermalink(null);
 		}
 	}, [updateBibliography, state.bibliographyNeedsRefresh])
 
