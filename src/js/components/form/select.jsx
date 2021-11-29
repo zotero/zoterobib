@@ -110,6 +110,8 @@ const SelectInput = forwardRef((props, ref) => {
 	);
 });
 
+SelectInput.displayName = 'SelectInput';
+
 SelectInput.propTypes = {
 	autoFocus: PropTypes.bool,
 	className: PropTypes.string,
