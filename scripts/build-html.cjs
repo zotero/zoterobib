@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const config = require('config');
 const fs = require('fs-extra');
 const Handlebars = require('handlebars');
-const marked = require('marked');
+const { marked } = require('marked');
 const path = require('path');
 
 Handlebars.registerHelper('json', context => JSON.stringify(context));
