@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo, useMemo, useCallback, useState } from 'react';
+import React, { memo, useEffect, useMemo, useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -7,10 +7,13 @@ import Icon from './ui/icon';
 import Modal from './modal';
 import { formatBib, formatFallback } from '../cite';
 import { isTriggerEvent } from '../common/event';
+import { usePrevious } from '../hooks';
 
 const MultipleItemsDialog = props => {
 	const { activeDialog, multipleItems, onMultipleItemsSelect, onMultipleItemsCancel,  } = props;
 	const [selectedItems, setSelectedItems] = useState([]);
+	const prevActiveDialog = usePrevious(activeDialog);
+	const isOpen = multipleItems && activeDialog === 'MULTIPLE_ITEMS_DIALOG';
 
 	const bibliographyRendered = useMemo(() => {
 		if(!multipleItems) {
@@ -56,13 +59,15 @@ const MultipleItemsDialog = props => {
 		onMultipleItemsCancel();
 	}, [onMultipleItemsCancel])
 
-	if(!multipleItems || activeDialog !== 'MULTIPLE_ITEMS_DIALOG') {
-		return null;
-	}
+	useEffect(() => {
+		if(prevActiveDialog !== activeDialog && activeDialog === 'MULTIPLE_ITEMS_DIALOG') {
+			setSelectedItems([]);
+		}
+	}, [activeDialog, prevActiveDialog]);
 
 	return (
 		<Modal
-			isOpen={ activeDialog === 'MULTIPLE_ITEMS_DIALOG' }
+			isOpen={ isOpen }
 			contentLabel="Select the entry to add:"
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ handleCancel }
@@ -83,7 +88,7 @@ const MultipleItemsDialog = props => {
 				<div className="modal-body">
 					<ul className="results">
 						{
-							multipleItems.bibliographyItems.map((item, index) => (
+							(multipleItems?.bibliographyItems ?? []).map((item, index) => (
 								<li key={ item.id }
 									data-key={ item.id }
 									className="result"
