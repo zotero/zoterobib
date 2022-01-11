@@ -67,7 +67,7 @@ const MultipleItemsDialog = props => {
 
 	return (
 		<Modal
-			isOpen={ isOpen }
+			isOpen={ !!isOpen }
 			contentLabel="Select the entry to add:"
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ handleCancel }

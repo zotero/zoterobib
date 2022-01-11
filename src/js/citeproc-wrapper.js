@@ -118,7 +118,7 @@ class CiteprocWrapper {
 
 			return { bibliography, clusters };
 		} else {
-			return this.driver.batchedUpdates().unwrap();
+			return this.driver.batchedUpdates();
 		}
 	}
 
@@ -131,7 +131,7 @@ class CiteprocWrapper {
 			delete this.nextMeta;
 			return meta;
 		} else {
-			return this.driver.bibliographyMeta().unwrap();
+			return this.driver.bibliographyMeta();
 		}
 	}
 
@@ -139,7 +139,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			throw new Error('builtCluster() is not supported when using citeprocJS');
 		} else {
-			return this.driver.builtCluster(id).unwrap();
+			return this.driver.builtCluster(id);
 
 		}
 	}
@@ -148,7 +148,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			throw new Error('drain() is not supported when using citeprocJS');
 		} else {
-			return this.driver.drain().unwrap();
+			return this.driver.drain();
 
 		}
 	}
@@ -187,7 +187,7 @@ class CiteprocWrapper {
 
 			return { allClusters };
 		} else {
-			return this.driver.fullRender().unwrap();
+			return this.driver.fullRender();
 		}
 	}
 
@@ -195,7 +195,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			this.shouldIncludeUncidted = uncited;
 		} else {
-			return this.driver.includeUncited(uncited).unwrap();
+			return this.driver.includeUncited(uncited);
 		}
 	}
 
@@ -203,7 +203,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			this.clustersStore = clusters;
 		} else {
-			return this.driver.initClusters(clusters).unwrap();
+			return this.driver.initClusters(clusters);
 		}
 	}
 
@@ -211,7 +211,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			this.clustersStore.push(cluster);
 		} else {
-			return this.driver.insertCluster(cluster).unwrap();
+			return this.driver.insertCluster(cluster);
 		}
 	}
 
@@ -220,7 +220,7 @@ class CiteprocWrapper {
 			this.itemsStore[refr.id] = refr;
 			this.driver.updateItems(Object.keys(this.itemsStore));
 		} else {
-			return this.driver.insertReference(refr).unwrap();
+			return this.driver.insertReference(refr);
 		}
 	}
 
@@ -229,7 +229,7 @@ class CiteprocWrapper {
 			this.itemsStore = {...this.itemsStore, ...Object.fromEntries(refs.map(item => ([item.id, item]))) };
 			this.driver.updateItems(Object.keys(this.itemsStore));
 		} else {
-			return this.driver.insertReferences(refs).unwrap();
+			return this.driver.insertReferences(refs);
 		}
 	}
 
@@ -239,7 +239,7 @@ class CiteprocWrapper {
 			this.nextMeta = CiteprocWrapper.metaCiteprocJStoRS(meta, this.opts.format);
 			return meta.entry_ids.map((id, index) => ({ id: Array.isArray(id) ? id[0] : id, value: items[index] }));
 		} else {
-			return this.driver.makeBibliography().unwrap();
+			return this.driver.makeBibliography();
 		}
 	}
 
@@ -251,7 +251,7 @@ class CiteprocWrapper {
 			// TODO: pre and post (2nd, 3rd args) from positions?
 			return this.driver.previewCitationCluster({ citationItems: fixCitesCompatiblity(cites) }, [], [], format);
 		} else {
-			return this.driver.previewCitationCluster(cites, positions, format).unwrap();
+			return this.driver.previewCitationCluster(cites, positions, format);
 		}
 	}
 
@@ -267,7 +267,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			this.clustersStore = this.clustersStore.filter(c => c.id !== cluster_id);
 		} else {
-			return this.driver.removeCluster(cluster_id).unwrap();
+			return this.driver.removeCluster(cluster_id);
 		}
 	}
 
@@ -276,7 +276,7 @@ class CiteprocWrapper {
 			delete this.itemsStore[id];
 			this.driver.updateItems(Object.keys(this.itemsStore));
 		} else {
-			return this.driver.removeReference(id).unwrap();
+			return this.driver.removeReference(id);
 		}
 	}
 
@@ -286,7 +286,7 @@ class CiteprocWrapper {
 			this.driver.updateItems([]); // workaround for #256
 			this.driver.updateItems(Object.keys(this.itemsStore));
 		} else {
-			return this.driver.resetReferences(refs).unwrap();
+			return this.driver.resetReferences(refs);
 
 		}
 	}
@@ -295,7 +295,7 @@ class CiteprocWrapper {
 		if(this.isLegacy) {
 			// TODO: implement for citeproc JS
 		} else {
-			return this.driver.setClusterOrder(positions).unwrap();
+			return this.driver.setClusterOrder(positions);
 
 		}
 	}
@@ -309,7 +309,7 @@ class CiteprocWrapper {
 				// TODO
 				throw new Error("CiteprocRS does not support changing locale override.")
 			} else {
-				return this.driver.setStyle(newStyleXml).unwrap();
+				return this.driver.setStyle(newStyleXml);
 			}
 		}
 	}
@@ -389,8 +389,7 @@ CiteprocWrapper.new = async ({ style, format = 'html', lang = null, localeOverri
 				}
 			}
 			const fetcher = new Fetcher();
-			const driverResult = Driver.new({ localeOverride, format, formatOptions, style, fetcher });
-			const driver = driverResult.unwrap();
+			const driver = new Driver({ localeOverride, format, formatOptions, style, fetcher });
 			await driver.fetchLocales();
 			return new CiteprocWrapper(false, driver, { style, format, lang, localeOverride, formatOptions, Driver });
 		}
