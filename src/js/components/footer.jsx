@@ -13,7 +13,8 @@ const Footer = () => (
 			/>
 		</nav>
 		<small className="copyright">
-			© 2018–2021 Zotero &nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
+			© 2018–{new Date().getFullYear()} Zotero &nbsp;•&nbsp;{" "}
+			<a href="/faq#privacy">Privacy</a>
 		</small>
 	</footer>
 );
