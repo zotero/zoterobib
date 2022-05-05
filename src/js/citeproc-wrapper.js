@@ -2,6 +2,7 @@ import load from 'load-script';
 import { getStyleProperties } from './common/citation-style';
 import supportedLocales from '../../data/supported-locales.json';
 import { pickBestLocale } from './utils';
+import { mapObject } from './immutable';
 
 const isWasmSupported = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
 var Driver = null;
@@ -118,7 +119,15 @@ class CiteprocWrapper {
 
 			return { bibliography, clusters };
 		} else {
-			return this.driver.batchedUpdates();
+			const updates = this.driver.batchedUpdates();
+			// if html output, wrap with csl-entry, until https://github.com/zotero/citeproc-rs/issues/90
+			if(this.opts.format === 'html' && updates?.bibliography?.updatedEntries) {
+				updates.bibliography.updatedEntries = mapObject(
+					updates.bibliography.updatedEntries,
+					(k, i) => ([k, `<div class="csl-entry">${i}</div>`])
+				)
+			}
+			return updates;
 		}
 	}
 
@@ -239,7 +248,11 @@ class CiteprocWrapper {
 			this.nextMeta = CiteprocWrapper.metaCiteprocJStoRS(meta, this.opts.format);
 			return meta.entry_ids.map((id, index) => ({ id: Array.isArray(id) ? id[0] : id, value: items[index] }));
 		} else {
-			return this.driver.makeBibliography();
+			const bibOutput = this.driver.makeBibliography();
+			// if html output, wrap with csl-entry, until https://github.com/zotero/citeproc-rs/issues/90
+			return this.opts.format === 'html' ?
+				bibOutput.map(i => ({ ...i, value: `<div class="csl-entry">${i.value}</div>` })) :
+				bibOutput;
 		}
 	}
 

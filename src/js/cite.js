@@ -8,9 +8,7 @@ const formatFallback = bibliographyItems => {
 const formatBib = (bibliographyItems, bibliographyMeta) => {
 	return formatBibLegacy([
 		CiteprocWrapper.metaCiteprocRStoJS(bibliographyMeta),
-		bibliographyItems.map(renderedItem => (
-			`<div className="csl-entry">${renderedItem.value}</div>`
-		)).join('')
+		bibliographyItems.map(renderedItem => renderedItem.value)
 	]);
 };
 
