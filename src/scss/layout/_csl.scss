@@ -4,15 +4,19 @@
 
 // CSL styles only work correctly with content-box
 .csl-entry {
-	word-wrap: break-word; // Break long URLs
-	margin: 0 !important; // Override entry-spacing defined in CSL
-
-	&,
-	* {
-		box-sizing: content-box;
+		&,
+		* {
+			box-sizing: content-box;
+			word-wrap: break-word; // Break long URLs
+		}
 	}
-}
 
-.csl-left-margin {
-	word-wrap: normal;
+.write {
+	.csl-entry {
+		margin: 0 !important; // Override entry-spacing defined in CSL
+	}
+
+	.csl-left-margin {
+		word-wrap: normal;
+	}
 }
