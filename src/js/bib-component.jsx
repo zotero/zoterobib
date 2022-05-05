@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
 
 import Container from './components/container';
@@ -44,13 +44,13 @@ ZoteroBibComponent.displayName = 'ZoteroBibComponent';
 
 ZoteroBibComponent.init = (domEl, config = {}) => {
 	'hydrateItemsCount' in domEl.dataset ?
-		ReactDOM.hydrate(
+		hydrateRoot(domEl,
 			<ZoteroBibComponent
 				hydrateItemsCount={ parseInt(domEl.dataset.hydrateItemsCount) }
 				title={ domEl.querySelector('.bibliography-title')?.textContent }
 				config={ config }
-			/>, domEl) :
-		ReactDOM.render(<ZoteroBibComponent config={ config } />, domEl);
+			/>) :
+		createRoot(domEl).render(<ZoteroBibComponent config={ config } />)
 }
 
 ZoteroBibComponent.propTypes = {
