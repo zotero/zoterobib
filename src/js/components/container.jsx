@@ -58,15 +58,6 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 
 const confirmStyle = dispatch => dispatch({ type: CONFIRM_CURRENT_STYLE });
 
-const makeEmptyBibliography = itemCount => {
-	const arrayOfIds = Array(itemCount).fill().map((_, id) => id.toString());
-	return {
-		items: arrayOfIds.map(id => ({ id, value: '<div class="cls-entry"></div>' })),
-		meta: { maxOffset: 1, entrySpacing: 1, lineSpacing: 1 },
-		lookup: arrayOfIds.map(id => ([id, id]))
-	};
-}
-
 const reducer = (state, action) => {
 	switch(action.type) {
 		case REQUEST_FETCH_STYLE:
@@ -187,9 +178,7 @@ const BibWebContainer = props => {
 		isUppercaseSubtitlesStyle: undefined,
 		isSentenceCaseStyle: undefined,
 		isConfirmed: undefined,
-		bibliography: isHydrated.current ?
-			makeEmptyBibliography(hydrateItemsCount) :
-			{ items: [], meta: null, lookup: {} },
+		bibliography: { items: [], meta: null, lookup: {} },
 		bibliographyNeedsRefresh: false,
 		bibliographyNeedsRebuild: false,
 		isCiteprocReady: false,

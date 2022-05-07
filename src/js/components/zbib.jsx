@@ -31,6 +31,7 @@ const commonFormats = {
 };
 
 const ZBib = props => {
+	const { bibliography, hydrateItemsCount, isHydrated } = props;
 	const [userType, setUserType] = useState({
 		isKeyboardUser: false,
 		isMouseUser: true,
@@ -113,11 +114,12 @@ const ZBib = props => {
 				{(!props.isReadOnly && (props.isTranslating || props.itemUnderReview)) && (
 					<Review { ...pick(props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
 				)}
-				<BibliographySection { ...pick(props, ['bibliography', 'isReadOnly', 'isReady',
-					'localCitationsCount', 'onOverride', 'onTitleChanged', 'title', 'citationStyle',
-					'citationStyles', 'onCitationStyleChanged', 'isPrintMode', 'isHydrated',
-					'isNoteStyle', 'isNumericStyle', 'onCitationCopyDialogOpen', 'onDeleteEntry',
-					'onDeleteCitations', 'onEditorOpen', 'onCancelPrintMode', 'styleHasBibliography']) }
+				<BibliographySection { ...pick(props, ['bibliography', 'hydrateItemsCount',
+					'isReadOnly', 'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged',
+					'title', 'citationStyle', 'citationStyles', 'onCitationStyleChanged',
+					'isPrintMode', 'isHydrated', 'isNoteStyle', 'isNumericStyle',
+					'onCitationCopyDialogOpen', 'onDeleteEntry', 'onDeleteCitations',
+					'onEditorOpen', 'onCancelPrintMode', 'styleHasBibliography']) }
 				/>
 				{
 					<section className="section section-export">
@@ -125,8 +127,10 @@ const ZBib = props => {
 							<h2>
 								<FormattedMessage id="zbib.export" defaultMessage="Export" />
 							</h2>
-							<ExportTools { ...pick(props, ['bibliography', 'getCopyData',
-								'onDownloadFile', 'isReadOnly', 'onSaveToZoteroShow']) }
+							<ExportTools
+								itemCount={ isHydrated ? hydrateItemsCount : bibliography.items.length }
+								{ ...pick(props, ['getCopyData', 'onDownloadFile', 'isReadOnly',
+								'onSaveToZoteroShow']) }
 							/>
 						</div>
 					</section>
@@ -259,10 +263,13 @@ const ZBib = props => {
 
 ZBib.propTypes = {
 	activeDialog: PropTypes.string,
+	bibliography: PropTypes.object,
 	citationHtml: PropTypes.string,
 	citationToCopy: PropTypes.string,
 	errorMessage: PropTypes.string,
+	hydrateItemsCount: PropTypes.number,
 	isConfirmingStyleSwitch: PropTypes.bool,
+	isHydrated: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
 	isSaveToZoteroVisible: PropTypes.bool,
 	isTranslating: PropTypes.bool,

@@ -9,6 +9,7 @@ import Confirmation from './confirmation';
 import DeleteAllButton from './delete-all-button';
 import Editable from './ui/editable';
 import Icon from './ui/icon';
+import PlaceholderBibliography from './placeholder-bibliography';
 import Spinner from './ui/spinner';
 import StyleSelector from './style-selector';
 import { pick } from '../immutable'
@@ -118,16 +119,18 @@ const BibliographySection = props => {
 						{
 							!isReadOnly && <StyleSelector { ...pick(props, ['citationStyle', 'citationStyles', 'onCitationStyleChanged']) } />
 						}
-						{
-							(isReady || isHydrated) ? <Bibliography { ...pick(props,
-							['isNoteStyle', 'isNumericStyle', 'hydrateItemsCount', 'isHydrated', 'isReadOnly',
-							'bibliography', 'onCitationCopyDialogOpen', 'onDeleteEntry',
-							'onEditorOpen', 'styleHasBibliography'])} /> : (
-								<div className="spinner-container">
-									<Spinner />
-								</div>
-							)
-						}
+						{ (isHydrated && !isReady) ? (
+							<PlaceholderBibliography itemCount={ props.hydrateItemsCount } />
+						) : isReady ? (
+							<Bibliography { ...pick(props, ['isNoteStyle', 'isNumericStyle',
+							'hydrateItemsCount','isReadOnly', 'bibliography',
+							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
+							'styleHasBibliography'])} />
+						) : (
+							<div className="spinner-container">
+								<Spinner />
+							</div>
+						) }
 						{
 							!isReadOnly && (isReady || isHydrated) && (
 								<DeleteAllButton

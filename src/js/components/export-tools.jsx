@@ -54,7 +54,7 @@ ExportOption.propTypes = {
 };
 
 const ExportTools = props => {
-	const { bibliography, getCopyData, onDownloadFile, onSaveToZoteroShow } = props;
+	const { itemCount, getCopyData, onDownloadFile, onSaveToZoteroShow } = props;
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [clipboardConfirmations, setClipboardConfirmations] = useState({});
 	const dropdownTimer = useRef(null);
@@ -123,7 +123,7 @@ const ExportTools = props => {
 				<Button
 					data-format="plain"
 					data-main
-					disabled={ bibliography.items.length === 0 }
+					disabled={ itemCount === 0 }
 					className='btn btn-secondary btn-xl copy-to-clipboard'
 					onClick={ handleCopyClick }
 					onKeyDown={ handleCopyClick }
@@ -136,7 +136,7 @@ const ExportTools = props => {
 					</span>
 				</Button>
 				<DropdownToggle
-					disabled={ bibliography.items.length === 0 }
+					disabled={ itemCount === 0 }
 					className="btn btn-secondary btn-xl dropdown-toggle"
 					>
 					<span className="dropdown-caret" />
@@ -158,9 +158,9 @@ const ExportTools = props => {
 }
 
 ExportTools.propTypes = {
-	bibliography: PropTypes.object,
 	getCopyData: PropTypes.func.isRequired,
 	isReadOnly: PropTypes.bool,
+	itemCount: PropTypes.number,
 	onDownloadFile: PropTypes.func.isRequired,
 	onSaveToZoteroShow: PropTypes.func.isRequired,
 }
