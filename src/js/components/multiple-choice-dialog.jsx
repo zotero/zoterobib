@@ -70,7 +70,6 @@ const MultipleChoiceDialog = props => {
 	onMultipleChoiceCancel, onMultipleChoiceMore, onMultipleChoiceSelect } = props;
 
 	const handleItemSelect = useCallback(ev => {
-		console.log({ ev });
 		if(isTriggerEvent(ev)) {
 			const item = getItem(ev, multipleChoiceItems);
 			onMultipleChoiceSelect(item);
