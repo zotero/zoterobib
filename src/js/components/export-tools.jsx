@@ -1,7 +1,7 @@
 import copy from 'copy-to-clipboard';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, useState, memo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import Dropdown from 'reactstrap/lib/Dropdown';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import DropdownMenu from './ui/dropdown-menu';
@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import exportFormats from '../constants/export-formats';
 import Button from './ui/button';
 import { isTriggerEvent } from '../common/event';
+import { usePrevious } from '../hooks';
 
 const formatsInDropdown = ['rtf', 'html', 'ris', 'bibtex', 'zotero'];
 
@@ -54,10 +55,23 @@ ExportOption.propTypes = {
 };
 
 const ExportTools = props => {
-	const { itemCount, getCopyData, onDownloadFile, onSaveToZoteroShow } = props;
+	const { getCopyData, isHydrated, isReady, itemCount, onDownloadFile, onSaveToZoteroShow } = props;
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [clipboardConfirmations, setClipboardConfirmations] = useState({});
 	const dropdownTimer = useRef(null);
+	const whenReadyData = useRef(false);
+	const wasReady = usePrevious(isReady);
+
+	const copyToClipboard = useCallback(async (format, isTopLevelButton) => {
+		if(isTopLevelButton) {
+			setIsDropdownOpen(false);
+		}
+		const text = await getCopyData(format);
+		const result = copy(text);
+		if(result) {
+			handleClipoardSuccess(format);
+		}
+	}, [getCopyData, handleClipoardSuccess])
 
 	const handleClipoardSuccess = useCallback(format => {
 		if(clipboardConfirmations[format]) {
@@ -77,9 +91,13 @@ const ExportTools = props => {
 			onSaveToZoteroShow();
 			return;
 		}
+		if(isHydrated && !isReady) {
+			whenReadyData.current = { shouldDownload: true, format }
+			return;
+		}
 
 		onDownloadFile(format);
-	}, [onDownloadFile, onSaveToZoteroShow]);
+	}, [isHydrated, isReady, onDownloadFile, onSaveToZoteroShow]);
 
 	const handleToggleDropdown = useCallback(ev => {
 		const isFromCopyTrigger = ev.target && ev.target.closest('.clipboard-trigger');
@@ -100,17 +118,28 @@ const ExportTools = props => {
 
 		const format = ev.currentTarget.dataset.format;
 		const isTopLevelButton = 'main' in ev.currentTarget.dataset;
-		if(isTopLevelButton) {
-			setIsDropdownOpen(false);
+
+		if(isHydrated && !isReady) {
+			whenReadyData.current = { shouldCopy: true, format, isTopLevelButton }
+			return;
 		}
-		const text = await getCopyData(format);
-		const result = copy(text);
-		if(result) {
-			handleClipoardSuccess(format);
-		}
-	}, [getCopyData, handleClipoardSuccess]);
+		copyToClipboard(format, isTopLevelButton);
+	}, [copyToClipboard, isHydrated, isReady]);
 
 	const isCopied = clipboardConfirmations['plain'];
+
+	useEffect(() => {
+		if(isReady && !wasReady && whenReadyData.current) {
+			if(whenReadyData.current.shouldCopy) {
+				const { format, isTopLevelButton } = whenReadyData.current;
+				copyToClipboard(format, isTopLevelButton);
+			} else if(whenReadyData.current.shouldDownload) {
+				const { format } = whenReadyData.current;
+				onDownloadFile(format);
+			}
+			whenReadyData.current = false;
+		}
+	}, [copyToClipboard, isReady, onDownloadFile, wasReady]);
 
 	return (
 		<div className="export-tools">
@@ -159,7 +188,9 @@ const ExportTools = props => {
 
 ExportTools.propTypes = {
 	getCopyData: PropTypes.func.isRequired,
+	isHydrated: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
+	isReady: PropTypes.bool,
 	itemCount: PropTypes.number,
 	onDownloadFile: PropTypes.func.isRequired,
 	onSaveToZoteroShow: PropTypes.func.isRequired,

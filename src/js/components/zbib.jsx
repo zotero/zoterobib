@@ -129,8 +129,8 @@ const ZBib = props => {
 							</h2>
 							<ExportTools
 								itemCount={ isHydrated ? hydrateItemsCount : bibliography.items.length }
-								{ ...pick(props, ['getCopyData', 'onDownloadFile', 'isReadOnly',
-								'onSaveToZoteroShow']) }
+								{ ...pick(props, ['getCopyData', 'onDownloadFile', 'isHydrated',
+								'isReadOnly', 'isReady', 'onSaveToZoteroShow']) }
 							/>
 						</div>
 					</section>
