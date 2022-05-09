@@ -62,6 +62,17 @@ const ExportTools = props => {
 	const whenReadyData = useRef(false);
 	const wasReady = usePrevious(isReady);
 
+	const handleClipoardSuccess = useCallback(format => {
+		if(clipboardConfirmations[format]) {
+			return;
+		}
+
+		setClipboardConfirmations({ ...clipboardConfirmations, [format]: true });
+		setTimeout(() => {
+			setClipboardConfirmations({ ...clipboardConfirmations, [format]: false });
+		}, 1000);
+	}, [clipboardConfirmations]);
+
 	const copyToClipboard = useCallback(async (format, isTopLevelButton) => {
 		if(isTopLevelButton) {
 			setIsDropdownOpen(false);
@@ -72,18 +83,6 @@ const ExportTools = props => {
 			handleClipoardSuccess(format);
 		}
 	}, [getCopyData, handleClipoardSuccess])
-
-	const handleClipoardSuccess = useCallback(format => {
-		if(clipboardConfirmations[format]) {
-			return;
-		}
-
-		setClipboardConfirmations({ ...clipboardConfirmations, [format]: true });
-
-		setTimeout(() => {
-			setClipboardConfirmations({ ...clipboardConfirmations, [format]: false });
-		}, 1000);
-	}, [clipboardConfirmations]);
 
 	const handleDownloadClick = useCallback(async ev => {
 		const format = ev.currentTarget.dataset.format;
