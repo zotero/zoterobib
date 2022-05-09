@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, memo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Bibliography from './bibliography';
@@ -13,12 +13,15 @@ import PlaceholderBibliography from './placeholder-bibliography';
 import Spinner from './ui/spinner';
 import StyleSelector from './style-selector';
 import { pick } from '../immutable'
+import { usePrevious } from '../hooks';
 
 const BibliographySection = props => {
 	const { isPrintMode, isReadOnly, isReady, isHydrated, localCitationsCount, onOverride,
 	onCancelPrintMode, onTitleChanged, title } = props;
+	const shouldOverrideWhenReady = useRef(false);
 	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
+	const wasReady = usePrevious(isReady);
 
 	const handleTitleEdit = useCallback(() => {
 		setIsEditingTitle(true);
@@ -35,6 +38,15 @@ const BibliographySection = props => {
 		setIsEditingTitle(false);
 	}, []);
 
+	const handleOverride = useCallback(() => {
+		if(isReady) {
+			onOverride();
+		} else if(isHydrated) {
+			shouldOverrideWhenReady.current = true;
+		}
+	}, [isReady, isHydrated, onOverride]);
+
+
 	const handleEditBibliography = useCallback(() => {
 		if(isPrintMode) {
 			onCancelPrintMode();
@@ -42,18 +54,21 @@ const BibliographySection = props => {
 			if(localCitationsCount > 0) {
 				setIsConfirmingOverride(true);
 			} else {
-				onOverride();
+				handleOverride();
 			}
 		}
-	}, [isPrintMode, localCitationsCount, onOverride, onCancelPrintMode]);
-
-	const handleOverride = useCallback(() => {
-		onOverride();
-	}, [onOverride]);
+	}, [isPrintMode, handleOverride, localCitationsCount, onCancelPrintMode]);
 
 	const handleCancel = useCallback(() => {
 		setIsConfirmingOverride(false);
 	}, []);
+
+	useEffect(() => {
+		if(isReady && !wasReady && shouldOverrideWhenReady.current) {
+			shouldOverrideWhenReady.current = false;
+			onOverride();
+		}
+	}, [isReady, wasReady, onOverride]);
 
 	return (
 		<section
