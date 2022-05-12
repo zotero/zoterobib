@@ -10,7 +10,7 @@
   "sourceType": "module",
   "browserslist": "firefox >= 68, chrome >=67, edge >= 15, safari >= 10, last 2 versions, not dead, not ie 11, not ie 10",
   "scripts": {
-    "serve": "node scripts/server.cjs -p $npm_package_config_port -t $npm_package_config_translation_server",
+    "serve": "node scripts/server.cjs",
     "prebuild": "npm run clean -s && mkdir -p build/static/",
     "clean": "rimraf build lang",
     "clean:data": "rimraf data",
@@ -19,7 +19,7 @@
     "build:scss": "for f in src/scss/*.scss; do sass --no-source-map $f build/static/`basename $f .scss`.css; done;",
     "build:html": "node scripts/build-html.cjs",
     "build:collect-locale": "node scripts/collect-locale.js",
-    "build:styles-json": "node scripts/build-styles-json.cjs --stylesCacheTime $npm_package_config_styles_cache_time",
+    "build:styles-json": "node scripts/build-styles-json.cjs",
     "build:static": "mkdir -p build/static && rsync -vazL src/static/* build/static/",
     "build:postprocess": "postcss build/static/bib.css --use autoprefixer --use cssnano --no-map -r",
     "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:static -s'",
