@@ -166,7 +166,7 @@ const ZBib = props => {
 					)
 				}
 
-				<Footer />
+				<Footer { ...pick(props, ['isReadOnly']) } />
 
 				<Confirmation
 					isOpen={ props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
