@@ -140,7 +140,7 @@ const BibliographySection = props => {
 							<Bibliography { ...pick(props, ['isNoteStyle', 'isNumericStyle',
 							'hydrateItemsCount','isReadOnly', 'bibliography',
 							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
-							'styleHasBibliography'])} />
+							'onReorderCitations', 'styleHasBibliography'])} />
 						) : (
 							<div className="spinner-container">
 								<Spinner />

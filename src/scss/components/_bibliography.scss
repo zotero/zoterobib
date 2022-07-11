@@ -8,135 +8,32 @@
 	text-align: left;
 
 	.write & {
-		margin: $space-lg (-$grid-gutter-width * 0.5);
+		margin: $space-lg (
+			-$grid-gutter-width * 0.5
+		);
 
 		@media (min-width: $bp-md) {
 			margin: $space-lg 0;
 		}
 
-		.citation {
-			display: flex;
-			align-items: center;
-			padding: ($space-lg - 7px) ($space-md - $space-xs) ($space-lg - 7px) $space-md; // Caps height
-			border-top: 1px solid $shade-2;
-			cursor: pointer;
-			position: relative;
-
-			@media (max-width: $bp-md - 1px) {
-				padding-right: $space-md - 2px;
-			}
-
-			@media (min-width: $bp-md) {
-				&::before {
-					content: "";
-					position: absolute;
-					left: 100%;
-					width: 32px;
-					height: 100%;
-					cursor: auto;
-				}
+		.citation-container {
+			&::before,
+			&::after {
+				content: "";
+				display: block;
+				height: 0;
+				width: 100%;
+				background-color: rgba($asphalt-light, .2);
 			}
 
 			&:last-child {
 				border-bottom: 1px solid $shade-2;
 			}
 
-			&:hover {
-				background-color: $shade-1;
-
-				@media (min-width: $bp-md) {
-					.btn-remove {
-						opacity: 1;
-					}
-				}
-			}
-
-			&:focus {
-				@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
-					outline-offset: -3px;
-
-					& + .citation {
-						border-top-color: transparent;
-					}
-				}
-			}
-
-			.csl-entry-container {
-				flex: 1 1 0;
-				margin-right: ($space-md - $space-xs);
-				min-width: 0; // Enable word-wrap for long URLs
-			}
-
-			> .btn-icon,
-			.dropdown {
-				margin-top: -$space-lg;
-				margin-bottom: -$space-lg;
-			}
-
-			.show {
-				.dropdown-toggle {
-					background: $btn-secondary-color;
-
-					.icon {
-						color: $shade-0;
-					}
-				}
-			}
-
-			> .btn-icon {
-				flex: 0 0 auto;
-			}
-
-			.btn-copy {
-				border-color: transparent;
-
-				&:focus {
-					@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
-						border-color: $btn-secondary-color;
-
-						&:active {
-							border-color: darken($btn-secondary-color, 8%);
-						}
-					}
-				}
-
-				&:active {
-					.icon {
-						color: $shade-0;
-					}
-				}
-			}
-
-			.btn-remove {
-				position: absolute;
-				width: $space-md;
-				height: $space-md;
-				top: 50%;
-				right: -24px;
-				margin: -8px 0 0 0;
-				border-radius: 50%;
-				display: none;
-
-				&:active {
-					opacity: 1;
-				}
-
-				@media (min-width: $bp-md) {
-					display: block;
-					opacity: 0;
-
-					&:focus {
-						@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
-							opacity: 1;
-						}
-					}
-
-					&:active {
-						.icon {
-							color: $shade-0;
-						}
-					}
-				}
+			&.dnd-target.dnd-target-above::before,
+			&.dnd-target.dnd-target-below::after {
+				border-top: 1px solid $shade-2;
+				height: var(--dnd-height, 50px);
 			}
 		}
 	}
@@ -147,6 +44,155 @@
 
 		@media (min-width: $bp-md) {
 			margin-bottom: $space-xxl - 7px;
+		}
+	}
+}
+
+.citation {
+	display: flex;
+	align-items: center;
+	padding: ($space-lg - 7px) ($space-md - $space-xs) ($space-lg - 7px) $space-md; // Caps height
+	border-top: 1px solid $shade-2;
+	cursor: pointer;
+	position: relative;
+
+	@media (max-width: $bp-md - 1px) {
+		padding-right: $space-md - 2px;
+	}
+
+	@media (min-width: $bp-md) {
+		&::before {
+			content: "";
+			position: absolute;
+			left: 100%;
+			width: 32px;
+			height: 100%;
+			cursor: auto;
+		}
+	}
+
+	&.dnd-src {
+		display: none;
+	}
+
+	&.dnd-ghost {
+		border: 1px solid $shade-5;
+		background-color: $shade-1;
+		box-shadow: 0 2px 20px rgba($shade-10, 0.2);
+
+		.drag-handle,
+		.btn-remove {
+			display: none;
+		}
+	}
+
+	&:hover {
+		@at-root #{selector-replace(&, ".citation", "body:not(.dnd-in-progress) .citation")} {
+			background-color: $shade-1;
+
+			@media (min-width: $bp-md) {
+				.drag-handle,
+				.btn-remove {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	&:focus {
+		@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+			outline-offset: -3px;
+
+			&+.citation {
+				border-top-color: transparent;
+			}
+		}
+	}
+
+	.drag-handle {
+		opacity: 0;
+		padding-right: $space-md;
+
+		.icon {
+			color: $blue;
+		}
+	}
+
+	.csl-entry-container {
+		flex: 1 1 0;
+		margin-right: ($space-md - $space-xs);
+		min-width: 0; // Enable word-wrap for long URLs
+	}
+
+	>.btn-icon,
+	.dropdown {
+		margin-top: -$space-lg;
+		margin-bottom: -$space-lg;
+	}
+
+	.show {
+		.dropdown-toggle {
+			background: $btn-secondary-color;
+
+			.icon {
+				color: $shade-0;
+			}
+		}
+	}
+
+	>.btn-icon {
+		flex: 0 0 auto;
+	}
+
+	.btn-copy {
+		border-color: transparent;
+
+		&:focus {
+			@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+				border-color: $btn-secondary-color;
+
+				&:active {
+					border-color: darken($btn-secondary-color, 8%);
+				}
+			}
+		}
+
+		&:active {
+			.icon {
+				color: $shade-0;
+			}
+		}
+	}
+
+	.btn-remove {
+		position: absolute;
+		width: $space-md;
+		height: $space-md;
+		top: 50%;
+		right: -24px;
+		margin: -8px 0 0 0;
+		border-radius: 50%;
+		display: none;
+
+		&:active {
+			opacity: 1;
+		}
+
+		@media (min-width: $bp-md) {
+			display: block;
+			opacity: 0;
+
+			&:focus {
+				@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+					opacity: 1;
+				}
+			}
+
+			&:active {
+				.icon {
+					color: $shade-0;
+				}
+			}
 		}
 	}
 }

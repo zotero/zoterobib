@@ -119,7 +119,7 @@ const ZBib = props => {
 					'title', 'citationStyle', 'citationStyles', 'onCitationStyleChanged',
 					'isPrintMode', 'isHydrated', 'isNoteStyle', 'isNumericStyle',
 					'onCitationCopyDialogOpen', 'onDeleteEntry', 'onDeleteCitations',
-					'onEditorOpen', 'onCancelPrintMode', 'styleHasBibliography']) }
+					'onEditorOpen', 'onCancelPrintMode', 'onReorderCitations', 'styleHasBibliography']) }
 				/>
 				{
 					<section className="section section-export">

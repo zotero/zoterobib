@@ -604,6 +604,23 @@ const BibWebContainer = props => {
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 	}, [state.styleHasBibliography]);
 
+	const handleReorderCitations = useCallback((srcItemKey, targetItemKey, placeBefore = false) => {
+		const reorderedItems = [...bib.current.itemsRaw];
+		const srcItemIndex = reorderedItems.findIndex(i => i.key === srcItemKey);
+		const srcItem = reorderedItems.splice(srcItemIndex, 1).pop();
+		const targetItemIndex = reorderedItems.findIndex(i => i.key === targetItemKey);
+		const effectiveTargetItemIndex = targetItemIndex + (placeBefore ? 0 : 1);
+		reorderedItems.splice(effectiveTargetItemIndex, 0, srcItem);
+
+		bib.current = new ZoteroBib({
+			...config,
+			initialItems: reorderedItems,
+			override: true,
+		});
+		citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
+		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+	}, [config]);
+
 	const handleDismiss = useCallback(id => {
 		const message = state.messages.find(m => m.id === id);
 		if(message) {
@@ -1224,6 +1241,7 @@ const BibWebContainer = props => {
 		onMultipleChoiceSelect = { handleMultipleChoiceSelect }
 		onMultipleItemsCancel = { handleMultipleItemsCancel }
 		onMultipleItemsSelect = { handleMultipleItemsSelect }
+		onReorderCitations ={ handleReorderCitations }
 		onReviewDelete = { handleReviewDelete }
 		onReviewDismiss = { handleReviewDismiss }
 		onReviewEdit = { handleReviewEdit }
