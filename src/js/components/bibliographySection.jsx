@@ -138,7 +138,7 @@ const BibliographySection = props => {
 							<PlaceholderBibliography itemCount={ props.hydrateItemsCount } />
 						) : isReady ? (
 							<Bibliography { ...pick(props, ['isNoteStyle', 'isNumericStyle',
-							'hydrateItemsCount','isReadOnly', 'bibliography',
+							'hydrateItemsCount', 'isSortedStyle', 'isReadOnly', 'bibliography',
 							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
 							'onReorderCitations', 'styleHasBibliography'])} />
 						) : (

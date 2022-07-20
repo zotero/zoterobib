@@ -34,13 +34,14 @@ const getStyleProperties = citationStyleXml => {
 		const styleHasBibliography = xmlDoc.querySelector('style > bibliography') !== null;
 		const isNumericStyle = xmlDoc.querySelector('info > category[citation-format^="numeric"]') !== null;
 		const isNoteStyle = xmlDoc.querySelector('info > category[citation-format^="note"]') !== null;
+		const isSortedStyle = xmlDoc.querySelector('style > bibliography > sort') !== null;
 		const isUppercaseSubtitlesStyle = checkUppercase(citationStyleName) || checkUppercase(parentStyleName);
 		const isSentenceCaseStyle = checkSentenceCase(citationStyleName) || checkSentenceCase(parentStyleName);
 		const defaultLocale = xmlDoc.querySelector('style')?.getAttribute('default-locale');
 
 		stylePropertiesCache.set(citationStyleXml, { citationStyleName, defaultLocale,
 			parentStyleName, styleHasBibliography, isNumericStyle, isNoteStyle,
-			isUppercaseSubtitlesStyle, isSentenceCaseStyle, });
+			isUppercaseSubtitlesStyle, isSortedStyle, isSentenceCaseStyle, });
 	}
 
 	return stylePropertiesCache.get(citationStyleXml);

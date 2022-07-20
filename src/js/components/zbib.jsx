@@ -77,7 +77,7 @@ const ZBib = props => {
 				<BibliographySection { ...pick(props, ['bibliography', 'hydrateItemsCount',
 					'isReadOnly', 'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged',
 					'title', 'citationStyle', 'citationStyles', 'onCitationStyleChanged',
-					'isPrintMode', 'isHydrated', 'isNoteStyle', 'isNumericStyle',
+					'isPrintMode', 'isHydrated', 'isNoteStyle', 'isNumericStyle', 'isSortedStyle',
 					'onCitationCopyDialogOpen', 'onDeleteEntry', 'onDeleteCitations',
 					'onEditorOpen', 'onCancelPrintMode', 'onReorderCitations', 'styleHasBibliography']) }
 				/>

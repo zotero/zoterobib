@@ -77,7 +77,7 @@ const reducer = (state, action) => {
 				localeOverride: action.styleProps.parentStyleName ? action.styleProps.defaultLocale : null,
 				...pick(
 					action.styleProps,
-					['styleHasBibliography', 'isNumericStyle', 'isNoteStyle', 'isUppercaseSubtitlesStyle', 'isSentenceCaseStyle']
+					['styleHasBibliography', 'isNumericStyle', 'isNoteStyle', 'isSortedStyle', 'isUppercaseSubtitlesStyle', 'isSentenceCaseStyle']
 				)
 			}
 		case CONFIRM_CURRENT_STYLE:
@@ -177,6 +177,7 @@ const BibWebContainer = props => {
 		styleHasBibliography: undefined,
 		isNumericStyle: undefined,
 		isNoteStyle: undefined,
+		isSortedStyle: undefined,
 		isUppercaseSubtitlesStyle: undefined,
 		isSentenceCaseStyle: undefined,
 		isConfirmed: undefined,
@@ -299,17 +300,16 @@ const BibWebContainer = props => {
 			}
 
 		} else if(!state.styleHasBibliography) {
-			const newBibliographyItems = [];
+			items = [];
 			diff.clusters.forEach(([id, value]) => {
 				const existingEntry = state.bibliography.items.find(bibItem => bibItem.id === id);
-				if(existingEntry) {
+				if(existingEntry && existingEntry.id in lookup) {
 					existingEntry.value = value;
+					items.push(existingEntry);
 				} else {
-					newBibliographyItems.push({ id, value });
+					items.push({ id, value });
 				}
 			});
-
-			items = [...state.bibliography.items.filter(i => i.id in lookup), ...newBibliographyItems];
 		} else {
 			// updateBibliography called but diff is empty so no action required
 			return;
@@ -620,8 +620,15 @@ const BibWebContainer = props => {
 			override: true,
 		});
 		citeproc.current.resetReferences(ensureNoBlankItems(bib.current.itemsCSL));
+		if (!state.styleHasBibliography) {
+			citeproc.current.initClusters(
+				bib.current.itemsRaw.map(item => ({ id: item.key, cites: [{ id: item.key }] }))
+			);
+			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
+		}
+
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
-	}, [config]);
+	}, [config, state.styleHasBibliography]);
 
 	const handleDismiss = useCallback(id => {
 		const message = state.messages.find(m => m.id === id);
@@ -1223,6 +1230,7 @@ const BibWebContainer = props => {
 		isHydrated={ isHydrated.current }
 		isReady={ isReady }
 		isPrintMode = { isPrintMode }
+		isSortedStyle={ state.isSortedStyle }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }
 		isTranslatingMore= { isTranslatingMore }

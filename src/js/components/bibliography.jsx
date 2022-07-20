@@ -80,6 +80,16 @@ const BibliographyItem = memo(props => {
 					className="csl-entry-container"
 					dangerouslySetInnerHTML={ { __html: formattedItem } }
 				/>
+				{ !isNumericStyle && (
+					<Button
+						icon
+						title={copyText}
+						className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
+						onClick={onCopyCitationDialogOpen}
+					>
+						<Icon type={'16/copy'} width="16" height="16" />
+					</Button>
+				) }
 				<Dropdown
 					isOpen={ dropdownsOpen.includes(rawItem.key) }
 					toggle={ onToggleDropdown }
@@ -131,16 +141,6 @@ const BibliographyItem = memo(props => {
 						) }
 					</DropdownMenu>
 				</Dropdown>
-				{ !isNumericStyle && (
-					<Button
-						icon
-						title={ copyText }
-						className={ cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
-						onClick={ onCopyCitationDialogOpen }
-					>
-						<Icon type={ '16/copy' } width="16" height="16" />
-					</Button>
-				) }
 				<Button
 					icon
 					title="Delete Entry"
@@ -175,7 +175,7 @@ BibliographyItem.propTypes = {
 const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 
-	const { isNoteStyle, isNumericStyle, isReadOnly, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
+	const { isNoteStyle, isNumericStyle, isReadOnly, isSortedStyle, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
 		onReorderCitations, styleHasBibliography } = props;
 
 	const bibliographyRendered = useMemo(() => {
@@ -290,7 +290,7 @@ const Bibliography = props => {
 							onSelectCitation = { handleSelectCitation }
 							onToggleDropdown = { handleToggleDropdown }
 							rawItem={ bibliography.lookup[renderedItem.id] }
-							allowReorder={ bibliography.items.length > 1 }
+							allowReorder={ (!styleHasBibliography || !isSortedStyle) && bibliography.items.length > 1 }
 							isFirst={ index === 0 }
 							isLast={ index === bibliography.items.length - 1 }
 						/>
