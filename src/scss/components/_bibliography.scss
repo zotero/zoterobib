@@ -110,8 +110,11 @@
 	}
 
 	.drag-handle {
-		opacity: 0;
 		padding-right: $space-md;
+
+		@at-root #{selector-replace(&, ".citation", ".mouse .citation")} {
+			opacity: 0;
+		}
 
 		.icon {
 			color: $blue;
@@ -180,7 +183,10 @@
 
 		@media (min-width: $bp-md) {
 			display: block;
-			opacity: 0;
+
+			@at-root #{selector-replace(&, ".citation", ".mouse .citation")} {
+				opacity: 0;
+			}
 
 			&:focus {
 				@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
