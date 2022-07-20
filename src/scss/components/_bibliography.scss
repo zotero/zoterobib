@@ -100,7 +100,7 @@
 	}
 
 	&:focus {
-		@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+		@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
 			outline-offset: -3px;
 
 			&+.citation {
@@ -148,7 +148,7 @@
 		border-color: transparent;
 
 		&:focus {
-			@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
 				border-color: $btn-secondary-color;
 
 				&:active {
@@ -183,7 +183,7 @@
 			opacity: 0;
 
 			&:focus {
-				@at-root #{selector-replace(&, ".write", ".write.keyboard-user")} {
+				@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
 					opacity: 1;
 				}
 			}

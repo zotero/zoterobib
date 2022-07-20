@@ -13,11 +13,12 @@ import { coreCitationStyles } from '../../../data/citation-styles-data.json';
 import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
 import ZBib from './zbib';
-import { usePrevious } from '../hooks';
+import { usePrevious, useUserTypeDetector } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 import CiteprocWrapper from '../citeproc-wrapper';
 import { pick } from '../immutable';
 import { fetchAndParseIndependentStyle } from '../common/citation-style';
+
 
 const defaultItem = {
 	version: 0,
@@ -150,6 +151,7 @@ const BibWebContainer = props => {
 	const isReadOnly = isPrintMode || !!remoteId;
 	const hydrateItemsCount = props.hydrateItemsCount;
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
+	const { keyboard, mouse, touch } = useUserTypeDetector();
 
 	if(bib.current === null) {
 		bib.current = new ZoteroBib(config);
@@ -1192,6 +1194,18 @@ const BibWebContainer = props => {
 			);
 		}
 	}, []); //eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		document.documentElement.classList.toggle('keyboard', keyboard);
+	}, [keyboard]);
+
+	useEffect(() => {
+		document.documentElement.classList.toggle('mouse', mouse);
+	}, [mouse]);
+
+	useEffect(() => {
+		document.documentElement.classList.toggle('touch', touch);
+	}, [touch]);
 
 	return (<ZBib
 		getCopyData = { getCopyData }

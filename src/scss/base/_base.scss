@@ -13,7 +13,7 @@ li[tabindex] {
 		outline: none;
 		outline-offset: $outline-offset;
 
-		.keyboard-user & {
+		.keyboard & {
 			outline: $outline-width solid $outline-color;
 		}
 	}

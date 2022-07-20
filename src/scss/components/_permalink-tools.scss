@@ -39,7 +39,7 @@
 			}
 
 			&:focus {
-				.keyboard-user & {
+				.keyboard & {
 					box-shadow: 0 0 0 $input-btn-focus-width $btn-success-color;
 
 					&:active {

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -32,54 +32,14 @@ const commonFormats = {
 
 const ZBib = props => {
 	const { bibliography, hydrateItemsCount, isHydrated } = props;
-	const [userType, setUserType] = useState({
-		isKeyboardUser: false,
-		isMouseUser: true,
-		isTouchUser: false
-	});
-	const lastTouchStartEvent = useRef(0);
 	const intl = useIntl();
 
 	const className = {
 		'zotero-bib-container': true,
-		'keyboard-user': userType.isKeyboardUser,
-		'mouse-user': userType.isMouseUser,
-		'touch-user': userType.isTouchUser,
 		'read-only': props.isReadOnly,
 		'write': !props.isReadOnly,
 		'welcome': props.messages.some(m => m.kind === 'WELCOME_MESSAGE'),
 	};
-
-	const handleKeyboard = useCallback(ev => {
-		if(ev.key === 'Tab') {
-			setUserType({ isKeyboardUser: true, isMouseUser: false, isTouchUser: false });
-		}
-	}, []);
-
-	const handleMouse = useCallback(ev => {
-		// prevent simulated mouse events triggering mouse user
-		if(ev.timeStamp - lastTouchStartEvent.current > 300) {
-			setUserType({ isKeyboardUser: false, isMouseUser: true, isTouchUser: false });
-		}
-	}, []);
-
-	const handleTouch = useCallback(ev => {
-		lastTouchStartEvent.current = ev.timeStamp;
-		setUserType({ isKeyboardUser: false, isMouseUser: false, isTouchUser: true });
-	}, []);
-
-
-	useEffect(() => {
-		document.addEventListener('keyup', handleKeyboard);
-		document.addEventListener('mousedown', handleMouse);
-		document.addEventListener('touchstart', handleTouch);
-
-		return () => {
-			document.removeEventListener('keyup', handleKeyboard);
-			document.removeEventListener('mousedown', handleMouse);
-			document.removeEventListener('touchstart', handleTouch);
-		}
-	}, []); //eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<div className={ cx(className) }>

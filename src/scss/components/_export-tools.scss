@@ -8,7 +8,7 @@
 		outline: 1px solid transparent; // Prevent rendering issue on iOS (thin gap)
 
 		&:focus {
-			.keyboard-user & {
+			.keyboard & {
 				box-shadow: none; // Use padding as focus state (no gradients in box-shadows possible)
 				padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-xl + 2px);
 				margin: -2px;
@@ -26,7 +26,7 @@
 			padding-right: $btn-padding-x-lg;
 
 			&:focus {
-				.keyboard-user & {
+				.keyboard & {
 					padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-lg + 2px);
 				}
 			}
@@ -147,7 +147,7 @@
 
 		.btn:focus,
 		.btn:focus + .btn {
-			.keyboard-user & {
+			.keyboard & {
 				&::before {
 					opacity: 0;
 				}

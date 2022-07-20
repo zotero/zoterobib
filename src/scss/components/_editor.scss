@@ -183,7 +183,7 @@
 				margin-right: $space-min;
 
 				&:focus {
-					.keyboard-user & {
+					.keyboard & {
 						border: $input-border-width solid $input-focus-color;
 					}
 				}
