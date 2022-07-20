@@ -81,7 +81,8 @@
 		box-shadow: 0 2px 20px rgba($shade-10, 0.2);
 
 		.drag-handle,
-		.btn-remove {
+		.btn-remove,
+		.citation-options-menu {
 			display: none;
 		}
 	}
@@ -109,8 +110,25 @@
 		}
 	}
 
+	.citation-options-menu {
+		@media (min-width: $bp-md) {
+			display: none;
+
+			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
+				position: absolute;
+				right: -36px;
+				display: block;
+			}
+		}
+	}
+
 	.drag-handle {
 		padding-right: $space-md;
+		display: none;
+
+		@media (min-width: $bp-md) {
+			display: block;
+		}
 
 		@at-root #{selector-replace(&, ".citation", ".mouse .citation")} {
 			opacity: 0;
@@ -188,10 +206,8 @@
 				opacity: 0;
 			}
 
-			&:focus {
-				@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
-					opacity: 1;
-				}
+			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
+				display: none;
 			}
 
 			&:active {

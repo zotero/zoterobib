@@ -16,7 +16,7 @@ import { useDnd } from '../hooks';
 const BIB_ITEM = 'BIB_ITEM';
 
 const BibliographyItem = memo(props => {
-	const { dropdownsOpen, formattedItem, isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onDeleteCitation,
+	const { allowReorder, dropdownsOpen, formattedItem, isNoteStyle, isNumericStyle, isFirst, isLast, onCopyCitationDialogOpen, onDeleteCitation,
 		onSelectCitation, onEditCitationClick, onReorderCitations, onToggleDropdown, rawItem, } = props;
 	const containerRef = useRef(null);
 	const intl = useIntl();
@@ -25,6 +25,22 @@ const BibliographyItem = memo(props => {
 		const targetKey = targetNode.closest('[data-key]').dataset.key;
 
 		onReorderCitations(current.key, targetKey, above);
+	}, [onReorderCitations]);
+
+	const handleMoveTop = useCallback(ev => {
+		const srcNode = ev.currentTarget.closest('[data-key]');
+		const topNode = srcNode.parentNode.querySelector('[data-key]:first-child');
+		onReorderCitations(srcNode.dataset.key, topNode.dataset.key, true);
+	}, [onReorderCitations]);
+	const handleMoveUp = useCallback(ev => {
+		const srcNode = ev.currentTarget.closest('[data-key]');
+		const prevNode = srcNode.previousElementSibling;
+		onReorderCitations(srcNode.dataset.key, prevNode.dataset.key, true);
+	}, [onReorderCitations]);
+	const handleMovedown = useCallback(ev => {
+		const srcNode = ev.currentTarget.closest('[data-key]');
+		const nextNode = srcNode.nextElementSibling;
+		onReorderCitations(srcNode.dataset.key, nextNode.dataset.key, false);
 	}, [onReorderCitations]);
 
 	const { onDrag, onHover, onDrop } = useDnd({
@@ -54,9 +70,11 @@ const BibliographyItem = memo(props => {
 			onMouseUp={ onDrop }
 		>
 			<div className="citation" ref={containerRef}>
-				<div className="drag-handle" onMouseDown={onDrag} onTouchStart={onDrag}>
-					<Icon type="24/grip" width="24" height="24" />
-				</div>
+				{ allowReorder && (
+					<div className="drag-handle" onMouseDown={onDrag} onTouchStart={onDrag}>
+						<Icon type="24/grip" width="24" height="24" />
+					</div>
+				) }
 				<div
 					data-container-key={rawItem.key}
 					className="csl-entry-container"
@@ -65,7 +83,7 @@ const BibliographyItem = memo(props => {
 				<Dropdown
 					isOpen={ dropdownsOpen.includes(rawItem.key) }
 					toggle={ onToggleDropdown }
-					className="d-md-none"
+					className="citation-options-menu"
 				>
 					<DropdownToggle
 						color={ null }
@@ -94,6 +112,23 @@ const BibliographyItem = memo(props => {
 						>
 							<FormattedMessage id="zbib.general.delete" defaultMessage="Delete" />
 						</DropdownItem>
+						{ allowReorder && (
+							<React.Fragment>
+								<DropdownItem divider />
+								{!isFirst && (
+									<DropdownItem onClick={ handleMoveTop } className="btn">
+										<FormattedMessage id="zbib.citation.moveToTop" defaultMessage="Move to Top" />
+									</DropdownItem>) }
+								{ !isFirst && (
+									<DropdownItem onClick={ handleMoveUp } className="btn">
+										<FormattedMessage id="zbib.citation.moveUp" defaultMessage="Move Up" />
+									</DropdownItem>) }
+								{ !isLast && (
+									<DropdownItem onClick={ handleMovedown } className="btn">
+										<FormattedMessage id="zbib.citation.moveDown" defaultMessage="Move Down" />
+									</DropdownItem>) }
+							</React.Fragment>
+						) }
 					</DropdownMenu>
 				</Dropdown>
 				{ !isNumericStyle && (
@@ -255,6 +290,9 @@ const Bibliography = props => {
 							onSelectCitation = { handleSelectCitation }
 							onToggleDropdown = { handleToggleDropdown }
 							rawItem={ bibliography.lookup[renderedItem.id] }
+							allowReorder={ bibliography.items.length > 1 }
+							isFirst={ index === 0 }
+							isLast={ index === bibliography.items.length - 1 }
 						/>
 					)) }
 				</ul>
