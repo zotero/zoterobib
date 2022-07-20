@@ -1,7 +1,7 @@
 <!-- This file is part of Zotero. It is distributed under the GNU Affero General Public License version 3. -->
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<symbol id="grip" viewBox="0 0 24 24">
-		<path fill="currentColor" d="M23,9.5H1V8H23Zm0,2H1V13H23ZM23,15H1v1.5H23Z"/>
+		<path d="m12 21 3.51-3h-7zm0.0167-19-3.51 3h7zm-11 5v1h22v-1zm0 4v1h22v-1zm0 4v1h22v-1z" fill="currentColor"/>
 	</symbol>
-	<use xlink:href="#grip" viewBox="0 0 24 24"/>
+ 	<use xlink:href="#grip" viewBox="0 0 24 24"/>
 </svg>
