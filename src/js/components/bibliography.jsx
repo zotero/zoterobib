@@ -43,9 +43,13 @@ const BibliographyItem = memo(props => {
 		onReorderCitations(srcNode.dataset.key, nextNode.dataset.key, false);
 	}, [onReorderCitations]);
 
+	const getData = useCallback(
+		ev => ({ key: ev.currentTarget.closest('[data-key]').dataset.key }), []
+	);
+
 	const { onDrag, onHover, onDrop } = useDnd({
 		type: BIB_ITEM,
-		data: ev => ({ key: ev.currentTarget.closest('[data-key]').dataset.key }),
+		data: getData,
 		ref: containerRef,
 		ghostContainerSelector: '.zotero-bib-container',
 		midpointOffset: 12,
@@ -160,13 +164,17 @@ const BibliographyItem = memo(props => {
 BibliographyItem.displayName = 'BibliographyItem';
 
 BibliographyItem.propTypes = {
+	allowReorder: PropTypes.bool,
 	dropdownsOpen: PropTypes.array,
 	formattedItem: PropTypes.string,
+	isFirst: PropTypes.bool,
+	isLast: PropTypes.bool,
 	isNoteStyle: PropTypes.bool,
 	isNumericStyle: PropTypes.bool,
 	onCopyCitationDialogOpen: PropTypes.func,
 	onDeleteCitation: PropTypes.func,
 	onEditCitationClick: PropTypes.func,
+	onReorderCitations: PropTypes.func,
 	onSelectCitation: PropTypes.func,
 	onToggleDropdown: PropTypes.func,
 	rawItem: PropTypes.object,
@@ -175,8 +183,9 @@ BibliographyItem.propTypes = {
 const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 
-	const { isNoteStyle, isNumericStyle, isReadOnly, isSortedStyle, bibliography, onCitationCopyDialogOpen, onDeleteEntry, onEditorOpen,
-		onReorderCitations, styleHasBibliography } = props;
+
+	const { isNoteStyle, isNumericStyle, isReadOnly, isSortedStyle, bibliography, onCitationCopyDialogOpen,
+		onDeleteEntry, onEditorOpen, onReorderCitations, styleHasBibliography } = props;
 
 	const bibliographyRendered = useMemo(() => {
 			return (styleHasBibliography && bibliography.meta) ?
@@ -306,9 +315,11 @@ Bibliography.propTypes = {
 	isNoteStyle: PropTypes.bool,
 	isNumericStyle: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
+	isSortedStyle: PropTypes.bool,
 	onCitationCopyDialogOpen: PropTypes.func,
 	onDeleteEntry: PropTypes.func,
 	onEditorOpen: PropTypes.func,
+	onReorderCitations: PropTypes.func,
 	styleHasBibliography: PropTypes.bool,
 }
 

@@ -1,7 +1,8 @@
+import { useCallback } from 'react';
 import { noop } from '../utils';
 
 const marginVec2 = { x: -5, y: -5 };
-var current = null; // currently dragged item
+var draggedItem = null;
 const cleanupNodes = new Set();
 
 const getClientVec2 = ev => ({
@@ -16,12 +17,14 @@ const markAboveOrBelow = (targetEl, clientVec2, midpointOffset) => {
 	targetEl.classList.toggle('dnd-target-below', clientVec2.y - top > (rect.height * 0.5 + midpointOffset))
 };
 
+const alwaysTrue = () => true;
 
-const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onComplete = noop, onCleanup = noop, midpointOffset = 0, ghostContainerSelector = 'body' }) => {
+const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onComplete = noop, onCleanup = noop, midpointOffset = 0, ghostContainerSelector = 'body' }) => {
 	if (!type) {
 		throw new Error(`Named argument "type" is required for "onDrag'. Got ${type}`);
 	}
-	const onDrag = ev => {
+
+	const onDrag = useCallback(ev => {
 		const ghostContainer = document.querySelector(ghostContainerSelector);
 		const ghost = ref.current.cloneNode(true);
 		const rect = ref.current.getBoundingClientRect();
@@ -47,11 +50,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 
 		ghostContainer.appendChild(ghost);
 
-		if(typeof data === 'function') {
-			data = data(ev);
-		}
-
-		current = { type, ...data };
+		draggedItem = { type, ...(typeof data === 'function' ? data(ev) : data) };
 
 		onPickup(ev);
 
@@ -62,6 +61,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 			mmev.stopPropagation();
 
 			if(mmev.type === 'touchmove') {
+				console.log(Array.from(mmev.changedTouches).map(t => t.identifier));
 				const dndCandidate = document
 					.elementFromPoint(clientVec2.x, clientVec2.y)
 					?.closest('[data-dnd-candidate]');
@@ -91,7 +91,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 				const top = rect.y;
 				const above = clientVec2.y - top <= rect.height * 0.5 + midpointOffset;
 
-				onComplete(dndCandidate, above, current, ev);
+				onComplete(dndCandidate, above, draggedItem, ev);
 			}
 
 			setTimeout(() => {
@@ -104,7 +104,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 					}
 
 					cleanupNodes.clear();
-					onCleanup(cleanupEv, current);
+					onCleanup(cleanupEv, draggedItem);
 				} catch(e) {
 					//
 				}
@@ -116,7 +116,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 				ghostContainer.removeEventListener('touchcancel', cleanup);
 				ghostContainer.removeEventListener('mouseleave', cleanup);
 				document.querySelector('html').removeEventListener('mouseleave', cleanup);
-				current = null;
+				draggedItem = null;
 			}, 0);
 		};
 
@@ -126,13 +126,13 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 		ghostContainer.addEventListener('touchend', cleanup, false);
 		ghostContainer.addEventListener('touchcancel', cleanup, false);
 		document.querySelector('html').addEventListener('mouseleave', cleanup, false);
-	}
+	}, [data, ghostContainerSelector, midpointOffset, onCleanup, onComplete, onPickup, ref, type]);
 
-	const onHover = ev => {
-		if (current?.type !== type) {
+	const onHover = useCallback(ev => {
+		if (draggedItem?.type !== type) {
 			return;
 		}
-		const acceptTarget = onVerify(ev, current);
+		const acceptTarget = onVerify(ev, draggedItem);
 		if (!acceptTarget) {
 			return;
 		}
@@ -153,17 +153,18 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = () => true, onCom
 			cleanupNodes.add(ev.currentTarget);
 			ev.stopPropagation();
 		}
-	}
+	}, [midpointOffset, onVerify, type]);
 
-	const onDrop = ev => {
-		if (current?.type === type) {
+	const onDrop = useCallback(ev => {
+		if (draggedItem?.type === type) {
 			ev.currentTarget.classList.remove('dnd-target-below', 'dnd-target-above', 'dnd-target');
 			const rect = ev.currentTarget.getBoundingClientRect();
 			const top = rect.y;
 			const above = ev.clientY - top <= rect.height * 0.5 + midpointOffset;
-			onComplete(ev.currentTarget, above, current, ev);
+			onComplete(ev.currentTarget, above, draggedItem, ev);
 		}
-	}
+	}, [midpointOffset, onComplete, type]);
+
 	return { onDrag, onHover, onDrop };
 }
 
