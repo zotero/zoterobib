@@ -300,15 +300,21 @@ const BibWebContainer = props => {
 			}
 
 		} else if(!state.styleHasBibliography) {
-			items = [];
+			const newBibliographyItems = [];
 			diff.clusters.forEach(([id, value]) => {
 				const existingEntry = state.bibliography.items.find(bibItem => bibItem.id === id);
-				if(existingEntry && existingEntry.id in lookup) {
+				if (existingEntry) {
 					existingEntry.value = value;
-					items.push(existingEntry);
 				} else {
-					items.push({ id, value });
+					newBibliographyItems.push({ id, value });
 				}
+			});
+
+			items = bib.current.itemsRaw.map(item => {
+				const updatedEntry = diff.clusters.find(([id,]) => id === item.key);
+				return updatedEntry
+					? { id: updatedEntry[0], value: updatedEntry[1] }
+					: state.bibliography.items.find(bibItem => bibItem.id === item.key)
 			});
 		} else {
 			// updateBibliography called but diff is empty so no action required
