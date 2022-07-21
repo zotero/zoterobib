@@ -3,12 +3,15 @@ import { noop } from '../utils';
 
 const marginVec2 = { x: -5, y: -5 };
 var draggedItem = null;
+var touchID = null;
 const cleanupNodes = new Set();
 
-const getClientVec2 = ev => ({
-	x: ev.type.startsWith('touch') ? ev.changedTouches[0].clientX : ev.clientX,
-	y: ev.type.startsWith('touch') ? ev.changedTouches[0].clientY : ev.clientY
-});
+const getClientVec2 = (ev, touch = null) => {
+	return {
+		x: ev.type.startsWith('touch') ? (touch ? touch.clientX : ev.changedTouches[0].clientX) : ev.clientX,
+		y: ev.type.startsWith('touch') ? (touch ? touch.clientY : ev.changedTouches[0].clientY) : ev.clientY
+	}
+};
 
 const markAboveOrBelow = (targetEl, clientVec2, midpointOffset) => {
 	const rect = targetEl.getBoundingClientRect();
@@ -33,6 +36,14 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 		const offsetVec2 = { x: posVec2.x - clientVec2.x + marginVec2.x, y: posVec2.y - clientVec2.y + marginVec2.y };
 		const body = document.querySelector('body');
 
+		if(draggedItem !== null) {
+			return;
+		}
+
+		if(ev.type === 'touchstart') {
+			touchID = ev.changedTouches[0].identifier;
+		}
+
 		ev.preventDefault();
 
 		body.classList.add('dnd-in-progress');
@@ -54,44 +65,58 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 
 		onPickup(ev);
 
+		const handleTouchMove = tmev => {
+			const touch = Array.from(tmev.changedTouches).find(t => t.identifier === touchID);
+			if (!touch) {
+				return;
+			}
+			tmev.preventDefault();
+			tmev.stopPropagation();
+
+			const clientVec2 = getClientVec2(tmev, touch);
+			ghost.style.transform = `translate(${clientVec2.x + offsetVec2.x}px, ${clientVec2.y + offsetVec2.y}px`;
+
+			const dndCandidate = document
+				.elementFromPoint(clientVec2.x, clientVec2.y)
+				?.closest('[data-dnd-candidate]');
+
+			if (dndCandidate) {
+				for (const node of cleanupNodes) {
+					if (node !== dndCandidate) {
+						node.classList.remove('dnd-target-below', 'dnd-target-above', 'dnd-target');
+					}
+				}
+
+				dndCandidate.classList.add('dnd-target');
+				markAboveOrBelow(dndCandidate, clientVec2, midpointOffset);
+				cleanupNodes.add(dndCandidate);
+			}
+		}
+
 		const handleMouseMove = mmev => {
 			const clientVec2 = getClientVec2(mmev);
 			ghost.style.transform = `translate(${clientVec2.x + offsetVec2.x}px, ${clientVec2.y + offsetVec2.y}px`;
-			mmev.preventDefault();
-			mmev.stopPropagation();
-
-			if(mmev.type === 'touchmove') {
-				console.log(Array.from(mmev.changedTouches).map(t => t.identifier));
-				const dndCandidate = document
-					.elementFromPoint(clientVec2.x, clientVec2.y)
-					?.closest('[data-dnd-candidate]');
-
-				if(dndCandidate) {
-					for (const node of cleanupNodes) {
-						if (node !== dndCandidate) {
-							node.classList.remove('dnd-target-below', 'dnd-target-above', 'dnd-target');
-						}
-					}
-
-					dndCandidate.classList.add('dnd-target');
-					markAboveOrBelow(dndCandidate, clientVec2, midpointOffset);
-					cleanupNodes.add(dndCandidate);
-				}
-			}
 		};
 
 		const cleanup = cleanupEv => {
-			if(cleanupEv.type === 'touchend') {
-				const clientVec2 = getClientVec2(cleanupEv);
+			if(cleanupEv.type === 'touchend' || cleanupEv.type === 'touchcancel') {
+				const touch = Array.from(cleanupEv.changedTouches).find(t => t.identifier === touchID);
+				if (!touch) {
+					return;
+				}
+				const clientVec2 = getClientVec2(cleanupEv, touch);
 				const dndCandidate = document
 					.elementFromPoint(clientVec2.x, clientVec2.y)
 					?.closest('[data-dnd-candidate]');
 
-				const rect = dndCandidate.getBoundingClientRect();
-				const top = rect.y;
-				const above = clientVec2.y - top <= rect.height * 0.5 + midpointOffset;
+				if (dndCandidate) {
+					const rect = dndCandidate.getBoundingClientRect();
+					const top = rect.y;
+					const above = clientVec2.y - top <= rect.height * 0.5 + midpointOffset;
 
-				onComplete(dndCandidate, above, draggedItem, ev);
+					onComplete(dndCandidate, above, draggedItem, ev);
+				}
+				touchID = null;
 			}
 
 			setTimeout(() => {
@@ -110,7 +135,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 				}
 
 				ghostContainer.removeEventListener('mousemove', handleMouseMove);
-				ghostContainer.removeEventListener('touchmove', handleMouseMove);
+				ghostContainer.removeEventListener('touchmove', handleTouchMove);
 				ghostContainer.removeEventListener('mouseup', cleanup);
 				ghostContainer.removeEventListener('touchend', cleanup);
 				ghostContainer.removeEventListener('touchcancel', cleanup);
@@ -120,11 +145,11 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 			}, 0);
 		};
 
-		ghostContainer.addEventListener('mousemove', handleMouseMove, false);
-		ghostContainer.addEventListener('touchmove', handleMouseMove, false);
-		ghostContainer.addEventListener('mouseup', cleanup, false);
-		ghostContainer.addEventListener('touchend', cleanup, false);
-		ghostContainer.addEventListener('touchcancel', cleanup, false);
+		ghostContainer.addEventListener('mousemove', handleMouseMove, { passive: true, capture: false });
+		ghostContainer.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+		ghostContainer.addEventListener('mouseup', cleanup, { passive: true, capture: false });
+		ghostContainer.addEventListener('touchend', cleanup, { passive: true, capture: false });
+		ghostContainer.addEventListener('touchcancel', cleanup, { passive: true, capture: false });
 		document.querySelector('html').addEventListener('mouseleave', cleanup, false);
 	}, [data, ghostContainerSelector, midpointOffset, onCleanup, onComplete, onPickup, ref, type]);
 

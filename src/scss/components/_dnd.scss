@@ -1,3 +1,5 @@
-.dnd-in-progress .btn {
-	pointer-events: none;
+.dnd-in-progress {
+	button, input, select, a {
+		pointer-events: none;
+	}
 }
