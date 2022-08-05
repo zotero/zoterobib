@@ -30,6 +30,14 @@ const commonFormats = {
 	i: (chunks) => <i>{chunks}</i>, //eslint-disable-line react/display-name
 };
 
+const titleCaseExample = 'Circadian Mood Variations in Twitter Content';
+const conversionExample = 'Circadian mood variations in twitter content';
+const sentenceCaseExample = (
+	<React.Fragment>
+		Circadian mood variations in <span style={{ color: '#e52e3d', fontWeight: 'bold' }}>T</span>witter content
+	</React.Fragment>
+);
+
 const ZBib = props => {
 	const { bibliography, hydrateItemsCount, isHydrated } = props;
 	const intl = useIntl();
@@ -146,22 +154,22 @@ const ZBib = props => {
 					<p>
 						<FormattedMessage
 							id="zbib.confirmCase.titleCaseExample"
-							defaultMessage="<b>Title case:</b> <i>Circadian Mood Variations in Twitter Content</i>"
-							values={ commonFormats }
+							defaultMessage="<b>Title case:</b> <i>{ titleCaseExample }</i>"
+							values={{ ...commonFormats, titleCaseExample } }
 						/>
 					</p>
 					<p>
 						<FormattedMessage
 							id="zbib.confirmCase.conversionExample"
-							defaultMessage="<b>ZoteroBib conversion:</b> <i>Circadian mood variations in twitter content</i>"
-							values={ commonFormats }
+							defaultMessage="<b>ZoteroBib conversion:</b> <i>{ conversionExample }</i>"
+							values={ { ...commonFormats, conversionExample }}
 						/>
 					</p>
 					<p>
 						<FormattedMessage
 							id="zbib.confirmCase.sentenceCaseExample"
-							defaultMessage="<b>Sentence case:</b> <i>Circadian mood variations in <r>T</r>witter content</i>"
-							values={ { ...commonFormats, r: chunk => <span style={{color: '#e52e3d', fontWeight: 'bold'}}>{ chunk }</span> } } //eslint-disable-line react/display-name
+							defaultMessage="<b>Sentence case:</b> <i>{ sentenceCaseExample }</i>"
+							values={ { ...commonFormats, sentenceCaseExample } } //eslint-disable-line react/display-name
 						/>
 					</p>
 				</Confirmation>
