@@ -43,11 +43,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature1.title" defaultMessage="Adding a bibliography entry" />
+							<FormattedMessage id="zbib.about.addingEntry.header" defaultMessage="Adding a bibliography entry" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature1.paragraph"
+								id="zbib.about.addingEntry.description"
 								defaultMessage="Simply find what you’re looking for in another
 								browser tab and copy the page URL to the ZoteroBib search bar.
 								ZoteroBib can automatically pull in data from newspaper and magazine
@@ -66,11 +66,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature2.title" defaultMessage="Manual entry" />
+							<FormattedMessage id="zbib.about.manualEntry.header" defaultMessage="Manual entry" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature2.paragraph"
+								id="zbib.about.manualEntry.description"
 								defaultMessage="If automatic import doesn’t find what you’re looking
 								for or you’re entering something without a URL or identifier, you
 								can enter the reference information by hand."
@@ -86,11 +86,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature3.title" defaultMessage="Bibliography title" />
+							<FormattedMessage id="zbib.about.settingTitle.header" defaultMessage="Bibliography title" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature3.paragraph"
+								id="zbib.about.settingTitle.description"
 								defaultMessage="To rename your bibliography, just click its title. A
 								title can be useful if you’re switching between multiple projects or
 								sharing a bibliography with others."
@@ -106,11 +106,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature4.title" defaultMessage="Editing an item" />
+							<FormattedMessage id="zbib.about.editingItem.header" defaultMessage="Editing an item" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature4.paragraph"
+								id="zbib.about.editingItem.description"
 								defaultMessage="You might need to add or change a few fields after adding an
 								item. Click on a bibliography entry to make manual changes."
 							/>
@@ -125,11 +125,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature5.title" defaultMessage="Deleting items" />
+							<FormattedMessage id="zbib.about.deletingItems.header" defaultMessage="Deleting items" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature5.paragraph"
+								id="zbib.about.deletingItems.description"
 								defaultMessage="Click the { deleteIcon } next to a bibliography entry to delete it. To start a new
 								bibliography, click <i>Delete All</i> to remove all entries."
 								values={ {
@@ -155,11 +155,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature6.title" defaultMessage="Style selection" />
+							<FormattedMessage id="zbib.about.styleSelection.header" defaultMessage="Style selection" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature6.paragraph"
+								id="zbib.about.styleSelection.description"
 								defaultMessage="Format your bibliography using APA, MLA, Chicago / Turabian,
 									Harvard, or any of the {citationStylesCount, plural, other {#+ other <link>CSL</link> styles} }."
 								values={ {
@@ -178,11 +178,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature7.title" defaultMessage="Copy Citation / Note" />
+							<FormattedMessage id="zbib.about.copyCitation.header" defaultMessage="Copy Citation / Note" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature7.paragraph"
+								id="zbib.about.copyCitation.description"
 								defaultMessage="As you’re writing, you can quickly generate
 								parenthetical citations or footnotes /endnotes to paste into your
 								document without typing names or dates by hand."
@@ -198,11 +198,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature8.title" defaultMessage="Export" />
+							<FormattedMessage id="zbib.about.export.header" defaultMessage="Export" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature8.paragraph"
+								id="zbib.about.export.description"
 								defaultMessage="When you’re done, you can copy a formatted
 								bibliography to the clipboard and paste it into your document. You
 								can also export HTML to add to a webpage, an RTF document to open in
@@ -220,11 +220,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature9.title" defaultMessage="Autosave" />
+							<FormattedMessage id="zbib.about.autosave.header" defaultMessage="Autosave" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature9.paragraph"
+								id="zbib.about.autosave.description"
 								defaultMessage="ZoteroBib automatically saves your bibliography to
 								your browser’s local storage — you can close the page and return to
 								it anytime. (If you’re using private / incognito mode in your
@@ -242,11 +242,11 @@ const About = ({ onGetStartedClick }) => (
 							alt=""
 						/>
 						<h2 className="h4">
-							<FormattedMessage id="zbib.about.feature10.title" defaultMessage="Link to this version" />
+							<FormattedMessage id="zbib.about.linkToVersion.header" defaultMessage="Link to this version" />
 						</h2>
 						<p>
 							<FormattedMessage
-								id="zbib.about.feature10.paragraph"
+								id="zbib.about.linkToVersion.description"
 								defaultMessage="If you want to edit your bibliography on another
 								device, share it with someone else, or switch to another
 								bibliography, you can generate a link to a copy of the current
