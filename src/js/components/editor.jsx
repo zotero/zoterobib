@@ -1,10 +1,10 @@
-import baseMappings from 'zotero-base-mappings';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useReducer, useRef, memo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import baseMappings from '../../../data/mappings.js';
 import Button from './ui/button';
 import ItemBox from './itembox';
 import Modal from './modal';

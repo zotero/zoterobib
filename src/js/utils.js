@@ -1,7 +1,7 @@
 import balanced from 'balanced-match';
-import baseMappings from 'zotero-base-mappings';
 import ZoteroBib from 'zotero-translation-client';
 
+import baseMappings from '../../data/mappings.js';
 import CiteprocWrapper from './citeproc-wrapper';
 import { getItemTypes, getItemTypeMeta } from './api-utils';
 
