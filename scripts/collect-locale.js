@@ -17,7 +17,7 @@ const collectLocale = async (pathToLocales, outputPath) => {
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-	const pathToLocales = `${dirname(fileURLToPath(import.meta.url))}/../third-party/locales`;
+	const pathToLocales = `${dirname(fileURLToPath(import.meta.url))}/../modules/locales`;
 	const outputPath = `${dirname(fileURLToPath(import.meta.url))}/../data/supported-locales.json`;
 	collectLocale(pathToLocales, outputPath);
 }
