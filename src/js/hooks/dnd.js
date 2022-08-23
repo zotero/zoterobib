@@ -6,10 +6,21 @@ var draggedItem = null;
 var touchID = null;
 const cleanupNodes = new Set();
 
+var lastKnownScrollY = window.scrollY;
+var lastPageVec2 = null;
+var accDeltaY = 0;
+
 const getClientVec2 = (ev, touch = null) => {
 	return {
 		x: ev.type.startsWith('touch') ? (touch ? touch.clientX : ev.changedTouches[0].clientX) : ev.clientX,
 		y: ev.type.startsWith('touch') ? (touch ? touch.clientY : ev.changedTouches[0].clientY) : ev.clientY
+	}
+};
+
+const getPageVec2 = (ev, touch = null) => {
+	return {
+		x: ev.type.startsWith('touch') ? (touch ? touch.pageX : ev.changedTouches[0].pageX) : ev.pageX,
+		y: ev.type.startsWith('touch') ? (touch ? touch.pageY : ev.changedTouches[0].pageY) : ev.pageY
 	}
 };
 
@@ -28,13 +39,15 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 	}
 
 	const onDrag = useCallback(ev => {
+		const scrollContainer = document; // TODO
 		const ghostContainer = document.querySelector(ghostContainerSelector);
 		const ghost = ref.current.cloneNode(true);
 		const rect = ref.current.getBoundingClientRect();
-		const clientVec2 = getClientVec2(ev);
-		const posVec2 = { x: rect.x + window.scrollX, y: rect.y + window.scrollY };
-		const offsetVec2 = { x: posVec2.x - clientVec2.x + marginVec2.x, y: posVec2.y - clientVec2.y + marginVec2.y };
+		const pageVec2 = getPageVec2(ev);
 		const body = document.querySelector('body');
+		lastKnownScrollY = window.scrollY;
+		lastPageVec2 = pageVec2;
+		accDeltaY = 0;
 
 		if(draggedItem !== null) {
 			return;
@@ -54,7 +67,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 		ghost.style.position = 'absolute'
 		ghost.style.top = `0`;
 		ghost.style.left = `0`;
-		ghost.style.transform = `translate(${clientVec2.x + offsetVec2.x}px, ${clientVec2.y + offsetVec2.y}px`;
+		ghost.style.transform = `translate(${pageVec2.x + marginVec2.x}px, ${pageVec2.y + marginVec2.y}px`;
 		ghost.style.width = `${rect.width}px`;
 		ghost.style.height = `${rect.height}px`;
 		ghost.style.pointerEvents = 'none';
@@ -74,7 +87,8 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 			tmev.stopPropagation();
 
 			const clientVec2 = getClientVec2(tmev, touch);
-			ghost.style.transform = `translate(${clientVec2.x + offsetVec2.x}px, ${clientVec2.y + offsetVec2.y}px`;
+			const pageVec2 = getPageVec2(tmev, touch);
+			ghost.style.transform = `translate(${pageVec2.x + marginVec2.x}px, ${pageVec2.y + marginVec2.y}px`;
 
 			const dndCandidate = document
 				.elementFromPoint(clientVec2.x, clientVec2.y)
@@ -94,8 +108,18 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 		}
 
 		const handleMouseMove = mmev => {
-			const clientVec2 = getClientVec2(mmev);
-			ghost.style.transform = `translate(${clientVec2.x + offsetVec2.x}px, ${clientVec2.y + offsetVec2.y}px`;
+			const pageVec2 = getPageVec2(mmev);
+			lastPageVec2 = pageVec2;
+			accDeltaY = 0;
+			ghost.style.transform = `translate(${pageVec2.x + marginVec2.x}px, ${pageVec2.y + marginVec2.y}px`;
+		};
+
+		const handleScroll = () => {
+			let deltaY = window.scrollY - lastKnownScrollY;
+			let pageVec2 = lastPageVec2;
+			accDeltaY += deltaY;
+			lastKnownScrollY = window.scrollY;
+			ghost.style.transform = `translate(${pageVec2.x + marginVec2.x}px, ${pageVec2.y + marginVec2.y + accDeltaY}px`;
 		};
 
 		const cleanup = cleanupEv => {
@@ -135,6 +159,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 				}
 
 				ghostContainer.removeEventListener('mousemove', handleMouseMove);
+				scrollContainer.removeEventListener('scroll', handleScroll);
 				ghostContainer.removeEventListener('touchmove', handleTouchMove);
 				ghostContainer.removeEventListener('mouseup', cleanup);
 				ghostContainer.removeEventListener('touchend', cleanup);
@@ -146,6 +171,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 		};
 
 		ghostContainer.addEventListener('mousemove', handleMouseMove, { passive: true, capture: false });
+		scrollContainer.addEventListener('scroll', handleScroll, { passive: true, capture: false });
 		ghostContainer.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
 		ghostContainer.addEventListener('mouseup', cleanup, { passive: true, capture: false });
 		ghostContainer.addEventListener('touchend', cleanup, { passive: true, capture: false });
