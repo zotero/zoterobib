@@ -125,6 +125,7 @@
 	.drag-handle {
 		padding-right: $space-md;
 		display: none;
+		cursor: grab;
 
 		@media (min-width: $bp-md) {
 			display: block;

@@ -61,6 +61,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 
 		body.classList.add('dnd-in-progress');
 		body.style.setProperty('--dnd-height', `${rect.height}px`);
+		body.style.cursor = 'grabbing';
 
 		ref.current.classList.add('dnd-src');
 		ghost.classList.add('dnd-ghost');
@@ -165,6 +166,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 				ghostContainer.removeEventListener('touchend', cleanup);
 				ghostContainer.removeEventListener('touchcancel', cleanup);
 				ghostContainer.removeEventListener('mouseleave', cleanup);
+				body.style.removeProperty('cursor');
 				document.querySelector('html').removeEventListener('mouseleave', cleanup);
 				draggedItem = null;
 			}, 0);
