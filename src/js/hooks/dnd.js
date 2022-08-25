@@ -210,13 +210,11 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 
 	const onDrop = useCallback(ev => {
 		if (draggedItem?.type === type) {
+			const above = ev.currentTarget.classList.contains('dnd-target-above');
 			ev.currentTarget.classList.remove('dnd-target-below', 'dnd-target-above', 'dnd-target');
-			const rect = ev.currentTarget.getBoundingClientRect();
-			const top = rect.y;
-			const above = ev.clientY - top <= rect.height * 0.5 + midpointOffset;
 			onComplete(ev.currentTarget, above, draggedItem, ev);
 		}
-	}, [midpointOffset, onComplete, type]);
+	}, [onComplete, type]);
 
 	return { onDrag, onHover, onDrop };
 }
