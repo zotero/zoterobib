@@ -895,6 +895,11 @@ const BibWebContainer = props => {
 	}, [citationStyles]);
 
 	const handleStyleSwitchConfirm = useCallback(() => {
+
+		const processedItems = processSentenceCaseAPAItems(bib.current.itemsRaw);
+		for (const [index, item] of processedItems.entries()) {
+			bib.current.updateItem(index, item);
+		}
 		confirmStyle(dispatch);
 		setActiveDialog(null);
 		revertCitationStyle.current = null;
