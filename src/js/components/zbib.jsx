@@ -82,12 +82,13 @@ const ZBib = props => {
 				{(!props.isReadOnly && (props.isTranslating || props.itemUnderReview)) && (
 					<Review { ...pick(props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
 				)}
-				<BibliographySection { ...pick(props, ['bibliography', 'hydrateItemsCount',
-					'isReadOnly', 'isReady', 'localCitationsCount', 'onOverride', 'onTitleChanged',
-					'title', 'citationStyle', 'citationStyles', 'onCitationStyleChanged',
-					'isPrintMode', 'isHydrated', 'isNoteStyle', 'isNumericStyle', 'isSortedStyle',
-					'onCitationCopyDialogOpen', 'onDeleteEntry', 'onDeleteCitations',
-					'onEditorOpen', 'onCancelPrintMode', 'onReorderCitations', 'styleHasBibliography']) }
+				<BibliographySection {...pick(props, ['bibliography', 'bibliographyRendered',
+					'bibliographyRenderedNodes', 'hydrateItemsCount', 'isReadOnly', 'isReady',
+					'localCitationsCount', 'onOverride', 'onTitleChanged', 'title', 'citationStyle',
+					'citationStyles', 'onCitationStyleChanged', 'isPrintMode', 'isHydrated',
+					'isNoteStyle', 'isNumericStyle', 'isSortedStyle', 'onCitationCopyDialogOpen',
+					'onDeleteEntry', 'onDeleteCitations', 'onEditorOpen', 'onCancelPrintMode',
+					'onReorderCitations', 'styleHasBibliography']) }
 				/>
 				{
 					<section className="section section-export">
@@ -206,8 +207,8 @@ const ZBib = props => {
 						</div>
 					</div>
 				</Modal>
-				<CopyCitationDialog { ...pick(props, ['activeDialog', 'citationHtml',
-					'citationCopyModifiers', 'isNoteStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
+				<CopyCitationDialog {...pick(props, ['activeDialog', 'copyCitationState',
+					'isNoteStyle', 'isNumericStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
 					'onCitationModifierChange']) }
 				/>
 				<Editor { ...pick(props, ['activeDialog', 'editorItem', 'onEditorClose',

@@ -3,6 +3,34 @@
 //
 
 .copy-citation-dialog {
+	.modal-header {
+		display: flex;
+
+		@include state(".copy-citation-dialog.switchable") {
+			padding: 5px 0 5px 0;
+		}
+
+		.btn {
+			background: transparent;
+			flex: 0 0 50%;
+			color: $shade-0;
+
+			&.active {
+				pointer-events: none;
+				font-weight: bold;
+			}
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.btn + .btn {
+			flex: 0 0 calc(50% - 1px);
+			border-left: 1px solid $shade-0;
+		}
+	}
+
 	h5 {
 		font-size: $font-size-base;
 		font-weight: 600;
@@ -23,4 +51,6 @@
 			+ 2 * $input-btn-padding-y-sm
 			+ 2 * $input-border-width;
 	}
+
+
 }

@@ -4,12 +4,11 @@ import DropdownItem from 'reactstrap/lib/DropdownItem';
 import DropdownMenu from './ui/dropdown-menu';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, useState, useMemo, memo } from 'react';
+import React, { useCallback, useRef, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
 import Icon from './ui/icon';
-import { formatBib, formatFallback } from '../cite';
 import { isTriggerEvent } from '../common/event';
 import { useDnd } from '../hooks';
 
@@ -84,16 +83,14 @@ const BibliographyItem = memo(props => {
 					className="csl-entry-container"
 					dangerouslySetInnerHTML={ { __html: formattedItem } }
 				/>
-				{ !isNumericStyle && (
-					<Button
-						icon
-						title={copyText}
-						className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
-						onClick={onCopyCitationDialogOpen}
-					>
-						<Icon type={'16/copy'} width="16" height="16" />
-					</Button>
-				) }
+				<Button
+					icon
+					title={copyText}
+					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
+					onClick={onCopyCitationDialogOpen}
+				>
+					<Icon type={'16/copy'} width="16" height="16" />
+				</Button>
 				<Dropdown
 					isOpen={ dropdownsOpen.includes(rawItem.key) }
 					toggle={ onToggleDropdown }
@@ -183,25 +180,8 @@ BibliographyItem.propTypes = {
 const Bibliography = props => {
 	const [dropdownsOpen, setDropdownsOpen] = useState([]);
 
-
-	const { isNoteStyle, isNumericStyle, isReadOnly, isSortedStyle, bibliography, onCitationCopyDialogOpen,
+	const { bibliographyRendered, bibliographyRenderedNodes, isNoteStyle, isNumericStyle, isReadOnly, isSortedStyle, bibliography, onCitationCopyDialogOpen,
 		onDeleteEntry, onEditorOpen, onReorderCitations, styleHasBibliography } = props;
-
-	const bibliographyRendered = useMemo(() => {
-			return (styleHasBibliography && bibliography.meta) ?
-				formatBib(bibliography.items, bibliography.meta) :
-				formatFallback(bibliography.items)
-		}, [bibliography, styleHasBibliography]
-	);
-
-	const bibliographyRenderedNodes = useMemo(() => {
-		const div = document.createElement('div');
-		div.innerHTML = bibliographyRendered;
-		div.querySelectorAll('a').forEach(link => {
-			link.setAttribute('rel', 'nofollow');
-		});
-		return div.firstChild.children;
-	}, [bibliographyRendered]);
 
 	const handleSelectCitation = useCallback((ev) => {
 		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
@@ -288,7 +268,7 @@ const Bibliography = props => {
 					{ bibliography.items.map((renderedItem, index) => (
 						<BibliographyItem
 							dropdownsOpen = { dropdownsOpen }
-							formattedItem={ bibliographyRenderedNodes[index]?.innerHTML || renderedItem.value }
+							formattedItem={ bibliographyRenderedNodes?.[index]?.innerHTML || renderedItem.value }
 							isNoteStyle = { isNoteStyle }
 							isNumericStyle = { isNumericStyle }
 							key={ renderedItem.id }
@@ -312,6 +292,11 @@ const Bibliography = props => {
 
 Bibliography.propTypes = {
 	bibliography: PropTypes.object,
+	bibliographyRendered: PropTypes.string,
+	bibliographyRenderedNodes: PropTypes.oneOfType([
+		PropTypes.array,
+		PropTypes.instanceOf(HTMLCollection)
+	]),
 	isNoteStyle: PropTypes.bool,
 	isNumericStyle: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
@@ -322,6 +307,5 @@ Bibliography.propTypes = {
 	onReorderCitations: PropTypes.func,
 	styleHasBibliography: PropTypes.bool,
 }
-
 
 export default memo(Bibliography);

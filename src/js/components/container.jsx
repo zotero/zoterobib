@@ -191,10 +191,14 @@ const BibWebContainer = props => {
 	const prevCitationStyle = usePrevious(state.selected);
 	const [isStylesDataLoading, setIsStylesDataLoading] = useState(false);
 	const [stylesData, setStylesData] = useState(null);
-
-	const [citationToCopy, setCitationToCopy] = useState(null);
-	const [citationCopyModifiers, setCitationCopyModifiers] = useState({});
-	const [citationHtml, setCitationHtml] = useState(null);
+	const [copyCitationState, setCopyCitationState] = useState({
+		citationKey: null,
+		inTextHtml: null,
+		inTextPlain: null,
+		bibliographyHtml: null,
+		bibliographyPlain: null,
+		modifiers: {},
+	});
 
 	const [title, setTitle] = useState(props.title || (remoteId ? '' : localStorage.getItem('zotero-bib-title') || ''));
 	const prevTitle = usePrevious(title);
@@ -225,6 +229,21 @@ const BibWebContainer = props => {
 	citationStyles.sort((a, b) => a.title.toUpperCase().localeCompare(b.title.toUpperCase()));
 
 	const localCitationsCount = remoteId ? initialCitationsCount.current : bib.current.items.length;
+
+	const bibliographyRendered = useMemo(() => {
+		return (state.styleHasBibliography && state.bibliography.meta) ?
+			formatBib(state.bibliography.items, state.bibliography.meta) :
+			formatFallback(state.bibliography.items)
+	}, [state.bibliography.items, state.bibliography.meta, state.styleHasBibliography]);
+
+	const bibliographyRenderedNodes = useMemo(() => {
+		const div = document.createElement('div');
+		div.innerHTML = bibliographyRendered;
+		div.querySelectorAll('a').forEach(link => {
+			link.setAttribute('rel', 'nofollow');
+		});
+		return div.firstChild.children;
+	}, [bibliographyRendered]);
 
 	const buildBibliography = useCallback(async () => {
 		dispatch({ type: BEGIN_BUILD_BIBLIOGRAPHY });
@@ -531,27 +550,32 @@ const BibWebContainer = props => {
 		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		setActiveDialog('COPY_CITATION');
-		setCitationToCopy(itemId);
+		setCopyCitationState(state => ({ ...state, citationKey: itemId }));
 	}, []);
 
 	const handleCitationCopyDialogClose = useCallback(() => {
 		setActiveDialog(null);
-		setCitationToCopy(null);
-		setCitationHtml(null);
-		setCitationCopyModifiers({});
+		setCopyCitationState({
+			citationKey: null,
+			inTextHtml: null,
+			bibliographyHtml: null,
+			modifiers: {},
+		})
 	}, []);
 
-	const handleCitationCopy = useCallback(() => {
-		const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
-		const positions = [{ }];
-		const text = citeproc.current.previewCitationCluster(cites, positions, 'plain');
-		const html = citationHtml;
+	const handleCitationCopy = useCallback((mode) => {
+
+		const plain = mode === 'citation' ?
+			copyCitationState.inTextPlain : copyCitationState.bibliographyPlain;
+		const html = mode === 'citation' ?
+			copyCitationState.inTextHtml : copyCitationState.bibliographyHtml;
 		copyData.current = [
-			{ mime: 'text/plain', data: text },
+			{ mime: 'text/plain', data: plain },
 			{ mime: 'text/html', data: html },
 		];
-		return copy(text);
-	}, [citationCopyModifiers, citationHtml, citationToCopy]);
+
+		return copy(plain);
+	}, [copyCitationState.bibliographyHtml, copyCitationState.bibliographyPlain, copyCitationState.inTextHtml, copyCitationState.inTextPlain]);
 
 	const handleCopyToClipboard = useCallback(ev => {
 		if(copyDataInclude.current) {
@@ -564,7 +588,7 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleCitationModifierChange = useCallback(citationCopyModifiers => {
-		setCitationCopyModifiers(citationCopyModifiers);
+		setCopyCitationState(state => ({ ...state, modifiers: citationCopyModifiers }));
 	}, []);
 
 	const handleConfirmAddCancel = useCallback(() => {
@@ -1099,18 +1123,28 @@ const BibWebContainer = props => {
 	}, []);
 
 	useEffect(() => {
-		if(!state.isCiteprocReady || !citationToCopy) {
+		if(!state.isCiteprocReady || !copyCitationState.citationKey) {
 			return;
 		}
 
-		setTimeout(() => {
-			const cites = [ {id: citationToCopy, ...citationCopyModifiers }];
+		setTimeout(async () => {
+			const bibIndex = state.bibliography.items.findIndex(i => i.id === copyCitationState.citationKey);
+			const cites = [{ id: copyCitationState.citationKey, ...copyCitationState.modifiers }];
 			const positions = [{ }];
-			setCitationHtml(
-				citeproc.current.previewCitationCluster(cites, positions, 'html')
+			const inTextHtml =  citeproc.current.previewCitationCluster(cites, positions, 'html');
+			const inTextPlain = citeproc.current.previewCitationCluster(cites, positions, 'plain');
+			const bibliographyHtml = bibliographyRenderedNodes?.[bibIndex]?.innerHTML
+				|| state.bibliography.items[bibIndex].value;
+			const { bibliographyItems } = await getOneTimeBibliographyOrFallback(
+				getItemsCSL([state.bibliography.lookup[copyCitationState.citationKey]]),
+				state.xml, state.styleHasBibliography, useLegacy.current, { format: 'plain' }
 			);
+			const bibliographyPlain = bibliographyItems[0].value;
+			setCopyCitationState(state => ({
+				...state, inTextHtml, inTextPlain, bibliographyHtml, bibliographyPlain,
+			}));
 		}, 0);
-	}, [state.isCiteprocReady, citationCopyModifiers, citationToCopy]);
+	}, [bibliographyRenderedNodes, copyCitationState.citationKey, copyCitationState.modifiers, state.bibliography.items, state.bibliography.lookup, state.isCiteprocReady, state.styleHasBibliography, state.xml]);
 
 	useEffect(() => {
 		if(state.bibliographyNeedsRebuild && isStyleReady && state.isConfirmed && isDataReady) {
@@ -1228,8 +1262,9 @@ const BibWebContainer = props => {
 	return (<ZBib
 		getCopyData = { getCopyData }
 		bibliography = { state.bibliography }
-		citationCopyModifiers = { citationCopyModifiers }
-		citationHtml = { citationHtml }
+		bibliographyRendered = { bibliographyRendered }
+		bibliographyRenderedNodes = { bibliographyRenderedNodes }
+		copyCitationState = { copyCitationState }
 		citationStyle = { state.selected }
 		citationStyles = { citationStyles }
 		editorItem = { editorItem }

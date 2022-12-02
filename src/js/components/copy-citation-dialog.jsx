@@ -18,35 +18,39 @@ const locators = [
 }));
 
 const CopyCitationDialog = props => {
-	const { activeDialog, citationHtml, citationCopyModifiers, isNoteStyle, onCitationCopy,
-	onCitationCopyDialogClose, onCitationModifierChange } = props;
+	const { activeDialog, copyCitationState, isNoteStyle, isNumericStyle, onCitationCopy,
+		onCitationCopyDialogClose, onCitationModifierChange } = props;
 	const [isCopied, setIsCopied] = useState(false);
+	const [mode, setMode] = useState(isNumericStyle ? 'bibliography' : 'citation');
 	const timeout = useRef(null);
 	const intl = useIntl();
-	const title = isNoteStyle ?
-		intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
-		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
+	const title = mode === 'citation' ?
+		isNoteStyle ?
+			intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
+			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' })
+		: intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' });
+
 
 	let isCitationEmpty = false;
 
 	if(typeof citationHtml === 'string') {
-		isCitationEmpty = citationHtml
+		isCitationEmpty = copyCitationState.inTextHtml
 			.replace(/<[^>]*>/g, '')
 			.trim()
 			.length === 0;
 	}
 
 	const handleLabelChange = useCallback(
-		newValue => onCitationModifierChange({ ...citationCopyModifiers, label: newValue }),
-	[citationCopyModifiers, onCitationModifierChange]);
+		newValue => onCitationModifierChange({ ...copyCitationState.modifiers, label: newValue }),
+	[copyCitationState.modifiers, onCitationModifierChange]);
 
 	const handleLocatorChange = useCallback(
-		newValue => onCitationModifierChange({ ...citationCopyModifiers, locator: newValue }),
-	[citationCopyModifiers, onCitationModifierChange]);
+		newValue => onCitationModifierChange({ ...copyCitationState.modifiers, locator: newValue }),
+	[copyCitationState.modifiers, onCitationModifierChange]);
 
 	const handleSuppressAuthorChange = useCallback(
-		ev => onCitationModifierChange({ ...citationCopyModifiers, mode: ev.currentTarget.checked ? 'SuppressAuthor' : undefined }),
-	[citationCopyModifiers, onCitationModifierChange]);
+		ev => onCitationModifierChange({ ...copyCitationState.modifiers, mode: ev.currentTarget.checked ? 'SuppressAuthor' : undefined }),
+	[copyCitationState.modifiers, onCitationModifierChange]);
 
 	const handleCancel = useCallback(() => {
 		if(timeout.current) {
@@ -57,14 +61,14 @@ const CopyCitationDialog = props => {
 	}, [onCitationCopyDialogClose]);
 
 	const handleConfirm = useCallback(() => {
-		if(onCitationCopy()) {
+		if(onCitationCopy(mode)) {
 			setIsCopied(true);
 			timeout.current = setTimeout(() => {
 				onCitationCopyDialogClose();
 				setIsCopied(false);
 			}, 1000);
 		}
-	}, [onCitationCopy, onCitationCopyDialogClose]);
+	}, [mode, onCitationCopy, onCitationCopyDialogClose]);
 
 	const handleInputCommit = useCallback((_val, _hasChanged, ev) => {
 		if(ev.type === 'keydown') {
@@ -73,9 +77,14 @@ const CopyCitationDialog = props => {
 		}
 	}, [handleConfirm]);
 
+	const handleModeChange = useCallback(ev => {
+		setMode(ev.currentTarget.dataset.mode);
+	}, [])
+
 	useEffect(() => {
 		setIsCopied(false);
-	}, [activeDialog]);
+		setMode(isNumericStyle ? 'bibliography' : 'citation');
+	}, [activeDialog, isNumericStyle]);
 
 	useEffect(() => {
 		return () => {
@@ -88,14 +97,42 @@ const CopyCitationDialog = props => {
 
 	return (
 		<Modal
-			className={ cx('modal modal-centered copy-citation-dialog', { loading: !citationHtml }) }
+			className={cx('modal modal-centered copy-citation-dialog', {
+				loading: !copyCitationState.inTextHtml || !copyCitationState.bibliographyHtml,
+				switchable: !isNumericStyle }) }
 			isOpen={ activeDialog === 'COPY_CITATION' }
 			contentLabel={ title }
 			onRequestClose={ onCitationCopyDialogClose }
 		>
-			{ citationHtml ? (
-				<div className="modal-content" tabIndex={ -1 }>
+			{(copyCitationState.inTextHtml && copyCitationState.bibliographyHtml) ? (
+			<div className="modal-content" tabIndex={ -1 }>
+				<div className="modal-header">
+					{isNumericStyle ? (
+						<h4 className="modal-title text-truncate">
+							<FormattedMessage id="zbib.citation.outputBibliography" defaultMessage="Bibliography Entry" />
+						</h4>
+					) : (
+					<React.Fragment>
+					<Button
+						className={cx({ active: mode === 'citation'})}
+						onClick={ handleModeChange }
+						data-mode="citation"
+					>
+						<FormattedMessage id="zbib.citation.outputCitation" defaultMessage="Citation" />
+					</Button>
+					<Button
+						className={cx({ active: mode === 'bibliography' })}
+						onClick={ handleModeChange }
+						data-mode="bibliography"
+					>
+						<FormattedMessage id="zbib.citation.outputBibliography" defaultMessage="Bibliography Entry" />
+					</Button>
+					</React.Fragment>
+					) }
+				</div>
 				<div className="modal-body">
+					{ mode === 'citation' ? (
+					<React.Fragment>
 					<div className="form-row form-group">
 						<div className="col-xs-6">
 							<Select
@@ -107,7 +144,7 @@ const CopyCitationDialog = props => {
 								options={ locators }
 								searchable={ false}
 								tabIndex={ 0 }
-								value={ citationCopyModifiers.label || 'page' }
+								value={copyCitationState.modifiers.label || 'page' }
 								className="form-control form-control-sm"
 							/>
 							</div>
@@ -119,7 +156,7 @@ const CopyCitationDialog = props => {
 								onChange={ handleLocatorChange }
 								onCommit={ handleInputCommit }
 								tabIndex={ 0 }
-								value={ citationCopyModifiers.locator }
+								value={copyCitationState.modifiers.locator }
 								className="form-control form-control-sm"
 								placeholder="Number"
 							/>
@@ -132,7 +169,7 @@ const CopyCitationDialog = props => {
 									<input
 										disabled={ isCopied }
 										type="checkbox"
-										checked={ citationCopyModifiers.mode === 'SuppressAuthor' }
+										checked={copyCitationState.modifiers.mode === 'SuppressAuthor' }
 										onChange={ handleSuppressAuthorChange }
 									/>
 									<FormattedMessage id="zbib.citation.omitAuthor" defaultMessage="Omit Author" />
@@ -146,9 +183,23 @@ const CopyCitationDialog = props => {
 						</h5>
 						<p
 							className="preview"
-							dangerouslySetInnerHTML={ { __html: citationHtml } }
+							dangerouslySetInnerHTML={{ __html: copyCitationState.inTextHtml } }
 						/>
 					</div>
+					</React.Fragment>
+					) : (
+						<React.Fragment>
+							<div>
+								<h5>
+									<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview:" />
+								</h5>
+								<p
+									className="preview"
+									dangerouslySetInnerHTML={{ __html: copyCitationState.bibliographyHtml }}
+								/>
+							</div>
+						</React.Fragment>
+					) }
 				</div>
 				<div className="modal-footer">
 					<div className="buttons">
@@ -174,15 +225,14 @@ const CopyCitationDialog = props => {
 						</Button>
 					</div>
 				</div>
-				</div>
-			) : <Spinner /> }
+			</div>
+			) : <Spinner />}
 		</Modal>
 	);
 }
 
 CopyCitationDialog.propTypes = {
-	citationCopyModifiers: PropTypes.object,
-	citationHtml: PropTypes.string,
+	copyCitationState: PropTypes.object,
 	activeDialog: PropTypes.string,
 	isNoteStyle: PropTypes.bool,
 	onCitationCopy: PropTypes.func.isRequired,
