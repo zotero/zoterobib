@@ -8,6 +8,7 @@ import Input from './form/input';
 import Modal from './modal';
 import Select from './form/select';
 import Spinner from './ui/spinner';
+import { usePrevious } from '../hooks';
 
 const locators = [
 	'page', 'book', 'chapter', 'column', 'figure', 'folio', 'issue', 'line', 'note', 'opus',
@@ -20,8 +21,12 @@ const locators = [
 const CopyCitationDialog = props => {
 	const { activeDialog, copyCitationState, isNoteStyle, isNumericStyle, onCitationCopy,
 		onCitationCopyDialogClose, onCitationModifierChange } = props;
+	const prevActiveDialog = usePrevious(activeDialog);
 	const [isCopied, setIsCopied] = useState(false);
-	const [mode, setMode] = useState(isNumericStyle ? 'bibliography' : 'citation');
+	const [mode, setMode] = useState(
+		copyCitationState.initialMode ? copyCitationState.initialMode :
+			isNumericStyle ? 'bibliography' : 'citation'
+	);
 	const timeout = useRef(null);
 	const intl = useIntl();
 	const title = mode === 'citation' ?
@@ -82,9 +87,13 @@ const CopyCitationDialog = props => {
 	}, [])
 
 	useEffect(() => {
-		setIsCopied(false);
-		setMode(isNumericStyle ? 'bibliography' : 'citation');
-	}, [activeDialog, isNumericStyle]);
+		if (prevActiveDialog !== activeDialog) {
+			setIsCopied(false);
+			setMode(copyCitationState.initialMode ? copyCitationState.initialMode :
+				isNumericStyle ? 'bibliography' : 'citation'
+			);
+		}
+	}, [activeDialog, copyCitationState.initialMode, isNumericStyle, prevActiveDialog]);
 
 	useEffect(() => {
 		return () => {
@@ -232,9 +241,10 @@ const CopyCitationDialog = props => {
 }
 
 CopyCitationDialog.propTypes = {
-	copyCitationState: PropTypes.object,
 	activeDialog: PropTypes.string,
+	copyCitationState: PropTypes.object,
 	isNoteStyle: PropTypes.bool,
+	isNumericStyle: PropTypes.bool,
 	onCitationCopy: PropTypes.func.isRequired,
 	onCitationCopyDialogClose: PropTypes.func.isRequired,
 	onCitationModifierChange: PropTypes.func.isRequired,

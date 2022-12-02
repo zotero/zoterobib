@@ -546,11 +546,11 @@ const BibWebContainer = props => {
 		}
 	}, [config.stylesURL, handleError]);
 
-	const handleCitationCopyDialogOpen = useCallback(itemId => {
+	const handleCitationCopyDialogOpen = useCallback((itemId, initialMode = 'citation') => {
 		dispatch({ type: CLEAR_ALL_MESSAGES });
 		setItemUnderReview(null);
 		setActiveDialog('COPY_CITATION');
-		setCopyCitationState(state => ({ ...state, citationKey: itemId }));
+		setCopyCitationState(state => ({ ...state, citationKey: itemId, initialMode }));
 	}, []);
 
 	const handleCitationCopyDialogClose = useCallback(() => {

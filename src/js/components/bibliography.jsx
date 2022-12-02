@@ -56,8 +56,8 @@ const BibliographyItem = memo(props => {
 	});
 
 	const copyText = isNoteStyle ?
-		intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
-		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
+			intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
+			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
 
 	return (
 		<li key={ rawItem.key }
@@ -88,6 +88,7 @@ const BibliographyItem = memo(props => {
 					title={copyText}
 					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 					onClick={onCopyCitationDialogOpen}
+					data-mode={isNumericStyle ? 'bibliography' : 'citation'}
 				>
 					<Icon type={'16/copy'} width="16" height="16" />
 				</Button>
@@ -103,14 +104,22 @@ const BibliographyItem = memo(props => {
 						<Icon type={ '28/dots' } width="28" height="28" />
 					</DropdownToggle>
 					<DropdownMenu right>
-						{ !isNumericStyle && (
+						{!isNumericStyle && (
 							<DropdownItem
-								onClick={ onCopyCitationDialogOpen }
+								onClick={onCopyCitationDialogOpen}
 								className="btn"
+								data-mode="citation"
 							>
 								{ copyText }
 							</DropdownItem>
-						) }
+						)}
+						<DropdownItem
+							onClick={onCopyCitationDialogOpen}
+							className="btn"
+							data-mode="bibliography"
+						>
+							<FormattedMessage id="zbib.citation.copyBibliographyEntry" defaultMessage="Copy Bibliography Entry" />
+						</DropdownItem>
 						<DropdownItem
 							onClick={ onEditCitationClick }
 							className="btn"
@@ -237,7 +246,10 @@ const Bibliography = props => {
 	const handleCopyCitationDialogOpen = useCallback(ev => {
 		ev.stopPropagation();
 		ev.preventDefault();
-		onCitationCopyDialogOpen(ev.currentTarget.closest('[data-key]').dataset.key);
+		onCitationCopyDialogOpen(
+			ev.currentTarget.closest('[data-key]').dataset.key,
+			ev.currentTarget.closest('[data-mode]')?.dataset.mode
+		);
 	}, [onCitationCopyDialogOpen]);
 
 
