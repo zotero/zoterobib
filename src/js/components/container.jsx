@@ -138,7 +138,6 @@ const BibWebContainer = props => {
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const abortController = useRef(null);
-	const copyData = useRef(null);
 	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
 	const lastDeletedItem = useRef(null);
@@ -439,9 +438,10 @@ const BibWebContainer = props => {
 		}
 	}, [citationStyles, config, handleError, remoteId]);
 
-	const getCopyData = useCallback(async format => {
+	const getCopyData = useCallback(async (format, itemsCSL) => {
+		itemsCSL = itemsCSL || bib.current.itemsCSL;
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-			bib.current.itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format }
+			itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format }
 		);
 
 		if(bibliographyItems) {
@@ -564,12 +564,12 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleCitationCopy = useCallback((mode) => {
-
 		const plain = mode === 'citation' ?
 			copyCitationState.inTextPlain : copyCitationState.bibliographyPlain;
 		const html = mode === 'citation' ?
 			copyCitationState.inTextHtml : copyCitationState.bibliographyHtml;
-		copyData.current = [
+
+		copyDataInclude.current = [
 			{ mime: 'text/plain', data: plain },
 			{ mime: 'text/html', data: html },
 		];
@@ -1128,23 +1128,23 @@ const BibWebContainer = props => {
 		}
 
 		setTimeout(async () => {
-			const bibIndex = state.bibliography.items.findIndex(i => i.id === copyCitationState.citationKey);
 			const cites = [{ id: copyCitationState.citationKey, ...copyCitationState.modifiers }];
 			const positions = [{ }];
 			const inTextHtml =  citeproc.current.previewCitationCluster(cites, positions, 'html');
 			const inTextPlain = citeproc.current.previewCitationCluster(cites, positions, 'plain');
-			const bibliographyHtml = bibliographyRenderedNodes?.[bibIndex]?.innerHTML
-				|| state.bibliography.items[bibIndex].value;
-			const { bibliographyItems } = await getOneTimeBibliographyOrFallback(
-				getItemsCSL([state.bibliography.lookup[copyCitationState.citationKey]]),
-				state.xml, state.styleHasBibliography, useLegacy.current, { format: 'plain' }
+
+			const bibliographyHtml = await getCopyData('html',
+				getItemsCSL([state.bibliography.lookup[copyCitationState.citationKey]])
 			);
-			const bibliographyPlain = bibliographyItems[0].value;
+			const bibliographyPlain = await getCopyData('plain',
+				getItemsCSL([state.bibliography.lookup[copyCitationState.citationKey]])
+			);
+
 			setCopyCitationState(state => ({
 				...state, inTextHtml, inTextPlain, bibliographyHtml, bibliographyPlain,
 			}));
 		}, 0);
-	}, [bibliographyRenderedNodes, copyCitationState.citationKey, copyCitationState.modifiers, state.bibliography.items, state.bibliography.lookup, state.isCiteprocReady, state.styleHasBibliography, state.xml]);
+	}, [copyCitationState.citationKey, copyCitationState.modifiers, getCopyData, state.bibliography.lookup, state.isCiteprocReady]);
 
 	useEffect(() => {
 		if(state.bibliographyNeedsRebuild && isStyleReady && state.isConfirmed && isDataReady) {
