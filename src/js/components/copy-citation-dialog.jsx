@@ -107,8 +107,7 @@ const CopyCitationDialog = props => {
 	return (
 		<Modal
 			className={cx('modal modal-centered copy-citation-dialog', {
-				loading: !copyCitationState.inTextHtml || !copyCitationState.bibliographyHtml,
-				switchable: !isNumericStyle }) }
+				loading: !copyCitationState.inTextHtml || !copyCitationState.bibliographyHtml }) }
 			isOpen={ activeDialog === 'COPY_CITATION' }
 			contentLabel={ title }
 			onRequestClose={ onCitationCopyDialogClose }
@@ -116,28 +115,9 @@ const CopyCitationDialog = props => {
 			{(copyCitationState.inTextHtml && copyCitationState.bibliographyHtml) ? (
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
-					{isNumericStyle ? (
-						<h4 className="modal-title text-truncate">
-							<FormattedMessage id="zbib.citation.outputBibliography" defaultMessage="Bibliography Entry" />
-						</h4>
-					) : (
-					<React.Fragment>
-					<Button
-						className={cx({ active: mode === 'citation'})}
-						onClick={ handleModeChange }
-						data-mode="citation"
-					>
-						<FormattedMessage id="zbib.citation.outputCitation" defaultMessage="Citation" />
-					</Button>
-					<Button
-						className={cx({ active: mode === 'bibliography' })}
-						onClick={ handleModeChange }
-						data-mode="bibliography"
-					>
-						<FormattedMessage id="zbib.citation.outputBibliography" defaultMessage="Bibliography Entry" />
-					</Button>
-					</React.Fragment>
-					) }
+					<h4 className="modal-title text-truncate">
+						{ title }
+					</h4>
 				</div>
 				<div className="modal-body">
 					{ mode === 'citation' ? (

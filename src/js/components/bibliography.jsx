@@ -83,12 +83,23 @@ const BibliographyItem = memo(props => {
 					className="csl-entry-container"
 					dangerouslySetInnerHTML={ { __html: formattedItem } }
 				/>
+				{ !isNumericStyle && (
 				<Button
 					icon
 					title={copyText}
 					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
+					onClick={ onCopyCitationDialogOpen }
+					data-mode="citation"
+				>
+					<Icon type={'16/quote'} width="16" height="16" />
+				</Button>
+				)}
+				<Button
+					icon
+					title={ intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' }) }
+					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 					onClick={onCopyCitationDialogOpen}
-					data-mode={isNumericStyle ? 'bibliography' : 'citation'}
+					data-mode="bibliography"
 				>
 					<Icon type={'16/copy'} width="16" height="16" />
 				</Button>
