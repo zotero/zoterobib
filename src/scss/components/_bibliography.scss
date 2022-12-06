@@ -160,6 +160,14 @@
 				color: $shade-0;
 			}
 		}
+
+		.dropdown-menu {
+			text-align: left;
+
+			.feedback {
+				color: $btn-success-color;
+			}
+		}
 	}
 
 	>.btn-icon {
@@ -168,6 +176,15 @@
 
 	.btn-copy {
 		border-color: transparent;
+
+		&.success {
+			opacity: 1.0;
+			background-color: transparent;
+
+			.icon {
+				color: $btn-success-color;
+			}
+		}
 
 		&:focus {
 			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {

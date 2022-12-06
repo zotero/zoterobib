@@ -138,10 +138,11 @@ const BibliographySection = props => {
 							<PlaceholderBibliography itemCount={ props.hydrateItemsCount } />
 						) : isReady ? (
 							<Bibliography { ...pick(props, ['bibliographyRendered',
-							'bibliographyRenderedNodes', 'isNoteStyle', 'isNumericStyle',
-							'hydrateItemsCount', 'isSortedStyle', 'isReadOnly', 'bibliography',
-							'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
-							'onReorderCitations', 'styleHasBibliography'])} />
+								'bibliographyRenderedNodes', 'copySingleState',
+								'onCopySingle', 'isNoteStyle', 'isNumericStyle',
+								'hydrateItemsCount', 'isSortedStyle', 'isReadOnly', 'bibliography',
+								'onCitationCopyDialogOpen', 'onDeleteEntry', 'onEditorOpen',
+								'onReorderCitations', 'styleHasBibliography'])} />
 						) : (
 							<div className="spinner-container">
 								<Spinner />

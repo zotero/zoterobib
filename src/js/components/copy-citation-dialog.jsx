@@ -23,18 +23,11 @@ const CopyCitationDialog = props => {
 		onCitationCopyDialogClose, onCitationModifierChange } = props;
 	const prevActiveDialog = usePrevious(activeDialog);
 	const [isCopied, setIsCopied] = useState(false);
-	const [mode, setMode] = useState(
-		copyCitationState.initialMode ? copyCitationState.initialMode :
-			isNumericStyle ? 'bibliography' : 'citation'
-	);
 	const timeout = useRef(null);
 	const intl = useIntl();
-	const title = mode === 'citation' ?
-		isNoteStyle ?
+	const title = isNoteStyle ?
 			intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
-			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' })
-		: intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' });
-
+			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
 
 	let isCitationEmpty = false;
 
@@ -66,14 +59,14 @@ const CopyCitationDialog = props => {
 	}, [onCitationCopyDialogClose]);
 
 	const handleConfirm = useCallback(() => {
-		if(onCitationCopy(mode)) {
+		if(onCitationCopy()) {
 			setIsCopied(true);
 			timeout.current = setTimeout(() => {
 				onCitationCopyDialogClose();
 				setIsCopied(false);
 			}, 1000);
 		}
-	}, [mode, onCitationCopy, onCitationCopyDialogClose]);
+	}, [onCitationCopy, onCitationCopyDialogClose]);
 
 	const handleInputCommit = useCallback((_val, _hasChanged, ev) => {
 		if(ev.type === 'keydown') {
@@ -82,16 +75,9 @@ const CopyCitationDialog = props => {
 		}
 	}, [handleConfirm]);
 
-	const handleModeChange = useCallback(ev => {
-		setMode(ev.currentTarget.dataset.mode);
-	}, [])
-
 	useEffect(() => {
 		if (prevActiveDialog !== activeDialog) {
 			setIsCopied(false);
-			setMode(copyCitationState.initialMode ? copyCitationState.initialMode :
-				isNumericStyle ? 'bibliography' : 'citation'
-			);
 		}
 	}, [activeDialog, copyCitationState.initialMode, isNumericStyle, prevActiveDialog]);
 
@@ -112,7 +98,7 @@ const CopyCitationDialog = props => {
 			contentLabel={ title }
 			onRequestClose={ onCitationCopyDialogClose }
 		>
-			{(copyCitationState.inTextHtml && copyCitationState.bibliographyHtml) ? (
+			{copyCitationState.inTextHtml ? (
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
@@ -120,8 +106,6 @@ const CopyCitationDialog = props => {
 					</h4>
 				</div>
 				<div className="modal-body">
-					{ mode === 'citation' ? (
-					<React.Fragment>
 					<div className="form-row form-group">
 						<div className="col-xs-6">
 							<Select
@@ -175,20 +159,6 @@ const CopyCitationDialog = props => {
 							dangerouslySetInnerHTML={{ __html: copyCitationState.inTextHtml } }
 						/>
 					</div>
-					</React.Fragment>
-					) : (
-						<React.Fragment>
-							<div>
-								<h5>
-									<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview:" />
-								</h5>
-								<p
-									className="preview"
-									dangerouslySetInnerHTML={{ __html: copyCitationState.bibliographyHtml }}
-								/>
-							</div>
-						</React.Fragment>
-					) }
 				</div>
 				<div className="modal-footer">
 					<div className="buttons">

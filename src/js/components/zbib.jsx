@@ -83,10 +83,11 @@ const ZBib = props => {
 					<Review { ...pick(props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
 				)}
 				<BibliographySection {...pick(props, ['bibliography', 'bibliographyRendered',
-					'bibliographyRenderedNodes', 'hydrateItemsCount', 'isReadOnly', 'isReady',
-					'localCitationsCount', 'onOverride', 'onTitleChanged', 'title', 'citationStyle',
-					'citationStyles', 'onCitationStyleChanged', 'isPrintMode', 'isHydrated',
-					'isNoteStyle', 'isNumericStyle', 'isSortedStyle', 'onCitationCopyDialogOpen',
+					'bibliographyRenderedNodes', 'copySingleState', 'onCopySingle',
+					'hydrateItemsCount', 'isReadOnly', 'isReady', 'localCitationsCount',
+					'onOverride', 'onTitleChanged', 'title', 'citationStyle', 'citationStyles',
+					'onCitationStyleChanged', 'isPrintMode', 'isHydrated', 'isNoteStyle',
+					'isNumericStyle', 'isSortedStyle', 'onCitationCopyDialogOpen',
 					'onDeleteEntry', 'onDeleteCitations', 'onEditorOpen', 'onCancelPrintMode',
 					'onReorderCitations', 'styleHasBibliography']) }
 				/>
