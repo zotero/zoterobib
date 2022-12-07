@@ -12,7 +12,6 @@ import ConfirmAddDialog from './confirm-add-dialog';
 import Confirmation from './confirmation';
 import CopyCitationDialog from './copy-citation-dialog';
 import Editor from './editor';
-import ExportTools from './export-tools';
 import Footer from './footer';
 import Icon from './ui/icon';
 import Message from './message';
@@ -39,7 +38,6 @@ const sentenceCaseExample = (
 );
 
 const ZBib = props => {
-	const { bibliography, hydrateItemsCount, isHydrated } = props;
 	const intl = useIntl();
 
 	const className = {
