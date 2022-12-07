@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -9,14 +9,6 @@ import Modal from './modal';
 import Select from './form/select';
 import Spinner from './ui/spinner';
 import { usePrevious } from '../hooks';
-
-const locators = [
-	'page', 'book', 'chapter', 'column', 'figure', 'folio', 'issue', 'line', 'note', 'opus',
-	'paragraph', 'part', 'section', 'sub verbo', 'verse', 'volume'
-].map(locator => ({
-	value: locator,
-	label: locator[0].toUpperCase() + locator.slice(1)
-}));
 
 const CopyCitationDialog = props => {
 	const { activeDialog, copyCitationState, isNoteStyle, isNumericStyle, onCitationCopy,
@@ -28,6 +20,73 @@ const CopyCitationDialog = props => {
 	const title = isNoteStyle ?
 			intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
 			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
+
+	const locators = useMemo(() => ([
+			{
+				value: 'page',
+				label: intl.formatMessage({ id: 'zbib.locator.page', defaultMessage: 'Page' })
+			},
+			{
+				value: 'book',
+				label: intl.formatMessage({ id: 'zbib.locator.book', defaultMessage: 'Book' })
+			},
+			{
+				value: 'chapter',
+				label: intl.formatMessage({ id: 'zbib.locator.chapter', defaultMessage: 'Chapter' })
+			},
+			{
+				value: 'column',
+				label: intl.formatMessage({ id: 'zbib.locator.column', defaultMessage: 'Column' })
+			},
+			{
+				value: 'figure',
+				label: intl.formatMessage({ id: 'zbib.locator.figure', defaultMessage: 'Figure' })
+			},
+			{
+				value: 'folio',
+				label: intl.formatMessage({ id: 'zbib.locator.folio', defaultMessage: 'Folio' })
+			},
+			{
+				value: 'issue',
+				label: intl.formatMessage({ id: 'zbib.locator.issue', defaultMessage: 'Issue' })
+			},
+			{
+				value: 'line',
+				label: intl.formatMessage({ id: 'zbib.locator.line', defaultMessage: 'Line' })
+			},
+			{
+				value: 'note',
+				label: intl.formatMessage({ id: 'zbib.locator.note', defaultMessage: 'Note' })
+			},
+			{
+				value: 'opus',
+				label: intl.formatMessage({ id: 'zbib.locator.opus', defaultMessage: 'Opus' })
+			},
+			{
+				value: 'paragraph',
+				label: intl.formatMessage({ id: 'zbib.locator.paragraph', defaultMessage: 'Paragraph' })
+			},
+			{
+				value: 'part',
+				label: intl.formatMessage({ id: 'zbib.locator.part', defaultMessage: 'Part' })
+			},
+			{
+				value: 'section',
+				label: intl.formatMessage({ id: 'zbib.locator.section', defaultMessage: 'Section' })
+			},
+			{
+				value: 'sub verbo',
+				label: intl.formatMessage({ id: 'zbib.locator.subverbo', defaultMessage: 'Sub Verbo' })
+			},
+			{
+				value: 'verse',
+				label: intl.formatMessage({ id: 'zbib.locator.verse', defaultMessage: 'Verse' })
+			},
+			{
+				value: 'volume',
+				label: intl.formatMessage({ id: 'zbib.locator.volume', defaultMessage: 'Volume' })
+			},
+	]), [intl]);
 
 	let isCitationEmpty = false;
 
