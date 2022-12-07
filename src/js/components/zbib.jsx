@@ -82,30 +82,14 @@ const ZBib = props => {
 				{(!props.isReadOnly && (props.isTranslating || props.itemUnderReview)) && (
 					<Review { ...pick(props, ['isTranslating', 'itemUnderReview', 'onReviewEdit', 'onReviewDelete', 'onReviewDismiss', 'styleHasBibliography']) } />
 				)}
-				<BibliographySection {...pick(props, ['bibliography', 'bibliographyRendered',
-					'bibliographyRenderedNodes', 'copySingleState', 'onCopySingle',
-					'hydrateItemsCount', 'isReadOnly', 'isReady', 'localCitationsCount',
-					'onOverride', 'onTitleChanged', 'title', 'citationStyle', 'citationStyles',
-					'onCitationStyleChanged', 'isPrintMode', 'isHydrated', 'isNoteStyle',
-					'isNumericStyle', 'isSortedStyle', 'onCitationCopyDialogOpen',
-					'onDeleteEntry', 'onDeleteCitations', 'onEditorOpen', 'onCancelPrintMode',
-					'onReorderCitations', 'styleHasBibliography']) }
+				<BibliographySection {...pick(props, ['bibliography', 'bibliographyRendered', 'bibliographyRenderedNodes',
+					'citationStyle', 'citationStyles', 'copySingleState', 'getCopyData', 'hydrateItemsCount',
+					'isHydrated', 'isNoteStyle', 'isNumericStyle', 'isPrintMode', 'isReadOnly', 'isReady',
+					'isSortedStyle', 'localCitationsCount', 'onCancelPrintMode', 'onCitationCopyDialogOpen',
+					'onCitationStyleChanged', 'onCopySingle', 'onDeleteCitations', 'onDeleteEntry', 'onDownloadFile',
+					'onEditorOpen', 'onOverride', 'onReorderCitations', 'onSaveToZoteroShow', 'onTitleChanged',
+					'styleHasBibliography', 'title']) }
 				/>
-				{
-					<section className="section section-export">
-						<div className="container">
-							<h2>
-								<FormattedMessage id="zbib.export" defaultMessage="Export" />
-							</h2>
-							<ExportTools
-								itemCount={ isHydrated ? hydrateItemsCount : bibliography.items.length }
-								{ ...pick(props, ['getCopyData', 'onDownloadFile', 'isHydrated',
-								'isReadOnly', 'isReady', 'onSaveToZoteroShow']) }
-							/>
-						</div>
-					</section>
-				}
-
 				{
 					!props.isReadOnly && (
 						<section className="section section-link">
@@ -119,7 +103,6 @@ const ZBib = props => {
 						</section>
 					)
 				}
-
 				{
 					props.isReadOnly && (
 						<section className="section section-brand">

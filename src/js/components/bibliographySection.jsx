@@ -12,6 +12,7 @@ import Icon from './ui/icon';
 import PlaceholderBibliography from './placeholder-bibliography';
 import Spinner from './ui/spinner';
 import StyleSelector from './style-selector';
+import ExportTools from './export-tools';
 import { pick } from '../immutable'
 import { usePrevious } from '../hooks';
 
@@ -148,6 +149,11 @@ const BibliographySection = props => {
 								<Spinner />
 							</div>
 						) }
+						<ExportTools
+								itemCount={isHydrated ? props.hydrateItemsCount : props.bibliography.items.length}
+							{...pick(props, ['getCopyData', 'onDownloadFile', 'isHydrated',
+								'isReadOnly', 'isReady', 'onSaveToZoteroShow'])}
+						/>
 						{
 							!isReadOnly && (isReady || isHydrated) && (
 								<DeleteAllButton

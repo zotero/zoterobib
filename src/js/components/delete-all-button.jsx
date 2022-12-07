@@ -28,10 +28,10 @@ const DeleteAllButton = props => {
 		<React.Fragment>
 			<Button
 				key="delete-all-button"
-				className="btn-sm btn-outline-primary"
+				className="btn-sm btn-outline-primary delete-all"
 				onClick={ handleDeleteAll }
 			>
-				<FormattedMessage id="zbib.bibliography.deleteAll" defaultMessage="Delete All" />
+				<FormattedMessage id="zbib.bibliography.deleteAll" defaultMessage="Delete Bibliography" />
 			</Button>
 			<Confirmation
 				key="delete-all-confirmation"
