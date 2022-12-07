@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Bibliography from './bibliography';
 import Button from './ui/button';
@@ -23,6 +23,7 @@ const BibliographySection = props => {
 	const [isConfirmingOverride, setIsConfirmingOverride] = useState(false);
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 	const wasReady = usePrevious(isReady);
+	const intl = useIntl();
 
 	const handleTitleEdit = useCallback(() => {
 		setIsEditingTitle(true);
@@ -166,12 +167,12 @@ const BibliographySection = props => {
 							isOpen={ isReadOnly && isConfirmingOverride }
 							onConfirm={ handleOverride }
 							onCancel={ handleCancel }
-							title="Clear existing bibliography?"
+							title={intl.formatMessage({ id: 'zbib.confirmOverride.title', defaultMessage: 'Clear existing bibliography?' })}
 							confirmLabel="Continue"
 							>
 								<p>
 									<FormattedMessage
-										id="zbib.bibliography.override"
+										id="zbib.confirmOverride.prompt"
 										defaultMessage="There is an existing bibliography with {localCitationsCount, plural,
 											one {# entry}
 											other {# entries}
@@ -197,16 +198,17 @@ const BibliographySection = props => {
 
 
 BibliographySection.propTypes = {
-	bibliography: PropTypes.object,
-	isHydrated: PropTypes.bool,
-	isPrintMode: PropTypes.bool,
-	isReadOnly: PropTypes.bool,
-	isReady: PropTypes.bool,
-	localCitationsCount: PropTypes.number,
-	onOverride: PropTypes.func.isRequired,
-	onCancelPrintMode: PropTypes.func.isRequired,
-	onTitleChanged: PropTypes.func.isRequired,
-	title: PropTypes.string,
+    bibliography: PropTypes.object,
+    hydrateItemsCount: PropTypes.number,
+    isHydrated: PropTypes.bool,
+    isPrintMode: PropTypes.bool,
+    isReadOnly: PropTypes.bool,
+    isReady: PropTypes.bool,
+    localCitationsCount: PropTypes.number,
+    onCancelPrintMode: PropTypes.func.isRequired,
+    onOverride: PropTypes.func.isRequired,
+    onTitleChanged: PropTypes.func.isRequired,
+    title: PropTypes.string
 }
 
 export default memo(BibliographySection);

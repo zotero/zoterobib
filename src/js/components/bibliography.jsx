@@ -105,7 +105,7 @@ const BibliographyItem = memo(props => {
 				)}
 				<Button
 					icon
-					title={intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' })}
+					title={ intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' }) }
 					disabled={copySingleState.citationKey === rawItem.key}
 					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy',
 						{ 'success': isCopied }
@@ -181,7 +181,7 @@ const BibliographyItem = memo(props => {
 				</Dropdown>
 				<Button
 					icon
-					title="Delete Entry"
+					title={ intl.formatMessage({ id: 'zbib.citation.deleteEntry', defaultMessage: 'Delete Entry' }) }
 					className="btn-outline-secondary btn-remove"
 					onClick={onDeleteCitation}
 				>
