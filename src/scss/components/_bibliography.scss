@@ -179,10 +179,14 @@
 
 		&.success {
 			opacity: 1.0;
-			background-color: transparent;
+			background-color: $btn-success-color;
+
+			&:active {
+				background-color: darken($btn-success-color, 8%);
+			}
 
 			.icon {
-				color: $btn-success-color;
+				color: $shade-0;
 			}
 		}
 
