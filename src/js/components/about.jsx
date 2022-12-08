@@ -131,7 +131,7 @@ const About = ({ onGetStartedClick }) => (
 							<FormattedMessage
 								id="zbib.about.deletingItems.description"
 								defaultMessage="Click the { deleteIcon } next to a bibliography entry to delete it. To start a new
-								bibliography, click <i>Delete All</i> to remove all entries."
+								bibliography, click <i>Delete Bibliography</i> to remove all entries."
 								values={ {
 									deleteIcon: <img
 										src="/static/images/about/remove-xs.svg"
