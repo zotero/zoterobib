@@ -345,7 +345,7 @@ const BibWebContainer = props => {
 		dispatch({ type: COMPLETE_REFRESH_BIBLIOGRAPHY, lookup, items });
 	}, [state.styleHasBibliography, state.bibliography]);
 
-	const addItem = useCallback((item, showFirstCitationMessage = true)  => {
+	const addItem = useCallback((item, showFirstCitationMessage = true, index = null)  => {
 		duplicate.current = isDuplicate(item, bib.current.itemsRaw);
 		if(duplicate.current) {
 			const message = {
@@ -363,6 +363,10 @@ const BibWebContainer = props => {
 			bib.current.addItem(item);
 		}
 
+		if (index !== null && bib.current.itemsRaw[index]) {
+			handleReorderCitations(item.key, bib.current.itemsRaw[index].key, true);
+		}
+
 		if(showFirstCitationMessage && !localStorage.getItem('zotero-bib-translated')) {
 			localStorage.setItem('zotero-bib-translated', 'true');
 			displayFirstCitationMessage();
@@ -376,7 +380,7 @@ const BibWebContainer = props => {
 			citeproc.current.insertCluster(({ id: itemCSL.id, cites: [ { id: itemCSL.id } ] }));
 			citeproc.current.setClusterOrder(bib.current.itemsRaw.map(item => ({ id: item.key })));
 		}
-	}, [displayFirstCitationMessage, state.isSentenceCaseStyle, state.styleHasBibliography]);
+	}, [displayFirstCitationMessage, handleReorderCitations, state.isSentenceCaseStyle, state.styleHasBibliography]);
 
 	const deleteItem = useCallback(itemId => {
 		const item = bib.current.itemsRaw.find(item => item.key == itemId);
@@ -637,8 +641,9 @@ const BibWebContainer = props => {
 	}, [addItem, state.xml, itemToConfirm, state.styleHasBibliography]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
-		const item = bib.current.itemsRaw.find(item => item.key == itemId);
-		lastDeletedItem.current = item;
+		const index = bib.current.itemsRaw.findIndex(item => item.key == itemId);
+		const item = bib.current.itemsRaw[index];
+		lastDeletedItem.current = { item, index: index === bib.current.itemsRaw.length - 1 ? null : index };
 		setItemUnderReview(null);
 		deleteItem(itemId);
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
@@ -1113,7 +1118,8 @@ const BibWebContainer = props => {
 
 	const handleUndoDelete = useCallback(() => {
 		if(lastDeletedItem.current) {
-			addItem(lastDeletedItem.current);
+			const { item, index } = lastDeletedItem.current;
+			addItem(item, false, index);
 			dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
 			dispatch({ type: CLEAR_MESSAGE, kind: 'UNDO_DELETE' });
 			lastDeletedItem.current = null;
