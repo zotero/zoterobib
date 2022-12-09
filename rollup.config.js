@@ -7,7 +7,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import sizes from 'rollup-plugin-sizes';
 import wasm from '@rollup/plugin-wasm';
 import webWorkerLoader from 'rollup-plugin-web-worker-loader';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import alias from '@rollup/plugin-alias';
 import virtual from '@rollup/plugin-virtual';
 
