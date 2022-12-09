@@ -8,7 +8,7 @@ const WhatsThis = () => {
 			href="/faq#where-is-my-bibliography-stored"
 			title={intl.formatMessage({
 				id: `zbib.whatsThis`,
-				defaultMessage: 'Clear existing bibliography?'
+				defaultMessage: 'What’s this?'
 			})}
 			className="whats-this"
 		>
