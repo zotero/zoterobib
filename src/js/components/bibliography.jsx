@@ -94,6 +94,7 @@ const BibliographyItem = memo(props => {
 					dangerouslySetInnerHTML={{ __html: formattedItem }}
 				/>
 				{!isNumericStyle && (
+					<React.Fragment>
 					<Button
 						icon
 						title={copyText}
@@ -102,18 +103,19 @@ const BibliographyItem = memo(props => {
 					>
 						<Icon type={'16/quote'} width="16" height="16" />
 					</Button>
+					<Button
+						icon
+						title={intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' })}
+						disabled={copySingleState.citationKey === rawItem.key}
+						className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy',
+							{ 'success': isCopied }
+						)}
+						onClick={handleCopySingleClick}
+					>
+						<Icon type={isCopied ? '16/tick' : '16/copy'} width="16" height="16" />
+					</Button>
+					</React.Fragment>
 				)}
-				<Button
-					icon
-					title={ intl.formatMessage({ id: 'zbib.citation.copyBibliographyEntry', defaultMessage: 'Copy Bibliography Entry' }) }
-					disabled={copySingleState.citationKey === rawItem.key}
-					className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy',
-						{ 'success': isCopied }
-					)}
-					onClick={handleCopySingleClick}
-				>
-					<Icon type={isCopied ? '16/tick' : '16/copy'} width="16" height="16" />
-				</Button>
 				<Dropdown
 					isOpen={isDropdownOpen}
 					toggle={onToggleDropdown}
@@ -127,27 +129,28 @@ const BibliographyItem = memo(props => {
 					</DropdownToggle>
 					<DropdownMenu right>
 						{!isNumericStyle && (
+							<React.Fragment>
 							<DropdownItem
 								onClick={onCopyCitationDialogOpen}
 								className="btn"
 							>
 								{copyText}
 							</DropdownItem>
+							<DropdownItem
+								onClick={handleCopySingleClick}
+								className={cx('btn clipboard-trigger', { success: isCopied })}
+							>
+								<span className={cx('inline-feedback', { 'active': isCopied })}>
+									<span className="default-text" aria-hidden={!isCopied}>
+										<FormattedMessage id="zbib.citation.copyBibliographyEntry" defaultMessage="Copy Bibliography Entry" />
+									</span>
+									<span className="shorter feedback" aria-hidden={isCopied}>
+										<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
+									</span>
+								</span>
+							</DropdownItem>
+							</React.Fragment>
 						)}
-						<DropdownItem
-							onClick={handleCopySingleClick}
-							className={ cx('btn clipboard-trigger', { success: isCopied }) }
-						>
-							<span className={cx('inline-feedback', { 'active': isCopied })}>
-								<span className="default-text" aria-hidden={!isCopied}>
-									<FormattedMessage id="zbib.citation.copyBibliographyEntry" defaultMessage="Copy Bibliography Entry" />
-								</span>
-								<span className="shorter feedback" aria-hidden={isCopied}>
-									<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
-								</span>
-							</span>
-
-						</DropdownItem>
 						<DropdownItem
 							onClick={onEditCitationClick}
 							className="btn"
