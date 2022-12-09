@@ -7,6 +7,5 @@ build
 data
 lang
 config/local*.json
-.npmrc
 .nyc_output
 src/static/js/citeproc.js
