@@ -152,6 +152,7 @@ const BibWebContainer = props => {
 	const hydrateItemsCount = props.hydrateItemsCount;
 	const config = useMemo(() => ({ ...defaults, ...props.config }), [props.config]);
 	const { keyboard, mouse, touch } = useUserTypeDetector();
+	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 	if(bib.current === null) {
 		bib.current = new ZoteroBib(config);
@@ -1301,6 +1302,7 @@ const BibWebContainer = props => {
 		isHydrated={ isHydrated.current }
 		isReady={ isReady }
 		isPrintMode = { isPrintMode }
+		isSafari = { isSafari }
 		isSortedStyle={ state.isSortedStyle }
 		isStylesDataLoading = { isStylesDataLoading }
 		isTranslating={ isTranslating }

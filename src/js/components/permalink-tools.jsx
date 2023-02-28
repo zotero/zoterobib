@@ -7,7 +7,7 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Button from './ui/button';
 import Spinner from './ui/spinner';
 
-const PermalinkTools = ({ bibliography, onSave, permalink }) => {
+const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 	const [isSavingPermalink, setIsSavingPermalink] = useState(false);
 	const [isRecentlyCopied, setIsRecentlyCopied] = useState(false);
 	const intl = useIntl();
@@ -29,45 +29,62 @@ const PermalinkTools = ({ bibliography, onSave, permalink }) => {
 		}
 	}, [isRecentlyCopied, permalink]);
 
-	return isSavingPermalink ? (
-		<div className="permalink-tools loading">
-			<Spinner />
+	return (
+		<div className={cx('permalink-tools', { 'loading': isSavingPermalink }) }>
+			{ isSavingPermalink ? (
+				<Spinner />
+			) : permalink ? (
+				<div className="btn-wrap">
+					<Button
+						className={
+							cx('btn btn-lg btn-block btn-secondary',
+								{ success: isRecentlyCopied })
+						}
+						data-clipboard-text={permalink}
+						onClick={handleCopy}
+					>
+						{isRecentlyCopied ?
+							intl.formatMessage({ id: 'zbib.permalink.copyFeedback', defaultMessage: 'Copied!' }) :
+							intl.formatMessage({ id: 'zbib.permalink.copyURL', defaultMessage: 'Copy URL' })
+						}
+					</Button>
+					<a
+						className="btn btn-lg btn-block btn-secondary"
+						href={permalink}>
+						<FormattedMessage id="zbib.permalink.view" defaultMessage="View" />
+					</a>
+				</div>
+			) : (
+				<React.Fragment>
+					{ isSafari && (
+						<div className="safari-warning">
+							<p><strong><FormattedMessage
+								id="zbib.permalink.safari.warning"
+								defaultMessage="If you don't visit zbib.org for 7 days, your browser will automatically remove your bibliography."
+							/></strong></p>
+							<p><FormattedMessage
+								id="zbib.permalink.safari.recommendation"
+								defaultMessage="We recommend persisting your bibliography by creating a permalink."
+							/></p>
+						</div>
+					) }
+					<Button
+						disabled={bibliography.items.length === 0}
+						className="btn-lg btn-outline-secondary btn-min-width"
+						onClick={handleCreateLink}
+					>
+						<FormattedMessage id="zbib.permalink.create" defaultMessage="Create" />
+					</Button>
+				</React.Fragment>
+			) }
 		</div>
-	) : permalink ? (
-		<div className="permalink-tools">
-			<Button
-				className={
-					cx('btn btn-lg btn-block btn-secondary',
-					{ success: isRecentlyCopied})
-				}
-				data-clipboard-text={ permalink }
-				onClick={ handleCopy }
-			>
-				{ isRecentlyCopied ?
-					intl.formatMessage({ id: 'zbib.permalink.copyFeedback', defaultMessage: 'Copied!'}) :
-					intl.formatMessage({ id: 'zbib.permalink.copyURL', defaultMessage: 'Copy URL'})
-				}
-			</Button>
-			<a
-				className="btn btn-lg btn-block btn-secondary"
-				href={ permalink }>
-				<FormattedMessage id="zbib.permalink.view" defaultMessage="View" />
-			</a>
-		</div>
-		) : (
-		<Button
-			disabled={ bibliography.items.length === 0 }
-			className="btn-lg btn-outline-secondary btn-min-width"
-			onClick={ handleCreateLink }
-		>
-			<FormattedMessage id="zbib.permalink.create" defaultMessage="Create" />
-		</Button>
 	);
 }
 
 
 PermalinkTools.propTypes = {
 	bibliography: PropTypes.object,
+	isSafari: PropTypes.bool,
 	onSave: PropTypes.func.isRequired,
 	permalink: PropTypes.string,
 }

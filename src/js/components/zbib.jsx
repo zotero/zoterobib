@@ -96,7 +96,7 @@ const ZBib = props => {
 									<FormattedMessage id="zbib.linkToThis" defaultMessage="Link to this version" />
 									<WhatsThis />
 								</h2>
-								<PermalinkTools { ...pick(props, ['bibliography', 'onSave', 'permalink']) } />
+								<PermalinkTools { ...pick(props, ['bibliography', 'isSafari', 'onSave', 'permalink']) } />
 							</div>
 						</section>
 					)

@@ -3,8 +3,10 @@
 //
 
 .permalink-tools {
-	@media (min-width: $bp-md) {
-		display: flex;
+	.btn-wrap {
+		@media (min-width: $bp-md) {
+			display: flex;
+		}
 	}
 
 	&.loading {
@@ -17,6 +19,13 @@
 	.icon-spin {
 		width: $permalink-spinner-size;
 		height: $permalink-spinner-size;
+	}
+
+	.safari-warning {
+		margin: 2em 0 2em 0;
+		p {
+			margin: .25em 0 .25em 0;
+		}
 	}
 
 	.btn {
