@@ -193,9 +193,10 @@ const ZBib = props => {
 					'isNoteStyle', 'isNumericStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
 					'onCitationModifierChange']) }
 				/>
-				<Editor { ...pick(props, ['activeDialog', 'editorItem', 'onEditorClose',
+				{ props.isReady && <Editor { ...pick(props, ['activeDialog', 'editorItem', 'meta', 'onEditorClose',
 					'onError', 'onItemCreated', 'onItemUpdate']) }
 				/>
+				}
 				<MultipleChoiceDialog { ...pick(props, ['activeDialog',
 					'isTranslatingMore', 'moreItemsLink', 'multipleChoiceItems',
 					'onMultipleChoiceCancel', 'onMultipleChoiceMore', 'onMultipleChoiceSelect']) }
@@ -222,6 +223,7 @@ ZBib.propTypes = {
 	isConfirmingStyleSwitch: PropTypes.bool,
 	isHydrated: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
+	isReady: PropTypes.bool,
 	isSaveToZoteroVisible: PropTypes.bool,
 	isTranslating: PropTypes.bool,
 	itemUnderReview: PropTypes.object,

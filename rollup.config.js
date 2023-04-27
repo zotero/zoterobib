@@ -43,6 +43,7 @@ const config = {
 		commonjs(),
 		replace({
 			preventAssignment: true,
+			'Zotero.isNode': false,
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
 		}),
 		babel({

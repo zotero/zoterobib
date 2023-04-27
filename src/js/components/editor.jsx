@@ -1,22 +1,16 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useEffect, useCallback, useReducer, useRef, memo } from 'react';
+import React, { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import baseMappings from '../../../data/mappings.js';
 import Button from './ui/button';
 import ItemBox from './itembox';
 import Modal from './modal';
-import Spinner from './ui/spinner';
-import { getItemTypeMeta } from '../api-utils';
 import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
 import { usePrevious } from '../hooks';
 
-const REQUEST_META = 'REQUEST_META';
-const RECEIVE_META = 'RECEIVE_META';
-const ERROR_META = 'ERROR_META';
 const ITEM_UPDATED = 'ITEM_UPDATED';
 const BEGIN_ITEM_UPDATE = 'BEGIN_ITEM_UPDATE';
 
@@ -26,8 +20,8 @@ const hiddenFields = [
 	'extra',
 ];
 
-const getFieldsAndItems = (item, itemTypeFields, itemTypes) => {
-	if(!item || !itemTypeFields || !itemTypes) {
+const getFieldsAndItems = (item, itemTypeFields, itemTypeOptions, baseMappings) => {
+	if (!item || !itemTypeFields || !itemTypeOptions) {
 		return { item, fields: [] }
 	}
 
@@ -67,7 +61,7 @@ const getFieldsAndItems = (item, itemTypeFields, itemTypes) => {
 	}
 
 	fields = fields.map(f => ({
-			options: f.field === 'itemType' ? itemTypes : null,
+			options: f.field === 'itemType' ? itemTypeOptions : null,
 			key: f.field,
 			label: f.localized,
 			readonly: noEditFields.includes(f.field),
@@ -79,36 +73,15 @@ const getFieldsAndItems = (item, itemTypeFields, itemTypes) => {
 }
 
 const editorReducer = (state, action) => {
-	if(action.type === REQUEST_META) {
-		return { ...state, isLoading: action.skipLoading ? false : true }
-	}
-
-	if(action.type === RECEIVE_META) {
-		const itemTypes = action.itemTypes.map(it => ({
-			value: it.itemType,
-			label: it.localized
-		})).filter(it => it.value != 'note');
-		const itemTypeCreatorTypes = action.itemTypeCreatorTypes.map(ct => ({
-			value: ct.creatorType,
-			label: ct.localized
-		}));
-		const itemTypeFields = action.itemTypeFields;
-
-		return {
-			...state, itemTypes, itemTypeFields, itemTypeCreatorTypes,
-			...getFieldsAndItems(state.item, itemTypeFields, itemTypes),
-			isLoading: false
-		}
-	}
-
-	if(action.type === ERROR_META) {
-		return { ...state, isLoading: false }
-	}
-
 	if(action.type === ITEM_UPDATED) {
 		return {
 			...state,
-			...getFieldsAndItems(action.item, state.itemTypeFields, state.itemTypes)
+			...getFieldsAndItems(
+				action.item,
+				state.itemTypeFields?.[action.item?.itemType] ?? [],
+				state.itemTypeOptions,
+				state.baseMappings
+			)
 		}
 	}
 
@@ -132,7 +105,7 @@ const editorReducer = (state, action) => {
 }
 
 const Editor = props => {
-	const { activeDialog, className, editorItem, onEditorClose, onError, onItemCreated, onItemUpdate } = props;
+	const { activeDialog, className, editorItem, meta, onEditorClose, onItemCreated, onItemUpdate } = props;
 	const prevEditorItem = usePrevious(editorItem);
 	const itemBox = useRef(null);
 	const hasCreatedItem = useRef(null);
@@ -141,26 +114,30 @@ const Editor = props => {
 		onItemUpdate(itemKey, accumulatedPatch.current);
 		accumulatedPatch.current = {};
 	}, 1000));
+
+	const { baseMappings, itemTypes, itemTypeFields, itemTypeCreatorTypes } = meta;
 	const [editor, dispatchEditor] = useReducer(editorReducer, {
-		isLoading: true,
 		fields: [],
 		item: editorItem,
+		baseMappings: baseMappings,
+		itemTypes,
+		itemTypeFields,
+		itemTypeCreatorTypes,
+		itemTypeOptions: itemTypes.map(it => ({
+			value: it.itemType,
+			label: it.localized
+		}))
 	});
 	const intl = useIntl();
 
+	//move to state?
+	const creatorTypeOptions = useMemo(() => (itemTypeCreatorTypes?.[editorItem?.itemType] || []).map(ct => ({
+		value: ct.creatorType,
+		label: ct.localized
+	})), [editorItem, itemTypeCreatorTypes]);
+
 	const itemTitle = editor.item ?
 		editor.item[editor.item.itemType in baseMappings && baseMappings[editor.item.itemType]['title'] || 'title'] : '';
-
-	const getMeta = useCallback(async (itemType, skipLoading = false) => {
-		try {
-			dispatchEditor({ type: REQUEST_META, skipLoading })
-			var { itemTypes, itemTypeFields, itemTypeCreatorTypes } = await getItemTypeMeta(itemType);
-			dispatchEditor({ type: RECEIVE_META, itemTypes, itemTypeFields, itemTypeCreatorTypes });
-		} catch(e) {
-			onError(intl.formatMessage({ id: 'zbib.error.fetchMetadata', defaultMessage: 'Failed to obtain metadata. Please check your connection and try again.' }), e);
-			dispatchEditor({ type: ERROR_META });
-		}
-	}, [intl, onError]);
 
 	const handleItemUpdate = useCallback(async (fieldKey, newValue) => {
 		// Add Original Date field to book and bookSection #188
@@ -245,7 +222,7 @@ const Editor = props => {
 		}
 		accumulatedPatch.current = { ...accumulatedPatch.current, ...patch };
 		debouncedApplyAccumulatedPatchRef.current(editor.item.key);
-	}, [editor.item, onItemCreated]);
+	}, [baseMappings, editor.item, onItemCreated]);
 
 	const handleClose = useCallback(() => {
 		debouncedApplyAccumulatedPatchRef.current.flush();
@@ -253,13 +230,8 @@ const Editor = props => {
 	}, [onEditorClose]);
 
 	useEffect(() => {
-		if(activeDialog === 'EDITOR' && !editor.isLoading) {
-			itemBox.current?.focus();
-		}
-	}, [activeDialog, editor.isLoading]);
-
-	useEffect(() => {
 		if(activeDialog === 'EDITOR') {
+			itemBox.current?.focus();
 			hasCreatedItem.current = false;
 		}
 	}, [activeDialog]);
@@ -268,46 +240,39 @@ const Editor = props => {
 		if(editorItem !== prevEditorItem) {
 			dispatchEditor({ type: ITEM_UPDATED, item: editorItem });
 		}
-		if(typeof prevEditorItem !== 'undefined' && editorItem?.itemType && prevEditorItem?.itemType !== editorItem?.itemType) {
-			const skipLoading = editorItem?.itemType && prevEditorItem?.itemType;
-			getMeta(editorItem.itemType, skipLoading);
-		}
-
-	}, [editorItem, getMeta, prevEditorItem])
+	}, [editorItem, prevEditorItem])
 
 	return (
 		<Modal
 			isOpen={ activeDialog === 'EDITOR' }
 			contentLabel={ intl.formatMessage({ id: 'zbib.editor.title', defaultMessage: 'Item Editor' }) }
-			className={ cx('editor-container modal modal-lg', { loading: editor.isLoading })}
+			className={ cx('editor-container modal modal-lg')}
 			onRequestClose={ handleClose }
 		>
-			{ editor.isLoading ? <Spinner /> : (
-				<div className="modal-content" tabIndex={ -1 }>
-				<div className="modal-header">
-					<h4 className="modal-title text-truncate">
-					{ itemTitle }
-					</h4>
-					<Button
-						className="btn-outline-inverse-blue-dark"
-						onClick={ handleClose }
-					>
-						<FormattedMessage id="zbib.general.done" defaultMessage="Done" />
-					</Button>
-				</div>
-				<div className="modal-body">
-					<div className={ cx('editor', className ) }>
-						<ItemBox
-							creatorTypes={ editor.itemTypeCreatorTypes }
-							fields={ editor.fields }
-							isForm={ true }
-							onSave={ handleItemUpdate }
-							ref={ itemBox }
-						/>
-					</div>
+			<div className="modal-content" tabIndex={ -1 }>
+			<div className="modal-header">
+				<h4 className="modal-title text-truncate">
+				{ itemTitle }
+				</h4>
+				<Button
+					className="btn-outline-inverse-blue-dark"
+					onClick={ handleClose }
+				>
+					<FormattedMessage id="zbib.general.done" defaultMessage="Done" />
+				</Button>
+			</div>
+			<div className="modal-body">
+				<div className={ cx('editor', className ) }>
+					<ItemBox
+						creatorTypes={ creatorTypeOptions }
+						fields={ editor.fields }
+						isForm={ true }
+						onSave={ handleItemUpdate }
+						ref={ itemBox }
+					/>
 				</div>
 			</div>
-			) }
+		</div>
 		</Modal>
 	);
 }
@@ -316,6 +281,7 @@ Editor.propTypes = {
 	activeDialog: PropTypes.string,
 	className: PropTypes.string,
 	editorItem: PropTypes.object,
+	meta: PropTypes.object,
 	onEditorClose: PropTypes.func.isRequired,
 	onError: PropTypes.func.isRequired,
 	onItemCreated: PropTypes.func.isRequired,

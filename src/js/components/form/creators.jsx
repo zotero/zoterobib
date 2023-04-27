@@ -15,7 +15,7 @@ const Creators = props => {
 
 	const virtualCreators = useMemo(() => [{
 		id: 0,
-		creatorType: creatorTypes[0].value,
+		creatorType: creatorTypes?.[0]?.value ?? '',
 		firstName: '',
 		lastName: '',
 		[Symbol.for('isVirtual')]: true

@@ -32,6 +32,7 @@ ErrorBoundary.propTypes = {
 const ZoteroBibComponent = memo(props => (
 	<ErrorBoundary>
 		<IntlProvider
+			defaultLocale="en-US"
 			locale={ process.env.NODE_ENV === 'production' ? 'en-US' : undefined /* in development we always display values of defaultMessage */ }
 			messages={ messages }
 		>
