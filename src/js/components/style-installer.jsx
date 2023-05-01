@@ -7,7 +7,7 @@ import Button from './ui/button';
 import Icon from './ui/icon';
 import Input from './form/input';
 import Modal from './modal';
-import SearchWorker from 'web-worker:../search-worker.js';
+import SearchWorker from 'web-worker:../style-search.worker.js';
 import Spinner from './ui/spinner';
 import { usePrevious } from '../hooks';
 
