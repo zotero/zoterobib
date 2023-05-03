@@ -119,6 +119,7 @@ const BibliographySection = props => {
 									className="bibliography-title"
 								>
 									<Editable
+										aria-label="Bibliography Title"
 										placeholder="Bibliography"
 										value={ title || '' }
 										isActive={ isEditingTitle }

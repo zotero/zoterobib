@@ -8,54 +8,48 @@ import { noop } from '../../utils';
 import { pick } from '../../immutable';
 
 
-const EditableContent = memo(({ display, input, inputComponent, options, title, placeholder = '',  value = '' }) => {
-	const isSelect = inputComponent === Select || input && input.type == Select;
+const EditableContent = memo((props) => {
+	const { display, id, input, inputComponent, labelId, options, title } = props;
+	const value = props.value || (input && input.props.value);
+	const placeholder = props.placeholder || (input && input.props.placeholder);
 	const hasValue = !!(value || input && input.props.value);
-	value = value || input && input.props.value;
-	placeholder = placeholder || input && input.props.placeholder;
+	const isSelect = inputComponent === Select || input && input.type == Select;
 
 	const className = {
 		'editable-content': true,
 		'placeholder': !hasValue
 	};
+	const displayValue = !hasValue ? placeholder :
+		display ? display :
+			(isSelect && options) ? options.find(e => e.value == value)?.label ?? value : value;
 
-	const displayValue = useMemo(() => {
-		if(!hasValue) {
-			return placeholder;
-		}
-
-		if(display) {
-			return display;
-		}
-
-		if(isSelect && options) {
-			const displayValue = options.find(e => e.value == value);
-			return displayValue ? displayValue.label : value;
-		}
-
-		return value;
-	}, [display, hasValue, isSelect, placeholder, options, value]);
-
-	return <div
-		title={ title }
-		className={ cx(className) }
-	>
-		{ displayValue }
-	</div>;
+	return (
+		<div
+			{...pick(props, p => p.startsWith('aria-'))}
+			role="textbox"
+			aria-readonly="true"
+			aria-labelledby={labelId}
+			id={id}
+			title={title}
+			className={cx(className)}
+		>
+			{displayValue}
+		</div>
+	);
 });
 
 EditableContent.displayName = 'EditableContent';
 
 EditableContent.propTypes = {
+	contentId: PropTypes.string,
+	title: PropTypes.string,
 	display: PropTypes.string,
 	input: PropTypes.element,
 	inputComponent: PropTypes.elementType,
 	options: PropTypes.array,
 	placeholder: PropTypes.string,
-	title: PropTypes.string,
-	value: PropTypes.oneOfType([PropTypes.string,PropTypes.number]),
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
-
 
 const Editable = props => {
 	const { children, input, isBusy, isDisabled, inputComponent = Input, isSelect,
@@ -77,6 +71,7 @@ const Editable = props => {
 
 	return (
 		<div
+			{...pick(props, p => p.startsWith('aria-'))}
 			tabIndex={ isDisabled ? null : isActive ? null : tabIndex }
 			onClick={ onClick }
 			onFocus={ onFocus }

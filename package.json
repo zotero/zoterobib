@@ -90,6 +90,7 @@
     "babel-jest": "^29.5.0",
     "babel-plugin-formatjs": "^10.5.0",
     "cheerio": "^1.0.0-rc.12",
+    "citeproc": "^2.4.63",
     "config": "^3.3.9",
     "cssnano": "^6.0.1",
     "eslint": "^8.39.0",

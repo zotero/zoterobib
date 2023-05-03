@@ -22,8 +22,8 @@ const ExportOption = memo(({ isCopied, format, handleCopyClick, handleDownloadCl
 				className="btn clipboard-trigger"
 			>
 				<span className={ cx('inline-feedback', { 'active': isCopied }) }>
-					<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['html'].label }</span>
-					<span className="shorter feedback" aria-hidden={ isCopied }>
+					<span className="default-text" aria-hidden={ isCopied }>{ exportFormats['html'].label }</span>
+					<span className="shorter feedback" aria-hidden={ !isCopied }>
 						<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
 					</span>
 				</span>
@@ -145,6 +145,7 @@ const ExportTools = props => {
 				className={ cx('btn-group', { 'success': isCopied }) }
 			>
 				<Button
+					aria-labelledby="export-tools-copy-to-clipboard"
 					data-format="plain"
 					data-main
 					disabled={ itemCount === 0 }
@@ -152,17 +153,18 @@ const ExportTools = props => {
 					onClick={ handleCopyClick }
 					onKeyDown={ handleCopyClick }
 				>
-					<span className={ cx('inline-feedback', { 'active': isCopied }) }>
-						<span className="default-text" aria-hidden={ !isCopied }>{ exportFormats['plain'].label }</span>
-						<span className="shorter feedback" aria-hidden={ isCopied }>
+					<span id="export-tools-copy-to-clipboard" className={ cx('inline-feedback', { 'active': isCopied }) }>
+						<span className="default-text" aria-hidden={ isCopied }>{ exportFormats['plain'].label }</span>
+						<span className="shorter feedback" aria-hidden={ !isCopied }>
 							<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
 						</span>
 					</span>
 				</Button>
 				<DropdownToggle
+					aria-label="Export Options"
 					disabled={ itemCount === 0 }
 					className="btn btn-secondary btn-xl dropdown-toggle"
-					>
+				>
 					<span className="dropdown-caret" />
 				</DropdownToggle>
 				<DropdownMenu>

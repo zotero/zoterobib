@@ -67,7 +67,9 @@ const BibliographyItem = memo(props => {
 		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
 
 	return (
-		<li key={rawItem.key}
+		<li
+			aria-label="Citation"
+			key={rawItem.key}
 			data-dnd-candidate
 			data-key={rawItem.key}
 			className="citation-container"
@@ -316,7 +318,11 @@ const Bibliography = props => {
 					))}
 				</React.Fragment>
 			) : (
-				<ul className="bibliography" key="bibliography">
+				<ul
+					aria-label="Bibliography"
+					className="bibliography"
+					key="bibliography"
+				>
 					{bibliography.items.map((renderedItem, index) => (
 						<BibliographyItem
 							{...pick(props, ['copySingleState', 'isNoteStyle', 'isNumericStyle',

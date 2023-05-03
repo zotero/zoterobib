@@ -14,6 +14,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 	const prevIdentifier = usePrevious(identifier);
 	const wasTranslating = usePrevious(isTranslating)
 	const intl = useIntl();
+	const prompt = intl.formatMessage({ id: 'zbib.citePrompt', defaultMessage: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' });
 
 	const handleChange = useCallback(newValue => {
 		setEntry(newValue);
@@ -57,6 +58,7 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 		<div className="cite-tools">
 			<div className="id-input-container">
 				<Input
+					aria-label={ prompt }
 					autoFocus
 					className="form-control form-control-lg id-input"
 					isBusy={ isTranslating }
@@ -65,10 +67,10 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 					onChange={ handleChange }
 					onCommit={ handleCiteOrCancel }
 					onPaste={ handlePaste }
-					placeholder={ intl.formatMessage({ id: 'zbib.citePrompt' , defaultMessage: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })}
+					placeholder={ prompt }
 					ref = { inputRef }
 					tabIndex={ 0 }
-					type="text"
+					type="search"
 					value={ entry }
 				/>
 				<Button
