@@ -61,6 +61,7 @@ $font-family-base: $font-family-sans-serif;
 
 $font-size-base: 16px;
 $line-height-base: 1.5;
+$line-height-base-mobile: 1.5;
 
 $line-height-large: 26px;
 $line-height-large-touch: 42px;
@@ -161,8 +162,8 @@ $menu-no-results-color: $shade-5;
 // Z-index master list
 //
 
-$zindex-menu:     1000;
-$zindex-messages: 1010;
+$z-index-menu:     1000;
+$z-index-messages: 1010;
 
 
 //
@@ -261,7 +262,7 @@ $checkbox-checked-bg-touch: $secondary;
 $icon-color: $secondary;
 $icon-spin-size: $space-xl;
 $icon-spin-size-sm: $space-md;
-
+$icon-active-color: $shade-9;
 
 //
 // Outline
@@ -380,11 +381,20 @@ $message-success-bg:       $success;
 $permalink-spinner-size: $space-xl;
 
 
-//
-// Dropdown
-//
+// Menu (select, dropdown, …)
+$menu-color: $text-color;
+$menu-color-disabled: lighten($text-color, 33%);
+$menu-bg: $body-bg;
+$menu-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.2);
+$menu-item-hover-bg: mix($shade-10, $shade-1, 2%);
+$menu-item-selected-bg: $shade-2;
+$menu-item-selected-hover-bg: $shade-3;
+$menu-devider: $shade-2;
+$menu-no-results-color: $shade-5;
 
-$dropdown-menu-bg: $body-bg;
+$menu-border-radius: $border-radius-sm;
+$dropdown-item-padding-x-touch: $space-md;
+$dropdown-item-padding-y-touch: 9px;
 
 
 //

@@ -1,49 +1,56 @@
 .dropdown {
-	.dropdown-caret {
-		width: $space-md;
-		height: $space-md;
-		display: inline-block;
-		background: image-url("bg-icons/16/chevron-11-down-light.svg");
+	position: relative;
+
+	.dropdown-toggle {
+		&.btn-icon {
+			vertical-align: top;
+		}
+
+		[class*="icon-chevron"] {
+			transform: scaleY(-1);
+			vertical-align: -2px; // Works for btn-lg
+		}
+
+		@include state(".dropdown.show") {
+			&.btn-link,
+			&.btn-icon {
+				@include mouse-and-bp-up(md) {
+					color: $icon-active-color;
+
+					.icon {
+						color: $icon-active-color;
+					}
+				}
+			}
+		}
 	}
 
 	.dropdown-menu {
-		left: 0;
-		top: calc(100% + 4px);
-		background-color: $dropdown-menu-bg;
+		background-color: $menu-bg;
 		box-shadow: $menu-box-shadow;
 		border-radius: $menu-border-radius;
-		z-index: $zindex-menu;
+		z-index: $z-index-menu;
+		margin: $space-min 0;
 		display: none;
+		will-change: transform;
+		transform: translate3d(0, 0, 0);
+		top: 0;
+		left: 0; // required for correct popper js rendering
 
-		.dropdown-item {
-			&:hover {
-				@include state(".dropdown-menu.is-mouse") {
-					background-color: $menu-item-hover-bg;
-				}
-			}
-
-			&:focus {
-				@include state(".dropdown-menu.is-keyboard") {
-					background-color: $menu-item-hover-bg;
-				}
-			}
-		}
-	}
-
-	&.show {
-		.dropdown-toggle {
-			&.btn-secondary {
-				&:hover {
-					background-color: darken($btn-secondary-color, 8%);
-					box-shadow: none;
-				}
-			}
+		&:focus {
+			outline: none;
 		}
 
-		.dropdown-menu {
-			display: block;
+		@include touch-or-bp-down(sm) {
 			padding: $space-xs 0;
-			margin: $space-min 0;
+		}
+
+		@include mouse-and-bp-up(md) {
+			padding: $space-min 0;
+		}
+
+		@include state(".dropdown.show") {
+			display: block;
 		}
 	}
 
@@ -54,7 +61,61 @@
 		text-align: left;
 		background-color: transparent;
 		margin: 0;
-		padding: $input-btn-padding-y-sm $input-btn-padding-x-lg;
+		white-space: nowrap; // Prevent line break due to positioned dropdown-wrapper
+		color: $menu-color;
+		cursor: pointer;
+
+		@include touch-or-bp-down(sm) {
+			line-height: $line-height-base-mobile; // Prevent inheritance
+			padding: $dropdown-item-padding-y-touch $dropdown-item-padding-x-touch;
+		}
+
+		@include mouse-and-bp-up(md) {
+			line-height: $line-height-base; // Prevent inheritance
+			padding: ($input-btn-padding-y + $input-border-width) $input-btn-padding-x;
+		}
+
+		&.disabled {
+			color: $menu-color-disabled;
+
+			&:hover,
+			&:focus {
+				background-color: transparent;
+			}
+		}
+
+		&:focus {
+			outline: none;
+		}
+
+		&:hover,
+		&.active {
+			background-color: $menu-item-hover-bg;
+		}
+
+		@include state(".keyboard .dropdown") {
+			&:focus {
+				background-color: $menu-item-hover-bg;
+			}
+		}
+
+		&.selected {
+			background-color: $menu-item-selected-bg;
+
+			&:hover,
+			&:focus,
+			&.active {
+				background-color: $menu-item-selected-hover-bg;
+			}
+		}
+
+		.icon {
+			vertical-align: top;
+
+			@include touch-or-bp-down(sm) {
+				margin-right: $space-xs;
+			}
+		}
 	}
 
 	.dropdown-divider {

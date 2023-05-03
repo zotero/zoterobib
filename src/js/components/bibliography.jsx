@@ -1,12 +1,9 @@
 import cx from 'classnames';
-import Dropdown from 'reactstrap/lib/Dropdown';
-import DropdownItem from 'reactstrap/lib/DropdownItem';
-import DropdownMenu from './ui/dropdown-menu';
-import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from './ui/dropdown';
 import Button from './ui/button';
 import Icon from './ui/icon';
 import { isTriggerEvent } from '../common/event';
@@ -118,7 +115,7 @@ const BibliographyItem = memo(props => {
 				)}
 				<Dropdown
 					isOpen={isDropdownOpen}
-					toggle={onToggleDropdown}
+					onToggle={onToggleDropdown}
 					className="citation-options-menu"
 				>
 					<DropdownToggle

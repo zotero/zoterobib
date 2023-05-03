@@ -175,4 +175,11 @@
 			}
 		}
 	}
+
+	.dropdown-caret {
+		width: $space-md;
+		height: $space-md;
+		display: inline-block;
+		background: image-url("bg-icons/16/chevron-11-down-light.svg");
+	}
 }

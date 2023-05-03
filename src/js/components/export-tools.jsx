@@ -2,12 +2,9 @@ import copy from 'copy-to-clipboard';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
-import Dropdown from 'reactstrap/lib/Dropdown';
-import DropdownToggle from 'reactstrap/lib/DropdownToggle';
-import DropdownMenu from './ui/dropdown-menu';
-import DropdownItem from 'reactstrap/lib/DropdownItem';
 import { FormattedMessage } from 'react-intl';
 
+import { Dropdown,  DropdownMenu, DropdownToggle, DropdownItem } from './ui/dropdown';
 import exportFormats from '../constants/export-formats';
 import Button from './ui/button';
 import { isTriggerEvent } from '../common/event';
@@ -143,9 +140,8 @@ const ExportTools = props => {
 	return (
 		<div className="export-tools">
 			<Dropdown
-
 				isOpen={ isDropdownOpen }
-				toggle={ handleToggleDropdown }
+				onToggle={ handleToggleDropdown }
 				className={ cx('btn-group', { 'success': isCopied }) }
 			>
 				<Button
