@@ -28,7 +28,7 @@ const ConfirmAddDialog = props => {
 	return isReady ? (
 		<Modal
 			isOpen={ activeDialog === 'CONFIRM_ADD_DIALOG' }
-			contentLabel="Select the entry to add:"
+			contentLabel="Confirm Add Citation"
 			className="confirm-add-dialog modal modal-lg"
 			onRequestClose={ onConfirmAddCancel }
 		>

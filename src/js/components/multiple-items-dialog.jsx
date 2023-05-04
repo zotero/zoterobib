@@ -68,7 +68,7 @@ const MultipleItemsDialog = props => {
 	return (
 		<Modal
 			isOpen={ !!isOpen }
-			contentLabel="Select the entry to add:"
+			contentLabel="Select Entries to Add"
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ handleCancel }
 		>
@@ -86,10 +86,15 @@ const MultipleItemsDialog = props => {
 					</Button>
 				</div>
 				<div className="modal-body">
-					<ul className="results">
+					<ul
+						aria-label="Results"
+						className="results"
+					>
 						{
 							(multipleItems?.bibliographyItems ?? []).map((item, index) => (
-								<li key={ item.id }
+								<li
+									aria-labelledby={`citation-${item.id}`}
+									key={ item.id }
 									data-key={ item.id }
 									className="result"
 									onKeyDown={ handleItemSelectionChange }
@@ -97,6 +102,7 @@ const MultipleItemsDialog = props => {
 									tabIndex={ 0 }
 								>
 									<div
+										id={ `citation-${item.id}` }
 										className="csl-entry-container"
 										dangerouslySetInnerHTML={
 											{ __html: bibliographyRenderedNodes[index]?.innerHTML || item.value }

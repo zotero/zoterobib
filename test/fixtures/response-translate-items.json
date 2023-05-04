@@ -1,0 +1,76 @@
+[
+    {
+        "key": "TVQJXYF8",
+        "version": 0,
+        "itemType": "book",
+        "creators": [
+            {
+                "firstName": "Garth",
+                "lastName": "Stein",
+                "creatorType": "author"
+            }
+        ],
+        "tags": [],
+        "extra": "OCLC: 1130028878",
+        "title": "The art of racing in the rain",
+        "edition": "Movie tie-in reissued 2019",
+        "publisher": "Harper",
+        "place": "New York, NY",
+        "date": "2019",
+        "language": "eng",
+        "abstractNote": "Nearing the end of his life, Enzo, a dog with a philosopher's soul, tries to bring together the family, pulled apart by a three year custody battle between daughter Zoe's maternal grandparents and her father Denny, a race car driver",
+        "ISBN": "9780062364913",
+        "libraryCatalog": "Open WorldCat"
+    },
+    {
+        "key": "PCEGGIPM",
+        "version": 0,
+        "itemType": "book",
+        "creators": [
+            {
+                "firstName": "W. Bruce",
+                "lastName": "Cameron",
+                "creatorType": "author"
+            }
+        ],
+        "tags": [],
+        "extra": "OCLC: 987002535",
+        "title": "A dog's purpose",
+        "publisher": "Pan Books",
+        "place": "London",
+        "date": "2017",
+        "language": "eng",
+        "abstractNote": "Surprised to find himself reborn as a rambunctious golden-haired puppy after a tragically short life as a stray mutt, Bailey's search for his new life's meaning leads him into the loving arms of eight-year-old Ethan. During their countless adventures, Bailey joyously discovers how to be a good dog. But this life as a family pet is not the end of Bailey's journey. Reborn as a puppy yet again, Bailey wonders - will he ever find his purpose?",
+        "ISBN": "9781509852826",
+        "libraryCatalog": "Open WorldCat"
+    },
+    {
+        "key": "8BHG4ZBS",
+        "version": 0,
+        "itemType": "book",
+        "creators": [
+            {
+                "firstName": "Ben",
+                "lastName": "Holt",
+                "creatorType": "author"
+            },
+            {
+                "firstName": "Mandy",
+                "lastName": "Woods",
+                "creatorType": "editor"
+            }
+        ],
+        "tags": [],
+        "extra": "OCLC: 1312756191",
+        "title": "Wonder dogs: true stories of canine courage",
+        "edition": "Revised and expanded edition",
+        "publisher": "Summersdale",
+        "place": "London",
+        "date": "2022",
+        "language": "eng",
+        "abstractNote": "Life isn't perfect, but dogs certainly make it better. It's a truth universally acknowledged that dogs are pretty great. But when it comes to facing peril, these loyal creatures always seem willing to step up to the mark and become true doggy heroes. Whether they're saving humans from dangerous people or situations, helping the sick, fighting crime or just following their animal instincts to do good, the true stories featured in this expanded and updated collection prove that dogs aren't only man's best friend - they're also inspirational, courageous and selfless companions to us all",
+        "ISBN": "9781800071803",
+        "libraryCatalog": "Open WorldCat",
+        "shortTitle": "Wonder dogs"
+    }
+]

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, memo } from 'react';
+import React, { useCallback, useId, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -9,6 +9,7 @@ import Spinner from './ui/spinner';
 import { isTriggerEvent } from '../common/event';
 
 const ChoiceItem = memo(({ item, onItemSelect }) => {
+	const id = useId();
 	let badge = null;
 	let title = item.value.title || '';
 
@@ -34,6 +35,7 @@ const ChoiceItem = memo(({ item, onItemSelect }) => {
 
 	return (
 		<li
+			aria-labelledby={ id }
 			className="result"
 			data-signature={ item.signature }
 			onKeyDown={ onItemSelect }
@@ -41,7 +43,7 @@ const ChoiceItem = memo(({ item, onItemSelect }) => {
 			tabIndex={ 0 }
 		>
 			{ badge && <span className="badge badge-light d-sm-none">{ badge }</span> }
-			<h5 className="title">
+			<h5 id={ id } className="title">
 				<span className="title-container">
 					{ title }
 				</span>
@@ -79,7 +81,7 @@ const MultipleChoiceDialog = props => {
 	return (multipleChoiceItems && activeDialog === 'MULTIPLE_CHOICE_DIALOG') ? (
 		<Modal
 			isOpen={ activeDialog === 'MULTIPLE_CHOICE_DIALOG' }
-			contentLabel="Select the entry to add:"
+			contentLabel="Select a Search Result to Add"
 			className="multiple-choice-dialog modal modal-lg"
 			onRequestClose={ onMultipleChoiceCancel }
 		>
@@ -97,7 +99,10 @@ const MultipleChoiceDialog = props => {
 					</Button>
 				</div>
 				<div className="modal-body">
-					<ul className="results">
+					<ul
+						aria-label="Results"
+						className="results"
+					>
 						{ multipleChoiceItems.map(item => (
 							<ChoiceItem
 								key={ item.signature }

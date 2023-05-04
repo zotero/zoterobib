@@ -1,0 +1,23 @@
+[
+    {
+        "key": "RS8QLT93",
+        "version": 0,
+        "itemType": "book",
+        "creators": [
+            {
+                "firstName": "Linda",
+                "lastName": "Whitwam",
+                "creatorType": "author"
+            }
+        ],
+        "tags": [],
+        "extra": "OCLC: 1089197880",
+        "title": "The complete Golden Retriever handbook",
+        "publisher": "CreateSpace Independent Publishing Platform",
+        "place": "United States",
+        "date": "2017",
+        "language": "eng",
+        "ISBN": "9781979837125",
+        "libraryCatalog": "Open WorldCat"
+    }
+]

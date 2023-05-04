@@ -1,0 +1,48 @@
+[
+    {
+        "key": "PNQASZSA",
+        "version": 0,
+        "itemType": "journalArticle",
+        "creators": [
+            {
+                "firstName": "Evan L.",
+                "lastName": "MacLean",
+                "creatorType": "author"
+            },
+            {
+                "firstName": "Aubrey",
+                "lastName": "Fine",
+                "creatorType": "author"
+            },
+            {
+                "firstName": "Harold",
+                "lastName": "Herzog",
+                "creatorType": "author"
+            },
+            {
+                "firstName": "Eric",
+                "lastName": "Strauss",
+                "creatorType": "author"
+            },
+            {
+                "firstName": "Mia L.",
+                "lastName": "Cobb",
+                "creatorType": "author"
+            }
+        ],
+        "tags": [],
+        "publicationTitle": "Frontiers in Veterinary Science",
+        "journalAbbreviation": "Front. Vet. Sci.",
+        "volume": "8",
+        "abstractNote": "Canine science is rapidly maturing into an interdisciplinary and highly impactful field with great potential for both basic and translational research. The articles in this\r\n              Frontiers\r\n              Research Topic,\r\n              Our Canine Connection: The History, Benefits and Future of Human-Dog Interactions\r\n              , arise from two meetings sponsored by the Wallis Annenberg PetSpace Leadership Institute, which convened experts from diverse areas of canine science to assess the state of the field and challenges and opportunities for its future. In this final\r\n              Perspective\r\n              paper, we identify a set of overarching themes that will be critical for a productive and sustainable future in canine science. We explore the roles of dog welfare, science communication, and research funding, with an emphasis on developing approaches that benefit people and dogs, alike.",
+        "ISSN": "2297-1769",
+        "date": "2021-7-15",
+        "pages": "675782",
+        "DOI": "10.3389/fvets.2021.675782",
+        "url": "https://www.frontiersin.org/articles/10.3389/fvets.2021.675782/full",
+        "title": "The New Era of Canine Science: Reshaping Our Relationships With Dogs",
+        "libraryCatalog": "DOI.org (Crossref)",
+        "accessDate": "2023-05-04T13:05:46Z",
+        "shortTitle": "The New Era of Canine Science"
+    }
+]

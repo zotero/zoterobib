@@ -33,6 +33,19 @@ describe('Basic UI', () => {
 	beforeEach(() => {
 		delete window.location;
 		window.location = new URL('http://localhost/');
+		server.use(
+			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
+				return res(ctx.json(schema));
+			})
+		);
+		server.use(
+			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
+				return res(
+					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
+					ctx.text(modernLanguageAssociationStyle),
+				);
+			}),
+		);
 		localStorage.setItem(
 			'zotero-bib-items',
 			JSON.stringify(localStorage100Items.slice(0, 5)) // improve performance by using a small slice
@@ -45,18 +58,6 @@ describe('Basic UI', () => {
 	afterAll(() => server.close());
 
 	test('Shows all UI elements', async () => {
-		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
-			}),
-			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
-			}),
-		);
-
 		renderWithProviders(<Container />);
 		expect(await screen.findByRole(
 			'heading', { name: 'ZoteroBib' })
@@ -99,4 +100,5 @@ describe('Basic UI', () => {
 			'button', { name: "Create" }
 		)).toBeInTheDocument();
 	});
+
 });

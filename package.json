@@ -25,6 +25,7 @@
     "build:fetch-citeproc": "node scripts/fetch-citeproc-js.cjs",
     "build:static": "mkdir -p build/static && rsync -vazL src/static/* build/static/",
     "build:postprocess": "postcss build/static/bib.css --use autoprefixer --use cssnano --no-map -r",
+    "build:prepare-for-tests": "run-p \"build:collect-locale\" \"build:styles-json\"",
     "devel": "run-p 'devel:js -s' 'devel:scss -s' 'devel:html -s' 'devel:static -s'",
     "devel:js": "rollup -c -w",
     "devel:scss": "for f in src/scss/*.scss; do sass --embed-source-map --watch $f build/static/`basename $f .scss`.css; done;",
@@ -39,7 +40,10 @@
     "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'",
     "build:messages": "run-s \"build:extract-messages\" \"build:compile-messages\"",
     "build:extract-messages": "formatjs extract \"src/js/**/*\" --out-file lang/messages.json --format transifex",
-    "build:compile-messages": "formatjs compile lang/messages.json --ast --out-file lang/compiled/en-US.json --format transifex"
+    "build:compile-messages": "formatjs compile lang/messages.json --ast --out-file lang/compiled/en-US.json --format transifex",
+    "jest": "jest --silent",
+    "jest:watch": "jest --watch",
+    "test": "run-s \"build:prepare-for-tests\" \"jest\""
   },
   "dependencies": {
     "@babel/runtime": "^7.21.5",
