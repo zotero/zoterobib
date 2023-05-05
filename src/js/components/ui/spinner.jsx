@@ -5,7 +5,7 @@ import Icon from './icon';
 
 class Spinner extends React.Component {
 	render() {
-		return <Icon type="16/spin" width="16" height="16"/>;
+		return <Icon role="progressbar" type="16/spin" width="16" height="16"/>;
 	}
 }
 

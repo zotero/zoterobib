@@ -4,7 +4,6 @@ import React, { forwardRef, memo, useImperativeHandle, useMemo, useCallback, use
 import { useIntl } from 'react-intl';
 
 import Button from '../ui/button';
-import Editable from '../ui/editable';
 import Field from './field';
 import Icon from '../ui/icon';
 import Input from './input';
@@ -107,10 +106,9 @@ CreatorTypeSelector.propTypes = {
 };
 
 const CreatorFieldInputWrap = memo(forwardRef((props, ref) => {
-	const { active, creator, index, inModal, isForm, isReadOnly, label, name, onCancel, onAddMany,
+	const { creator, index, inModal, isReadOnly, label, name, onCancel, onAddMany,
 	onEditableCommit, onFieldClick, onFieldFocus, } = props;
 	const ignoreNextChange = useRef(null);
-	const shouldUseEditable = !isForm && !inModal;
 
 	const handleEditableCommit = useCallback((newValue, hasChanged, srcEvent) => {
 		if(ignoreNextChange.current !== srcEvent.target) {
@@ -150,35 +148,26 @@ const CreatorFieldInputWrap = memo(forwardRef((props, ref) => {
 		onAddMany([...additionalCreators, lastCreator], index, ev);
 	}, [creator, index, inModal, name, onAddMany]);
 
-	const formField = <Input
-		aria-label={ label }
-		autoFocus={ shouldUseEditable }
-		className={ shouldUseEditable ? 'editable-control' : 'form-control form-control-sm' }
-		data-field-name={ name }
-		isDisabled={ isReadOnly }
-		onCancel={ onCancel }
-		onClick={ onFieldClick }
-		onCommit={ handleEditableCommit }
-		onFocus={ onFieldFocus }
-		placeholder={ label }
-		ref={ ref }
-		resize={ (!inModal && name === 'lastName') ? 'horizontal' : null }
-		selectOnFocus={ shouldUseEditable }
-		tabIndex={ 0 }
-		value={ creator[name] }
-		onPaste={ handlePaste }
-	/>;
-
-	return shouldUseEditable ?
-		<Editable
-			data-field-name={ name }
-			input={ formField }
-			isActive={ active === name }
-			isDisabled={ isReadOnly }
-			onClick={ onFieldClick }
-			onFocus={ onFieldFocus }
-		/> :
-		formField;
+	return (
+		<Input
+			aria-label={label}
+			autoFocus={false}
+			className={'form-control form-control-sm'}
+			data-field-name={name}
+			isDisabled={isReadOnly}
+			onCancel={onCancel}
+			onClick={onFieldClick}
+			onCommit={handleEditableCommit}
+			onFocus={onFieldFocus}
+			placeholder={label}
+			ref={ref}
+			resize={(!inModal && name === 'lastName') ? 'horizontal' : null}
+			selectOnFocus={false}
+			tabIndex={0}
+			value={creator[name]}
+			onPaste={handlePaste}
+		/>
+	);
 }));
 
 CreatorFieldInputWrap.displayName = 'CreatorFieldInputWrap';
@@ -288,6 +277,7 @@ const CreatorField = forwardRef((props, ref) => {
 	return (
 		<React.Fragment>
 		<Field
+			aria-label={ creatorLabel }
 			className={ fieldClassName }
 			index={ index }
 			isSortable={ !isSingle && !isVirtual && !isReadOnly }

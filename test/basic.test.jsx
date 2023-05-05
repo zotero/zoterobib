@@ -100,5 +100,4 @@ describe('Basic UI', () => {
 			'button', { name: "Create" }
 		)).toBeInTheDocument();
 	});
-
 });

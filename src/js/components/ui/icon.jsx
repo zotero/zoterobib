@@ -12,7 +12,7 @@ const Icon = props => {
 
 	const svgAttr = {
 		className: cx(['icon', `icon-${basename}`, props.className]),
-		role: 'img',
+		role: props.role || 'img',
 		style
 	};
 
@@ -46,6 +46,7 @@ Icon.propTypes = {
 	color: PropTypes.string,
 	height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	label: PropTypes.string,
+	role: PropTypes.string,
 	style: PropTypes.object,
 	type: PropTypes.string.isRequired,
 	viewBox: PropTypes.string,

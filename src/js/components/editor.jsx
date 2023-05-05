@@ -266,7 +266,6 @@ const Editor = props => {
 					<ItemBox
 						creatorTypes={ creatorTypeOptions }
 						fields={ editor.fields }
-						isForm={ true }
 						onSave={ handleItemUpdate }
 						ref={ itemBox }
 					/>

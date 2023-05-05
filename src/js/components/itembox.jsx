@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { forwardRef, memo, useCallback, useImperativeHandle, useRef, useState } from 'react';
 
 import Creators from './form/creators';
-import Editable from './ui/editable';
 import Field from './form/field';
 import Input from './form/input';
 import SelectInput from './form/select';
@@ -44,7 +43,7 @@ FieldLabel.propTypes = {
 };
 
 const ItemBoxField = memo(forwardRef((props, ref) => {
-	const { field, isActive, isForm, onCancel, onCommit } = props;
+	const { field, isActive, onCancel, onCommit } = props;
 
 	const isSelect = field.options && Array.isArray(field.options);
 	const className = {
@@ -57,45 +56,43 @@ const ItemBoxField = memo(forwardRef((props, ref) => {
 	const display = field.key === 'itemType' ?
 		field.options.find(o => o.value === field.value) :
 		null;
+	const inputComponent = pickInputComponent(field);
 	const fieldProps = {
-		autoFocus: !isForm,
+		autoFocus: false,
 		display: display ? display.label : null,
-		inputComponent: pickInputComponent(field),
+		inputComponent,
 		isActive,
 		isBusy: field.processing || false,
 		onCancel: onCancel,
 		onCommit: onCommit,
 		options: field.options || null,
-		selectOnFocus: !isForm,
+		selectOnFocus: false,
 		value: field.value || '',
 		className: 'form-control form-control-sm',
 		id: field.key,
-		[isForm ? 'ref' : 'inputRef']: ref,
+		ref,
+		tabIndex: 0,
 	};
-
-	if(isForm) {
-		fieldProps['tabIndex'] = 0;
-	}
 
 	if(fieldProps.inputComponent === SelectInput) {
 		fieldProps['onChange'] = () => true; //commit on change
+		fieldProps['onBlur'] = () => false; //commit on blur
+		fieldProps['aria-label'] = field.label; // custom comboboxes aren't labeled by <label>
 	}
 
-	if(fieldProps.inputComponent !== SelectInput) {
-		fieldProps['onBlur'] = () => false; //commit on blur
-	}
 	if(fieldProps.inputComponent === TextAreaInput) {
 		fieldProps['rows'] = 5;
 	}
 
-	const FormField = isForm ? fieldProps.inputComponent : Editable;
+	const FormField = fieldProps.inputComponent;
 
 	return (
 		<Field
+			aria-labelledby={ `${field.key}-label` }
 			className={ cx(className) }
 			data-key={ field.key }
 		>
-			<label htmlFor={ field.key} >
+			<label id={`${field.key}-label` } htmlFor={ field.key } >
 				<FieldLabel field={ field } />
 			</label>
 			<FormField { ...fieldProps } />
@@ -108,13 +105,12 @@ ItemBoxField.displayName = 'ItemBoxField';
 ItemBoxField.propTypes = {
 	field: PropTypes.object,
 	isActive: PropTypes.bool,
-	isForm: PropTypes.bool,
 	onCancel: PropTypes.func.isRequired,
 	onCommit: PropTypes.func.isRequired,
 };
 
 const ItemBox = memo(forwardRef((props, ref) => {
-	const { creatorTypes, fields = [], isEditing, isForm, onSave } = props;
+	const { creatorTypes, fields = [], isEditing, onSave } = props;
 	const [activeEntry, setActiveEntry] = useState(null);
 	const itemTypeField = useRef(null);
 
@@ -138,12 +134,12 @@ const ItemBox = memo(forwardRef((props, ref) => {
 		if(key === activeEntry) {
 			setActiveEntry(null);
 		}
-		if(isForm && srcEvent) {
+		if(srcEvent) {
 			if(srcEvent.type === 'keydown' && srcEvent.key == 'Enter') {
 				srcEvent.target.blur();
 			}
 		}
-	}, [activeEntry, isForm, onSave]);
+	}, [activeEntry, onSave]);
 
 	const handleCommit = useCallback((newValue, isChanged, ev) => {
 		const key = ev.target.closest('[data-key]').dataset.key;
@@ -164,7 +160,6 @@ const ItemBox = memo(forwardRef((props, ref) => {
 					creatorTypes = { creatorTypes }
 					value={ field.value || [] }
 					onSave={ handleCreatorsCommit }
-					isForm={ isForm }
 				/> :
 				<ItemBoxField
 					field={ field }
@@ -172,7 +167,6 @@ const ItemBox = memo(forwardRef((props, ref) => {
 					key={ field.key }
 					onCancel={ handleCancel }
 					onCommit={ handleCommit }
-					isForm={ isForm }
 					{ ...(field.key === 'itemType' ? { ref: itemTypeField } : {}) }
 				/>
 			)) }
@@ -187,7 +181,6 @@ ItemBox.propTypes = {
 	creatorTypes: PropTypes.array,
 	fields: PropTypes.array,
 	isEditing: PropTypes.bool, // relevant on small screens only
-	isForm: PropTypes.bool,
 	onSave: PropTypes.func.isRequired
 };
 
