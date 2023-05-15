@@ -18,7 +18,7 @@ window.CSL = CSL;
 
 applyAdditionalJestTweaks();
 
-describe('Basic UI', () => {
+describe('Editor', () => {
 	const handlers = [];
 	const server = setupServer(...handlers)
 
@@ -136,6 +136,49 @@ describe('Basic UI', () => {
 		expect(titleField).toHaveValue('hello world');
 		user.click(screen.getByRole('button', { name: 'Done' }));
 		expect(firstCitation).toHaveTextContent(/Hello World/);
+	});
+
+	test('It adds a new creator', async () => {
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		const manualEntryButton = screen.getByRole(
+			'button', { name: 'Manual Entry' }
+		);
+		await user.click(manualEntryButton);
+		const dialog = await screen.findByRole('dialog', { name: 'Item Editor' });
+		const author = getByRole(dialog, 'listitem', { name: 'Author' });
+
+		const creatorType = getByRole(author, 'combobox', { name: 'Creator Type' });
+		await user.click(creatorType);
+		user.selectOptions(getByRole(creatorType, 'listbox'), 'Editor');
+
+		const firstNameInput = getByRole(author, 'textbox', { name: 'First Name' });
+		await user.type(firstNameInput, 'John');
+		const lastNameInput = getByRole(author, 'textbox', { name: 'Last Name' });
+		await user.type(lastNameInput, 'Doe');
+
+		const addCreatorButton = getByRole(author, 'button', { name: 'Add Creator' });
+		await user.click(addCreatorButton);
+
+		const authors = getAllByRole(dialog, 'listitem', { name: 'Editor' });
+		expect(authors).toHaveLength(2);
+		const newAuthor = authors[1];
+
+		const newAuthorFirstNameInput = getByRole(newAuthor, 'textbox', { name: 'First Name' });
+		await user.type(newAuthorFirstNameInput, 'Jane');
+		const newAuthorLastNameInput = getByRole(newAuthor, 'textbox', { name: 'Last Name' });
+		await user.type(newAuthorLastNameInput, 'Smith');
+		const switchCreatorTypeButton = getByRole(newAuthor, 'button', { name: 'Switch Creator Type' });
+		await user.click(switchCreatorTypeButton);
+		const newAuthorName = getByRole(newAuthor, 'textbox', { name: 'Name' });
+		expect(newAuthorName).toHaveValue('Jane Smith');
+
+		const doneButton = screen.getByRole('button', { name: 'Done' });
+		await user.click(doneButton);
+
+		const bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		expect(bibliography).toHaveTextContent(/Doe, John/);
+		expect(bibliography).toHaveTextContent(/Jane Smith/);
 	});
 
 });

@@ -43,6 +43,7 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 
 	return (
 		<SelectInput
+			aria-label="Creator Type"
 			className="form-control form-control-sm"
 			isActive={ isActive }
 			onCancel={ onCancel }
@@ -314,7 +315,7 @@ const CreatorField = forwardRef((props, ref) => {
 					shouldUseModalCreatorField ? (
 						<div className="truncate">
 							{ isVirtual ? isDual ?
-								intl.formatMessage({ id: 'zbib.creator.placeholderDual', defaultMessage: 'last name, first name' }) :
+								intl.formatMessage({ id: 'zbib.creator.placeholderDual', defaultMessage: 'Last Name, first name' }) :
 								intl.formatMessage({ id: 'zbib.creator.placeholderSingle', defaultMessage: 'name' })  :
 								(creator.name || (creator.firstName + ' ' + creator.lastName).trim())
 							}
@@ -325,20 +326,20 @@ const CreatorField = forwardRef((props, ref) => {
 								<CreatorFieldInputWrap
 									{ ...inputProps }
 									name="lastName"
-									label="last name"
+									label="Last Name"
 									ref={ component => fieldComponents.current['lastName'] = component }
 								/>
 								<CreatorFieldInputWrap
 									{ ...inputProps }
 									name="firstName"
-									label="first name"
+									label="First Name"
 									ref={ component => fieldComponents.current['firstName'] = component }
 								/>
 							</React.Fragment> ) :
 							<CreatorFieldInputWrap
 								{ ...inputProps }
 								name="name"
-								label="name"
+								label="Name"
 								ref={ component => fieldComponents.current['name'] = component }
 							/>
 					)
@@ -350,6 +351,7 @@ const CreatorField = forwardRef((props, ref) => {
 								icon
 								className="btn-single-dual"
 								onClick={ handleCreatorTypeSwitch }
+								title="Switch Creator Type"
 							>
 								<Icon type={ icon } width="20" height="20" />
 							</Button>
@@ -359,11 +361,17 @@ const CreatorField = forwardRef((props, ref) => {
 										icon
 										className="btn-minus"
 										onClick={ handleCreatorRemove }
+										title="Remove Creator"
 									>
 										<Icon type={ '16/minus' } width="16" height="16" />
 									</Button>
 								) : (
-									<Button icon className="btn-minus" disabled={ true }>
+									<Button
+										icon
+										className="btn-minus"
+										disabled={ true }
+										title="Remove Creator"
+									>
 										<Icon type={ '16/minus' } width="16" height="16" />
 									</Button>
 								)
@@ -374,11 +382,17 @@ const CreatorField = forwardRef((props, ref) => {
 										icon
 										className="btn-plus"
 										onClick={ handleCreatorAdd }
+										title="Add Creator"
 									>
 										<Icon type={ '16/plus' } width="16" height="16" />
 									</Button>
 								) : (
-									<Button icon className="btn-plus" disabled={ true }>
+									<Button
+										icon
+										className="btn-plus"
+										disabled={ true }
+										title="Add Creator"
+									>
 										<Icon type={ '16/plus' } width="16" height="16" />
 									</Button>
 								)

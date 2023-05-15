@@ -3,6 +3,7 @@ import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks } from './utils/common';
 import Container from '../src/js/components/container';
@@ -99,5 +100,14 @@ describe('Basic UI', () => {
 		expect(screen.getByRole(
 			'button', { name: "Create" }
 		)).toBeInTheDocument();
+	});
+
+	test('Change bibliography title', async () => {
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		const title = screen.getByRole('textbox', { name: "Bibliography Title" });
+		expect(title).toHaveTextContent('hello world');
+		await user.type(title, 'lorem ipsum{enter}');
+		expect(screen.getByRole('textbox', { name: "Bibliography Title" })).toHaveTextContent('lorem ipsum');
 	});
 });
