@@ -11,7 +11,7 @@ import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
-import localeForCiteproc from './fixtures/locales-en-US.xml';
+import localeForCiteproc from './fixtures/locales-en-us.xml';
 
 import CSL from 'citeproc';
 window.CSL = CSL;

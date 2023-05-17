@@ -15,6 +15,10 @@ const StyleSelector = ({ className, citationStyle, citationStyles, onCitationSty
 	return (
 			<div className={ cx('style-selector', className ) }>
 				<Select
+					aria-label={ intl.formatMessage({
+						id: 'zbib.styleSelector.label',
+						defaultMessage: 'Citation Style',
+					}) }
 					clearable={ false }
 					searchable={ false}
 					value={ citationStyle }

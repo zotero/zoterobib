@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useReducer, useRef, memo } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, useId, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Button from './ui/button';
@@ -33,12 +33,14 @@ const reducer = (state, action) => {
 
 const StyleItem = memo(props => {
 	const { name, title, isCore = false, onDelete, onInstall, isActive, isInstalled, isSelected } = props;
+	const id = useId();
 	return (
 		<li
+			aria-labelledby={ id }
 			data-style={ name }
 			className={ cx('style', { selected: isSelected }) }
 		>
-			<div className="style-title">
+			<div id={ id } className="style-title">
 				{ title }
 			</div>
 			{
@@ -194,16 +196,17 @@ const StyleInstaller = props => {
 				</div>
 				<div className="modal-body">
 					<Input
+						aria-label="Search Citation Styles"
 						autoFocus
 						className="form-control form-control-lg"
 						onChange={ handleFilterChange }
 						onKeyDown={ handleInputKeydown }
 						placeholder={ intl.formatMessage({ id: 'zbib.styleInstaller.searchPlaceholder', defaultMessage: 'Enter three or more characters to search' }) }
-						type="text"
+						type="search"
 						value={ state.filter }
 						isBusy={ state.isSearching }
 					/>
-						<ul className="style-list">
+						<ul aria-label="Citation Styles" className="style-list">
 							{
 								state.filter.length > 2 ?
 								state.items.map(style => {
