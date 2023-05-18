@@ -29,16 +29,19 @@ const BibliographyItem = memo(props => {
 	}, [onReorderCitations]);
 
 	const handleMoveTop = useCallback(ev => {
+		ev.stopPropagation();
 		const srcNode = ev.currentTarget.closest('[data-key]');
 		const topNode = srcNode.parentNode.querySelector('[data-key]:first-child');
 		onReorderCitations(srcNode.dataset.key, topNode.dataset.key, true);
 	}, [onReorderCitations]);
 	const handleMoveUp = useCallback(ev => {
+		ev.stopPropagation();
 		const srcNode = ev.currentTarget.closest('[data-key]');
 		const prevNode = srcNode.previousElementSibling;
 		onReorderCitations(srcNode.dataset.key, prevNode.dataset.key, true);
 	}, [onReorderCitations]);
 	const handleMovedown = useCallback(ev => {
+		ev.stopPropagation();
 		const srcNode = ev.currentTarget.closest('[data-key]');
 		const nextNode = srcNode.nextElementSibling;
 		onReorderCitations(srcNode.dataset.key, nextNode.dataset.key, false);
@@ -123,10 +126,11 @@ const BibliographyItem = memo(props => {
 					<DropdownToggle
 						color={null}
 						className="btn-icon dropdown-toggle"
+						title="Options"
 					>
 						<Icon type={'28/dots'} width="28" height="28" />
 					</DropdownToggle>
-					<DropdownMenu right>
+					<DropdownMenu aria-label="Options" right>
 						{!isNumericStyle && (
 							<React.Fragment>
 							<DropdownItem

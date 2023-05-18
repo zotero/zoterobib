@@ -168,6 +168,7 @@ const CopyCitationDialog = props => {
 					<div className="form-row form-group">
 						<div className="col-xs-6">
 							<Select
+								aria-label={ intl.formatMessage({ id: 'zbib.citation.locatorLabel', defaultMessage: 'Locator Label' }) }
 								name="label"
 								clearable={ false }
 								isDisabled={ isCopied }
@@ -182,7 +183,8 @@ const CopyCitationDialog = props => {
 							</div>
 						<div className="col-xs-6">
 							<Input
-								name="locator"
+								aria-label={ intl.formatMessage({ id: 'zbib.citation.locator', defaultMessage: 'Locator' }) }
+								name="Locator"
 								autoFocus
 								isDisabled={ isCopied }
 								onChange={ handleLocatorChange }
@@ -210,10 +212,12 @@ const CopyCitationDialog = props => {
 						</div>
 					) }
 					<div>
-						<h5>
-							<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview:" />
+						<h5 id="copy-citation-preview-header">
+							<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview" />
+							<span role="presentation" aria-hidden="true">:</span>
 						</h5>
-						<p
+						<figure
+							aria-labelledby="copy-citation-preview-header"
 							className="preview"
 							dangerouslySetInnerHTML={{ __html: copyCitationState.inTextHtml } }
 						/>
@@ -233,10 +237,10 @@ const CopyCitationDialog = props => {
 							onClick={ handleConfirm }
 						>
 							<span className={ cx('inline-feedback', { 'active': isCopied }) }>
-								<span className="default-text" aria-hidden={ !isCopied }>
+								<span className="default-text" aria-hidden={ isCopied }>
 								{ title }
 								</span>
-								<span className="shorter feedback" aria-hidden={ isCopied }>
+								<span className="shorter feedback" aria-hidden={ !isCopied }>
 									<FormattedMessage id="zbib.citation.copiedFeedback" defaultMessage="Copied!" />
 								</span>
 							</span>

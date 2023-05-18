@@ -7,6 +7,7 @@ import Button from './ui/button';
 
 const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onShowDuplicate, onUndoDelete }) => {
 	let category;
+	const htmlID = `message-${id}`;
 
 	switch(kind) {
 		case 'UNDO_DELETE': category = 'warning'; break;
@@ -29,9 +30,14 @@ const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onSho
 	}, [id, onDismiss]);
 
 	return (
-		<div className={ cx('message', category) }>
+		<div
+			aria-live="polite"
+			aria-labelledby={ htmlID }
+			role="status"
+			className={ cx('message', category) }
+		>
 			<p className="text">
-				{ message }
+				<span id={htmlID}>{message}</span>
 				{ action && (
 					href ? (
 						<a
