@@ -70,7 +70,10 @@ describe('Citations', () => {
 		localStorage.setItem('zotero-style-locales-en-GB', localesGBForCiteproc);
 	});
 
-	afterEach(() => server.resetHandlers());
+	afterEach(() => {
+		server.resetHandlers();
+		localStorage.clear();
+	});
 	afterAll(() => server.close());
 
 	test('Supports copying citation with options', async () => {
@@ -191,6 +194,91 @@ describe('Citations', () => {
 			'listitem', { name: 'Citation' }
 		)[0];
 		expect(updatedFirstCitation).toHaveTextContent(/1\.Bose,/);
+	});
+
+	test('For keyboard users, all actions are accessible via dropdown menu', async () => {
+		copy.mockReturnValue(true);
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		const firstCitation = getAllByRole(
+			await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 }),
+			'listitem', { name: 'Citation' }
+		)[0];
+
+		// copy citation
+		getByRole(firstCitation, 'button', { name: 'Options' }).focus();
+		await user.keyboard('{enter}');
+		expect(await screen.findByRole('menu', { name: 'Options' })).toBeInTheDocument();
+		expect(screen.getByRole('menuitem', { name: 'Copy Citation' })).toHaveFocus();
+		await user.keyboard('{enter}');
+		const copyCitationDialog = await screen.findByRole('dialog', { name: 'Copy Citation' });
+		await waitFor(
+			() => expect(screen.queryByRole('menu', { name: 'Options' })).not.toBeInTheDocument()
+		);
+
+		await waitFor(
+			async () => expect(
+				await findByRole(copyCitationDialog, 'figure', { name: 'Preview' })
+			).toHaveTextContent('(Bose and Sarma)')
+		);
+
+		await waitFor(
+			() => expect(
+				getByRole(copyCitationDialog, 'textbox', { name: 'Locator' })
+			).toHaveFocus()
+		);
+
+		await user.keyboard('{escape}');
+		await waitFor(
+			() => expect(screen.queryByRole('dialog', { name: 'Copy Citation' })).not.toBeInTheDocument()
+		);
+
+		// copy bibliography entry
+		getByRole(firstCitation, 'button', { name: 'Options' }).focus();
+		await user.keyboard('{enter}{arrowdown}');
+		expect(screen.getByRole('menuitem', { name: 'Copy Bibliography Entry' })).toHaveFocus();
+		await user.keyboard('{enter}');
+		expect(copy.mock.calls[0][0]).toMatch(/Bose, K\. S\., and R\. H\. Sarma. “Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution\.”/);
+		expect(await screen.findByRole('menuitem', { name: 'Copied!' })).toBeInTheDocument();
+		expect(screen.queryByRole('menuitem', { name: 'Copy Bibliography Entry' })).not.toBeInTheDocument();
+		await waitFor(
+			() => expect(screen.queryByRole('menu', { name: 'Options' })).not.toBeInTheDocument(),
+			{ timeout: 2000 } // extra timeout because we keep the dropdown open for 950ms to show the "Copied" message
+		);
+
+		// edit
+		getByRole(firstCitation, 'button', { name: 'Options' }).focus();
+		await user.keyboard('{enter}{arrowdown}{arrowdown}');
+		expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus();
+		await user.keyboard('{enter}');
+		const editorDialog = await screen.findByRole('dialog', { name: 'Item Editor' });
+		await waitFor(
+			() => expect(screen.queryByRole('menu', { name: 'Options' })).not.toBeInTheDocument()
+		);
+		await waitFor(
+			() => {
+				expect(
+					getByRole(editorDialog, 'combobox', { name: 'Item Type' })
+				).toHaveFocus()
+			}
+		);
+		await user.keyboard('{escape}');
+		await waitFor(
+			() => expect(screen.queryByRole('dialog', { name: 'Item Editor' })).not.toBeInTheDocument()
+		);
+
+		// delete
+		getByRole(firstCitation, 'button', { name: 'Options' }).focus();
+		await user.keyboard('{enter}{arrowdown}{arrowdown}{arrowdown}');
+		expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus();
+		await user.keyboard('{enter}');
+		expect(getAllByRole(
+			await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 }),
+			'listitem', { name: 'Citation' }
+		)).toHaveLength(4);
+		await waitFor(
+			() => expect(screen.queryByRole('menu', { name: 'Options' })).not.toBeInTheDocument()
+		);
 	});
 
 });

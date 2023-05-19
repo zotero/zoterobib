@@ -47,7 +47,7 @@ const Input = memo(forwardRef((props, ref) => {
 	}, [onChange]);
 
 	const handleBlur = useCallback(ev => {
-		if(ev.relatedTarget && ev.relatedTarget.dataset.suggestion) {
+		if(ev.relatedTarget && ev.relatedTarget?.dataset?.suggestion) {
 			return;
 		}
 		if (hasBeenCancelled.current || hasBeenCommitted.current) {

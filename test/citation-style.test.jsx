@@ -82,8 +82,9 @@ describe('Editor', () => {
 		const styleSelector = screen.getByRole('combobox', { name: "Citation Style" });
 		expect(styleSelector).toHaveTextContent(/Modern Language Association/);
 		await user.click(styleSelector);
-		await user.selectOptions(getByRole(styleSelector, 'listbox'), 'Turabian 8th edition (full note)');
-		expect(screen.getByRole('combobox', { name: "Citation Style", expanded: false })).toHaveTextContent(/Turabian 8th edition \(full note\)/);
+		const option = getByRole(getByRole(styleSelector, 'listbox'), 'option', { name: /Turabian/ });
+		await userEvent.click(option);
+		expect(screen.getByRole('combobox', { name: "Citation Style", expanded: false })).toHaveTextContent(/Turabian/);
 		bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
 		expect(getAllByRole(bibliography, 'listitem')[0]).not.toHaveTextContent(/https:\/\/doi\.org\/10\.1016\/0006-291x\(75\)90482-9/);
 	});
@@ -216,7 +217,7 @@ describe('Editor', () => {
 		const removeNatureStyle = getByRole(natureEntry, 'button', { name: 'Active' });
 		expect(removeNatureStyle).toBeDisabled();
 
-		const turabianEntry = await findByRole(list, 'listitem', { name: 'Turabian 8th edition (full note)' });
+		const turabianEntry = await findByRole(list, 'listitem', { name: /Turabian/ });
 		const removeTurabianStyle = getByRole(turabianEntry, 'button', { name: 'Default' });
 		expect(removeTurabianStyle).toBeDisabled();
 	});

@@ -15,7 +15,7 @@ const BIB_ITEM = 'BIB_ITEM';
 const BibliographyItem = memo(props => {
 	const { allowReorder, copySingleState, isDropdownOpen, formattedItem, isFirst, isLast,
 		isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onCopySingle, onDeleteCitation,
-		onEditCitationClick, onReorderCitations, onSelectCitation, onToggleDropdown,
+		onDelayedCloseDropdown, onEditCitationClick, onReorderCitations, onSelectCitation, onToggleDropdown,
 		rawItem
 	} = props;
 	const containerRef = useRef(null);
@@ -49,8 +49,10 @@ const BibliographyItem = memo(props => {
 
 	const handleCopySingleClick = useCallback(ev => {
 		ev.stopPropagation();
+		ev.preventDefault();
+		onDelayedCloseDropdown();
 		onCopySingle(ev.currentTarget.closest('[data-key]')?.dataset.key);
-	}, [onCopySingle])
+	}, [onCopySingle, onDelayedCloseDropdown])
 
 	const getData = useCallback(
 		ev => ({ key: ev.currentTarget.closest('[data-key]').dataset.key }), []
@@ -144,10 +146,10 @@ const BibliographyItem = memo(props => {
 								className={cx('btn clipboard-trigger', { success: isCopied })}
 							>
 								<span className={cx('inline-feedback', { 'active': isCopied })}>
-									<span className="default-text" aria-hidden={!isCopied}>
+									<span className="default-text" aria-hidden={isCopied}>
 										<FormattedMessage id="zbib.citation.copyBibliographyEntry" defaultMessage="Copy Bibliography Entry" />
 									</span>
-									<span className="shorter feedback" aria-hidden={isCopied}>
+									<span className="shorter feedback" aria-hidden={!isCopied}>
 										<FormattedMessage id="zbib.export.copiedFeedback" defaultMessage="Copied!" />
 									</span>
 								</span>
@@ -204,23 +206,24 @@ const BibliographyItem = memo(props => {
 BibliographyItem.displayName = 'BibliographyItem';
 
 BibliographyItem.propTypes = {
-    allowReorder: PropTypes.bool,
-    copySingleState: PropTypes.object,
-    dropdownsOpen: PropTypes.array,
-    formattedItem: PropTypes.string,
 	isDropdownOpen: PropTypes.bool,
-    isFirst: PropTypes.bool,
-    isLast: PropTypes.bool,
-    isNoteStyle: PropTypes.bool,
-    isNumericStyle: PropTypes.bool,
-    onCopyCitationDialogOpen: PropTypes.func,
-    onCopySingle: PropTypes.func,
-    onDeleteCitation: PropTypes.func,
-    onEditCitationClick: PropTypes.func,
-    onReorderCitations: PropTypes.func,
-    onSelectCitation: PropTypes.func,
-    onToggleDropdown: PropTypes.func,
-    rawItem: PropTypes.object
+	onDelayedCloseDropdown: PropTypes.func,
+	allowReorder: PropTypes.bool,
+	copySingleState: PropTypes.object,
+	dropdownsOpen: PropTypes.array,
+	formattedItem: PropTypes.string,
+	isFirst: PropTypes.bool,
+	isLast: PropTypes.bool,
+	isNoteStyle: PropTypes.bool,
+	isNumericStyle: PropTypes.bool,
+	onCopyCitationDialogOpen: PropTypes.func,
+	onCopySingle: PropTypes.func,
+	onDeleteCitation: PropTypes.func,
+	onEditCitationClick: PropTypes.func,
+	onReorderCitations: PropTypes.func,
+	onSelectCitation: PropTypes.func,
+	onToggleDropdown: PropTypes.func,
+	rawItem: PropTypes.object,
 }
 
 const Bibliography = props => {
@@ -228,10 +231,10 @@ const Bibliography = props => {
 	const [dropdownOpen, setDropdownOpen] = useState(null);
 
 	const {
-        bibliography, bibliographyRendered, bibliographyRenderedNodes,
+		bibliography, bibliographyRendered, bibliographyRenderedNodes,
 		isReadOnly, isSortedStyle, onCitationCopyDialogOpen, onDeleteEntry,
 		onEditorOpen, styleHasBibliography,
-    } = props;
+	} = props;
 
 	const handleSelectCitation = useCallback((ev) => {
 		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
@@ -258,6 +261,9 @@ const Bibliography = props => {
 	}, [isReadOnly, onEditorOpen]);
 
 	const handleEditCitationClick = useCallback((ev) => {
+		ev.stopPropagation();
+		ev.preventDefault();
+		setDropdownOpen(null);
 		const itemId = ev.currentTarget.closest('[data-key]').dataset.key;
 		onEditorOpen(itemId);
 	}, [onEditorOpen]);
@@ -274,27 +280,23 @@ const Bibliography = props => {
 		const itemId = ev.currentTarget?.closest?.('[data-key]')?.dataset.key;
 
 		if(!itemId) {
-			clearTimeout(dropdownTimer.current);
 			setDropdownOpen(null);
 			return;
 		}
 
-		const isFromCopyTrigger = ev.target && ev.target.closest('.clipboard-trigger');
 		const isDropdownOpen = dropdownOpen ===  itemId;
-
-		if (isDropdownOpen && isFromCopyTrigger) {
-			dropdownTimer.current = setTimeout(() => {
-				setDropdownOpen(null);
-			}, 950);
-			return;
-		}
-
 		setDropdownOpen(isDropdownOpen ? null : itemId);
 	}, [dropdownOpen]);
 
+	const handleDelayedCloseDropdown = useCallback(() => {
+		clearTimeout(dropdownTimer.current);
+		dropdownTimer.current = setTimeout(() => {
+			setDropdownOpen(null);
+		}, 950);
+	}, []);
+
 	const handleCopyCitationDialogOpen = useCallback(ev => {
 		ev.stopPropagation();
-		ev.preventDefault();
 		onCitationCopyDialogOpen(ev.currentTarget.closest('[data-key]').dataset.key);
 	}, [onCitationCopyDialogOpen]);
 
@@ -339,6 +341,7 @@ const Bibliography = props => {
 							onEditCitationClick={handleEditCitationClick}
 							onSelectCitation={handleSelectCitation}
 							onToggleDropdown={handleToggleDropdown}
+							onDelayedCloseDropdown={ handleDelayedCloseDropdown }
 							rawItem={bibliography.lookup[renderedItem.id]}
 							allowReorder={(!styleHasBibliography || !isSortedStyle) && bibliography.items.length > 1}
 							isFirst={index === 0}

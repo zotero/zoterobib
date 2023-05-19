@@ -17,6 +17,9 @@ const CopyCitationDialog = props => {
 	const [isCopied, setIsCopied] = useState(false);
 	const timeout = useRef(null);
 	const intl = useIntl();
+	const isReady = !!copyCitationState.inTextHtml;
+	const wasReady = usePrevious(isReady);
+	const inputRef = useRef(null);
 	const title = isNoteStyle ?
 			intl.formatMessage({ id: 'zbib.citation.copyNote' , defaultMessage: 'Copy Note' }) :
 			intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
@@ -149,6 +152,12 @@ const CopyCitationDialog = props => {
 		}
 	}, []);
 
+	useEffect(() => {
+		if (isReady && !wasReady) {
+			inputRef.current.focus();
+		}
+	}, [isReady, wasReady]);
+
 	return (
 		<Modal
 			className={cx('modal modal-centered copy-citation-dialog', {
@@ -185,7 +194,6 @@ const CopyCitationDialog = props => {
 							<Input
 								aria-label={ intl.formatMessage({ id: 'zbib.citation.locator', defaultMessage: 'Locator' }) }
 								name="Locator"
-								autoFocus
 								isDisabled={ isCopied }
 								onChange={ handleLocatorChange }
 								onCommit={ handleInputCommit }
@@ -193,6 +201,7 @@ const CopyCitationDialog = props => {
 								value={copyCitationState.modifiers.locator }
 								className="form-control form-control-sm"
 								placeholder="Number"
+								ref={ inputRef }
 							/>
 						</div>
 					</div>

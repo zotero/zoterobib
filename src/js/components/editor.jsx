@@ -231,7 +231,9 @@ const Editor = props => {
 
 	useEffect(() => {
 		if(activeDialog === 'EDITOR') {
-			itemBox.current?.focus();
+			setTimeout(() => {
+				itemBox.current?.focus();
+			}, 0);
 			hasCreatedItem.current = false;
 		}
 	}, [activeDialog]);
