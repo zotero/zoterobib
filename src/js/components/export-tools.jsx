@@ -167,7 +167,7 @@ const ExportTools = props => {
 				>
 					<span className="dropdown-caret" />
 				</DropdownToggle>
-				<DropdownMenu>
+				<DropdownMenu aria-label="Export Options">
 					{ formatsInDropdown.map(format => (
 						<ExportOption
 							format={ format }

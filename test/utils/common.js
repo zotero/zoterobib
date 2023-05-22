@@ -60,3 +60,24 @@ export const applyAdditionalJestTweaks = ({ timeout = 30000, resolution = [1280,
 		},
 	});
 }
+
+export const getFileAsText = async (file) => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.addEventListener(
+			"load",
+			() => {
+				resolve(reader.result);
+			},
+			false
+		);
+		reader.addEventListener(
+			"error",
+			() => {
+				reject(reader.error);
+			},
+			false
+		);
+		reader.readAsText(file);
+	});
+}

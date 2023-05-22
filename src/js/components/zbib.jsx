@@ -39,6 +39,7 @@ const sentenceCaseExample = (
 
 const ZBib = props => {
 	const intl = useIntl();
+	const saveToZotero = intl.formatMessage({ id: 'zbib.saveToZotero.title', defaultMessage: 'Save to Zotero' });
 
 	const className = {
 		'zotero-bib-container': true,
@@ -158,13 +159,14 @@ const ZBib = props => {
 				</Confirmation>
 				<Modal
 					isOpen={ props.activeDialog === 'SAVE_TO_ZOTERO' }
+					contentLabel={ saveToZotero }
 					onRequestClose={ props.onSaveToZoteroHide }
 					className={ cx('modal modal-centered') }
 				>
 					<div className="modal-content" tabIndex={ -1 }>
 						<div className="modal-header">
 							<h4 className="modal-title text-truncate">
-								<FormattedMessage id="zbib.saveToZotero.title" defaultMessage="Save to Zotero" />
+								{ saveToZotero }
 							</h4>
 							<Button
 								icon
