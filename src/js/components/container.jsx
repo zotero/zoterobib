@@ -1293,6 +1293,7 @@ const BibWebContainer = props => {
 		useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));
 
 		if(remoteId) {
+			configureZoteroSchema(dispatch, intl.locale);
 			fetchRemoteBibliography();
 		} else {
 			const prefilledIdentifier = params.get('q') || '';
