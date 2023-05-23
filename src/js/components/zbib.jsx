@@ -91,12 +91,16 @@ const ZBib = props => {
 				/>
 				{
 					!props.isReadOnly && (
-						<section className="section section-link">
+						<section
+							aria-labelledby="link-to-this-version"
+							className="section section-link">
 							<div className="container">
-								<h2>
-									<FormattedMessage id="zbib.linkToThis" defaultMessage="Link to this version" />
+								<div className="header-wrapper">
+									<h2 id="link-to-this-version">
+										<FormattedMessage id="zbib.linkToThis" defaultMessage="Link to this version" />
+									</h2>
 									<WhatsThis />
-								</h2>
+								</div>
 								<PermalinkTools { ...pick(props, ['bibliography', 'isSafari', 'onSave', 'permalink']) } />
 							</div>
 						</section>

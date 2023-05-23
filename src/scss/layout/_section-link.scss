@@ -10,6 +10,11 @@
 		padding-top: $section-padding - 12px; // t height
 	}
 
+	.header-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
 	.whats-this {
 		display: inline-block;
 		width: $space-md;

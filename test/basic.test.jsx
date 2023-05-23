@@ -103,6 +103,15 @@ describe('Basic UI', () => {
 		expect(screen.getByRole(
 			'button', { name: "Create" }
 		)).toBeInTheDocument();
+		expect(screen.getByRole(
+			'button', { name: "Awesome! Let’s start!" }
+		)).toBeInTheDocument();
+		expect(screen.getByRole(
+			'link', { name: "FAQ" }
+		)).toBeInTheDocument();
+		expect(screen.getByRole(
+			'link', { name: "Privacy" }
+		)).toBeInTheDocument();
 	});
 
 	test('Change bibliography title', async () => {

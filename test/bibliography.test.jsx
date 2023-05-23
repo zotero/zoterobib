@@ -215,4 +215,30 @@ describe('Citations', () => {
 			{ timeout: 3000 }
 		);
 	});
+
+	test('Supports creating a link to bibliography', async () => {
+		server.use(
+			rest.post('http://localhost/store', async (req, res, ctx) => {
+				const reqJSON = await req.json();
+				expect(reqJSON.citationStyle).toEqual('modern-language-association');
+				expect(reqJSON.items).toHaveLength(5);
+
+				return res(
+					ctx.set('Content-Type', 'application/json'),
+					ctx.json({ "key": "d3b2fbdeadff4a00aecd048451a962b9" })
+				);
+			}),
+		);
+		copy.mockReturnValue(true);
+		renderWithProviders(<Container />);
+		await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		const user = userEvent.setup();
+		const section = screen.getByRole('region', { name: "Link to this version" });
+		await user.click(getByRole(section, 'button', { name: 'Create' }));
+		const copyURL = await findByRole(section, 'button', { name: 'Copy URL' });
+		const link = await findByRole(section, 'link', { name: 'View' });
+		await user.click(copyURL);
+		expect(copy).toHaveBeenCalledWith('http://localhost/d3b2fbdeadff4a00aecd048451a962b9');
+		expect(link).toHaveAttribute('href', 'http://localhost/d3b2fbdeadff4a00aecd048451a962b9');
+	});
 });
