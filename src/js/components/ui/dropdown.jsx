@@ -215,6 +215,7 @@ export const DropdownMenu = memo(props => {
 
 	return (
 		<div
+			suppressHydrationWarning={true}
 			role="menu"
 			aria-hidden={!isOpen}
 			ref={ r => { floating(r); ref.current = r } }

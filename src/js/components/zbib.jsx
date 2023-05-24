@@ -123,97 +123,100 @@ const ZBib = props => {
 				}
 
 				<Footer { ...pick(props, ['isReadOnly']) } />
+				{ (!props.isHydrated || (props.isHydrated && props.isReady)) && (
+					<React.Fragment>
+					<Confirmation
+						isOpen={ props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
+						onConfirm={ props.onStyleSwitchConfirm }
+						onCancel={ props.onStyleSwitchCancel }
+						title={ intl.formatMessage({ id: 'zbib.confirmCase.title', defaultMessage:'Converting Titles to Sentence Case' }) }
+						confirmLabel={ intl.formatMessage({ id: 'zbib.confirmCase.confirm', defaultMessage: 'OK, I’ll Edit Them' }) }
+					>
+						<p>
+							<FormattedMessage id="zbib.confirmCase.explanation" defaultMessage="The
+							style you’ve selected requires titles to be in sentence case rather than
+							title case. When you use this style, ZoteroBib will convert the titles of
+							entries to sentence case for you, but you’ll need to manually edit some
+							entries to capitalize proper nouns:" />
+						</p>
 
-				<Confirmation
-					isOpen={ props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
-					onConfirm={ props.onStyleSwitchConfirm }
-					onCancel={ props.onStyleSwitchCancel }
-					title={ intl.formatMessage({ id: 'zbib.confirmCase.title', defaultMessage:'Converting Titles to Sentence Case' }) }
-					confirmLabel={ intl.formatMessage({ id: 'zbib.confirmCase.confirm', defaultMessage: 'OK, I’ll Edit Them' }) }
-				>
-					<p>
-						<FormattedMessage id="zbib.confirmCase.explanation" defaultMessage="The
-						style you’ve selected requires titles to be in sentence case rather than
-						title case. When you use this style, ZoteroBib will convert the titles of
-						entries to sentence case for you, but you’ll need to manually edit some
-						entries to capitalize proper nouns:" />
-					</p>
-
-					<p>
-						<FormattedMessage
-							id="zbib.confirmCase.titleCaseExample"
-							defaultMessage="<b>Title case:</b> <i>{ titleCaseExample }</i>"
-							values={{ ...commonFormats, titleCaseExample } }
-						/>
-					</p>
-					<p>
-						<FormattedMessage
-							id="zbib.confirmCase.conversionExample"
-							defaultMessage="<b>ZoteroBib conversion:</b> <i>{ conversionExample }</i>"
-							values={ { ...commonFormats, conversionExample }}
-						/>
-					</p>
-					<p>
-						<FormattedMessage
-							id="zbib.confirmCase.sentenceCaseExample"
-							defaultMessage="<b>Sentence case:</b> <i>{ sentenceCaseExample }</i>"
-							values={ { ...commonFormats, sentenceCaseExample } } //eslint-disable-line react/display-name
-						/>
-					</p>
-				</Confirmation>
-				<Modal
-					isOpen={ props.activeDialog === 'SAVE_TO_ZOTERO' }
-					contentLabel={ saveToZotero }
-					onRequestClose={ props.onSaveToZoteroHide }
-					className={ cx('modal modal-centered') }
-				>
-					<div className="modal-content" tabIndex={ -1 }>
-						<div className="modal-header">
-							<h4 className="modal-title text-truncate">
-								{ saveToZotero }
-							</h4>
-							<Button
-								icon
-								className="close"
-								onClick={ props.onSaveToZoteroHide }
-							>
-								<Icon type={ '24/remove' } width="24" height="24" />
-							</Button>
-						</div>
-						<div className="modal-body">
-							<p>
-								<FormattedMessage
-								id="zbib.saveToZotero.message"
-								defaultMessage="Once you’ve <a>installed Zotero and the Zotero
-								Connector</a>, you can export your bibliography to Zotero by
-								clicking the “Save to Zotero” button in your browser’s toolbar."
-								values= { {
-									a: chunk => <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">{ chunk }</a> //eslint-disable-line react/display-name
-								} }
+						<p>
+							<FormattedMessage
+								id="zbib.confirmCase.titleCaseExample"
+								defaultMessage="<b>Title case:</b> <i>{ titleCaseExample }</i>"
+								values={{ ...commonFormats, titleCaseExample } }
 							/>
-							</p>
+						</p>
+						<p>
+							<FormattedMessage
+								id="zbib.confirmCase.conversionExample"
+								defaultMessage="<b>ZoteroBib conversion:</b> <i>{ conversionExample }</i>"
+								values={ { ...commonFormats, conversionExample }}
+							/>
+						</p>
+						<p>
+							<FormattedMessage
+								id="zbib.confirmCase.sentenceCaseExample"
+								defaultMessage="<b>Sentence case:</b> <i>{ sentenceCaseExample }</i>"
+								values={ { ...commonFormats, sentenceCaseExample } } //eslint-disable-line react/display-name
+							/>
+						</p>
+					</Confirmation>
+					<Modal
+						isOpen={ props.activeDialog === 'SAVE_TO_ZOTERO' }
+						contentLabel={ saveToZotero }
+						onRequestClose={ props.onSaveToZoteroHide }
+						className={ cx('modal modal-centered') }
+					>
+						<div className="modal-content" tabIndex={ -1 }>
+							<div className="modal-header">
+								<h4 className="modal-title text-truncate">
+									{ saveToZotero }
+								</h4>
+								<Button
+									icon
+									className="close"
+									onClick={ props.onSaveToZoteroHide }
+								>
+									<Icon type={ '24/remove' } width="24" height="24" />
+								</Button>
+							</div>
+							<div className="modal-body">
+								<p>
+									<FormattedMessage
+									id="zbib.saveToZotero.message"
+									defaultMessage="Once you’ve <a>installed Zotero and the Zotero
+									Connector</a>, you can export your bibliography to Zotero by
+									clicking the “Save to Zotero” button in your browser’s toolbar."
+									values= { {
+										a: chunk => <a target="_blank" rel="noopener noreferrer" href="https://www.zotero.org/download/">{ chunk }</a> //eslint-disable-line react/display-name
+									} }
+								/>
+								</p>
+							</div>
 						</div>
-					</div>
-				</Modal>
-				<CopyCitationDialog {...pick(props, ['activeDialog', 'copyCitationState',
-					'isNoteStyle', 'isNumericStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
-					'onCitationModifierChange']) }
-				/>
-				{ props.isReady && <Editor { ...pick(props, ['activeDialog', 'editorItem', 'meta', 'onEditorClose',
-					'onError', 'onItemCreated', 'onItemUpdate']) }
-				/>
-				}
-				<MultipleChoiceDialog { ...pick(props, ['activeDialog',
-					'isTranslatingMore', 'moreItemsLink', 'multipleChoiceItems',
-					'onMultipleChoiceCancel', 'onMultipleChoiceMore', 'onMultipleChoiceSelect']) }
-				/>
-				<StyleInstaller { ...pick(props, ['activeDialog', 'citationStyle',
-					'citationStyles', 'isStylesDataLoading', 'onStyleInstallerCancel',
-					'onStyleInstallerDelete', 'onStyleInstallerSelect', 'stylesData']) } />
-				<ConfirmAddDialog { ...pick(props, ['activeDialog', 'onConfirmAddCancel',
-					'onConfirmAddConfirm', 'itemToConfirm', 'styleHasBibliography']) } />
-				<MultipleItemDialog { ...pick(props, ['activeDialog', 'multipleItems',
-					'multipleChoiceItems', 'onMultipleItemsCancel', 'onMultipleItemsSelect']) } />
+					</Modal>
+					<CopyCitationDialog {...pick(props, ['activeDialog', 'copyCitationState',
+						'isNoteStyle', 'isNumericStyle', 'onCitationCopy', 'onCitationCopyDialogClose',
+						'onCitationModifierChange']) }
+					/>
+					{ props.isReady && <Editor { ...pick(props, ['activeDialog', 'editorItem', 'meta', 'onEditorClose',
+						'onError', 'onItemCreated', 'onItemUpdate']) }
+					/>
+					}
+					<MultipleChoiceDialog { ...pick(props, ['activeDialog',
+						'isTranslatingMore', 'moreItemsLink', 'multipleChoiceItems',
+						'onMultipleChoiceCancel', 'onMultipleChoiceMore', 'onMultipleChoiceSelect']) }
+					/>
+					<StyleInstaller { ...pick(props, ['activeDialog', 'citationStyle',
+						'citationStyles', 'isStylesDataLoading', 'onStyleInstallerCancel',
+						'onStyleInstallerDelete', 'onStyleInstallerSelect', 'stylesData']) } />
+					<ConfirmAddDialog { ...pick(props, ['activeDialog', 'onConfirmAddCancel',
+						'onConfirmAddConfirm', 'itemToConfirm', 'styleHasBibliography']) } />
+					<MultipleItemDialog { ...pick(props, ['activeDialog', 'multipleItems',
+						'multipleChoiceItems', 'onMultipleItemsCancel', 'onMultipleItemsSelect']) } />
+				</React.Fragment>
+				) }
 			</div>
 		</div>
 	);
