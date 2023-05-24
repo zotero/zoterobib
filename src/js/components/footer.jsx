@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 const Footer = props => {
 	const { isReadOnly } = props;
-	
+
 	return (
 		<footer>
 			{ !isReadOnly &&
@@ -18,10 +18,13 @@ const Footer = props => {
 					/>
 				</nav> }
 			<small className="copyright">
-				© 2018–2022 Zotero { ' ' }
-				{ isReadOnly &&
-					<>&nbsp;•&nbsp; <a href="https://twitter.com/zotero">@zotero</a> </> }
-				&nbsp;•&nbsp; <a href="/faq#privacy">Privacy</a>
+				<ul>
+					<li>© 2018–2023 Zotero</li>
+					{isReadOnly && (
+						<li><a href="https://twitter.com/zotero">@zotero</a></li>
+					)}
+					<li><a href="/faq#privacy">Privacy</a></li>
+				</ul>
 			</small>
 		</footer>
 	);
