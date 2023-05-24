@@ -1,8 +1,9 @@
+[![CI](https://github.com/zotero/zoterobib/actions/workflows/ci.yml/badge.svg)](https://github.com/zotero/zoterobib/actions/workflows/ci.yml)
 # Zotero Bib
 
 Overview
 --------
-This repo contains Zotero Bib tool, including React components, stylesheets and entry-point website.
+This repo contains code for [Zotero Bib](https://zbib.org/), including React components, translation client, stylesheets and entry-point website.
 
 Prerequisites
 ------------
