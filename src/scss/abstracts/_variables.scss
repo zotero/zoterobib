@@ -162,8 +162,9 @@ $menu-no-results-color: $shade-5;
 // Z-index master list
 //
 
-$z-index-menu:     1000;
-$z-index-messages: 1010;
+$z-index-menu: 		50;
+$z-index-modal: 	60;
+$z-index-messages:	100;
 
 
 //
