@@ -10,6 +10,7 @@ import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 import terser from '@rollup/plugin-terser';
 import alias from '@rollup/plugin-alias';
 import virtual from '@rollup/plugin-virtual';
+import { visualizer } from "rollup-plugin-visualizer";
 
 const isProduction = process.env.NODE_ENV?.startsWith('prod');
 
@@ -17,7 +18,10 @@ const config = {
 	input: './src/js/main.js',
 	external: [
 		'/static/js/citeproc-rs/citeproc_rs_wasm.js',
-		'cross-fetch/polyfill'
+		'cross-fetch/polyfill',
+		'jsdom',	// zotero-utilities/utilities.js:619 includes jsdom which is then
+					// treeshaken because we replace Zotero.isNode to false. To avoid
+					// bogus imports/warnings it also needs to be marked as external.
 	],
 	output: {
 		dir: './build/static',
@@ -26,20 +30,29 @@ const config = {
 		compact: isProduction
 	},
 	treeshake: {
-		moduleSideEffects: 'no-external',
+		preset: 'smallest',
+		moduleSideEffects: (id) => {
+			if (id.includes('core-js/')) {
+				return true;
+			}
+			if (!isProduction && id.includes('wdyr')) {
+				return true;
+			}
+			return false;
+		}
 	},
 	plugins: [
+		webWorkerLoader({
+			targetPlatform: 'browser',
+			skipPlugins: ['resolve', 'json', 'wasm', 'commonjs', 'replace', 'babel', 'sizes', 'visualizer', 'filesize']
+		}),
 		resolve({
 			preferBuiltins: false,
-			mainFields: ['browser', 'module', 'main'],
+			mainFields: ['browser', 'main'],
 			extensions: ['.js', '.jsx', '.wasm'],
 		}),
 		json(),
 		wasm(),
-		webWorkerLoader({
-			targetPlatform: 'browser',
-			skipPlugins: ['resolve', 'json', 'wasm', 'commonjs', 'replace', 'babel', 'sizes', 'filesize']
-		}),
 		commonjs(),
 		replace({
 			preventAssignment: true,
@@ -47,21 +60,28 @@ const config = {
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
 		}),
 		babel({
-			exclude: "node_modules/**",
+			include: ['src/js/**'],
 			extensions: ['.js', '.jsx'],
-			babelHelpers: 'runtime'
+			babelHelpers: 'bundled'
 		}),
 		filesize({ showMinifiedSize: false, showGzippedSize: !!process.env.DEBUG }),
 	]
 };
 
+const commonAliases = [
+	{ find: /^core-js-pure\/(.*)/, replacement: 'core-js/$1' },
+];
+
+
 if(process.env.DEBUG) {
+	config.plugins.splice(0, 0, alias({ entries: commonAliases }));
 	config.plugins.splice(-1, 0, sizes());
+	config.plugins.splice(-1, 0, visualizer({ filename: 'visualizer.html' }));
 }
 
 if(isProduction) {
 	config.plugins.splice(0, 0, alias({
-		entries: [{
+		entries: [...commonAliases, {
 			find: '@formatjs/icu-messageformat-parser',
 			replacement: '@formatjs/icu-messageformat-parser/no-parser'
 		}]

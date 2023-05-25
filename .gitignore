@@ -9,3 +9,4 @@ lang
 config/local*.json
 .nyc_output
 src/static/js/citeproc.js
+visualizer.html
