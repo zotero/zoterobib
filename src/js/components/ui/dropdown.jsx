@@ -14,7 +14,7 @@ export const Dropdown = memo(props => {
 	const ref = useRef(null);
 	const isKeyboardTrigger = useRef(false);
 	const { disabled, isOpen, onToggle, className, placement = 'bottom-start', maxHeight, ...rest } = props;
-	const { x, y, reference, floating, strategy, update } = useFloating({
+	const { x, y, refs, strategy, update } = useFloating({
 		placement, middleware: [flip(), shift(), size({
 			apply: ({ availableHeight, elements }) => {
 				Object.assign(elements.floating.style, { overflow: 'auto', maxHeight: `${maxHeight ? maxHeight : availableHeight}px` });
@@ -101,7 +101,7 @@ export const Dropdown = memo(props => {
 
 	return (
 		<DropdownContext.Provider
-			value={{ handleToggle, isOpen, x, y, reference, floating, strategy, update, isReady }}>
+			value={{ handleToggle, isOpen, x, y, refs, strategy, update, isReady }}>
 				<div
 					ref={ref}
 					className={cx('dropdown', className, {
@@ -131,7 +131,7 @@ Dropdown.propTypes = {
 export const DropdownToggle = memo(forwardRef((props, ref) => {
 	const { className, tabIndex, title, onKeyDown, onClick, ...rest } = props;
 	const Tag = props.tag || Button;
-	const { isOpen, reference, handleToggle } = useContext(DropdownContext);
+	const { isOpen, refs, handleToggle } = useContext(DropdownContext);
 
 
 	const handleClick = useCallback(ev => {
@@ -159,7 +159,7 @@ export const DropdownToggle = memo(forwardRef((props, ref) => {
 			className={ className }
 			onClick={ handleClick }
 			onKeyDown={ handleKeyDown }
-			ref={ r => { reference?.(r); ref?.(r) } }
+			ref={ r => { refs.setReference?.(r); ref?.(r) } }
 			tabIndex={ tabIndex }
 		>
 			{props.children}
@@ -183,7 +183,7 @@ export const DropdownMenu = memo(props => {
 	const { className, ...rest } = props;
 	const ref = useRef(null);
 
-	const { isOpen, x, y, isReady, strategy, floating, handleToggle } = useContext(DropdownContext);
+	const { isOpen, x, y, isReady, strategy, refs, handleToggle } = useContext(DropdownContext);
 	const { focusNext, focusPrev, receiveBlur, receiveFocus, resetLastFocused } = useFocusManager(ref, '[role="menuitem"]');
 	const wasOpen = usePrevious(isOpen);
 
@@ -218,7 +218,7 @@ export const DropdownMenu = memo(props => {
 			suppressHydrationWarning={true}
 			role="menu"
 			aria-hidden={!isOpen}
-			ref={ r => { floating(r); ref.current = r } }
+			ref={ r => { refs.setFloating(r); ref.current = r } }
 			style={{ position: strategy, transform: (isOpen && isReady) ? `translate3d(${x}px, ${y}px, 0px)` : ''}}
 			className={cx('dropdown-menu', className, {
 				'show': (isOpen && isReady),
