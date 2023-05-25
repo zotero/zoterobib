@@ -19,9 +19,9 @@ Local Development version
 
 Getting The Library
 
-1. `git clone --recursive git@github.com:zotero/bib-web.git`
+1. `git clone --recursive git@github.com:zotero/zoterobib.git`
 
-1. `cd bib-web`
+1. `cd zoterobib`
 
 1. `npm install`
 
@@ -33,7 +33,7 @@ You might need to provide configuration options (see below) in order to get stor
 
 By default, the development server **proxies translations server requests to localhost:1969**. If your server is located elsewhere you need to provide the url, e.g. the last step above would look like this:
 
-1. `npm start --zotero-bib-web:translation_server="http://localhost:1234"`
+1. `TRANSLATE_URL=http://localhost:1234 npm start`
 
 This will proxy requests from the browser to the specified translation server.
 
@@ -47,7 +47,9 @@ To obtain production-ready files use the following npm command:
 Configuration
 -------------
 
-It's possible to provide configuration parameters for the build (both in development and production) using configuration files and/or environment variables. The easiest way is to copy `config/default.json` to `config/local.json` and place variables there (this file is git ignored and should not be committed). Alternatively environment variables listed in `config/custom-environment-variables.json` can be used. For more details how to provide configurations, see [config npm package](https://github.com/lorenwest/node-config).
+It's possible to provide configuration parameters for the build (both in development and production) using configuration files and/or environment variables. 
+
+The easiest way is to copy `config/default.json` to `config/local.json` and place variables there (this file is git ignored and should not be committed). Alternatively environment variables listed in `config/custom-environment-variables.json` can be used. For more details how to provide configurations, see [config npm package](https://github.com/lorenwest/node-config).
 
 Configuration options
 --------------
@@ -64,4 +66,18 @@ Specifies url for the *styles-repo* website. When left empty, default will be us
 Specifies an additional prefix for where translation server request should be send. Useful in cases where `translateURL` is left empty so that it's possible to direct requests to a specific endpoint at wherever zotero-bib is being hosted.
 
 **translateURL**
-Specifies url for the *translation-server*. By default current host is assumed to proxy request to the translation server.
+Specifies URL for the *translation-server*. By default localhost is assumed to proxy request to the translation server.
+
+Development server configuration
+--------------
+
+Running `npm start` checks for the following environment variables:
+
+**TRANSLATE_URL**
+Where to proxy translation requests, defaults to http://localhost:1969. By default ZoteroBib will send translation requests to `window.location.origin` and dev server should be configured to proxy these requests to a translation server.
+
+**PORT**
+On which port should the dev server listen, defaults to 8001.
+
+**NO_HYDRATE**
+When accessing a remote bibliography, ZoteroBib can hydrate from pre-rendered HTML to avoid a spinner while loading. For development purposes, a hard-coded bibliography is stored in `hydrate.hbs` and is used to serve any request that includes a remote bibliography ID. To disable this behavior, set `NO_HYDRATE` to `1`, which will serve `index.hbs` instead, meaning the bibliography is always rendered client-side with a spinner.
