@@ -35,6 +35,9 @@ const config = {
 			if (id.includes('core-js/')) {
 				return true;
 			}
+			if (id.includes('@formatjs/intl-')) {
+				return true;
+			}
 			if (!isProduction && id.includes('wdyr')) {
 				return true;
 			}
