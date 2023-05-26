@@ -1,5 +1,4 @@
 import balanced from 'balanced-match';
-import api from 'zotero-api-client';
 
 import ZoteroBib from './zotero-translation-client';
 import CiteprocWrapper from './citeproc-wrapper';
@@ -425,7 +424,7 @@ const mergeFetchOptions = (init, globalOpts, localOpts) => {
 	return { ...init, ...(globalOpts.init || {}), ...(localOpts.init || {}), headers };
 }
 
-const fetchSchema = async (apiConfig = {}) => (await api(null, apiConfig).schema().get()).getData();
+const fetchSchema = async (apiAuthorityPart) => (await fetch(`https://${apiAuthorityPart}/schema`)).json();
 
 const ignoredItemTypes = ['note', 'attachment', 'annotation'];
 const getMetaFromSchema = (schema, locale) => {

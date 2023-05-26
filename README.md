@@ -68,6 +68,9 @@ Specifies an additional prefix for where translation server request should be se
 **translateURL**
 Specifies URL for the *translation-server*. By default localhost is assumed to proxy request to the translation server.
 
+**apiAuthorityPart**
+Specifies the authority part of the URL for Zotero API requests. Defaults to `api.zotero.org`.
+
 Development server configuration
 --------------
 

@@ -1,9 +1,10 @@
 {
 	"indexConfig": {
+		"apiAuthorityPart": "API_AUTHORITY_PART",
 		"storeURL": "STORE_URL",
+		"stylesCacheTime": "STYLES_CACHE_TIME",
 		"stylesURL": "STYLES_URL",
 		"translatePrefix": "TRANSLATION_SERVER_PREFIX",
-		"translateURL": "TRANSLATION_SERVER_URL",
-		"stylesCacheTime": "STYLES_CACHE_TIME"
+		"translateURL": "TRANSLATION_SERVER_URL"
 	}
 }

@@ -67,8 +67,7 @@
     "react-modal": "^3.16.1",
     "react-transition-group": "^4.4.5",
     "smooth-scroll": "^16.1.3",
-    "use-debounce": "^9.0.4",
-    "zotero-api-client": ">=0.41.1"
+    "use-debounce": "^9.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
@@ -95,6 +94,7 @@
     "cheerio": "^1.0.0-rc.12",
     "citeproc": "^2.4.63",
     "config": "^3.3.9",
+    "cross-fetch": "^3.1.6",
     "cssnano": "^6.0.1",
     "eslint": "^8.41.0",
     "eslint-plugin-jest-dom": "^4.0.3",
