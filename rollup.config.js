@@ -60,8 +60,10 @@ const config = {
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'development'),
 		}),
 		babel({
-			include: ['src/js/**'],
-			extensions: ['.js', '.jsx'],
+			// @floating-ui targets Safari >= 12, we target Safari >= 10, so we need to
+			// include @floating-ui in babel transpilation
+			babelrc: false,
+			include: ['src/js/**', 'modules/zotero-utilities/**', 'node_modules/@floating-ui/**'],
 			babelHelpers: 'bundled'
 		}),
 		filesize({ showMinifiedSize: false, showGzippedSize: !!process.env.DEBUG }),
