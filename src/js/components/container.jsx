@@ -390,7 +390,7 @@ const BibWebContainer = props => {
 		}
 
 		if(state.isSentenceCaseStyle) {
-			bib.current.addItem(processSentenceCaseAPAItems([item])[0], state.meta.baseMappings);
+			bib.current.addItem(processSentenceCaseAPAItems([item], state.meta.baseMappings)[0]);
 		} else {
 			bib.current.addItem(item);
 		}

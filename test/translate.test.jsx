@@ -17,6 +17,8 @@ import responseTranslateDOI from './fixtures/response-translate-doi.json';
 import responseTranslateItems from './fixtures/response-translate-items.json';
 import responseTranslateSearch from './fixtures/response-translate-search.json';
 import responseTranslateSearchMore from './fixtures/response-translate-search-more.json';
+import responseTranslateAPAIdentifier from './fixtures/response-translate-apa-identifier.json';
+import apaStyle from './fixtures/apa.xml';
 
 import CSL from 'citeproc';
 window.CSL = CSL;
@@ -60,7 +62,10 @@ describe('Translate', () => {
 		localStorage.setItem('zotero-style-locales-en-US', localeForCiteproc);
 	});
 
-	afterEach(() => server.resetHandlers());
+	afterEach(() => {
+		server.resetHandlers();
+		localStorage.clear();
+	});
 	afterAll(() => server.close());
 
 	test('Translates identifier', async () => {
@@ -324,5 +329,46 @@ describe('Translate', () => {
 		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
 
 		expect(requestCounter).toBe(3);
+	});
+
+	test('Items are processed when translating while APA style selected', async () => {
+		localStorage.setItem('zotero-bib-citation-style', 'apa');
+		let hasTranslated = false;
+		server.use(
+			rest.get('https://www.zotero.org/styles/apa', (req, res, ctx) => {
+				return res(
+					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
+					ctx.text(apaStyle),
+				);
+			}),
+		);
+		server.use(
+			rest.post('http://localhost/search', async (req, res, ctx) => {
+				expect(await req.text()).toBe('123456789');
+				hasTranslated = true;
+				// delayed to make sure input becomes readonly
+				return res(ctx.delay(100), ctx.json(responseTranslateAPAIdentifier));
+			})
+		);
+
+		renderWithProviders(<Container />);
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+		const user = userEvent.setup();
+		await user.type(input, '123456789{enter}');
+
+		await waitFor(() => expect(screen.getByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
+		).toHaveAttribute('readonly'));
+
+		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
+
+		await waitFor(() => expect(screen.getByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		)).not.toHaveAttribute('readonly'));
+
+		expect(getByText(newItemSection, /Circadian mood variations in twitter content/)).toBeInTheDocument();
+		expect(hasTranslated).toBe(true);
 	});
 });

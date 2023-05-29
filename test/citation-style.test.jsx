@@ -16,6 +16,8 @@ import localStorage100Items from './fixtures/local-storage-100-items.json';
 import localeForCiteproc from './fixtures/locales-en-us.xml';
 import localesGBForCiteproc from './fixtures/locales-en-gb.xml';
 import stylesJson from './fixtures/styles.json';
+import localStorageItemsForApa from './fixtures/local-storage-items-for-apa.json';
+import apaStyle from './fixtures/apa.xml';
 
 import CSL from 'citeproc';
 window.CSL = CSL;
@@ -220,6 +222,42 @@ describe('Editor', () => {
 		const turabianEntry = await findByRole(list, 'listitem', { name: /Turabian/ });
 		const removeTurabianStyle = getByRole(turabianEntry, 'button', { name: 'Default' });
 		expect(removeTurabianStyle).toBeDisabled();
+	});
+
+	test('Items are processed when switching to APA style', async () => {
+		localStorage.setItem('zotero-bib-items', JSON.stringify(localStorageItemsForApa));
+		server.use(
+			rest.get('https://www.zotero.org/styles/apa', (req, res, ctx) => {
+				return res(
+					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
+					ctx.text(apaStyle),
+				);
+			}),
+		);
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		let bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		expect(getAllByRole(bibliography, 'listitem')[0]).toHaveTextContent(/Circadian Mood Variations In Twitter Content/);
+		const styleSelector = screen.getByRole('combobox', { name: "Citation Style" });
+
+		// Switch to APA style, but cancel the dialog
+		await user.click(styleSelector);
+		await userEvent.click(getByRole(getByRole(styleSelector, 'listbox'), 'option', { name: /American Psychological Association/ }));
+		let dialog = await screen.findByRole('dialog', { name: 'Converting Titles to Sentence Case' });
+		await userEvent.click(getByRole(dialog, 'button', { name: 'Cancel' }));
+		await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Converting Titles to Sentence Case' })).not.toBeInTheDocument());
+		bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		expect(getAllByRole(bibliography, 'listitem')[0]).toHaveTextContent(/Circadian Mood Variations In Twitter Content/);
+
+		// Switch to APA style for real
+		await user.click(styleSelector);
+		await userEvent.click(getByRole(getByRole(styleSelector, 'listbox'), 'option', { name: /American Psychological Association/ }));
+		dialog = await screen.findByRole('dialog', { name: 'Converting Titles to Sentence Case' });
+		await userEvent.click(getByRole(dialog, 'button', { name: 'OK, I’ll Edit Them' }));
+		await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Converting Titles to Sentence Case' })).not.toBeInTheDocument());
+		bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		expect(getAllByRole(bibliography, 'listitem')[0]).toHaveTextContent(/Circadian mood variations in twitter content/);
+		expect(getAllByRole(bibliography, 'listitem')[1]).toHaveTextContent(new RegExp('Sentence \\(Maybe from twitter\\) that has parenthesis \\(Some of which are nested \\(like this\\)\\) or unmatched \\(parenthesis'));
 	});
 
 });
