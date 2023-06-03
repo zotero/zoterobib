@@ -39,8 +39,10 @@
     "watch:eslint": "nodemon -q -w src/js --ext 'js,jsx' --exec 'npm run eslint'",
     "watch:lint": "run-p 'watch:stylelint -s' 'watch:eslint -s'",
     "build:messages": "run-s \"build:extract-messages\" \"build:compile-messages\"",
-    "build:extract-messages": "formatjs extract \"src/js/**/*\" --out-file lang/messages.json --format transifex",
-    "build:compile-messages": "formatjs compile lang/messages.json --ast --out-file lang/compiled/en-US.json --format transifex",
+    "build:extract-messages": "formatjs extract \"src/js/**/*\" --out-file lang/tx/en-US.json --format transifex",
+    "build:compile-messages": "formatjs compile lang/tx/en-US.json --ast --out-file lang/compiled/en-US.json --format transifex",
+    "locale-to-zotero": "node scripts/locale-to-zotero.mjs",
+    "locale-from-zotero": "node scripts/locale-from-zotero.mjs",
     "jest": "jest --silent",
     "jest:watch": "jest --watch",
     "test": "run-s \"build:prepare-for-tests\" \"jest\""
