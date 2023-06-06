@@ -1,21 +1,11 @@
 import React, { useCallback, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
-
-import { usePrevious } from '../hooks';
-import { omit } from '../immutable';
+import { usePrevious } from 'web-common/hooks';
+import { getScrollbarWidth, omit } from 'web-common/utils';
 
 var initialPadding = parseFloat(document.body.style.paddingRight);
 initialPadding = Number.isNaN(initialPadding) ? 0 : initialPadding;
-
-const getScrollbarWidth = () => {
-	const scrollDiv = document.createElement('div');
-	scrollDiv.className = 'modal-scrollbar-measure';
-	document.body.appendChild(scrollDiv);
-	const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
-	document.body.removeChild(scrollDiv);
-	return scrollbarWidth;
-}
 
 const setScrollbar = () => {
 	const calculatedPadding = initialPadding + getScrollbarWidth();

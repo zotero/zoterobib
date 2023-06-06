@@ -4,6 +4,8 @@ import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import { useIntl } from 'react-intl';
+import { usePrevious } from 'web-common/hooks';
+import { pick } from 'web-common/utils';
 
 import {
 	calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink, fetchSchema,
@@ -15,10 +17,9 @@ import defaults from '../constants/defaults';
 import exportFormats from '../constants/export-formats';
 import ZoteroBib from '../zotero-translation-client.js';
 import ZBib from './zbib';
-import { usePrevious, useUserTypeDetector } from '../hooks';
+import { useUserTypeDetector } from '../hooks';
 import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
 import CiteprocWrapper from '../citeproc-wrapper';
-import { pick } from '../immutable';
 import { fetchAndParseIndependentStyle } from '../common/citation-style';
 import { configureZoteroShim } from '../zotero-shim';
 

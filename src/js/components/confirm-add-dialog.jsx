@@ -1,12 +1,11 @@
 import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Button, Icon } from 'web-common/components';
+import { isTriggerEvent } from 'web-common/utils';
 
-import Button from './ui/button';
-import Icon from './ui/icon';
 import Modal from './modal';
 import { formatBib, formatFallback } from '../cite';
-import { isTriggerEvent } from '../common/event';
 
 const ConfirmAddDialog = props => {
 	const { activeDialog, onConfirmAddCancel, onConfirmAddConfirm, itemToConfirm,

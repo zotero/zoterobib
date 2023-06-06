@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 
-import Button from './ui/button';
+import { Button } from 'web-common/components';
 import Modal from './modal';
 
 const Confirmation = props => {

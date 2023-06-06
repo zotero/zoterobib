@@ -1,9 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
-import Icon from './ui/icon';
-import Button from './ui/button';
+import { Button, Icon } from 'web-common/components';
 
 const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onShowDuplicate, onUndoDelete }) => {
 	let category;

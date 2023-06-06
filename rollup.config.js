@@ -1,3 +1,4 @@
+import * as path from 'path';
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
@@ -50,6 +51,7 @@ const config = {
 			skipPlugins: ['resolve', 'json', 'wasm', 'commonjs', 'replace', 'babel', 'sizes', 'visualizer', 'filesize']
 		}),
 		resolve({
+			modulePaths: [path.join(process.cwd(), 'modules')],
 			preferBuiltins: false,
 			mainFields: ['browser', 'main'],
 			extensions: ['.js', '.jsx', '.wasm'],
@@ -66,7 +68,7 @@ const config = {
 			// @floating-ui targets Safari >= 12, we target Safari >= 10, so we need to
 			// include @floating-ui in babel transpilation
 			babelrc: false,
-			include: ['src/js/**', 'modules/zotero-utilities/**', 'node_modules/@floating-ui/**'],
+			include: ['src/js/**', 'modules/zotero-utilities/**', 'modules/web-common/**', 'node_modules/@floating-ui/**'],
 			babelHelpers: 'bundled'
 		}),
 		filesize({ showMinifiedSize: false, showGzippedSize: !!process.env.DEBUG }),

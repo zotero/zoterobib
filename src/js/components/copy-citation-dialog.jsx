@@ -2,13 +2,12 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, useMemo, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { Button, Spinner } from 'web-common/components';
+import { usePrevious } from 'web-common/hooks';
 
-import Button from './ui/button';
 import Input from './form/input';
 import Modal from './modal';
 import Select from './form/select';
-import Spinner from './ui/spinner';
-import { usePrevious } from '../hooks';
 
 const CopyCitationDialog = props => {
 	const { activeDialog, copyCitationState, isNoteStyle, isNumericStyle, onCitationCopy,

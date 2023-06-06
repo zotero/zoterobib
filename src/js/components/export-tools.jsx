@@ -3,13 +3,12 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Button, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'web-common/components';
+import { isTriggerEvent } from 'web-common/utils';
+import { usePrevious } from 'web-common/hooks';
 
-import { Dropdown,  DropdownMenu, DropdownToggle, DropdownItem } from './ui/dropdown';
+
 import exportFormats from '../constants/export-formats';
-import Button from './ui/button';
-import { isTriggerEvent } from '../common/event';
-import { usePrevious } from '../hooks';
-
 const formatsInDropdown = ['rtf', 'html', 'ris', 'bibtex', 'zotero'];
 
 const ExportOption = memo(({ isCopied, format, handleCopyClick, handleDownloadClick }) => {

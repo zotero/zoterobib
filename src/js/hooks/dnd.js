@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { noop } from '../utils';
+import { noop } from 'web-common/utils';
 
 const marginVec2 = { x: -5, y: -5 };
 var draggedItem = null;

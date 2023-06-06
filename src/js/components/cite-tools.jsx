@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { Button } from 'web-common/components';
+import { usePrevious } from 'web-common/hooks';
 
 import Input from './form/input';
-import Button from './ui/button';
-import { usePrevious } from '../hooks';
 
 const canCancel = typeof(AbortController) === 'function';
 

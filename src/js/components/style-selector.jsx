@@ -2,8 +2,8 @@ import React, { useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl } from 'react-intl';
+import { Select, SelectDivider, SelectOption } from 'web-common/components';
 
-import Select, { SelectDivider, SelectOption } from './ui/select';
 import { citationStylesCount } from '../../../data/citation-styles-data.json';
 
 const StyleSelector = ({ className, citationStyle, citationStyles, onCitationStyleChanged }) => {

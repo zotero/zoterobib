@@ -1,11 +1,10 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { noop, pick } from 'web-common/utils';
+import { usePrevious } from 'web-common/hooks';
+import { Spinner } from 'web-common/components';
 
-import Spinner from '../ui/spinner';
-import { noop } from '../../utils';
-import { pick } from '../../immutable';
-import { usePrevious } from '../../hooks';
 
 const NATIVE_INPUT_PROPS = ['autoFocus', 'form', 'id', 'inputMode', 'max', 'maxLength',
 'min', 'minLength', 'name', 'placeholder', 'type', 'spellCheck', 'step', 'tabIndex'];

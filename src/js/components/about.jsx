@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Button from './ui/button';
+import { Button } from 'web-common/components';
 import { citationStylesCount } from '../../../data/citation-styles-data.json';
 
 const About = ({ onGetStartedClick }) => (

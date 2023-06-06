@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button } from 'web-common/components';
 
-import Button from './ui/button';
 import Confirmation from './confirmation';
 
 const DeleteAllButton = props => {

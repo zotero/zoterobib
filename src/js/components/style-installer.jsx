@@ -2,14 +2,12 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useReducer, useRef, useId, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { Button, Icon, Spinner } from 'web-common/components';
+import { usePrevious } from 'web-common/hooks';
 
-import Button from './ui/button';
-import Icon from './ui/icon';
 import Input from './form/input';
 import Modal from './modal';
 import SearchWorker from 'web-worker:../style-search.worker.js';
-import Spinner from './ui/spinner';
-import { usePrevious } from '../hooks';
 
 const searchWorker = new SearchWorker();
 

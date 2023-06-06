@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button } from 'web-common/components';
+import { usePrevious } from 'web-common/hooks';
 
-import Button from './ui/button';
 import ItemBox from './itembox';
 import Modal from './modal';
 import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
-import { usePrevious } from '../hooks';
 
 const ITEM_UPDATED = 'ITEM_UPDATED';
 const BEGIN_ITEM_UPDATE = 'BEGIN_ITEM_UPDATE';

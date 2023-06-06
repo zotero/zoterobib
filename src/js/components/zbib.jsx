@@ -2,18 +2,18 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { Button, Icon } from 'web-common/components';
+import { pick } from 'web-common/utils';
 
 import About from './about';
 import BibliographySection from './bibliographySection';
 import Brand from './brand';
-import Button from './ui/button';
 import CiteTools from './cite-tools';
 import ConfirmAddDialog from './confirm-add-dialog';
 import Confirmation from './confirmation';
 import CopyCitationDialog from './copy-citation-dialog';
 import Editor from './editor';
 import Footer from './footer';
-import Icon from './ui/icon';
 import Message from './message';
 import Modal from './modal';
 import MultipleChoiceDialog from './multiple-choice-dialog';
@@ -22,7 +22,6 @@ import PermalinkTools from './permalink-tools';
 import Review from './review';
 import StyleInstaller from './style-installer';
 import WhatsThis from './whats-this';
-import { pick } from '../immutable';
 
 const commonFormats = {
 	b: (chunks) => <b>{chunks}</b>, //eslint-disable-line react/display-name

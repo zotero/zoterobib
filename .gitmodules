@@ -4,3 +4,6 @@
 [submodule "modules/zotero-utilities"]
 	path = modules/zotero-utilities
 	url = https://github.com/zotero/utilities.git
+[submodule "modules/web-common"]
+	path = modules/web-common
+	url = https://github.com/zotero/web-common.git

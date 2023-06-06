@@ -2,7 +2,7 @@ import load from 'load-script';
 import { getStyleProperties } from './common/citation-style';
 import supportedLocales from '../../data/supported-locales.json';
 import { pickBestLocale } from './utils';
-import { mapObject } from './immutable';
+import { mapObject } from 'web-common/utils';
 
 const isWasmSupported = typeof WebAssembly === 'object' && typeof WebAssembly.instantiate === 'function';
 var Driver = null;

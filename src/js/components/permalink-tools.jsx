@@ -3,9 +3,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
-
-import Button from './ui/button';
-import Spinner from './ui/spinner';
+import { Button, Spinner } from 'web-common/components';
 
 const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 	const [isSavingPermalink, setIsSavingPermalink] = useState(false);

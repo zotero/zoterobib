@@ -2,15 +2,12 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, memo, useImperativeHandle, useMemo, useCallback, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { Button, Icon, SelectDivider, SelectOption } from 'web-common/components';
+import { isTriggerEvent, omit, pick } from 'web-common/utils';
 
-import Button from '../ui/button';
 import Field from './field';
-import Icon from '../ui/icon';
 import Input from './input';
 import SelectInput from './select';
-import { isTriggerEvent } from '../../common/event';
-import { omit, pick } from '../../immutable';
-import { SelectDivider, SelectOption } from '../ui/select';
 
 const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 	const { creatorsCount, index, isActive, isDisabled, onCancel, onClick, onCommit, onFocus,

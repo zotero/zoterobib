@@ -1,11 +1,10 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Input from '../form/input';
 import TextAreaInput from '../form/text-area';
 import Select from '../form/select';
-import { noop } from '../../utils';
-import { pick } from '../../immutable';
+import { noop, pick } from 'web-common/utils';
 
 
 const EditableContent = memo((props) => {

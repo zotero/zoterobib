@@ -2,19 +2,17 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button, Icon, Spinner } from 'web-common/components';
+import { pick } from 'web-common/utils'
+import { usePrevious } from 'web-common/hooks';
 
 import Bibliography from './bibliography';
-import Button from './ui/button';
 import Confirmation from './confirmation';
 import DeleteAllButton from './delete-all-button';
 import Editable from './ui/editable';
-import Icon from './ui/icon';
 import PlaceholderBibliography from './placeholder-bibliography';
-import Spinner from './ui/spinner';
 import StyleSelector from './style-selector';
 import ExportTools from './export-tools';
-import { pick } from '../immutable'
-import { usePrevious } from '../hooks';
 
 const BibliographySection = props => {
 	const { isPrintMode, isReadOnly, isReady, isHydrated, localCitationsCount, onOverride,

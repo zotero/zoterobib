@@ -1,5 +1,5 @@
 import { fetchWithCachedFallback } from '../utils'
-import { omit } from '../immutable';
+import { omit } from 'web-common/utils';
 
 const stylePropertiesCache = new Map();
 const stylesCache = new Map();

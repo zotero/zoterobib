@@ -2,12 +2,9 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Icon } from 'web-common/components';
+import { isTriggerEvent, pick } from 'web-common/utils';
 
-import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from './ui/dropdown';
-import Button from './ui/button';
-import Icon from './ui/icon';
-import { isTriggerEvent } from '../common/event';
-import { pick } from '../immutable'
 import { useDnd } from '../hooks';
 
 const BIB_ITEM = 'BIB_ITEM';

@@ -51,14 +51,14 @@
 
 @import "components/cite-tools";
 @import "components/dnd";
-@import "components/icon";
+@import "../../modules/web-common/scss/icon";
 @import "components/button";
 @import "components/review";
 @import "components/bibliography-section";
 @import "components/bibliography";
-@import "components/select";
+@import "../../modules/web-common/scss/select";
 @import "components/editable";
-@import "components/dropdown";
+@import "../../modules/web-common/scss/dropdown";
 @import "components/react-modal";
 @import "components/editor";
 @import "components/style-installer";

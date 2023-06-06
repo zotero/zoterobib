@@ -1,9 +1,8 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React, { forwardRef, memo } from 'react';
+import { noop, pick } from 'web-common/utils';
 
-import { noop } from '../../utils';
-import { pick } from '../../immutable';
 
 const Field = memo(forwardRef((props, ref) => {
 	const { children, className, dragHandle=null, onClick = noop, onKeyDown = noop, tabIndex } = props;

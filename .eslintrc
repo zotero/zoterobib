@@ -13,6 +13,9 @@
       "jsx": true
     }
   },
+  "rules": {
+    "react/prop-types": 1
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",

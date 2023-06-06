@@ -2,13 +2,12 @@ import cx from 'classnames';
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import CSSTransition from 'react-transition-group/cjs/CSSTransition'
+import CSSTransition from 'react-transition-group/cjs/CSSTransition';
+import { omit } from 'web-common/utils';
+import { usePrevious } from 'web-common/hooks';
 
 import CreatorField from './creator-field';
-import { enumerateObjects } from '../../utils';
-import { omit } from '../../immutable';
-import { splice } from '../../utils';
-import { usePrevious } from '../../hooks';
+import { enumerateObjects, splice } from '../../utils';
 
 const Creators = props => {
 	const { creatorTypes, onSave, name, value = [], isForm, onDragStatusChange, isReadOnly } = props;

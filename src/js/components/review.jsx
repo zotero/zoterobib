@@ -1,6 +1,6 @@
 import React, { memo, useId } from 'react';
 import PropTypes from 'prop-types';
-import Button from './ui/button';
+import { Button } from 'web-common/components';
 import { formatBib, formatFallback } from '../cite';
 import { FormattedMessage } from 'react-intl';
 
