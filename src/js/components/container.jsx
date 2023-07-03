@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react';
 import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';

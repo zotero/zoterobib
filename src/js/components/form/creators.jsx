@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import deepEqual from 'deep-equal';
 import PropTypes from 'prop-types';
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CSSTransition from 'react-transition-group/cjs/CSSTransition';
 import { omit } from 'web-common/utils';
 import { usePrevious } from 'web-common/hooks';
@@ -178,7 +178,7 @@ const Creators = props => {
 	}
 
 	return (
-		<React.Fragment>
+        <Fragment>
 			{ creators.map((creator, index) => (
 				<CSSTransition
 					key={ creator.id }
@@ -216,8 +216,8 @@ const Creators = props => {
 				/>
 				</CSSTransition>
 			))}
-		</React.Fragment>
-	);
+		</Fragment>
+    );
 }
 
 Creators.propTypes = {

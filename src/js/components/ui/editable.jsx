@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Input from '../form/input';
@@ -69,7 +69,7 @@ const Editable = props => {
 	const InputElement = input;
 
 	return (
-		<div
+        <div
 			{...pick(props, p => p.startsWith('aria-'))}
 			tabIndex={ isDisabled ? null : isActive ? null : tabIndex }
 			onClick={ onClick }
@@ -81,16 +81,16 @@ const Editable = props => {
 				InputElement ? InputElement : <InputComponent
 					className={ cx(className, "editable-control") }
 					{ ...props }
-			/> : <React.Fragment>
+			/> : <Fragment>
 						{
 						hasChildren ?
 							children :
 							<EditableContent { ...props } />
 						}
-				</React.Fragment>
+				</Fragment>
 			}
 		</div>
-	);
+    );
 }
 
 Editable.propTypes = {

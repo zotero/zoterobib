@@ -1,4 +1,4 @@
-import React, { memo, useId } from 'react';
+import { Fragment, memo, useId } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'web-common/components';
 import { formatBib, formatFallback } from '../cite';
@@ -12,7 +12,7 @@ const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, 
 		'';
 
 	return (
-		<section
+        <section
 			aria-labelledby={ id }
 			className="section section-review review"
 		>
@@ -21,7 +21,7 @@ const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, 
 						<FormattedMessage id="zbib.review.newItem" defaultMessage="New item…" />
 					</h2>
 			) : (
-			<React.Fragment>
+			<Fragment>
 				<h2 className="sr-only" id={ id }>
 					<FormattedMessage id="zbib.review.newItem" defaultMessage="New item…" />
 				</h2>
@@ -48,10 +48,10 @@ const Review = ({ isTranslating, itemUnderReview, onReviewEdit, onReviewDelete, 
 						</Button>
 					</div>
 				</div>
-			</React.Fragment>
+			</Fragment>
 			)}
 		</section>
-	);
+    );
 }
 
 Review.propTypes = {

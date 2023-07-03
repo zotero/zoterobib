@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState, useMemo, memo } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Spinner } from 'web-common/components';
 import { usePrevious } from 'web-common/hooks';

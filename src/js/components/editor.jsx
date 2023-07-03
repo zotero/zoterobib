@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
+import { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button } from 'web-common/components';

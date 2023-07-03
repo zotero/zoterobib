@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import { PureComponent, memo } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { IntlProvider } from 'react-intl';
 
@@ -8,7 +8,7 @@ import CrashHandler from './components/crash-handler';
 import messages from '../../lang/compiled/en-US.json';
 
 
-class ErrorBoundary extends React.PureComponent {
+class ErrorBoundary extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = { hasError: false };

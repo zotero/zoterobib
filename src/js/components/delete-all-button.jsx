@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import { Fragment, memo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button } from 'web-common/components';
@@ -25,7 +25,7 @@ const DeleteAllButton = props => {
 
 
 	return (
-		<React.Fragment>
+        <Fragment>
 			<Button
 				key="delete-all-button"
 				className="btn-sm btn-outline-primary delete-all"
@@ -54,8 +54,8 @@ const DeleteAllButton = props => {
 					</span>
 				</p>
 			</Confirmation>
-		</React.Fragment>
-	);
+		</Fragment>
+    );
 };
 
 DeleteAllButton.propTypes = {

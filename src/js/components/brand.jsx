@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import { Fragment, memo } from 'react';
 
 const Brand = () => (
-	<React.Fragment>
+	<Fragment>
 		<h1 className="brand">
 			<a href="/">
 				ZoteroBib
@@ -21,7 +21,7 @@ const Brand = () => (
 				</svg>
 			</a>
 		</h1>
-	</React.Fragment>
+	</Fragment>
 );
 
 export default memo(Brand);

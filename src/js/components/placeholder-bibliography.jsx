@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import { Fragment, memo } from 'react';
 
 // When hydrating from static markup, this placeholder component is used instead of actual
 // <Bibliography />. I matches static markup enough so that react won't attempt to re-render it and
@@ -7,7 +7,7 @@ import React, { memo } from 'react';
 // fetching real data and getting ready.
 const PlaceholderBibliography = ({ itemCount }) => {
 	return (
-		<React.Fragment>
+        <Fragment>
 			<div
 				suppressHydrationWarning={ true }
 				className="bibliography read-only placeholder"
@@ -21,8 +21,8 @@ const PlaceholderBibliography = ({ itemCount }) => {
 					{ "{}" }
 				</script>
 			)) }
-		</React.Fragment>
-	);
+		</Fragment>
+    );
 }
 
 PlaceholderBibliography.propTypes = {

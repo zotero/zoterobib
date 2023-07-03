@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { forwardRef, memo, useCallback, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useImperativeHandle, useRef, useState } from 'react';
 
 import Creators from './form/creators';
 import Field from './form/field';

@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon, Spinner } from 'web-common/components';
 import { pick } from 'web-common/utils'
@@ -71,7 +71,7 @@ const BibliographySection = props => {
 	}, [isReady, wasReady, onOverride]);
 
 	return (
-		<section
+        <section
 			aria-label="Bibliography"
 			className={ cx('section', 'section-bibliography',
 				{ 'loading': !isReady && !isHydrated, 'empty': !isReadOnly && localCitationsCount === 0 })
@@ -79,7 +79,7 @@ const BibliographySection = props => {
 		>
 			<div className="container" suppressHydrationWarning={ true }>
 				{ (!isReadOnly && localCitationsCount === 0) ? (
-					<React.Fragment>
+					<Fragment>
 						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
 						<h2 className="empty-title">
 							<FormattedMessage
@@ -101,9 +101,9 @@ const BibliographySection = props => {
 								}}
 							/>
 						</p>
-					</React.Fragment>
+					</Fragment>
 				) : (
-					<React.Fragment>
+					<Fragment>
 						{
 							isReadOnly ? (
 								title && (
@@ -181,7 +181,7 @@ const BibliographySection = props => {
 									/>
 								</p>
 						</Confirmation>
-					</React.Fragment>
+					</Fragment>
 				)
 			}
 			{ ((isReady || isHydrated) && isReadOnly) && (
@@ -193,7 +193,7 @@ const BibliographySection = props => {
 			) }
 			</div>
 		</section>
-	);
+    );
 }
 
 

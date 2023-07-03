@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import { Fragment, memo } from 'react';
 
 import { Button } from 'web-common/components';
 import Modal from './modal';
@@ -9,14 +9,14 @@ const Confirmation = props => {
 		confirmLabel = 'Confirm' } = props;
 
 	return (
-		<Modal
+        <Modal
 			key="react-modal"
 			className="modal modal-centered"
 			isOpen={ isOpen }
 			contentLabel={ title }
 			onRequestClose={ onCancel }
 		>
-			<React.Fragment>
+			<Fragment>
 				<div className="modal-content" tabIndex={ -1 }>
 					<div className="modal-header">
 						<h4 className="modal-title text-truncate">
@@ -42,9 +42,9 @@ const Confirmation = props => {
 						</div>
 					</div>
 				</div>
-			</React.Fragment>
+			</Fragment>
 		</Modal>
-	);
+    );
 }
 
 Confirmation.propTypes = {

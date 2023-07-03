@@ -1,7 +1,7 @@
 import copy from 'copy-to-clipboard';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
+import { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';

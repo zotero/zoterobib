@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { Fragment, memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -31,9 +31,9 @@ const commonFormats = {
 const titleCaseExample = 'Circadian Mood Variations in Twitter Content';
 const conversionExample = 'Circadian mood variations in twitter content';
 const sentenceCaseExample = (
-	<React.Fragment>
+	<Fragment>
 		Circadian mood variations in <span style={{ color: '#e52e3d', fontWeight: 'bold' }}>T</span>witter content
-	</React.Fragment>
+	</Fragment>
 );
 
 const ZBib = props => {
@@ -48,7 +48,7 @@ const ZBib = props => {
 	};
 
 	return (
-		<div className={ cx(className) }>
+        <div className={ cx(className) }>
 			<div className="zotero-bib-inner">
 				<div className="messages">
 					{ props.messages.map(message => (
@@ -123,7 +123,7 @@ const ZBib = props => {
 
 				<Footer { ...pick(props, ['isReadOnly']) } />
 				{ (!props.isHydrated || (props.isHydrated && props.isReady)) && (
-					<React.Fragment>
+					<Fragment>
 					<Confirmation
 						isOpen={ props.activeDialog === 'CONFIRM_SENTENCE_CASE_STYLE' }
 						onConfirm={ props.onStyleSwitchConfirm }
@@ -214,11 +214,11 @@ const ZBib = props => {
 						'onConfirmAddConfirm', 'itemToConfirm', 'styleHasBibliography']) } />
 					<MultipleItemDialog { ...pick(props, ['activeDialog', 'multipleItems',
 						'multipleChoiceItems', 'onMultipleItemsCancel', 'onMultipleItemsSelect']) } />
-				</React.Fragment>
+				</Fragment>
 				) }
 			</div>
 		</div>
-	);
+    );
 }
 
 ZBib.propTypes = {

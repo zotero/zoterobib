@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, memo } from 'react';
+import { useCallback, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import { usePrevious } from 'web-common/hooks';

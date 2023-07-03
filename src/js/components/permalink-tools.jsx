@@ -1,7 +1,7 @@
 import copy from 'copy-to-clipboard';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, memo } from 'react';
+import { Fragment, useCallback, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Spinner } from 'web-common/components';
 
@@ -28,7 +28,7 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 	}, [isRecentlyCopied, permalink]);
 
 	return (
-		<div className={cx('permalink-tools', { 'loading': isSavingPermalink }) }>
+        <div className={cx('permalink-tools', { 'loading': isSavingPermalink }) }>
 			{ isSavingPermalink ? (
 				<Spinner />
 			) : permalink ? (
@@ -53,7 +53,7 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 					</a>
 				</div>
 			) : (
-				<React.Fragment>
+				<Fragment>
 					{ isSafari && (
 						<div className="safari-warning">
 							<p><strong><FormattedMessage
@@ -73,10 +73,10 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 					>
 						<FormattedMessage id="zbib.permalink.create" defaultMessage="Create" />
 					</Button>
-				</React.Fragment>
+				</Fragment>
 			) }
 		</div>
-	);
+    );
 }
 
 

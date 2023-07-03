@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo, useEffect, useMemo, useCallback, useState } from 'react';
+import { memo, useEffect, useMemo, useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Icon } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';

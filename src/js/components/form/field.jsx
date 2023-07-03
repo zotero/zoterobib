@@ -1,12 +1,12 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { forwardRef, memo } from 'react';
+import { Children, forwardRef, memo } from 'react';
 import { noop, pick } from 'web-common/utils';
 
 
 const Field = memo(forwardRef((props, ref) => {
 	const { children, className, dragHandle=null, onClick = noop, onKeyDown = noop, tabIndex } = props;
-	const [label, value] = React.Children.toArray(children);
+	const [label, value] = Children.toArray(children);
 
 	return (
 		<li

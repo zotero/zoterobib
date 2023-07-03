@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { forwardRef, memo, useImperativeHandle, useMemo, useCallback, useRef, useState } from 'react';
+import { Fragment, forwardRef, memo, useImperativeHandle, useMemo, useCallback, useRef, useState, } from 'react';
 import { useIntl } from 'react-intl';
 import { Button, Icon, SelectDivider, SelectOption } from 'web-common/components';
 import { isTriggerEvent, omit, pick } from 'web-common/utils';
@@ -39,7 +39,7 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 	}, [index, onReorder]);
 
 	return (
-		<SelectInput
+        <SelectInput
 			aria-label="Creator Type"
 			className="form-control form-control-sm"
 			isActive={ isActive }
@@ -55,7 +55,7 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 			{ ... pick(rest, p => p.startsWith('data-')) }
 		>
 			{ creatorsCount > 1 ? (
-				<React.Fragment>
+				<Fragment>
 					<SelectDivider />
 					{ (index > 1) && (
 						<SelectOption
@@ -81,10 +81,10 @@ const CreatorTypeSelector = memo(forwardRef((props, ref) => {
 							value: '_down'
 						} }
 					/> ) }
-				</React.Fragment>
+				</Fragment>
 			) : null }
 		</SelectInput>
-	);
+    );
 }));
 
 CreatorTypeSelector.displayName = 'CreatorTypeSelector';
@@ -273,7 +273,7 @@ const CreatorField = forwardRef((props, ref) => {
 	onFieldFocus: handleFieldFocus, onAddMany };
 
 	return (
-		<React.Fragment>
+        <Fragment>
 		<Field
 			aria-label={ creatorLabel }
 			className={ fieldClassName }
@@ -307,7 +307,7 @@ const CreatorField = forwardRef((props, ref) => {
 					creatorsCount = { creatorsCount }
 				/>
 			}
-			<React.Fragment>
+			<Fragment>
 				{
 					shouldUseModalCreatorField ? (
 						<div className="truncate">
@@ -319,7 +319,7 @@ const CreatorField = forwardRef((props, ref) => {
 						</div>
 					) : (
 						isDual ? (
-							<React.Fragment>
+							<Fragment>
 								<CreatorFieldInputWrap
 									{ ...inputProps }
 									name="lastName"
@@ -332,7 +332,7 @@ const CreatorField = forwardRef((props, ref) => {
 									label="First Name"
 									ref={ component => fieldComponents.current['firstName'] = component }
 								/>
-							</React.Fragment> ) :
+							</Fragment> ) :
 							<CreatorFieldInputWrap
 								{ ...inputProps }
 								name="name"
@@ -343,7 +343,7 @@ const CreatorField = forwardRef((props, ref) => {
 				}
 				{
 					!isReadOnly && (
-						<React.Fragment>
+						<Fragment>
 							<Button
 								icon
 								className="btn-single-dual"
@@ -394,12 +394,12 @@ const CreatorField = forwardRef((props, ref) => {
 									</Button>
 								)
 							}
-					</React.Fragment>
+					</Fragment>
 				)}
-		</React.Fragment>
+		</Fragment>
 		</Field>
-		</React.Fragment>
-	);
+		</Fragment>
+    );
 });
 
 CreatorField.displayName = 'CreatorField';

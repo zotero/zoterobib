@@ -1,4 +1,3 @@
-import React from 'react'
 import '@testing-library/jest-dom'
 import copy from 'copy-to-clipboard';
 import fileSaver from 'file-saver';

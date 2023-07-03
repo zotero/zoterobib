@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useCallback, useRef, useState, memo } from 'react';
+import { Fragment, useCallback, useRef, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Icon } from 'web-common/components';
 import { isTriggerEvent, pick } from 'web-common/utils';
@@ -69,7 +69,7 @@ const BibliographyItem = memo(props => {
 		intl.formatMessage({ id: 'zbib.citation.copyCitation', defaultMessage: 'Copy Citation' });
 
 	return (
-		<li
+        <li
 			aria-label="Citation"
 			key={rawItem.key}
 			data-dnd-candidate
@@ -95,7 +95,7 @@ const BibliographyItem = memo(props => {
 					dangerouslySetInnerHTML={{ __html: formattedItem }}
 				/>
 				{!isNumericStyle && (
-					<React.Fragment>
+					<Fragment>
 					<Button
 						icon
 						title={copyText}
@@ -115,7 +115,7 @@ const BibliographyItem = memo(props => {
 					>
 						<Icon type={isCopied ? '16/tick' : '16/copy'} width="16" height="16" />
 					</Button>
-					</React.Fragment>
+					</Fragment>
 				)}
 				<Dropdown
 					isOpen={isDropdownOpen}
@@ -131,7 +131,7 @@ const BibliographyItem = memo(props => {
 					</DropdownToggle>
 					<DropdownMenu aria-label="Options" right>
 						{!isNumericStyle && (
-							<React.Fragment>
+							<Fragment>
 							<DropdownItem
 								onClick={onCopyCitationDialogOpen}
 								className="btn"
@@ -151,7 +151,7 @@ const BibliographyItem = memo(props => {
 									</span>
 								</span>
 							</DropdownItem>
-							</React.Fragment>
+							</Fragment>
 						)}
 						<DropdownItem
 							onClick={onEditCitationClick}
@@ -166,7 +166,7 @@ const BibliographyItem = memo(props => {
 							<FormattedMessage id="zbib.general.delete" defaultMessage="Delete" />
 						</DropdownItem>
 						{allowReorder && (
-							<React.Fragment>
+							<Fragment>
 								<DropdownItem divider />
 								{!isFirst && (
 									<DropdownItem onClick={handleMoveTop} className="btn">
@@ -180,7 +180,7 @@ const BibliographyItem = memo(props => {
 									<DropdownItem onClick={handleMovedown} className="btn">
 										<FormattedMessage id="zbib.citation.moveDown" defaultMessage="Move Down" />
 									</DropdownItem>)}
-							</React.Fragment>
+							</Fragment>
 						)}
 					</DropdownMenu>
 				</Dropdown>
@@ -197,7 +197,7 @@ const BibliographyItem = memo(props => {
 				</script>
 			</div>
 		</li>
-	);
+    );
 });
 
 BibliographyItem.displayName = 'BibliographyItem';
@@ -303,9 +303,9 @@ const Bibliography = props => {
 	}
 
 	return (
-		<React.Fragment>
+        <Fragment>
 			{isReadOnly ? (
-				<React.Fragment>
+				<Fragment>
 					<div
 						suppressHydrationWarning={true}
 						className="bibliography read-only"
@@ -319,7 +319,7 @@ const Bibliography = props => {
 							{JSON.stringify(bibliography.lookup[renderedItem.id])}
 						</script>
 					))}
-				</React.Fragment>
+				</Fragment>
 			) : (
 				<ul
 					aria-label="Bibliography"
@@ -347,8 +347,8 @@ const Bibliography = props => {
 					))}
 				</ul>
 			)}
-		</React.Fragment>
-	);
+		</Fragment>
+    );
 }
 
 Bibliography.propTypes = {
