@@ -6,7 +6,7 @@ lib
 build
 data
 lang
+visualizer
 config/local*.json
 .nyc_output
 src/static/js/citeproc.js
-visualizer.html

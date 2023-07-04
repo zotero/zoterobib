@@ -83,7 +83,7 @@ const commonAliases = [
 if(process.env.DEBUG) {
 	config.plugins.splice(0, 0, alias({ entries: commonAliases }));
 	config.plugins.splice(-1, 0, sizes());
-	config.plugins.splice(-1, 0, visualizer({ filename: 'visualizer.html' }));
+	config.plugins.splice(-1, 0, visualizer({ filename: `visualizer/${new Date().toJSON().slice(0, 10)}.html` }));
 }
 
 if(isProduction) {
