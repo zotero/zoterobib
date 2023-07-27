@@ -20,13 +20,25 @@ const Zotero = {
 
 window.Zotero = Zotero;
 
-const configureZoteroShim = (schema, locale) => {
-	const collator = new Intl.Collator([locale], {
+const configureZoteroShim = (schema, intl) => {
+	const collator = new Intl.Collator([intl.locale], {
 		numeric: true,
 		sensitivity: 'base'
 	});
 
-	Zotero.locale = locale;
+	Zotero.locale = intl.locale;
+	Zotero.getString = identifier => {
+		switch (identifier) {
+			case 'date.yesterday':
+				return intl.formatMessage({ id: 'date.yesterday', defaultMessage: 'yesterday' });
+			case 'date.today':
+				return intl.formatMessage({ id: 'date.today', defaultMessage: 'today' });
+			case 'date.tomorrow':
+				return intl.formatMessage({ id: 'date.tomorrow', defaultMessage: 'tomorrow' });
+			default:
+				return identifier;
+		}
+	}
 	Zotero.Schema.init(schema);
 	Zotero.setTypeSchema(ZOTERO_TYPE_SCHEMA);
 	Zotero.Date.init(dateFormats);

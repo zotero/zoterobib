@@ -10,6 +10,7 @@ import ItemBox from './itembox';
 import Modal from './modal';
 import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
+import { Zotero } from '../zotero-shim.js';
 
 const ITEM_UPDATED = 'ITEM_UPDATED';
 const BEGIN_ITEM_UPDATE = 'BEGIN_ITEM_UPDATE';
@@ -174,6 +175,10 @@ const Editor = props => {
 			}
 			fieldKey = 'extra';
 			newValue = extra;
+		}
+
+		if (fieldKey === 'accessDate' || fieldKey === 'date' || fieldKey === baseMappings?.[editor.item.itemType]?.['date']) {
+			newValue = Zotero.Date.parseDescriptiveString(newValue);
 		}
 
 		if(!('key' in editor.item)) {

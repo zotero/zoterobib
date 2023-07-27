@@ -64,12 +64,12 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	}
 }
 
-const configureZoteroSchema = async (dispatch, locale, apiAuthorityPart) => {
+const configureZoteroSchema = async (dispatch, intl, apiAuthorityPart) => {
 	dispatch({ type: REQUEST_SCHEMA });
 	try {
 		const schema = await fetchSchema(apiAuthorityPart);
-		configureZoteroShim(schema, locale);
-		const meta = getMetaFromSchema(schema, locale);
+		configureZoteroShim(schema, intl);
+		const meta = getMetaFromSchema(schema, intl.locale);
 		dispatch({ type: RECEIVE_SCHEMA, schema, meta });
 	} catch (error) {
 		console.error(error);
@@ -1294,13 +1294,13 @@ const BibWebContainer = props => {
 		useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));
 
 		if(remoteId) {
-			configureZoteroSchema(dispatch, intl.locale, config.apiAuthorityPart);
+			configureZoteroSchema(dispatch, intl, config.apiAuthorityPart);
 			fetchRemoteBibliography();
 		} else {
 			const prefilledIdentifier = params.get('q') || '';
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
-			configureZoteroSchema(dispatch, intl.locale, config.apiAuthorityPart);
+			configureZoteroSchema(dispatch, intl, config.apiAuthorityPart);
 			fetchAndSelectStyle(
 				dispatch,
 				localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,

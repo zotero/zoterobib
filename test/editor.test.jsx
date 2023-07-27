@@ -180,4 +180,21 @@ describe('Editor', () => {
 		expect(bibliography).toHaveTextContent(/Jane Smith/);
 	});
 
+	test("It parses descriptive string as date", async () => {
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		const manualEntryButton = screen.getByRole(
+			'button', { name: 'Manual Entry' }
+		);
+		await user.click(manualEntryButton);
+		const dialog = await screen.findByRole('dialog', { name: 'Item Editor' });
+		const dateField = getByRole(dialog, 'textbox', { name: 'Date' });
+		await user.type(dateField, 'today');
+		const doneButton = screen.getByRole('button', { name: 'Done' });
+		await user.click(doneButton);
+		const bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		const expectedDate = new Date().toISOString().slice(0, 10);
+		expect(bibliography).toHaveTextContent(new RegExp(expectedDate));
+	});
+
 });
