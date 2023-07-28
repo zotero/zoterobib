@@ -51,8 +51,6 @@ ZoteroBib supports over 10,000 [CSL](http://citationstyles.org/) styles, includi
 
 Your bibliography is stored in your browser's local storage by default. You can close the page and return to it later, and your bibliography will still be there — no need to worry about saving your data or logging in.
 
-Safari on macOS and iOS, as well as any other browser on iOS, will automatically clear local storage for any website you don’t visit for 7 days. We recommended using Link to this version on these browsers to persist your bibliography.
-
 If you want to load your bibliography on another computer, you can use <i>Link to this version</i> to upload a copy to zbib.org and generate a link that you can use to retrieve that version of your bibliography later. (We recommend storing the link in the document you're working on so you have everything in one place.) Once you've generated a link and stored it safely, you can click <i>Delete All</i> if you want to remove the bibliography from the current computer.
 
 <i>Link to this version</i> is also great for sharing the bibliography with someone else. They'll see a clean, read-only version, which they can choose to load into the editor if they want to make changes. (If you need to collaborate on a project, we highly recommend using [Zotero], which lets you easily create shared research libraries. It's free too!)
@@ -63,9 +61,15 @@ Note that if you're using private/incognito mode in your browser, your bibliogra
 
 ### How long is my bibliography stored?
 
-Bibliographies are stored in your local browser storage until you delete them or clear your browser's cache. If you're using private/incognito mode in your browser, your bibliography will be deleted as soon as you close the window. Note that some system-cleaning tools might clear the browser storage, and some browsers offer to do so as well as part of a refresh process.
+Bibliographies are stored in your local browser storage until you delete them or clear your browser's cache, with a few exceptions:
 
-If you're worried about losing your bibliography, use <i>Link to this version</i> to upload a copy to zbib.org, and then save the link. Each uploaded version is stored for at least six months from when it was created or last viewed.
+<ul>
+	<li>Safari on macOS and iOS, as well as any other browser on iOS, will automatically clear local storage for any website you don't visit for 7 days.</li>
+	<li>If you're using private/incognito mode in your browser, your bibliography will be deleted as soon as you close the window.</li>
+	<li>Some system-cleaning tools might clear the browser storage, and some browsers offer to do so as well as part of a refresh process.</li>
+</ul>
+
+If one of these applies to you, or you're otherwise worried about losing your bibliography, use <i>Link to this version</i> to upload a copy to zbib.org, and then save the link. Each uploaded version is stored for at least six months from when it was created or last viewed.
 
 <h3 id="privacy">Is my data private?</h3>
 

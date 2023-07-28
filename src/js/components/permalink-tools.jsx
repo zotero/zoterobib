@@ -58,11 +58,11 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 						<div className="safari-warning">
 							<p><strong><FormattedMessage
 								id="zbib.permalink.safari.warning"
-								defaultMessage="If you don't visit zbib.org for 7 days, your browser will automatically remove your bibliography."
+								defaultMessage="If you don’t visit zbib.org for 7 days, your browser will automatically remove your bibliography."
 							/></strong></p>
 							<p><FormattedMessage
 								id="zbib.permalink.safari.recommendation"
-								defaultMessage="We recommend persisting your bibliography by creating a permalink."
+								defaultMessage="We recommend saving your bibliography by creating a permalink."
 							/></p>
 						</div>
 					) }
