@@ -38,10 +38,12 @@ const getStyleProperties = citationStyleXml => {
 		const isUppercaseSubtitlesStyle = checkUppercase(citationStyleName) || checkUppercase(parentStyleName);
 		const isSentenceCaseStyle = checkSentenceCase(citationStyleName) || checkSentenceCase(parentStyleName);
 		const defaultLocale = xmlDoc.querySelector('style')?.getAttribute('default-locale');
+		const title = xmlDoc.querySelector('info > title')?.textContent;
+		const titleShort = xmlDoc.querySelector('info > title-short')?.textContent;
 
 		stylePropertiesCache.set(citationStyleXml, { citationStyleName, defaultLocale,
 			parentStyleName, styleHasBibliography, isNumericStyle, isNoteStyle,
-			isUppercaseSubtitlesStyle, isSortedStyle, isSentenceCaseStyle, });
+			isUppercaseSubtitlesStyle, isSortedStyle, isSentenceCaseStyle, title, titleShort: titleShort?.length ? titleShort : null });
 	}
 
 	return stylePropertiesCache.get(citationStyleXml);

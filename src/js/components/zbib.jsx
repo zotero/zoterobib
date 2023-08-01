@@ -211,7 +211,7 @@ const ZBib = props => {
 						'citationStyles', 'isStylesDataLoading', 'onStyleInstallerCancel',
 						'onStyleInstallerDelete', 'onStyleInstallerSelect', 'stylesData']) } />
 					<ConfirmAddDialog { ...pick(props, ['activeDialog', 'onConfirmAddCancel',
-						'onConfirmAddConfirm', 'itemToConfirm', 'styleHasBibliography']) } />
+						'onConfirmAddConfirm', 'incomingStyle', 'itemToConfirm', 'selectedStyle']) } />
 					<MultipleItemDialog { ...pick(props, ['activeDialog', 'multipleItems',
 						'multipleChoiceItems', 'onMultipleItemsCancel', 'onMultipleItemsSelect']) } />
 				</Fragment>

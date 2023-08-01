@@ -25,5 +25,32 @@
         },
         "updated": "2022-06-29 02:44:10",
         "href": "https:\/\/www.zotero.org\/styles\/harvard-cite-them-right"
+    },
+    {
+        "title": "Modern Language Association 8th edition",
+        "titleShort": "MLA",
+        "name": "modern-language-association",
+        "dependent": 0,
+        "categories": {
+            "format": "author",
+            "fields": [
+                "generic-base"
+            ]
+        },
+        "updated": "2017-11-24 18:38:06",
+        "href": "https:\/\/www.zotero.org\/styles\/modern-language-association"
+    },
+    {
+        "title": "The Journals of Gerontology, Series A: Biological Sciences and Medical Sciences",
+        "name": "the-journals-of-gerontology-series-a",
+        "dependent": 0,
+        "categories": {
+            "format": "numeric",
+            "fields": [
+                "medicine"
+            ]
+        },
+        "updated": "2016-09-17 04:50:06",
+        "href": "https://www.zotero.org/styles/the-journals-of-gerontology-series-a"
     }
 ]

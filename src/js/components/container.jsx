@@ -51,11 +51,18 @@ const CLEAR_ALL_MESSAGES = 'CLEAR_ALL_MESSAGES';
 const REQUEST_SCHEMA = 'REQUEST_SCHEMA';
 const RECEIVE_SCHEMA = 'RECEIVE_SCHEMA';
 const ERROR_SCHEMA = 'ERROR_SCHEMA';
+const REQUEST_FETCH_INCOMING_STYLE = 'REQUEST_FETCH_INCOMING_STYLE';
+const RECEIVE_FETCH_INCOMING_STYLE = 'RECEIVE_FETCH_INCOMING_STYLE';
+const ERROR_FETCH_INCOMING_STYLE = 'ERROR_FETCH_INCOMING_STYLE';
+const REJECT_FETCH_INCOMING_STYLE = 'REJECT_FETCH_INCOMING_STYLE';
 
 const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	dispatch({ type: REQUEST_FETCH_STYLE, styleName });
 	try {
 		const styleData = await fetchAndParseIndependentStyle(styleName);
+		if(opts.store) {
+			localStorage.setItem('zotero-bib-citation-style', styleData.citationStyleName ?? styleName);
+		}
 		dispatch({
 			type: RECEIVE_FETCH_STYLE, ...styleData, ...opts
 		});
@@ -63,6 +70,22 @@ const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 		dispatch({ type: ERROR_FETCH_STYLE, styleName, error });
 	}
 }
+
+const maybeFetchIncomingStyle = async (dispatch, styleName, isSameAsCurrent) => {
+	dispatch({ type: REQUEST_FETCH_INCOMING_STYLE, styleName });
+	if(isSameAsCurrent) {
+		dispatch({ type: REJECT_FETCH_INCOMING_STYLE, styleName })
+		return;
+	}
+	try {
+		const styleData = await fetchAndParseIndependentStyle(styleName);
+		dispatch({
+			type: RECEIVE_FETCH_INCOMING_STYLE, ...styleData,
+		});
+	} catch (error) {
+		dispatch({ type: ERROR_FETCH_INCOMING_STYLE, styleName, error });
+	}
+};
 
 const configureZoteroSchema = async (dispatch, intl, apiAuthorityPart) => {
 	dispatch({ type: REQUEST_SCHEMA });
@@ -81,6 +104,37 @@ const confirmStyle = dispatch => dispatch({ type: CONFIRM_CURRENT_STYLE });
 
 const reducer = (state, action) => {
 	switch(action.type) {
+		case REQUEST_FETCH_INCOMING_STYLE:
+			return {
+				...state,
+				incomingStyle: {
+					isFetching: true
+				}
+			};
+		case REJECT_FETCH_INCOMING_STYLE:
+			return {
+				...state,
+				incomingStyle: {
+					name: action.styleName,
+					isFetching: false,
+				}
+			};
+		case RECEIVE_FETCH_INCOMING_STYLE:
+			return {
+				...state,
+				incomingStyle: {
+					name: action.styleProps.citationStyleName,
+					isFetching: false,
+					xml: action.parentStyleXml ?? action.styleXml,
+					isDependent: !!action.styleProps.parentStyleName,
+					...pick(
+						action.styleProps,
+						['styleHasBibliography', 'isNumericStyle', 'isNoteStyle', 'isSortedStyle', 'isUppercaseSubtitlesStyle', 'isSentenceCaseStyle', 'title', 'titleShort', 'id']
+					)
+				}
+			};
+		case ERROR_FETCH_INCOMING_STYLE:
+			return { ...state, incomingStyle: { ...state.incomingStyle, isError: true, isFetching: false } };
 		case REQUEST_FETCH_STYLE:
 			return { ...state, isFetching: true };
 		case ERROR_FETCH_STYLE:
@@ -88,6 +142,15 @@ const reducer = (state, action) => {
 		case RECEIVE_FETCH_STYLE:
 			return {
 				...state,
+				selectedStyle: {
+					// TODO: migrate root-level props to selectedStyle
+					// xml: action.parentStyleXml ?? action.styleXml,
+					// isDependent: !!action.styleProps.parentStyleName,
+					...pick(
+						action.styleProps,
+						['styleHasBibliography', 'isNumericStyle', 'isNoteStyle', 'isSortedStyle', 'isUppercaseSubtitlesStyle', 'isSentenceCaseStyle', 'title', 'titleShort']
+					)
+				},
 				isFetching: false,
 				bibliographyNeedsRebuild: true,
 				selected: action.styleName, // in case of dependant style, this is the name of the parent style
@@ -206,6 +269,7 @@ const BibWebContainer = props => {
 		isDependent: false,
 		localeOverride: null,
 		styleHasBibliography: undefined,
+		incomingStyle: { isFetching: false },
 		isNumericStyle: undefined,
 		isNoteStyle: undefined,
 		isSortedStyle: undefined,
@@ -251,6 +315,8 @@ const BibWebContainer = props => {
 	const wasSentenceCaseStyle = usePrevious(state.isSentenceCaseStyle);
 	const useLegacy = useRef(true);
 	const isStyleReady = state.selected && state.isConfirmed && !state.isFetching;
+	const isIncomingStyleReady = state.incomingStyle && !state.incomingStyle.isFetching;
+	const prevIncomingStyleName = usePrevious(state.incomingStyle?.name);
 
 	const isReady = isStyleReady && state.isCiteprocReady && isDataReady &&
 		isQueryHandled && state.isSchemaReady && !state.bibliographyNeedsRebuild;
@@ -448,6 +514,12 @@ const BibWebContainer = props => {
 		dispatch({ type: POST_MESSAGE, message });
 	}, []);
 
+	const installCitationStyle = useCallback(async styleName => {
+		const stylesData = await retrieveStylesData(config.stylesURL);
+		const newStyleMeta = stylesData.find(sd => sd.name === styleName);
+		setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+	}, [citationStyles, config.stylesURL]);
+
 	const fetchRemoteBibliography = useCallback(async () => {
 		try {
 			const remoteData = await fetchFromPermalink(`${config.storeURL}/${remoteId}`);
@@ -457,9 +529,7 @@ const BibWebContainer = props => {
 
 					var citationStyleMeta = citationStyles.find(cs => cs.name === remoteData.citationStyle);
 					if(!citationStyleMeta) {
-						const stylesData = await retrieveStylesData(config.stylesURL);
-						const newStyleMeta = stylesData.find(sd => sd.name === remoteData.citationStyle);
-						setCitationStyles(getExpandedCitationStyles(citationStyles, newStyleMeta));
+						await installCitationStyle(remoteData.citationStyle);
 					}
 				}
 
@@ -476,7 +546,7 @@ const BibWebContainer = props => {
 			window.history.pushState(null, null, '/');
 			handleError('Failed to load citations by id', e);
 		}
-	}, [citationStyles, config, handleError, remoteId]);
+	}, [citationStyles, config, handleError, installCitationStyle, remoteId]);
 
 	const getCopyData = useCallback(async (format, itemsCSL) => {
 		itemsCSL = itemsCSL || bib.current.itemsCSL;
@@ -660,18 +730,23 @@ const BibWebContainer = props => {
 		setItemToConfirm(null);
 	}, []);
 
-	const handleConfirmAddConfirm = useCallback(async () => {
+	const handleConfirmAddConfirm = useCallback(async (useIncomingStyle) => {
 		addItem(itemToConfirm.item);
+
+		const { xml, styleHasBibliography } = useIncomingStyle ? state.incomingStyle : state;
 		setItemUnderReview({
 			item: itemToConfirm.item,
 			...(await getOneTimeBibliographyOrFallback(
-				getItemsCSL([itemToConfirm.item]), state.xml, state.styleHasBibliography, useLegacy.current
+				getItemsCSL([itemToConfirm.item]), xml, styleHasBibliography, useLegacy.current
 			))
 		});
 		setActiveDialog(null);
 		setItemToConfirm(null);
 		dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
-	}, [addItem, state.xml, itemToConfirm, state.styleHasBibliography]);
+		if (useIncomingStyle) {
+			fetchAndSelectStyle(dispatch, state.incomingStyle.name, { store: true });
+		}
+	}, [addItem, itemToConfirm, state]);
 
 	const handleDeleteEntry = useCallback((itemId) => {
 		const index = bib.current.itemsRaw.findIndex(item => item.key == itemId);
@@ -1013,7 +1088,7 @@ const BibWebContainer = props => {
 		setTitle(title);
 	}, []);
 
-	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false, shouldImport = false) => {
+	const handleTranslateIdentifier = useCallback(async (identifier, multipleSelectedItems = null, shouldConfirm = false, shouldImport = false, shouldUseIncomingStyle = false) => {
 		if(!shouldImport) {
 			identifier = parseIdentifier(identifier);
 		}
@@ -1051,6 +1126,8 @@ const BibWebContainer = props => {
 					translationResponse = await bib.current.translateIdentifier(identifier, opts);
 				}
 
+				const { xml, styleHasBibliography } = shouldUseIncomingStyle ? state.incomingStyle : state;
+
 				switch(translationResponse.result) {
 					case ZoteroBib.COMPLETE:
 						if(translationResponse.items.length === 0) {
@@ -1080,11 +1157,17 @@ const BibWebContainer = props => {
 
 						if(shouldConfirm) {
 							const itemToConfirm = {
-								item: translationResponse.items[0],
-								...(await getOneTimeBibliographyOrFallback(
-								getItemsCSL([translationResponse.items[0]]), state.xml, state.styleHasBibliography, useLegacy.current
-								))
+								item: translationResponse.items[0]
 							};
+							itemToConfirm.inCurrentStyle = await getOneTimeBibliographyOrFallback(
+								getItemsCSL([translationResponse.items[0]]), state.xml, state.styleHasBibliography, useLegacy.current
+							)
+
+							if (state.incomingStyle.name !== state.selected && state.incomingStyle.xml) {
+								itemToConfirm.inIncomingStyle = await getOneTimeBibliographyOrFallback(
+									getItemsCSL([translationResponse.items[0]]), state.incomingStyle.xml, state.incomingStyle.styleHasBibliography, useLegacy.current
+								)
+							}
 
 							setIdentifier('');
 							setIsTranslating(false);
@@ -1100,7 +1183,7 @@ const BibWebContainer = props => {
 						setItemUnderReview({
 							item: translationResponse.items[0],
 							...(await getOneTimeBibliographyOrFallback(
-							getItemsCSL([translationResponse.items[0]]), state.xml, state.styleHasBibliography, useLegacy.current
+							getItemsCSL([translationResponse.items[0]]), xml, styleHasBibliography, useLegacy.current
 							))
 						});
 
@@ -1130,7 +1213,7 @@ const BibWebContainer = props => {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
 		}
-	}, [addItem, state.xml, state.styleHasBibliography, state.meta, handleError]);
+	}, [state, addItem, handleError]);
 
 	const handleTranslationCancel = useCallback(() => {
 		if(abortController.current) {
@@ -1252,14 +1335,18 @@ const BibWebContainer = props => {
 	}, [isReadOnly, title, prevTitle]);
 
 	useEffect(() => {
-		if(isDataReady && isStyleReady && state.isCiteprocReady && !isQueryHandled && window.location.pathname === '/import') {
+		if(isDataReady && isStyleReady && isIncomingStyleReady && state.isCiteprocReady && !isQueryHandled && window.location.pathname === '/import') {
 			window.history.replaceState(null, null, '/');
 			setIsQueryHandled(true);
+			const shouldConfirm = state.bibliography.items.length > 0;
 			(async () => {
-				await handleTranslateIdentifier(identifier, null, true);
+				if(!shouldConfirm) {
+					await fetchAndSelectStyle(dispatch, state.incomingStyle.name, { isConfirmed: true, store: true });
+				}
+				await handleTranslateIdentifier(identifier, null, shouldConfirm, false, !shouldConfirm);
 			})();
 		}
-	}, [handleTranslateIdentifier, identifier, state.isCiteprocReady, isDataReady, isStyleReady, isQueryHandled]);
+	}, [handleTranslateIdentifier, identifier, state.isCiteprocReady, isDataReady, isStyleReady, isQueryHandled, isIncomingStyleReady, state.bibliography, state.incomingStyle]);
 
 	useEffect(() => {
 		document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -1287,6 +1374,12 @@ const BibWebContainer = props => {
 	}, [handleAfterPrint]);
 
 	useEffect(() => {
+		if (state.incomingStyle?.name !== prevIncomingStyleName && state.incomingStyle?.name !== state.selected) {
+			installCitationStyle(state.incomingStyle.name);
+		}
+	}, [state.incomingStyle, state.selected, prevIncomingStyleName, installCitationStyle]);
+
+	useEffect(() => {
 		document.addEventListener('copy', handleCopyToClipboard, true);
 
 		const params = new URLSearchParams(location.search);
@@ -1298,14 +1391,21 @@ const BibWebContainer = props => {
 			fetchRemoteBibliography();
 		} else {
 			const prefilledIdentifier = params.get('q') || '';
+			const incomingCitationStyle = params.get('style') || '';
+			const localCitationStyle = localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name;
+
 			setIdentifier(prefilledIdentifier);
 			setIsDataReady(true);
 			configureZoteroSchema(dispatch, intl, config.apiAuthorityPart);
 			fetchAndSelectStyle(
 				dispatch,
-				localStorage.getItem('zotero-bib-citation-style') || coreCitationStyles.find(cs => cs.isDefault).name,
+				localCitationStyle,
 				{ isConfirmed: true }
 			);
+			// for arrivals via /import we display incoming citation in current and incoming citation styles
+			if (!isQueryHandled && incomingCitationStyle) {
+				maybeFetchIncomingStyle(dispatch, incomingCitationStyle, incomingCitationStyle === localCitationStyle);
+			}
 		}
 	}, []); //eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1333,6 +1433,8 @@ const BibWebContainer = props => {
 		editorItem = { editorItem }
 		hydrateItemsCount={ hydrateItemsCount }
 		identifier = { identifier }
+		incomingStyle = { state.incomingStyle }
+		selectedStyle = { state.selectedStyle }
 		isNoteStyle = { state.isNoteStyle }
 		isNumericStyle = { state.isNumericStyle }
 		isReadOnly={ isReadOnly }

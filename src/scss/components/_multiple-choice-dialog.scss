@@ -1,9 +1,13 @@
-//
-// Multiple choice dialog
-//
-
 .multiple-choice-dialog,
 .confirm-add-dialog {
+	.tab {
+		max-width: 50%;
+	}
+
+	.tab-pane {
+		padding: 1em 0;
+	}
+
 	.results {
 		margin: 0 - $modal-inner-padding-mobile;
 		padding: 0;
