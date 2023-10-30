@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import { useIntl } from 'react-intl';
 import { usePrevious } from 'web-common/hooks';
-import { pick } from 'web-common/utils';
+import { pick, omit } from 'web-common/utils';
 
 import {
 	calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink, fetchSchema,
@@ -55,6 +55,8 @@ const REQUEST_FETCH_INCOMING_STYLE = 'REQUEST_FETCH_INCOMING_STYLE';
 const RECEIVE_FETCH_INCOMING_STYLE = 'RECEIVE_FETCH_INCOMING_STYLE';
 const ERROR_FETCH_INCOMING_STYLE = 'ERROR_FETCH_INCOMING_STYLE';
 const REJECT_FETCH_INCOMING_STYLE = 'REJECT_FETCH_INCOMING_STYLE';
+const TRANSLATION_RECEIVED = 'TRANSLATION_RECEIVED';
+const TRANSLATION_PROCESSED = 'TRANSLATION_PROCESSED';
 
 const fetchAndSelectStyle = async (dispatch, styleName, opts = {}) => {
 	dispatch({ type: REQUEST_FETCH_STYLE, styleName });
@@ -220,6 +222,16 @@ const reducer = (state, action) => {
 			}
 		case CLEAR_ALL_MESSAGES:
 			return { ...state, messages: [] }
+		case TRANSLATION_RECEIVED:
+			return {
+				...state,
+				translation: omit(action, 'type'),
+			}
+		case TRANSLATION_PROCESSED:
+			return {
+				...state,
+				translation: undefined
+			}
 	}
 	return state;
 }
@@ -262,26 +274,27 @@ const BibWebContainer = props => {
 	}
 
 	const [state, dispatch] = useReducer(reducer, {
-		isSchemaReady: false,
-		selected: undefined,
-		xml: undefined,
-		isFetching: false,
-		isDependent: false,
-		localeOverride: null,
-		styleHasBibliography: undefined,
+		bibliography: { items: [], meta: null, lookup: {} },
+		bibliographyNeedsRebuild: false,
+		bibliographyNeedsRefresh: false,
 		incomingStyle: { isFetching: false },
-		isNumericStyle: undefined,
+		isCiteprocReady: false,
+		isConfirmed: undefined,
+		isDependent: false,
+		isFetching: false,
 		isNoteStyle: undefined,
+		isNumericStyle: undefined,
+		isSchemaReady: false,
+		isSentenceCaseStyle: undefined,
 		isSortedStyle: undefined,
 		isUppercaseSubtitlesStyle: undefined,
-		isSentenceCaseStyle: undefined,
-		isConfirmed: undefined,
-		bibliography: { items: [], meta: null, lookup: {} },
-		bibliographyNeedsRefresh: false,
-		bibliographyNeedsRebuild: false,
-		isCiteprocReady: false,
+		localeOverride: null,
 		messages: [],
 		meta: {},
+		selected: undefined,
+		styleHasBibliography: undefined,
+		translation: undefined,
+		xml: undefined,
 	});
 
 	const prevCitationStyle = usePrevious(state.selected);
@@ -1126,83 +1139,8 @@ const BibWebContainer = props => {
 					translationResponse = await bib.current.translateIdentifier(identifier, opts);
 				}
 
-				const { xml, styleHasBibliography } = shouldUseIncomingStyle ? state.incomingStyle : state;
-
-				switch(translationResponse.result) {
-					case ZoteroBib.COMPLETE:
-						if(translationResponse.items.length === 0) {
-							dispatch({
-								type: POST_MESSAGE,
-								message: { id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
-							});
-							setIsTranslating(false);
-							return;
-						}
-						var rootItems = translationResponse.items.filter(item => !item.parentItem);
-
-						if(rootItems.length > 1) {
-							const multipleItems = {
-								items: rootItems,
-							...(await getOneTimeBibliographyOrFallback(
-									getItemsCSL(rootItems), state.xml, state.styleHasBibliography, useLegacy.current
-								))
-							};
-
-							setIdentifier('');
-							setIsTranslating(false);
-							setActiveDialog('MULTIPLE_ITEMS_DIALOG');
-							setMultipleItems(multipleItems);
-							return;
-						}
-
-						if(shouldConfirm) {
-							const itemToConfirm = {
-								item: translationResponse.items[0]
-							};
-							itemToConfirm.inCurrentStyle = await getOneTimeBibliographyOrFallback(
-								getItemsCSL([translationResponse.items[0]]), state.xml, state.styleHasBibliography, useLegacy.current
-							)
-
-							if (state.incomingStyle.name !== state.selected && state.incomingStyle.xml) {
-								itemToConfirm.inIncomingStyle = await getOneTimeBibliographyOrFallback(
-									getItemsCSL([translationResponse.items[0]]), state.incomingStyle.xml, state.incomingStyle.styleHasBibliography, useLegacy.current
-								)
-							}
-
-							setIdentifier('');
-							setIsTranslating(false);
-							setActiveDialog('CONFIRM_ADD_DIALOG');
-							setItemToConfirm(itemToConfirm);
-							return;
-						}
-
-						addItem(translationResponse.items[0]);
-						setIdentifier('');
-						setIsTranslating(false);
-						dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
-						setItemUnderReview({
-							item: translationResponse.items[0],
-							...(await getOneTimeBibliographyOrFallback(
-							getItemsCSL([translationResponse.items[0]]), xml, styleHasBibliography, useLegacy.current
-							))
-						});
-
-					break;
-					case ZoteroBib.MULTIPLE_CHOICES:
-						setIsTranslating(false);
-						setActiveDialog('MULTIPLE_CHOICE_DIALOG');
-						setMoreItemsLink(translationResponse.next);
-						setMultipleChoiceItems(dedupMultipleChoiceItems(
-							await processMultipleChoiceItems(translationResponse.items, state.meta.itemTypes, isUrl)
-						));
-					break;
-					case ZoteroBib.FAILED:
-						handleError('An error occurred while citing this source.');
-						setIsTranslating(false);
-					break;
-				}
-			}
-			catch(e) {
+				dispatch({ type: TRANSLATION_RECEIVED, translationResponse, identifier, shouldConfirm, shouldImport, shouldUseIncomingStyle, isUrl });
+			} catch(e) {
 				if(e instanceof DOMException && e.message === 'The user aborted a request.') {
 					return;
 				}
@@ -1213,7 +1151,86 @@ const BibWebContainer = props => {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
 		}
-	}, [state, addItem, handleError]);
+	}, [handleError]);
+
+	const processTranslation = useCallback(async () => {
+		const { shouldUseIncomingStyle, shouldConfirm, translationResponse, isUrl } = state.translation;
+		const { xml, styleHasBibliography } = shouldUseIncomingStyle ? state.incomingStyle : state;
+
+		switch (translationResponse.result) {
+			case ZoteroBib.COMPLETE:
+				if (translationResponse.items.length === 0) {
+					dispatch({
+						type: POST_MESSAGE,
+						message: { id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
+					});
+					setIsTranslating(false);
+					return;
+				}
+				var rootItems = translationResponse.items.filter(item => !item.parentItem);
+
+				if (rootItems.length > 1) {
+					const multipleItems = {
+						items: rootItems,
+						...(await getOneTimeBibliographyOrFallback(
+							getItemsCSL(rootItems), state.xml, state.styleHasBibliography, useLegacy.current
+						))
+					};
+
+					setIdentifier('');
+					setIsTranslating(false);
+					setActiveDialog('MULTIPLE_ITEMS_DIALOG');
+					setMultipleItems(multipleItems);
+					return;
+				}
+
+				if (shouldConfirm) {
+					const itemToConfirm = {
+						item: translationResponse.items[0]
+					};
+					itemToConfirm.inCurrentStyle = await getOneTimeBibliographyOrFallback(
+						getItemsCSL([translationResponse.items[0]]), state.xml, state.styleHasBibliography, useLegacy.current
+					)
+
+					if (state.incomingStyle.name !== state.selected && state.incomingStyle.xml) {
+						itemToConfirm.inIncomingStyle = await getOneTimeBibliographyOrFallback(
+							getItemsCSL([translationResponse.items[0]]), state.incomingStyle.xml, state.incomingStyle.styleHasBibliography, useLegacy.current
+						)
+					}
+
+					setIdentifier('');
+					setIsTranslating(false);
+					setActiveDialog('CONFIRM_ADD_DIALOG');
+					setItemToConfirm(itemToConfirm);
+					return;
+				}
+
+				addItem(translationResponse.items[0]);
+				setIdentifier('');
+				setIsTranslating(false);
+				dispatch({ type: BIBLIOGRAPHY_SOURCE_CHANGED });
+				setItemUnderReview({
+					item: translationResponse.items[0],
+					...(await getOneTimeBibliographyOrFallback(
+						getItemsCSL([translationResponse.items[0]]), xml, styleHasBibliography, useLegacy.current
+					))
+				});
+
+				break;
+			case ZoteroBib.MULTIPLE_CHOICES:
+				setIsTranslating(false);
+				setActiveDialog('MULTIPLE_CHOICE_DIALOG');
+				setMoreItemsLink(translationResponse.next);
+				setMultipleChoiceItems(dedupMultipleChoiceItems(
+					await processMultipleChoiceItems(translationResponse.items, state.meta.itemTypes, isUrl)
+				));
+				break;
+			case ZoteroBib.FAILED:
+				handleError('An error occurred while citing this source.');
+				setIsTranslating(false);
+				break;
+		}
+	}, [addItem, handleError, state]);
 
 	const handleTranslationCancel = useCallback(() => {
 		if(abortController.current) {
@@ -1273,6 +1290,13 @@ const BibWebContainer = props => {
 	const handleSaveToZoteroHide = useCallback(() => {
 		setActiveDialog(null);
 	}, []);
+
+	useEffect(() => {
+		if (state.translation && isReady) {
+			processTranslation();
+			dispatch({ type: TRANSLATION_PROCESSED });
+		}
+	}, [processTranslation, state.translation, isReady]);
 
 	useEffect(() => {
 		if(!state.isCiteprocReady || !copyCitationState.citationKey) {

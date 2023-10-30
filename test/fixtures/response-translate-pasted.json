@@ -1,0 +1,19 @@
+[
+    {
+        "key": "TQS6RQK9",
+        "version": 0,
+        "itemType": "book",
+        "creators": [
+            {
+                "firstName": "Clinton",
+                "lastName": "Sanders",
+                "creatorType": "author"
+            }
+        ],
+        "tags": [],
+        "title": "Understanding dogs",
+        "volume": "39",
+        "publisher": "Temple University Press",
+        "date": "1999"
+    }
+]

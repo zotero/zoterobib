@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole } from '@testing-library/react'
+import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, findByText, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks } from './utils/common';
@@ -18,6 +18,8 @@ import responseTranslateSearch from './fixtures/response-translate-search.json';
 import responseTranslateSearchMore from './fixtures/response-translate-search-more.json';
 import responseTranslateAPAIdentifier from './fixtures/response-translate-apa-identifier.json';
 import apaStyle from './fixtures/apa.xml';
+import understandingDogsBib from "./fixtures/paste-bibtex";
+import responseTranslatePasted from "./fixtures/response-translate-pasted.json";
 
 import CSL from 'citeproc';
 window.CSL = CSL;
@@ -325,7 +327,7 @@ describe('Translate', () => {
 		)).not.toBeInTheDocument());
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
-		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
+		await waitFor(() => expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6));
 
 		expect(requestCounter).toBe(3);
 	});
@@ -368,6 +370,30 @@ describe('Translate', () => {
 		)).not.toHaveAttribute('readonly'));
 
 		expect(getByText(newItemSection, /Circadian mood variations in twitter content/)).toBeInTheDocument();
+		expect(hasTranslated).toBe(true);
+	});
+
+	test("Multi-line pasted data is translated using /import endpoint", async () => {
+		let hasTranslated = false;
+		server.use(
+			rest.post('http://localhost/import', async (req, res, ctx) => {
+				expect(await req.text()).toEqual(understandingDogsBib);
+				hasTranslated = true;
+				return res(ctx.delay(100), ctx.json(responseTranslatePasted));
+			})
+		);
+
+		renderWithProviders(<Container />);
+
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+
+		expect(input).toHaveFocus();
+		fireEvent.paste(input, { clipboardData: { getData: () => understandingDogsBib } });
+
+		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
+		expect(await findByText(newItemSection, /Understanding Dogs/)).toBeInTheDocument();
 		expect(hasTranslated).toBe(true);
 	});
 });
