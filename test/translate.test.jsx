@@ -4,7 +4,7 @@ import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, findByText, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { applyAdditionalJestTweaks } from './utils/common';
+import { applyAdditionalJestTweaks, waitForPosition } from './utils/common';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
@@ -395,5 +395,31 @@ describe('Translate', () => {
 		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
 		expect(await findByText(newItemSection, /Understanding Dogs/)).toBeInTheDocument();
 		expect(hasTranslated).toBe(true);
+	});
+
+	test("Trailing newline is ignored in pasted data", async () => {
+		let hasTranslated = false;
+		server.use(
+			rest.post('http://localhost/search', async (req, res, ctx) => {
+				expect(await req.text()).toBe('978-1979837125');
+				hasTranslated = true;
+				// delayed to make sure input becomes readonly
+				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+			})
+		);
+		renderWithProviders(<Container />);
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+		expect(input).toHaveFocus();
+		fireEvent.paste(input, { clipboardData: { getData: () => "978-1979837125\n " } });
+
+		// should ignore this paste event and do nothing
+		await waitForPosition();
+		expect(screen.getByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		)).not.toHaveAttribute('readonly')
+
+		expect(hasTranslated).toBe(false);
 	});
 });

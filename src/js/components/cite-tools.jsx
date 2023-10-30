@@ -31,8 +31,9 @@ const CiteTools = ({ identifier, isTranslating, onEditorOpen, onTranslationCance
 	const handlePaste = useCallback((ev) => {
 		const clipboardData = ev.clipboardData || window.clipboardData;
 		const pastedData = clipboardData.getData('Text');
+		const isMultiLineData = pastedData.split('\n').filter(line => line.trim().length > 0).length > 1;
 
-		if(!pastedData.includes('\n')) {
+		if (!isMultiLineData) {
 			return;
 		}
 
