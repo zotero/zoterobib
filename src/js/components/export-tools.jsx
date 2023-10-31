@@ -94,17 +94,10 @@ const ExportTools = props => {
 		onDownloadFile(format);
 	}, [isHydrated, isReady, onDownloadFile, onSaveToZoteroShow]);
 
-	const handleToggleDropdown = useCallback(ev => {
-		const isFromCopyTrigger = ev.target && ev.target.closest('.clipboard-trigger');
-		if(isDropdownOpen && isFromCopyTrigger) {
-			dropdownTimer.current = setTimeout(() => {
-				setIsDropdownOpen(false);
-			}, 950);
-			return false;
-		}
+	const handleToggleDropdown = useCallback(() => {
 		clearTimeout(dropdownTimer.current);
-		setIsDropdownOpen(!isDropdownOpen);
-	}, [isDropdownOpen]);
+		setIsDropdownOpen(isDropdownOpen => !isDropdownOpen);
+	}, []);
 
 	const handleCopyClick = useCallback(async ev => {
 		if(!isTriggerEvent(ev)) {
@@ -119,7 +112,15 @@ const ExportTools = props => {
 			return;
 		}
 		copyToClipboard(format, isTopLevelButton);
-	}, [copyToClipboard, isHydrated, isReady]);
+
+		if (isDropdownOpen) {
+			ev.preventDefault();
+			dropdownTimer.current = setTimeout(() => {
+				setIsDropdownOpen(false);
+			}, 950);
+			return false;
+		}
+	}, [copyToClipboard, isDropdownOpen, isHydrated, isReady]);
 
 	const isCopied = clipboardConfirmations['plain'];
 
