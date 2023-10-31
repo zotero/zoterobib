@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, findByText, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -18,7 +18,7 @@ import responseTranslateSearch from './fixtures/response-translate-search.json';
 import responseTranslateSearchMore from './fixtures/response-translate-search-more.json';
 import responseTranslateAPAIdentifier from './fixtures/response-translate-apa-identifier.json';
 import apaStyle from './fixtures/apa.xml';
-import understandingDogsBib from "./fixtures/paste-bibtex";
+import pastedBibtex from "./fixtures/pasted-bibtex";
 import responseTranslatePasted from "./fixtures/response-translate-pasted.json";
 
 import CSL from 'citeproc';
@@ -43,16 +43,15 @@ describe('Translate', () => {
 		delete window.location;
 		window.location = new URL('http://localhost/');
 		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
+			http.get('https://api.zotero.org/schema', () => {
+				return HttpResponse.json(schema);
 			})
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
+			http.get('https://www.zotero.org/styles/modern-language-association', () => {
+				return HttpResponse.text(modernLanguageAssociationStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		localStorage.setItem(
@@ -72,11 +71,11 @@ describe('Translate', () => {
 	test('Translates identifier', async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
-				expect(await req.text()).toBe('978-1979837125');
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('978-1979837125');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifier);
 			})
 		);
 
@@ -110,11 +109,11 @@ describe('Translate', () => {
 	test('Translates URL', async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/web', async (req, res, ctx) => {
-				expect(await req.text()).toBe('https://example.com/golden');
+			http.post('http://localhost/web', async ({ request }) => {
+				expect(await request.text()).toBe('https://example.com/golden');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifier);
 			})
 		);
 
@@ -148,11 +147,11 @@ describe('Translate', () => {
 	test('Corrects incomplete URL', async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/web', async (req, res, ctx) => {
-				expect(await req.text()).toBe('http://example.com/golden');
+			http.post('http://localhost/web', async ({ request }) => {
+				expect(await request.text()).toBe('http://example.com/golden');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifier);
 			})
 		);
 
@@ -189,11 +188,11 @@ describe('Translate', () => {
 	test('Extracts DOI from an URL', async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
-				expect(await req.text()).toBe('10.3389/fvets.2021.675782');
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('10.3389/fvets.2021.675782');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateDOI));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateDOI);
 			})
 		);
 
@@ -231,11 +230,11 @@ describe('Translate', () => {
 	test('Supports picking from multiple results', async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/web', async (req, res, ctx) => {
-				expect(await req.text()).toBe('http://example.com/items.bib');
+			http.post('http://localhost/web', async ({ request }) => {
+				expect(await request.text()).toBe('http://example.com/items.bib');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateItems));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateItems);
 			})
 		);
 
@@ -277,26 +276,23 @@ describe('Translate', () => {
 	test('Supports picking an item from a search query', async () => {
 		let requestCounter = 0;
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
+			http.post('http://localhost/search', async ({ request }) => {
 				requestCounter++;
 				if(requestCounter === 1) {
-					expect(await req.text()).toBe('Doggos');
-					return res(
-						ctx.status(300),
-						ctx.set('Link', '</search?start=dd1857be0cd0b3d2c9b556c16cc63b16>; rel="next"'),
-						ctx.json(responseTranslateSearch)
-					);
+					expect(await request.text()).toBe('Doggos');
+					return HttpResponse.json(responseTranslateSearch, {
+						status: 300,
+						headers: { 'Link': '</search?start=dd1857be0cd0b3d2c9b556c16cc63b16>; rel="next"' },
+					});
 				} else if(requestCounter === 2) {
-					expect(req.url.searchParams.get('start')).toBe('dd1857be0cd0b3d2c9b556c16cc63b16');
-					return res(
-						ctx.status(300),
-						ctx.json(responseTranslateSearchMore)
-					);
+					const url = new URL(request.url);
+					expect(url.searchParams.get('start')).toBe('dd1857be0cd0b3d2c9b556c16cc63b16');
+					return HttpResponse.json(responseTranslateSearchMore, {
+						status: 300,
+					});
 				} else if(requestCounter === 3) {
-					expect(await req.text()).toBe('10.3389/fvets.2021.675782');
-					return res(
-						ctx.json(responseTranslateDOI)
-					);
+					expect(await request.text()).toBe('10.3389/fvets.2021.675782');
+					return HttpResponse.json(responseTranslateDOI);
 				}
 			})
 		);
@@ -336,19 +332,18 @@ describe('Translate', () => {
 		localStorage.setItem('zotero-bib-citation-style', 'apa');
 		let hasTranslated = false;
 		server.use(
-			rest.get('https://www.zotero.org/styles/apa', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(apaStyle),
-				);
+			http.get('https://www.zotero.org/styles/apa', () => {
+				return HttpResponse.text(apaStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
-				expect(await req.text()).toBe('123456789');
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('123456789');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateAPAIdentifier));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateAPAIdentifier);
 			})
 		);
 
@@ -376,10 +371,11 @@ describe('Translate', () => {
 	test("Multi-line pasted data is translated using /import endpoint", async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/import', async (req, res, ctx) => {
-				expect(await req.text()).toEqual(understandingDogsBib);
+			http.post('http://localhost/import', async ({ request }) => {
+				expect(await request.text()).toEqual(pastedBibtex);
 				hasTranslated = true;
-				return res(ctx.delay(100), ctx.json(responseTranslatePasted));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslatePasted);
 			})
 		);
 
@@ -390,7 +386,7 @@ describe('Translate', () => {
 		);
 
 		expect(input).toHaveFocus();
-		fireEvent.paste(input, { clipboardData: { getData: () => understandingDogsBib } });
+		fireEvent.paste(input, { clipboardData: { getData: () => pastedBibtex } });
 
 		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
 		expect(await findByText(newItemSection, /Understanding Dogs/)).toBeInTheDocument();
@@ -400,11 +396,11 @@ describe('Translate', () => {
 	test("Trailing newline is ignored in pasted data", async () => {
 		let hasTranslated = false;
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
-				expect(await req.text()).toBe('978-1979837125');
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('978-1979837125');
 				hasTranslated = true;
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifier);
 			})
 		);
 		renderWithProviders(<Container />);

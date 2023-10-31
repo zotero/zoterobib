@@ -14,7 +14,7 @@ export default {
     // cacheDirectory: "/private/var/folders/1l/vvnsdv3168dd8y9mrqh1qpt00000gn/T/jest_dx",
 
     // Automatically clear mock calls, instances, contexts and results before every test
-    // clearMocks: false,
+    clearMocks: true,
 
     // Indicates whether the coverage information should be collected while executing the test
     // collectCoverage: false,
@@ -66,7 +66,7 @@ export default {
 
     // A set of global variables that need to be available in all test environments
     globals: {
-        fetch: global.fetch,
+        // fetch: global.fetch,
     },
 
     // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
@@ -124,7 +124,7 @@ export default {
     // resolver: undefined,
 
     // Automatically restore mock state and implementation before every test
-    restoreMocks: true,
+    // restoreMocks: false,
 
     // The root directory that Jest should scan for tests and modules within
     // rootDir: undefined,
@@ -138,7 +138,7 @@ export default {
     // runner: "jest-runner",
 
     // The paths to modules that run some code to configure or set up the testing environment before each test
-    // setupFiles: [],
+    setupFiles: ['./test/utils/jest-setup.js'],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
     // setupFilesAfterEnv: [],
@@ -151,9 +151,12 @@ export default {
 
     // The test environment that will be used for testing
     testEnvironment: "./test/utils/env-with-fetch.js",
+    // testEnvironment: "jsdom",
 
     // Options that will be passed to the testEnvironment
-    // testEnvironmentOptions: {},
+    testEnvironmentOptions: {
+        customExportConditions: [''],
+    },
 
     // Adds a location field to test results
     // testLocationInResults: false,
@@ -183,9 +186,10 @@ export default {
     // transform: undefined,
 
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-    // transformIgnorePatterns: [
-    //     "\\.pnp\\.[^\\/]+$"
-    // ],
+    transformIgnorePatterns: [
+        "/node_modules/(?!balanced-match)",
+        "\\.pnp\\.[^\\/]+$"
+    ],
 
     // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
     // unmockedModulePathPatterns: undefined,

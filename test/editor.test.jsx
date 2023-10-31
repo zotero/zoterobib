@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, screen, waitFor, queryByRole } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -34,16 +34,15 @@ describe('Editor', () => {
 		delete window.location;
 		window.location = new URL('http://localhost/');
 		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
+			http.get('https://api.zotero.org/schema', () => {
+				return HttpResponse.json(schema);
 			})
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
+			http.get('https://www.zotero.org/styles/modern-language-association', () => {
+				return HttpResponse.text(modernLanguageAssociationStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		localStorage.setItem(

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { findByRole, getAllByRole, getByRole, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -40,16 +40,15 @@ describe('Editor', () => {
 		delete window.location;
 		window.location = new URL('http://localhost/');
 		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
+			http.get('https://api.zotero.org/schema', () => {
+				return HttpResponse.json(schema);
 			})
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
+			http.get('https://www.zotero.org/styles/modern-language-association', () => {
+				return HttpResponse.text(modernLanguageAssociationStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		localStorage.setItem(
@@ -68,11 +67,10 @@ describe('Editor', () => {
 
 	test('Supports changing style', async () => {
 		server.use(
-			rest.get('https://www.zotero.org/styles/turabian-fullnote-bibliography', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(turabianFullnoteStyle),
-				);
+			http.get('https://www.zotero.org/styles/turabian-fullnote-bibliography', () => {
+				return HttpResponse.text(turabianFullnoteStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 
@@ -92,27 +90,20 @@ describe('Editor', () => {
 
 	test('Supports installing new style', async () => {
 		server.use(
-			rest.get('https://www.zotero.org/styles-files/styles.json', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/json'),
-					ctx.json(stylesJson)
-				);
+			http.get('https://www.zotero.org/styles-files/styles.json', () => {
+				return HttpResponse.json(stylesJson);
 			}),
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/nature', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(natureStyle),
-				);
+			http.get('https://www.zotero.org/styles/nature', () => {
+				return HttpResponse.text(natureStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('http://localhost/static/locales/locales-en-GB.xml', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/xml'),
-					ctx.text(localesGBForCiteproc),
-				);
+			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
+				return HttpResponse.xml(localesGBForCiteproc);
 			}),
 		);
 		renderWithProviders(<Container />);
@@ -142,11 +133,8 @@ describe('Editor', () => {
 
 	test('Supports removing style, if not in use', async () => {
 		server.use(
-			rest.get('https://www.zotero.org/styles-files/styles.json', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/json'),
-					ctx.json(stylesJson)
-				);
+			http.get('https://www.zotero.org/styles-files/styles.json', () => {
+				return HttpResponse.json(stylesJson);
 			}),
 		);
 		localStorage.setItem(
@@ -174,27 +162,20 @@ describe('Editor', () => {
 
 	test('Does not allow removing default or active style', async () => {
 		server.use(
-			rest.get('https://www.zotero.org/styles-files/styles.json', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/json'),
-					ctx.json(stylesJson)
-				);
+			http.get('https://www.zotero.org/styles-files/styles.json', () => {
+				return HttpResponse.json(stylesJson);
 			}),
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/nature', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(natureStyle),
-				);
+			http.get('https://www.zotero.org/styles/nature', () => {
+				return HttpResponse.text(natureStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('http://localhost/static/locales/locales-en-GB.xml', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/xml'),
-					ctx.text(localesGBForCiteproc),
-				);
+			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
+				return HttpResponse.xml(localesGBForCiteproc);
 			}),
 		);
 		localStorage.setItem(
@@ -226,11 +207,10 @@ describe('Editor', () => {
 	test('Items are processed when switching to APA style', async () => {
 		localStorage.setItem('zotero-bib-items', JSON.stringify(localStorageItemsForApa));
 		server.use(
-			rest.get('https://www.zotero.org/styles/apa', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(apaStyle),
-				);
+			http.get('https://www.zotero.org/styles/apa', () => {
+				return HttpResponse.text(apaStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		renderWithProviders(<Container />);

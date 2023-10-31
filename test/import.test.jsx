@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { rest } from 'msw'
+import { delay, http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, queryByText } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -39,63 +39,53 @@ describe('Import', () => {
 	beforeEach(() => {
 		delete window.location;
 		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
+			http.get('https://api.zotero.org/schema', () => {
+				return HttpResponse.json(schema);
 			})
 		);
 		server.use(
-			rest.get(/https:\/\/www\.zotero\.org\/styles\/(modern-language-association|mla)/, (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
+			http.get(/https:\/\/www.zotero.org\/styles\/(modern-language-association|mla)/, () => {
+				return HttpResponse.text(modernLanguageAssociationStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get(/https:\/\/www\.zotero\.org\/styles\/(harvard-cite-them-right|harvard-university-west-london)/, (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(harvardCiteThemRight),
-				);
+			http.get(/https:\/\/www\.zotero\.org\/styles\/(harvard-cite-them-right|harvard-university-west-london)/, () => {
+				return HttpResponse.text(harvardCiteThemRight, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/the-journals-of-gerontology-series-a', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(theJournalsOfGerontologySeriesA),
-				);
+			http.get('https://www.zotero.org/styles/the-journals-of-gerontology-series-a', () => {
+				return HttpResponse.text(theJournalsOfGerontologySeriesA, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles-files/styles.json', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/json'),
-					ctx.json(stylesJson)
-				);
+			http.get('https://www.zotero.org/styles-files/styles.json', () => {
+				return HttpResponse.json(stylesJson);
 			}),
 		);
 		server.use(
-			rest.post('http://localhost/search', async (req, res, ctx) => {
-				expect(await req.text()).toBe('1234');
-				// delayed to make sure input becomes readonly
-				return res(ctx.delay(100), ctx.json(responseTranslateIdentifier));
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('1234');
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifier);
 			})
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/nature', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(natureStyle),
-				);
+			http.get('https://www.zotero.org/styles/nature', () => {
+				return HttpResponse.text(natureStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('http://localhost/static/locales/locales-en-GB.xml', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/xml'),
-					ctx.text(localesGBForCiteproc),
-				);
+			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
+				return HttpResponse.xml(localesGBForCiteproc);
 			}),
 		);
 

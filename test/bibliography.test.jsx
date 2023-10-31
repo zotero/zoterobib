@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom'
 import copy from 'copy-to-clipboard';
 import fileSaver from 'file-saver';
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import { findByRole, getAllByRole, getByRole, screen, waitFor, queryByRole } from '@testing-library/react'
+import { findByRole, getAllByRole, getByRole, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks, getFileAsText } from './utils/common';
@@ -43,24 +43,22 @@ describe('Citations', () => {
 		delete window.location;
 		window.location = new URL('http://localhost/');
 		server.use(
-			rest.get('https://api.zotero.org/schema', (req, res, ctx) => {
-				return res(ctx.json(schema));
+			http.get('https://api.zotero.org/schema', () => {
+				return HttpResponse.json(schema);
 			})
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/modern-language-association', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(modernLanguageAssociationStyle),
-				);
+			http.get('https://www.zotero.org/styles/modern-language-association', () => {
+				return HttpResponse.text(modernLanguageAssociationStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		server.use(
-			rest.get('https://www.zotero.org/styles/nature', (req, res, ctx) => {
-				return res(
-					ctx.set('Content-Type', 'application/vnd.citationstyles.style+xml'),
-					ctx.text(natureStyle),
-				);
+			http.get('https://www.zotero.org/styles/nature', () => {
+				return HttpResponse.text(natureStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
 			}),
 		);
 		localStorage.setItem(
@@ -133,15 +131,15 @@ describe('Citations', () => {
 
 	test('Supports downloading bibliography as RIS file', async () => {
 		server.use(
-			rest.post('http://localhost/export', async (req, res, ctx) => {
-				expect(req.url.searchParams.get('format')).toEqual('ris');
-				const reqJSON = await req.json();
-				expect(reqJSON).toHaveLength(5);
-				expect(reqJSON.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
-				return res(
-					ctx.set('Content-Type', 'application/x-research-info-systems'),
-					ctx.text('RIS FORMAT'),
-				);
+			http.post('http://localhost/export', async ({ request }) => {
+				const url = new URL(request.url);
+				const items = await request.json();
+				expect(url.searchParams.get('format')).toEqual('ris');
+				expect(items).toHaveLength(5);
+				expect(items.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
+				return HttpResponse.text('RIS FORMAT', {
+					headers: { 'Content-Type': 'application/x-research-info-systems' },
+				});
 			}),
 		);
 		renderWithProviders(<Container />);
@@ -159,15 +157,15 @@ describe('Citations', () => {
 
 	test('Supports downloading bibliography as BibTex file', async () => {
 		server.use(
-			rest.post('http://localhost/export', async (req, res, ctx) => {
-				expect(req.url.searchParams.get('format')).toEqual('bibtex');
-				const reqJSON = await req.json();
-				expect(reqJSON).toHaveLength(5);
-				expect(reqJSON.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
-				return res(
-					ctx.set('Content-Type', 'application/x-bibtex'),
-					ctx.text('BibTeX FORMAT'),
-				);
+			http.post('http://localhost/export', async ({ request }) => {
+				const url = new URL(request.url);
+				const items = await request.json();
+				expect(url.searchParams.get('format')).toEqual('bibtex');
+				expect(items).toHaveLength(5);
+				expect(items.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
+				return HttpResponse.text('BibTeX FORMAT', {
+					headers: { 'Content-Type': 'application/x-bibtex' },
+				});
 			}),
 		);
 		renderWithProviders(<Container />);
@@ -217,15 +215,12 @@ describe('Citations', () => {
 
 	test('Supports creating a link to bibliography', async () => {
 		server.use(
-			rest.post('http://localhost/store', async (req, res, ctx) => {
-				const reqJSON = await req.json();
+			http.post('http://localhost/store', async ({ request }) => {
+				const reqJSON = await request.json();
 				expect(reqJSON.citationStyle).toEqual('modern-language-association');
 				expect(reqJSON.items).toHaveLength(5);
 
-				return res(
-					ctx.set('Content-Type', 'application/json'),
-					ctx.json({ "key": "d3b2fbdeadff4a00aecd048451a962b9" })
-				);
+				return HttpResponse.json({ "key": "d3b2fbdeadff4a00aecd048451a962b9" });
 			}),
 		);
 		copy.mockReturnValue(true);
