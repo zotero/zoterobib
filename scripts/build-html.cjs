@@ -13,7 +13,9 @@ const addAnchors = html => {
 	const $ = cheerio.load(html);
 	const headers = $('h2, h3');
 	headers.map((_, element) => {
-		const id = element.attribs.id;
+		const id = element.attribs.id ?? $(element).text().replace(/[^\w\s]/g, '').trim().replace(/\s/g, '_').toLocaleLowerCase();
+		element.attribs.id = id;
+		
 		$('<a>')
 			.attr('href', '#' + id)
 			.addClass('anchor-link')

@@ -1,14 +1,4 @@
 {
 	"indexConfig": {
-		// this config is used during the build to configure Zotero Bib
-		// component both during development and in production. Values
-		// listed below can be overriden in local.json and/or using
-		// env variables. See https://www.npmjs.com/package/config
-		// 
-		// "apiAuthorityPart": undefined,
-		// "storeURL": undefined,
-		// "stylesURL": undefined,
-		// "translatePrefix": "",
-		// "translateURL": undefined
 	}
 }
