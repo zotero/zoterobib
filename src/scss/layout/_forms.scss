@@ -122,7 +122,7 @@
 		border: none;
 
 		.select-control {
-			padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
+			padding: $input-btn-padding-y-sm + 4px $input-btn-padding-x-sm;
 		}
 	}
 }

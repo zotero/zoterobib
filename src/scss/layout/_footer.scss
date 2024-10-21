@@ -64,14 +64,19 @@ footer {
 .zotero-bib-container {
 	&.write {
 		footer {
+			color: $shade-0;
 			border-top-color: rgba(0, 0, 0, 0.2);
 			background: $about-bg;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 
-			&,
-			a {
-				color: $shade-0;
+			.copyright {
+				opacity: 1;
+				color: #a5a9bb;
+
+				a {
+					color: #a5a9bb;
+				}
 			}
 		}
 	}

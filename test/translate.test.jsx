@@ -90,16 +90,19 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
 		)).not.toHaveAttribute('readonly'));
 
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
+		});
+
 		expect(getByRole(newItemSection, 'button', { name: 'Close' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Delete' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Edit' })).toBeInTheDocument();
-		expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
 		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
@@ -128,16 +131,19 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
 		)).not.toHaveAttribute('readonly'));
 
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
+		});
+
 		expect(getByRole(newItemSection, 'button', { name: 'Close' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Delete' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Edit' })).toBeInTheDocument();
-		expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
 		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
@@ -169,16 +175,19 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
 		)).not.toHaveAttribute('readonly'));
 
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
+		});
+
 		expect(getByRole(newItemSection, 'button', { name: 'Close' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Delete' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Edit' })).toBeInTheDocument();
-		expect(getByText(newItemSection, /The Complete Golden Retriever Handbook/)).toBeInTheDocument();
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
 		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
@@ -211,16 +220,19 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
 		)).not.toHaveAttribute('readonly'));
 
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItemSection, /The New Era of Canine Science: Reshaping Our Relationships With Dogs/)).toBeInTheDocument();
+		});
+
 		expect(getByRole(newItemSection, 'button', { name: 'Close' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Delete' })).toBeInTheDocument();
 		expect(getByRole(newItemSection, 'button', { name: 'Edit' })).toBeInTheDocument();
-		expect(getByText(newItemSection, /The New Era of Canine Science: Reshaping Our Relationships With Dogs/)).toBeInTheDocument();
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
 		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(6);
@@ -358,13 +370,16 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
 		)).not.toHaveAttribute('readonly'));
 
-		expect(getByText(newItemSection, /Circadian mood variations in twitter content/)).toBeInTheDocument();
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItemSection, /Circadian mood variations in twitter content/)).toBeInTheDocument();
+		});
+
 		expect(hasTranslated).toBe(true);
 	});
 
@@ -388,8 +403,10 @@ describe('Translate', () => {
 		expect(input).toHaveFocus();
 		fireEvent.paste(input, { clipboardData: { getData: () => pastedBibtex } });
 
-		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
-		expect(await findByText(newItemSection, /Understanding Dogs/)).toBeInTheDocument();
+		await waitFor(async () => {
+			const newItem = await screen.findByRole('region', { name: 'New item…' });
+			return expect(getByText(newItem, /Understanding Dogs/)).toBeInTheDocument();
+		});
 		expect(hasTranslated).toBe(true);
 	});
 

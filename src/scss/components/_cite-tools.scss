@@ -19,6 +19,7 @@
 	}
 
 	.form-control {
+		font-size: 1.125em;
 		transition: border $input-transition, box-shadow $input-transition, padding $input-transition;
 
 		&:focus {

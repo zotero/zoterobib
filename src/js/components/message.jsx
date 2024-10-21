@@ -55,10 +55,11 @@ const Message = ({ action, id, message, kind, href, onDismiss, onReadMore, onSho
 				) }
 			</p>
 			<button
+				title="Dismiss"
 				className="btn btn-icon close"
 				onClick={ handleDismiss }
 			>
-				<Icon type={ '24/remove' } width="24" height="24" />
+				<Icon type={ '24/remove' } role="presentation" width="24" height="24" />
 			</button>
 		</div>
 	);

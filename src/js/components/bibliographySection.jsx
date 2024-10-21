@@ -80,7 +80,7 @@ const BibliographySection = props => {
 			<div className="container" suppressHydrationWarning={ true }>
 				{ (!isReadOnly && localCitationsCount === 0) ? (
 					<Fragment>
-						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" />
+						<img className="empty-bibliography" src="static/images/empty-bibliography.svg" width="320" height="200" role="presentation" />
 						<h2 className="empty-title">
 							<FormattedMessage
 								wrapRichTextChunksInFragment={ true }

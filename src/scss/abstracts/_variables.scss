@@ -11,8 +11,8 @@
 // Colors
 //
 
-$red:           #e52e3d;
-$blue:          #2970ff;
+$red:           #e42535;
+$blue:          #2464e5;
 $blue-dark:     #333c66;
 $blue-darkest:  #3d4466;
 $violet:        #5959ff;
@@ -23,7 +23,7 @@ $primary:   $red;
 $secondary: $blue;
 $error:     $primary;
 $warning:   #ff794d;
-$success:   #3abd57;
+$success:   #31a149;
 $info:      $blue;
 
 $shade-0: #fff;
@@ -32,8 +32,8 @@ $shade-2: #ebebeb;
 $shade-3: #ddd;
 $shade-4: #ccc;
 $shade-4: #bbb;
-$shade-5: #999;
-$shade-6: #777;
+$shade-5: #949494; // the lightest shade that can be used on white and still meet 3:1 contrast (WCAG AA for large text)
+$shade-6: #757575; // the lightest shade that can be used on white and still meet 4.5:1 contrast (WCAG AA for normal text)
 $shade-7: #222;
 $shade-8:  #333;
 $shade-9:  #111;
@@ -203,7 +203,7 @@ $btn-padding-y: 7px;
 $btn-padding-x-xl: $space-lg;
 $btn-padding-y-xl: $space-sm;
 $btn-padding-x-lg: $space-md;
-$btn-padding-y-lg: 4px;
+$btn-padding-y-lg: 6px;
 $btn-padding-x-sm: $space-sm;
 $btn-padding-y-sm: 3px;
 
@@ -240,8 +240,8 @@ $input-border-radius: $input-btn-border-radius;
 $input-border-radius-lg: $border-radius-sm;
 
 $input-focus-color:  $secondary;
-$input-border-color: $shade-3;
-$placeholder-color:  $shade-4;
+$input-border-color: $shade-6;
+$placeholder-color:  $shade-5;
 $label-color:        $shade-6;
 
 $input-border-width: $border-width;

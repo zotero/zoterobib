@@ -86,7 +86,7 @@ const BibliographyItem = memo(props => {
 			<div className="citation" ref={containerRef}>
 				{allowReorder && (
 					<div className="drag-handle" onMouseDown={onDrag} onTouchStart={onDrag}>
-						<Icon type="24/grip" width="24" height="24" />
+						<Icon type="24/grip" role="presentation" width="24" height="24" />
 					</div>
 				)}
 				<div
@@ -102,7 +102,7 @@ const BibliographyItem = memo(props => {
 						className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
 						onClick={onCopyCitationDialogOpen}
 					>
-						<Icon type={'16/quote'} width="16" height="16" />
+						<Icon type={'16/quote'} role="presentation" width="16" height="16" />
 					</Button>
 					<Button
 						icon
@@ -113,7 +113,7 @@ const BibliographyItem = memo(props => {
 						)}
 						onClick={handleCopySingleClick}
 					>
-						<Icon type={isCopied ? '16/tick' : '16/copy'} width="16" height="16" />
+							<Icon type={isCopied ? '16/tick' : '16/copy'} role="presentation" width="16" height="16" />
 					</Button>
 					</Fragment>
 				)}
@@ -127,7 +127,7 @@ const BibliographyItem = memo(props => {
 						className="btn-icon dropdown-toggle"
 						title="Options"
 					>
-						<Icon type={'28/dots'} width="28" height="28" />
+						<Icon type={'28/dots'} role="presentation" width="28" height="28" />
 					</DropdownToggle>
 					<DropdownMenu aria-label="Options" right>
 						{!isNumericStyle && (
@@ -190,7 +190,7 @@ const BibliographyItem = memo(props => {
 					className="btn-outline-secondary btn-remove"
 					onClick={onDeleteCitation}
 				>
-					<Icon type={'16/remove-sm'} width="16" height="16" />
+					<Icon type={'16/remove-sm'} role="presentation" width="16" height="16" />
 				</Button>
 				<script type="application/vnd.zotero.data+json">
 					{JSON.stringify(rawItem)}

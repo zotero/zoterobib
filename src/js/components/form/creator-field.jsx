@@ -350,7 +350,7 @@ const CreatorField = forwardRef((props, ref) => {
 								onClick={ handleCreatorTypeSwitch }
 								title="Switch Creator Type"
 							>
-								<Icon type={ icon } width="20" height="20" />
+								<Icon type={ icon } role="presentation" width="20" height="20" />
 							</Button>
 							{
 								isDeleteAllowed ? (
@@ -360,7 +360,7 @@ const CreatorField = forwardRef((props, ref) => {
 										onClick={ handleCreatorRemove }
 										title="Remove Creator"
 									>
-										<Icon type={ '16/minus' } width="16" height="16" />
+										<Icon type={'16/minus'} role="presentation" width="16" height="16" />
 									</Button>
 								) : (
 									<Button
@@ -369,7 +369,7 @@ const CreatorField = forwardRef((props, ref) => {
 										disabled={ true }
 										title="Remove Creator"
 									>
-										<Icon type={ '16/minus' } width="16" height="16" />
+										<Icon type={'16/minus'} role="presentation" width="16" height="16" />
 									</Button>
 								)
 							}
@@ -381,7 +381,7 @@ const CreatorField = forwardRef((props, ref) => {
 										onClick={ handleCreatorAdd }
 										title="Add Creator"
 									>
-										<Icon type={ '16/plus' } width="16" height="16" />
+										<Icon type={ '16/plus' } role="presentation" width="16" height="16" />
 									</Button>
 								) : (
 									<Button
@@ -390,7 +390,7 @@ const CreatorField = forwardRef((props, ref) => {
 										disabled={ true }
 										title="Add Creator"
 									>
-										<Icon type={ '16/plus' } width="16" height="16" />
+										<Icon type={ '16/plus' } role="presentation" width="16" height="16" />
 									</Button>
 								)
 							}
