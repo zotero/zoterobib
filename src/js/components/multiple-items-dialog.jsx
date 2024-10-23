@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { memo, useEffect, useMemo, useCallback, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';
 import { usePrevious } from 'web-common/hooks';
@@ -12,6 +12,7 @@ const MultipleItemsDialog = props => {
 	const { activeDialog, multipleItems, onMultipleItemsSelect, onMultipleItemsCancel,  } = props;
 	const [selectedItems, setSelectedItems] = useState([]);
 	const prevActiveDialog = usePrevious(activeDialog);
+	const intl = useIntl();
 	const isOpen = multipleItems && activeDialog === 'MULTIPLE_ITEMS_DIALOG';
 
 	const bibliographyRendered = useMemo(() => {
@@ -58,30 +59,41 @@ const MultipleItemsDialog = props => {
 		onMultipleItemsCancel();
 	}, [onMultipleItemsCancel])
 
+	const handleSelectAll = useCallback(() => {
+		setSelectedItems(multipleItems.bibliographyItems.map(item => item.id));
+	}, [multipleItems]);
+
+	const handleClearSelection = useCallback(() => {
+		setSelectedItems([]);
+	}, []);
+
 	useEffect(() => {
 		if(prevActiveDialog !== activeDialog && activeDialog === 'MULTIPLE_ITEMS_DIALOG') {
 			setSelectedItems([]);
 		}
 	}, [activeDialog, prevActiveDialog]);
 
+	const title = intl.formatMessage({ id: 'zbib.multipleItems.prompt', defaultMessage: 'Please select citations from the list' });
+
 	return (
 		<Modal
 			isOpen={ !!isOpen }
-			contentLabel="Select Entries to Add"
-			className="multiple-choice-dialog modal modal-lg"
+			contentLabel={ title }
+			className="multiple-items-dialog modal modal-lg modal-with-footer"
 			onRequestClose={ handleCancel }
 		>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						<FormattedMessage id="zbib.multipleItems.prompt" defaultMessage="Please select a citation from the list" />
+						{ title }
 					</h4>
 					<Button
+						title={ intl.formatMessage({ id: 'zbib.modal.closeDialog', defaultMessage: 'Close Dialog' }) }
 						icon
 						className="close"
 						onClick={ handleCancel }
 					>
-						<Icon type={ '24/remove' } width="24" height="24" />
+						<Icon type={ '24/remove' } role="presentation" width="24" height="24" />
 					</Button>
 				</div>
 				<div className="modal-body">
@@ -106,26 +118,45 @@ const MultipleItemsDialog = props => {
 										dangerouslySetInnerHTML={
 											{ __html: bibliographyRenderedNodes[index]?.innerHTML || item.value }
 									} />
-									<input
-										checked={ selectedItems.includes(item.id) }
-										className="checkbox"
-										onChange={ handleItemSelectionChange }
-										tabIndex={ -1 }
-										type="checkbox"
-									/>
+									<div>
+										<input
+											aria-labelledby={`citation-${item.id}`}
+											checked={ selectedItems.includes(item.id) }
+											className="checkbox"
+											onChange={ handleItemSelectionChange }
+											tabIndex={ -1 }
+											type="checkbox"
+										/>
+									</div>
 								</li>
 							))
 						}
 					</ul>
-					<div className="more-items-action">
-						<Button
-							disabled={ selectedItems.length === 0 }
-							className="btn-outline-secondary btn-min-width"
-							onClick={ handleAddSelected }
-						>
-							<FormattedMessage id="zbib.multipleItems.confirm" defaultMessage="Add Selected" />
+				</div>
+				<div className="modal-footer">
+					<div className="selection-count">
+						<Button className="btn btn-link" onClick={ handleSelectAll }>
+							<FormattedMessage id="zbib.multipleItems.selectAll" defaultMessage="Select All" />
+						</Button>
+						<Button className="btn btn-link" onClick={ handleClearSelection }>
+							<FormattedMessage id="zbib.multipleItems.clearSelection" defaultMessage="Clear Selection" />
 						</Button>
 					</div>
+					<Button
+						disabled={selectedItems.length === 0}
+						className="btn-outline-secondary btn-min-width"
+						onClick={handleAddSelected}
+					>
+						{ selectedItems.length > 0 ? (
+							<FormattedMessage
+								id="zbib.multipleItems.confirmWithCount"
+								defaultMessage="Add {count, plural, one {# Item} other {# Items}}"
+								values={{ count: selectedItems.length }}
+							/>
+						) : (
+							<FormattedMessage id="zbib.multipleItems.confirm" defaultMessage="Add Selected" />
+						) }
+					</Button>
 				</div>
 			</div>
 		</Modal>

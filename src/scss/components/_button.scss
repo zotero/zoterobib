@@ -145,6 +145,24 @@ a.btn {
 	}
 }
 
+.btn-link {
+	display: inline;
+	border: 0;
+	color: $link-color;
+	background-color: transparent;
+	padding: 0;
+
+	.icon {
+		color: inherit;
+	}
+}
+
+.btn-flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .btn-group {
 	display: inline-flex;
 

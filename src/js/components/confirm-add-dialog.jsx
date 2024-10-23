@@ -1,6 +1,6 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon, Tabs, Tab, TabPane } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';
 
@@ -12,6 +12,8 @@ const ConfirmAddDialog = props => {
 	const isReady = itemToConfirm && activeDialog === 'CONFIRM_ADD_DIALOG';
 
 	const [activeTab, setActiveTab] = useState('current-style-content');
+	const minModalBodyHeight = useRef(null); // To avoid modal dialog shrinking when switching tabs, store the height of the body content when it's first rendered
+	const intl = useIntl();
 
 	const currentStyleHtml = useCallback(() => {
 		if (!itemToConfirm?.inCurrentStyle) {
@@ -42,27 +44,34 @@ const ConfirmAddDialog = props => {
 		setActiveTab(ev.getAttribute('aria-controls'));
 	}, []);
 
+	const title = intl.formatMessage({ id: 'zbib.dialog.confirmAddThisCitation', defaultMessage: 'Add this citation to your bibliography?' });
+
 	return isReady ? (
 		<Modal
 			isOpen={ activeDialog === 'CONFIRM_ADD_DIALOG' }
-			contentLabel="Confirm Add Citation"
-			className="confirm-add-dialog modal modal-lg"
+			contentLabel={title}
+			className="confirm-add-dialog modal modal-lg modal-with-footer"
 			onRequestClose={ onConfirmAddCancel }
 		>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						<FormattedMessage id="zbib.dialog.confirmAddThisCitation" defaultMessage="Add this citation to your bibliography?" />
+						{ title }
 					</h4>
 					<Button
+						title={intl.formatMessage({ id: 'zbib.modal.closeDialog', defaultMessage: 'Close Dialog' })}
 						icon
 						className="close"
 						onClick={ onConfirmAddCancel }
 					>
-						<Icon type={ '24/remove' } width="24" height="24" />
+						<Icon type={ '24/remove' } role="presentation" width="24" height="24" />
 					</Button>
 				</div>
-				<div className="modal-body">
+				<div
+					ref={ ref => minModalBodyHeight.current = ref?.offsetHeight }
+					style={ minModalBodyHeight.current ? { minHeight: minModalBodyHeight.current } : {} }
+					className="modal-body"
+				>
 
 					{ itemToConfirm.inIncomingStyle ? (
 						<>
@@ -100,32 +109,31 @@ const ConfirmAddDialog = props => {
 							<div dangerouslySetInnerHTML={{ __html: currentStyleHtml() }} />
 						</div>
 					) }
-
-					<div className="more-items-action">
-						<Button
-							autoFocus
-							className="btn-outline-secondary btn-min-width"
-							onClick={ handleConfirm }
-							onKeyDown = { handleConfirm }
-						>
-							{ activeTab === "incoming-style-content"  ? (
-								(incomingStyle.titleShort ?? incomingStyle.title).length > 40 ? (
-									<FormattedMessage
-										id="zbib.addAndSwitchShort"
-										defaultMessage={"Add and switch to this style"}
-									/>
-								) : (
-									<FormattedMessage
-										id="zbib.addAndSwitch"
-										defaultMessage={ "Add and switch to \"{style}\"" }
-										values={ { style: incomingStyle.titleShort ?? incomingStyle.title } }
-									/>
-								)
+				</div>
+				<div className="modal-footer">
+					<Button
+						autoFocus
+						className="btn-outline-secondary btn-min-width"
+						onClick={handleConfirm}
+						onKeyDown={handleConfirm}
+					>
+						{activeTab === "incoming-style-content" ? (
+							(incomingStyle.titleShort ?? incomingStyle.title).length > 40 ? (
+								<FormattedMessage
+									id="zbib.addAndSwitchShort"
+									defaultMessage={"Add and switch to this style"}
+								/>
 							) : (
-								<FormattedMessage id="zbib.general.add" defaultMessage="Add" />
-							) }
-						</Button>
-					</div>
+								<FormattedMessage
+									id="zbib.addAndSwitch"
+									defaultMessage={"Add and switch to \"{style}\""}
+									values={{ style: incomingStyle.titleShort ?? incomingStyle.title }}
+								/>
+							)
+						) : (
+							<FormattedMessage id="zbib.general.add" defaultMessage="Add" />
+						)}
+					</Button>
 				</div>
 			</div>
 		</Modal>

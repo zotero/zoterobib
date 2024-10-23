@@ -1,5 +1,23 @@
+.multiple-items-dialog,
 .multiple-choice-dialog,
 .confirm-add-dialog {
+	.modal-body {
+		overflow: auto;
+		max-height: calc(100vh - 96px);
+
+		@media (min-width: $bp-md) {
+			max-height: calc(90vh - 96px - 32px); // 90% of the screen, accounting for the modal header and modal margin
+		}
+	}
+
+	&.modal-with-footer .modal-body {
+		max-height: calc(100vh - 96px - 104px);
+
+		@media (min-width: $bp-md) {
+			max-height: calc(90vh - 96px - 104px - 32px);
+		}
+	}
+
 	.tab {
 		max-width: 50%;
 	}
@@ -9,6 +27,7 @@
 	}
 
 	.results {
+		position: relative;
 		margin: 0 - $modal-inner-padding-mobile;
 		padding: 0;
 		list-style: none;
@@ -19,18 +38,27 @@
 	}
 
 	.result {
-		border-top: 1px solid $result-border-color;
-		padding: $result-padding;
+		display: contents;
 		cursor: pointer;
-		display: flex;
-		justify-content: space-between;
+		position: relative;
+
+		> * {
+			border-top: 1px solid $result-border-color;
+			padding: $result-padding;
+		}
+
+		> *:first-child {
+			padding-inline: $space-md;
+		}
 
 		&:hover {
-			background-color: $result-hover-bg;
-
-			.badge {
+			> * {
 				background-color: $result-hover-bg;
-				border-color: darken($badge-light-border-color, 4%);
+
+				.badge {
+					background-color: $result-hover-bg;
+					border-color: darken($badge-light-border-color, 4%);
+				}
 			}
 		}
 
@@ -96,4 +124,43 @@
 			min-height: $border-width + $space-lg + $btn-height;
 		}
 	}
+
+	.modal-footer {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+.multiple-choice-dialog {
+	// results may contain description. If any does, use grid, otherwise hide description and use single column
+	.results:not(.single-column) {
+		display: grid;
+		grid-template-columns: auto minmax(min-content, 100px);
+		min-height: 0;
+		min-width: 0;
+
+		@media (min-width: $bp-md) {
+			grid-template-columns: auto minmax(min-content, 200px);
+		}
+	}
+
+	.results.single-column {
+		.description {
+			display: none;
+		}
+	}
+}
+
+.multiple-items-dialog {
+	// second column is just a checkbox so it can be smaller
+	.results {
+		display: grid;
+		grid-template-columns: auto min-content;
+		min-height: 0;
+		min-width: 0;
+	}
+}
+
+.confirm-add-dialog .modal-footer {
+	justify-content: flex-end;
 }

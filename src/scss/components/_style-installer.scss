@@ -22,17 +22,13 @@
 	}
 
 	.style {
-		display: flex;
-		flex-direction: column;
+		align-items: center;
 		border-top: 1px solid $style-border-color;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 		padding: ($space-lg - 9px) $space-md $space-lg $space-md;
-
-		@media (min-width: $bp-sm) {
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			padding: $space-sm;
-		}
+		padding: $space-sm;
 
 		.btn {
 			flex: 0 0 auto;

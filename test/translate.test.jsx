@@ -270,10 +270,11 @@ describe('Translate', () => {
 		expect(getByRole(dialog, 'button', { name: 'Add Selected' })).toBeDisabled();
 		expect(getByRole(result, 'checkbox')).not.toBeChecked();
 		await user.click(result); // clicking anywhere on the item toggles selection
-		expect(getByRole(dialog, 'button', { name: 'Add Selected' })).toBeEnabled();
+		expect(queryByRole(dialog, 'button', { name: 'Add Selected' })).not.toBeInTheDocument(); // button label changed to indicate number of selected items
+		expect(getByRole(dialog, 'button', { name: 'Add 1 Item' })).toBeEnabled();
 		expect(getByRole(result, 'checkbox')).toBeChecked();
 
-		await user.click(getByRole(dialog, 'button', { name: 'Add Selected' }));
+		await user.click(getByRole(dialog, 'button', { name: 'Add 1 Item' }));
 
 		await waitFor(() => expect(screen.queryByRole(
 			'dialog', { name: 'Select Entries to Add' }

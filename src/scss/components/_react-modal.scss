@@ -22,6 +22,7 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch; // Momentum scrolling for iOS
 	z-index: $z-index-modal;
+	width: 100vw;
 }
 
 .modal {

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useCallback, useId, memo } from 'react';
-import { FormattedMessage } from 'react-intl';
+import cx from 'classnames';
+import { useCallback, useId, memo, useRef } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon, Spinner } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';
 
@@ -40,18 +41,16 @@ const ChoiceItem = memo(({ item, onItemSelect }) => {
 			onClick={ onItemSelect }
 			tabIndex={ 0 }
 		>
-			{ badge && <span className="badge badge-light d-sm-none">{ badge }</span> }
+			{/* { badge && <span className="badge badge-light d-sm-none">{ badge }</span> } */}
 			<h5 id={ id } className="title">
 				<span className="title-container">
 					{ title }
 				</span>
 				{ badge && <span className="badge badge-light d-xs-none d-sm-inline-block">{ badge }</span> }
 			</h5>
-			{ item.value.description && (
-				<p className="description">
-					{item.value.description}
-				</p>
-			)}
+			<p className="description">
+				{item.value.description}
+			</p>
 		</li>
 	);
 });
@@ -68,6 +67,9 @@ const getItem = (ev, items) => items.find(item => item.signature === ev.currentT
 const MultipleChoiceDialog = props => {
 	const { activeDialog, isTranslatingMore, moreItemsLink, multipleChoiceItems,
 	onMultipleChoiceCancel, onMultipleChoiceMore, onMultipleChoiceSelect } = props;
+	const persistBtnWidth = useRef(null); // To avoid button size change when spinner is shown, store the button width in a ref when it is firts rendered
+	const intl = useIntl();
+	const useDescriptionColumn = !!multipleChoiceItems?.some(item => item.value.description);
 
 	const handleItemSelect = useCallback(ev => {
 		if(isTriggerEvent(ev)) {
@@ -76,30 +78,33 @@ const MultipleChoiceDialog = props => {
 		}
 	}, [multipleChoiceItems, onMultipleChoiceSelect]);
 
+	const title = intl.formatMessage({ id: 'zbib.multipleChoice.prompt', defaultMessage: 'Please select a citation from the list' });
+
 	return (multipleChoiceItems && activeDialog === 'MULTIPLE_CHOICE_DIALOG') ? (
 		<Modal
 			isOpen={ activeDialog === 'MULTIPLE_CHOICE_DIALOG' }
-			contentLabel="Select a Search Result to Add"
-			className="multiple-choice-dialog modal modal-lg"
+			contentLabel={ title }
+			className={cx("multiple-choice-dialog modal modal-lg", { 'modal-with-footer': moreItemsLink })}
 			onRequestClose={ onMultipleChoiceCancel }
 		>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						<FormattedMessage id="zbib.multipleChoice.prompt" defaultMessage="Please select a citation from the list" />
+						{ title }
 					</h4>
 					<Button
+						title={intl.formatMessage({ id: 'zbib.modal.closeDialog', defaultMessage: 'Close Dialog' })}
 						icon
 						className="close"
 						onClick={ onMultipleChoiceCancel }
 					>
-						<Icon type={ '24/remove' } width="24" height="24" />
+						<Icon type={'24/remove'} role="presentation" width="24" height="24" />
 					</Button>
 				</div>
 				<div className="modal-body">
 					<ul
 						aria-label="Results"
-						className="results"
+						className={ cx("results", { 'single-column': !useDescriptionColumn }) }
 					>
 						{ multipleChoiceItems.map(item => (
 							<ChoiceItem
@@ -109,21 +114,27 @@ const MultipleChoiceDialog = props => {
 							/>
 						)) }
 					</ul>
-					{ moreItemsLink && (
-						<div className="more-items-action">
-							{ isTranslatingMore ? <Spinner /> : (
-								moreItemsLink !== null && (
-									<Button
-										className="btn-outline-secondary btn-min-width"
-										onClick={ onMultipleChoiceMore }
-									>
-										<FormattedMessage id="zbib.multipleChoice.more" defaultMessage="More…" />
-									</Button>
-								)
-							) }
-						</div>
-					) }
 				</div>
+				{moreItemsLink && (
+					<div className="modal-footer">
+						<div className="selection-count">
+							<FormattedMessage
+								id="zbib.multipleChoice.selectionCount"
+								defaultMessage="{count, plural, one {# item found} other {# items found}}"
+								values={{ count: multipleChoiceItems.length }}
+							/>
+						</div>
+						<Button
+							ref={ ref => persistBtnWidth.current = ref?.offsetWidth }
+							style={ isTranslatingMore ? { width: persistBtnWidth.current } : {} }
+							disabled={ isTranslatingMore }
+							className="btn-outline-secondary btn-min-width btn-flex"
+							onClick={onMultipleChoiceMore}
+						>
+							{ isTranslatingMore ? <Spinner /> : <FormattedMessage id="zbib.multipleChoice.more" defaultMessage="More…" /> }
+						</Button>
+					</div>
+				)}
 			</div>
 		</Modal>
 	) : null;

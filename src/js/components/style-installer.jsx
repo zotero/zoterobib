@@ -171,10 +171,12 @@ const StyleInstaller = props => {
 		}
 	}, []);
 
+	const title = intl.formatMessage({ id: 'zbib.styleInstaller.title', defaultMessage: 'Add a Citation Style' });
+
 	return (
 		<Modal
 			isOpen={ isOpen }
-			contentLabel="Citation Style Picker"
+			contentLabel={ title }
 			className={ cx('style-installer', 'modal', 'modal-lg', { loading: !state.isReady }) }
 			onRequestClose={ handleCancel }
 		>
@@ -182,7 +184,7 @@ const StyleInstaller = props => {
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
 					<h4 className="modal-title text-truncate">
-						<FormattedMessage id="zbib.styleInstaller.title" defaultMessage="Add a Citation Style" />
+						{ title }
 					</h4>
 					<Button
 						icon
