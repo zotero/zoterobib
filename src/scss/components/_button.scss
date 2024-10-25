@@ -150,7 +150,13 @@ a.btn {
 	border: 0;
 	color: $link-color;
 	background-color: transparent;
-	padding: 0;
+	padding: 7px 12px;
+	border-radius: 0;
+
+	.keyboard &:focus {
+		outline: $outline-width solid $focus-color;
+		outline-offset: -3px;
+	}
 
 	.icon {
 		color: inherit;

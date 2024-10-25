@@ -38,7 +38,6 @@
 	}
 
 	.result {
-		display: contents;
 		cursor: pointer;
 		position: relative;
 
@@ -62,14 +61,19 @@
 			}
 		}
 
-		&:focus {
+		&:focus, &:focus-within {
 			.keyboard & {
 				outline-offset: -3px;
+				outline: 3px solid $blue;
 
 				& + .result {
 					border-top-color: transparent;
 				}
 			}
+		}
+
+		.checkbox {
+			outline: none;
 		}
 
 		.badge {
@@ -132,15 +136,21 @@
 }
 
 .multiple-choice-dialog {
-	// results may contain description. If any does, use grid, otherwise hide description and use single column
-	.results:not(.single-column) {
-		display: grid;
-		grid-template-columns: auto minmax(min-content, 100px);
-		min-height: 0;
-		min-width: 0;
+	.results:not(.single-column) .result {
+		display: flex;
+
+		h5 {
+			flex: 1 1 auto;
+		}
+
+		.description {
+			flex: 0 0 100px;
+		}
 
 		@media (min-width: $bp-md) {
-			grid-template-columns: auto minmax(min-content, 200px);
+			.description {
+				flex: 0 0 200px;
+			}
 		}
 	}
 
@@ -153,11 +163,16 @@
 
 .multiple-items-dialog {
 	// second column is just a checkbox so it can be smaller
-	.results {
-		display: grid;
-		grid-template-columns: auto min-content;
-		min-height: 0;
-		min-width: 0;
+	.results .result {
+		display: flex;
+
+		.csl-entry-container {
+			flex: 1 1 auto;
+		}
+
+		.checkbox-container {
+			flex: 0 0 min-content;
+		}
 	}
 }
 

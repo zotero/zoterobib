@@ -57,6 +57,8 @@ const ExportTools = props => {
 	const dropdownTimer = useRef(null);
 	const whenReadyData = useRef(false);
 	const wasReady = usePrevious(isReady);
+	const mainButtonRef = useRef(null);
+	const dropdownToggleRef = useRef(null);
 
 	const handleClipoardSuccess = useCallback(format => {
 		if(clipboardConfirmations[format]) {
@@ -122,6 +124,17 @@ const ExportTools = props => {
 		}
 	}, [copyToClipboard, isDropdownOpen, isHydrated, isReady]);
 
+	const handleKeyDown = useCallback(ev => {
+		if (['ArrowRight', 'ArrowDown'].includes(ev.key) && ev.currentTarget === mainButtonRef.current) {
+			dropdownToggleRef.current?.focus();
+			ev.preventDefault();
+		} else if(['ArrowLeft', 'ArrowUp'].includes(ev.key) && ev.currentTarget === dropdownToggleRef.current) {
+			mainButtonRef.current?.focus();
+		} else if (isTriggerEvent(ev) && ev.currentTarget === mainButtonRef.current) {
+			handleCopyClick(ev);
+		}
+	}, [handleCopyClick]);
+
 	const isCopied = clipboardConfirmations['plain'];
 
 	useEffect(() => {
@@ -145,13 +158,14 @@ const ExportTools = props => {
 				className={ cx('btn-group', { 'success': isCopied }) }
 			>
 				<Button
+					ref={mainButtonRef}
 					aria-labelledby="export-tools-copy-to-clipboard"
 					data-format="plain"
 					data-main
 					disabled={ itemCount === 0 }
 					className='btn btn-secondary btn-xl copy-to-clipboard'
 					onClick={ handleCopyClick }
-					onKeyDown={ handleCopyClick }
+					onKeyDown={handleKeyDown }
 				>
 					<span id="export-tools-copy-to-clipboard" className={ cx('inline-feedback', { 'active': isCopied }) }>
 						<span className="default-text" aria-hidden={ isCopied }>{ exportFormats['plain'].label }</span>
@@ -161,9 +175,12 @@ const ExportTools = props => {
 					</span>
 				</Button>
 				<DropdownToggle
+					ref={ dropdownToggleRef }
 					aria-label="Export Options"
 					disabled={ itemCount === 0 }
 					className="btn btn-secondary btn-xl dropdown-toggle"
+					onKeyDown={handleKeyDown}
+					tabIndex={-1}
 				>
 					<span className="dropdown-caret" />
 				</DropdownToggle>

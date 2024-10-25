@@ -1,9 +1,10 @@
-import { Fragment, memo } from 'react';
+import { Fragment, memo, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Icon } from 'web-common/components';
 import { pick } from 'web-common/utils';
+import { useFocusManager } from 'web-common/hooks';
 
 import About from './about';
 import BibliographySection from './bibliographySection';
@@ -39,6 +40,17 @@ const sentenceCaseExample = (
 const ZBib = props => {
 	const intl = useIntl();
 	const saveToZotero = intl.formatMessage({ id: 'zbib.saveToZotero.title', defaultMessage: 'Save to Zotero' });
+	const navLabel = intl.formatMessage({ id: 'zbib.navLabel', defaultMessage: 'Site Navigation' });
+	const navRef = useRef(null);
+	const { focusNext, focusPrev, receiveFocus, receiveBlur } = useFocusManager(navRef);
+
+	const handleKeyDown = useCallback(ev => {
+		if (ev.key === 'ArrowRight') {
+			focusNext(ev, { useCurrentTarget: false });
+		} else if (ev.key === 'ArrowLeft') {
+			focusPrev(ev, { useCurrentTarget: false });
+		}
+	}, [focusNext, focusPrev]);
 
 	const className = {
 		'zotero-bib-container': true,
@@ -64,11 +76,19 @@ const ZBib = props => {
 				{
 					!props.isReadOnly && (
 						<section className="section section-cite">
-							<nav className="meta-nav">
-								<a onClick={ props.onHelpClick }>
+							<nav
+								className="meta-nav"
+								aria-label={navLabel}
+								tabIndex={0}
+								ref={navRef}
+								onFocus={receiveFocus}
+								onBlur={receiveBlur}
+								onKeyDown={handleKeyDown}
+							>
+								<a tabIndex={-2} onClick={ props.onHelpClick }>
 									<FormattedMessage id="zbib.help" defaultMessage="Help" />
 								</a>
-								<a href="https://www.zotero.org">Zotero</a>
+								<a tabIndex={-2} href="https://www.zotero.org">Zotero</a>
 							</nav>
 							<div className="container">
 								<Brand />

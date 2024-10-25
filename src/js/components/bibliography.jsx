@@ -1,9 +1,10 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { Fragment, useCallback, useRef, useState, memo } from 'react';
+import { Fragment, useCallback, useRef, useState, memo, useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Icon } from 'web-common/components';
 import { isTriggerEvent, pick } from 'web-common/utils';
+import { useFocusManager } from 'web-common/hooks';
 
 import { useDnd } from '../hooks';
 
@@ -15,7 +16,11 @@ const BibliographyItem = memo(props => {
 		onDelayedCloseDropdown, onEditCitationClick, onReorderCitations, onSelectCitation, onToggleDropdown,
 		rawItem
 	} = props;
+	const listItemRef = useRef(null);
 	const containerRef = useRef(null);
+	const { focusNext, focusPrev, receiveBlur, receiveFocus } = useFocusManager(
+		listItemRef, { targetTabIndex: -3, isFocusable: true, isCarousel: false }
+	);
 	const intl = useIntl();
 	const isCopied = copySingleState.copied && copySingleState.citationKey === rawItem.key;
 
@@ -31,12 +36,14 @@ const BibliographyItem = memo(props => {
 		const topNode = srcNode.parentNode.querySelector('[data-key]:first-child');
 		onReorderCitations(srcNode.dataset.key, topNode.dataset.key, true);
 	}, [onReorderCitations]);
+
 	const handleMoveUp = useCallback(ev => {
 		ev.stopPropagation();
 		const srcNode = ev.currentTarget.closest('[data-key]');
 		const prevNode = srcNode.previousElementSibling;
 		onReorderCitations(srcNode.dataset.key, prevNode.dataset.key, true);
 	}, [onReorderCitations]);
+
 	const handleMovedown = useCallback(ev => {
 		ev.stopPropagation();
 		const srcNode = ev.currentTarget.closest('[data-key]');
@@ -45,11 +52,43 @@ const BibliographyItem = memo(props => {
 	}, [onReorderCitations]);
 
 	const handleCopySingleClick = useCallback(ev => {
+		listItemRef.current?.focus();
 		ev.stopPropagation();
 		ev.preventDefault();
 		onDelayedCloseDropdown();
 		onCopySingle(ev.currentTarget.closest('[data-key]')?.dataset.key);
 	}, [onCopySingle, onDelayedCloseDropdown])
+
+	const handleCopyCitationClick = useCallback(ev => {
+		ev.currentTarget.closest('[data-key]')?.focus();
+		onCopyCitationDialogOpen(ev);
+	}, [onCopyCitationDialogOpen]);
+
+	const handleEditCitationClick = useCallback(ev => {
+		ev.currentTarget.closest('[data-key]')?.focus();
+		onEditCitationClick(ev);
+	}, [onEditCitationClick]);
+
+	const handleDeleteCitationClick = useCallback(ev => {
+		const bibItemEl = ev.currentTarget.closest('[data-key]');
+		const otherBibItemEl = bibItemEl.previousElementSibling || bibItemEl.nextElementSibling;
+		onDeleteCitation(ev);
+		if(otherBibItemEl) {
+			otherBibItemEl.focus();
+		}
+	}, [onDeleteCitation]);
+
+	const handleKeyDown = useCallback(ev => {
+		if(isTriggerEvent(ev)) {
+			onSelectCitation(ev);
+		} else if(ev.key === 'ArrowRight') {
+			focusNext(ev, { useCurrentTarget: false });
+			ev.stopPropagation();
+		} else if(ev.key === 'ArrowLeft') {
+			focusPrev(ev, { useCurrentTarget: false });
+			ev.stopPropagation();
+		}
+	}, [focusNext, focusPrev, onSelectCitation]);
 
 	const getData = useCallback(
 		ev => ({ key: ev.currentTarget.closest('[data-key]').dataset.key }), []
@@ -76,12 +115,15 @@ const BibliographyItem = memo(props => {
 			data-key={rawItem.key}
 			className="citation-container"
 			onClick={onSelectCitation}
-			tabIndex={0}
-			onKeyDown={onSelectCitation}
+			tabIndex={-2}
+			onKeyDown={handleKeyDown}
 			onMouseOver={onHover}
 			onMouseOut={onHover}
 			onMouseMove={onHover}
 			onMouseUp={onDrop}
+			ref={listItemRef}
+			onFocus={receiveFocus}
+			onBlur={receiveBlur}
 		>
 			<div className="citation" ref={containerRef}>
 				{allowReorder && (
@@ -100,7 +142,8 @@ const BibliographyItem = memo(props => {
 						icon
 						title={copyText}
 						className={cx('d-xs-none d-md-block btn-outline-secondary btn-copy')}
-						onClick={onCopyCitationDialogOpen}
+						onClick={handleCopyCitationClick}
+						tabIndex={ -3 }
 					>
 						<Icon type={'16/quote'} role="presentation" width="16" height="16" />
 					</Button>
@@ -112,6 +155,7 @@ const BibliographyItem = memo(props => {
 							{ 'success': isCopied }
 						)}
 						onClick={handleCopySingleClick}
+						tabIndex={-3}
 					>
 							<Icon type={isCopied ? '16/tick' : '16/copy'} role="presentation" width="16" height="16" />
 					</Button>
@@ -126,6 +170,7 @@ const BibliographyItem = memo(props => {
 						color={null}
 						className="btn-icon dropdown-toggle"
 						title="Options"
+						tabIndex={-3}
 					>
 						<Icon type={'28/dots'} role="presentation" width="28" height="28" />
 					</DropdownToggle>
@@ -133,14 +178,14 @@ const BibliographyItem = memo(props => {
 						{!isNumericStyle && (
 							<Fragment>
 							<DropdownItem
-								onClick={onCopyCitationDialogOpen}
-								className="btn"
+								onClick={handleCopyCitationClick}
+								className="btn d-xs-block d-md-none"
 							>
 								{copyText}
 							</DropdownItem>
 							<DropdownItem
 								onClick={handleCopySingleClick}
-								className={cx('btn clipboard-trigger', { success: isCopied })}
+								className={cx('btn clipboard-trigger d-xs-block d-md-none', { success: isCopied })}
 							>
 								<span className={cx('inline-feedback', { 'active': isCopied })}>
 									<span className="default-text" aria-hidden={isCopied}>
@@ -154,13 +199,13 @@ const BibliographyItem = memo(props => {
 							</Fragment>
 						)}
 						<DropdownItem
-							onClick={onEditCitationClick}
+							onClick={handleEditCitationClick}
 							className="btn"
 						>
 							<FormattedMessage id="zbib.general.edit" defaultMessage="Edit" />
 						</DropdownItem>
 						<DropdownItem
-							onClick={onDeleteCitation}
+							onClick={handleDeleteCitationClick}
 							className="btn"
 						>
 							<FormattedMessage id="zbib.general.delete" defaultMessage="Delete" />
@@ -189,6 +234,7 @@ const BibliographyItem = memo(props => {
 					title={ intl.formatMessage({ id: 'zbib.citation.deleteEntry', defaultMessage: 'Delete Entry' }) }
 					className="btn-outline-secondary btn-remove"
 					onClick={onDeleteCitation}
+					tabIndex={-3}
 				>
 					<Icon type={'16/remove-sm'} role="presentation" width="16" height="16" />
 				</Button>
@@ -226,6 +272,8 @@ BibliographyItem.propTypes = {
 const Bibliography = props => {
 	const dropdownTimer = useRef(null);
 	const [dropdownOpen, setDropdownOpen] = useState(null);
+	const listRef = useRef(null);
+	const { focusNext, focusPrev, receiveBlur, receiveFocus } = useFocusManager(listRef);
 
 	const {
 		bibliography, bibliographyRendered, bibliographyRenderedNodes,
@@ -297,6 +345,13 @@ const Bibliography = props => {
 		onCitationCopyDialogOpen(ev.currentTarget.closest('[data-key]').dataset.key);
 	}, [onCitationCopyDialogOpen]);
 
+	const handleListKeyDown = useCallback(ev => {
+		if (ev.key === 'ArrowDown') {
+			focusNext(ev, { useCurrentTarget: false });
+		} else if (ev.key === 'ArrowUp') {
+			focusPrev(ev, { useCurrentTarget: false });
+		}
+	}, [focusNext, focusPrev]);
 
 	if (bibliography.items.length === 0) {
 		return null;
@@ -325,6 +380,11 @@ const Bibliography = props => {
 					aria-label="Bibliography"
 					className="bibliography"
 					key="bibliography"
+					ref={ listRef }
+					onFocus={ receiveFocus }
+					onBlur={ receiveBlur }
+					onKeyDown={ handleListKeyDown }
+					tabIndex={0}
 				>
 					{bibliography.items.map((renderedItem, index) => (
 						<BibliographyItem

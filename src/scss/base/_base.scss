@@ -19,12 +19,6 @@ li[tabindex] {
 	}
 }
 
-[tabindex="-1"] {
-	&:focus {
-		outline: none;
-	}
-}
-
 ::selection {
 	color: $shade-0;
 	background-color: $secondary;

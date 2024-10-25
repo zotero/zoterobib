@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useReducer, useRef, useId, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Icon, Spinner } from 'web-common/components';
-import { usePrevious } from 'web-common/hooks';
+import { useFocusManager, usePrevious } from 'web-common/hooks';
 
 import Input from './form/input';
 import Modal from './modal';
 import SearchWorker from 'web-worker:../style-search.worker.js';
+import { isTriggerEvent } from '../../../modules/web-common/utils/event';
 
 const searchWorker = new SearchWorker();
 
@@ -32,11 +33,37 @@ const reducer = (state, action) => {
 const StyleItem = memo(props => {
 	const { name, title, isCore = false, onDelete, onInstall, isActive, isInstalled, isSelected } = props;
 	const id = useId();
+	const styleItemRef = useRef(null);
+	const { focusNext, focusPrev, receiveFocus, receiveBlur } = useFocusManager(styleItemRef,
+		{ isCarousel: false, targetTabIndex: -3, isFocusable: true });
+
+		const handleKeyDown = useCallback(ev => {
+		if(ev.key === 'ArrowRight') {
+			focusNext(ev, { useCurrentTarget: false });
+		} else if(ev.key === 'ArrowLeft') {
+			focusPrev(ev, { useCurrentTarget: false });
+		} else if(isTriggerEvent(ev)) {
+			if(isActive || isCore) {
+				return;
+			}
+			if(isInstalled) {
+				onDelete(ev);
+			} else {
+				onInstall(ev);
+			}
+		}
+	}, [focusNext, focusPrev, isActive, isCore, isInstalled, onDelete, onInstall]);
+
 	return (
 		<li
 			aria-labelledby={ id }
 			data-style={ name }
 			className={ cx('style', { selected: isSelected }) }
+			tabIndex={-2}
+			ref={ styleItemRef }
+			onFocus={ receiveFocus }
+			onBlur={ receiveBlur }
+			onKeyDown={ handleKeyDown }
 		>
 			<div id={ id } className="style-title">
 				{ title }
@@ -52,12 +79,14 @@ const StyleItem = memo(props => {
 					</Button>
 				) : isInstalled ? (
 					<Button
+						tabIndex={-3}
 						className="btn btn-sm btn-outline-primary"
 						onClick={ onDelete }>
 						<FormattedMessage id="zbib.styleInstaller.remove" defaultMessage="Remove" />
 					</Button>
 				) : (
 					<Button
+						tabIndex={-3}
 						className="btn btn-sm btn-outline-secondary"
 						onClick={ onInstall }>
 						<FormattedMessage id="zbib.styleInstaller.add" defaultMessage="Add" />
@@ -94,6 +123,12 @@ const StyleInstaller = props => {
 		selectedIndex: null,
 	});
 	const intl = useIntl();
+	const listRef = useRef(null);
+	const { focusNext, focusPrev, focusBySelector, receiveFocus, receiveBlur } = useFocusManager(
+		listRef, { isCarousel: false }
+	);
+	const skipNextFocusRef = useRef(false); // required for modal's scopedTab (focus trap) to work correctly
+
 
 	const isOpen = activeDialog === 'STYLE_INSTALLER';
 
@@ -139,10 +174,16 @@ const StyleInstaller = props => {
 	}, [handleCancel, onStyleInstallerSelect, state.items]);
 
 	const handleDelete = useCallback(ev => {
+		const styleEl = ev.currentTarget.closest('[data-style]');
+		const otherStyleEl = styleEl.previousElementSibling || styleEl.nextElementSibling;
 		const styleName = ev.currentTarget.closest('[data-style]').dataset.style;
+		const otherStyleName = otherStyleEl ? otherStyleEl.dataset.style : null;
 		ev.stopPropagation();
 		onStyleInstallerDelete(styleName);
-	}, [onStyleInstallerDelete]);
+		if(otherStyleName) {
+			focusBySelector(`[data-style="${otherStyleName}"]`);
+		}
+	}, [focusBySelector, onStyleInstallerDelete]);
 
 	const handleInputKeydown = useCallback((ev) => {
 		if(ev.key === 'Escape') {
@@ -150,6 +191,31 @@ const StyleInstaller = props => {
 			ev.preventDefault();
 		}
 	}, [handleCancel]);
+
+	const handleKeyDown = useCallback(ev => {
+		if(ev.key === 'ArrowDown') {
+			focusNext(ev, { useCurrentTarget: false });
+			ev.preventDefault();
+		} else if(ev.key === 'ArrowUp') {
+			focusPrev(ev, { useCurrentTarget: false });
+			ev.preventDefault();
+		} else if (ev.key === 'Tab' && !ev.shiftKey) {
+			// for the modal's focus trap to work correctly, we need to make sure the focus is moved to the footerRef
+			// (scopedTab in react-modal needs focus to be on the last "tabbable" so that it can trap the focus)
+			skipNextFocusRef.current = true;
+			listRef.current.focus();
+			listRef.current.tabIndex = 0;
+			listRef.current.dataset.focusRoot = '';
+		}
+	}, [focusNext, focusPrev]);
+
+	const handleFocus = useCallback((ev) => {
+		if (skipNextFocusRef.current) {
+			skipNextFocusRef.current = false;
+		} else {
+			receiveFocus(ev);
+		}
+	}, [receiveFocus]);
 
 	useEffect(() => {
 		if(wasStylesDataLoading === true && isStylesDataLoading === false) {
@@ -206,7 +272,15 @@ const StyleInstaller = props => {
 						value={ state.filter }
 						isBusy={ state.isSearching }
 					/>
-						<ul aria-label="Citation Styles" className="style-list">
+						<ul
+							aria-label="Citation Styles"
+							className="style-list"
+							tabIndex={ 0 }
+							ref={ listRef }
+							onFocus={ handleFocus }
+							onBlur={ receiveBlur }
+							onKeyDown={ handleKeyDown }
+						>
 							{
 								state.filter.length > 2 ?
 								state.items.map(style => {

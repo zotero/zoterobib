@@ -116,7 +116,7 @@ describe('Editor', () => {
 		const lastOption = options[options.length - 1];
 		expect(lastOption).toHaveTextContent(/\s*[\d,'.]+\+ other styles available…/);
 		await user.click(lastOption);
-		const installer = await screen.findByRole('dialog', { name: 'Citation Style Picker' });
+		const installer = await screen.findByRole('dialog', { name: 'Add a Citation Style' });
 		const list = await findByRole(installer, 'list', { name: 'Citation Styles' }, { timeout: 3000 });
 		expect(getAllByRole(list, 'listitem')).toHaveLength(4);
 		const search = getByRole(installer, 'searchbox', { name: 'Search Citation Styles' });
@@ -125,7 +125,7 @@ describe('Editor', () => {
 		const addStyle = getByRole(natureEntry, 'button', { name: 'Add' });
 		await user.click(addStyle);
 		await waitFor(
-			() => expect(screen.queryByRole('dialog', { name: 'Citation Style Picker' })).not.toBeInTheDocument()
+			() => expect(screen.queryByRole('dialog', { name: 'Add a Citation Style' })).not.toBeInTheDocument()
 		);
 		const bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
 		expect(getAllByRole(bibliography, 'listitem')[0]).toHaveTextContent(/1\.Makar,/);
@@ -150,7 +150,7 @@ describe('Editor', () => {
 		const lastOption = options[options.length - 1];
 		expect(lastOption).toHaveTextContent(/\s*[\d,'.]+\+ other styles available…/);
 		await user.click(lastOption);
-		const installer = await screen.findByRole('dialog', { name: 'Citation Style Picker' });
+		const installer = await screen.findByRole('dialog', { name: 'Add a Citation Style' });
 		const list = await findByRole(installer, 'list', { name: 'Citation Styles' }, { timeout: 3000 });
 		expect(getAllByRole(list, 'listitem')).toHaveLength(5);
 		const natureEntry = await findByRole(list, 'listitem', { name: 'Nature' });
@@ -192,7 +192,7 @@ describe('Editor', () => {
 		const lastOption = options[options.length - 1];
 		expect(lastOption).toHaveTextContent(/\s*[\d,'.]+\+ other styles available…/);
 		await user.click(lastOption);
-		const installer = await screen.findByRole('dialog', { name: 'Citation Style Picker' });
+		const installer = await screen.findByRole('dialog', { name: 'Add a Citation Style' });
 		const list = await findByRole(installer, 'list', { name: 'Citation Styles' }, { timeout: 3000 });
 		expect(getAllByRole(list, 'listitem')).toHaveLength(5);
 		const natureEntry = await findByRole(list, 'listitem', { name: 'Nature' });

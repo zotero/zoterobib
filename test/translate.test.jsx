@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { delay, http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, findByText, fireEvent } from '@testing-library/react'
+import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks, waitForPosition } from './utils/common';
@@ -261,7 +261,7 @@ describe('Translate', () => {
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' })
 		).toHaveAttribute('readonly'));
 
-		const dialog = await screen.findByRole('dialog', { name: 'Select Entries to Add' });
+		const dialog = await screen.findByRole('dialog', { name: 'Please select citations from the list' });
 		const results = getByRole(dialog, 'list', { name: 'Results' });
 		expect(getAllByRole(results, 'listitem')).toHaveLength(3);
 
@@ -277,7 +277,7 @@ describe('Translate', () => {
 		await user.click(getByRole(dialog, 'button', { name: 'Add 1 Item' }));
 
 		await waitFor(() => expect(screen.queryByRole(
-			'dialog', { name: 'Select Entries to Add' }
+			'dialog', { name: 'Please select citations from the list' }
 		)).not.toBeInTheDocument());
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
@@ -317,7 +317,7 @@ describe('Translate', () => {
 		const user = userEvent.setup();
 		await user.type(input, 'Doggos{enter}');
 
-		const dialog = await screen.findByRole('dialog', { name: 'Select a Search Result to Add' });
+		const dialog = await screen.findByRole('dialog', { name: 'Please select a citation from the list' });
 		const results = getByRole(dialog, 'list', { name: 'Results' });
 		expect(getAllByRole(results, 'listitem')).toHaveLength(3);
 
@@ -332,7 +332,7 @@ describe('Translate', () => {
 		await user.click(result);
 
 		await waitFor(() => expect(screen.queryByRole(
-			'dialog', { name: 'Select a Search Result to Add' }
+			'dialog', { name: 'Please select a citation from the list' }
 		)).not.toBeInTheDocument());
 
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });

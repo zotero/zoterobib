@@ -285,7 +285,6 @@ const CreatorField = forwardRef((props, ref) => {
 			onReorderCommit={ onReorderCommit }
 			onDragStatusChange={ onDragStatusChange }
 			raw={ raw }
-			tabIndex = { 0 }
 		>
 			{ shouldUseModalCreatorField ?
 				<div className="truncate">{ creatorLabel }</div> :

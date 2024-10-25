@@ -1,0 +1,12 @@
+.keyboard :focus {
+	outline: $outline-width solid $focus-color;
+	outline-offset: $outline-offset;
+	position: relative;
+}
+
+// Hide modal outline
+[tabindex="-1"] {
+	&:focus {
+		outline: none;
+	}
+}

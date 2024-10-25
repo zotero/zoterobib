@@ -4,6 +4,7 @@ import { useCallback, useId, memo, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon, Spinner } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';
+import { useFocusManager } from 'web-common/hooks';
 
 import Modal from './modal';
 
@@ -39,7 +40,7 @@ const ChoiceItem = memo(({ item, onItemSelect }) => {
 			data-signature={ item.signature }
 			onKeyDown={ onItemSelect }
 			onClick={ onItemSelect }
-			tabIndex={ 0 }
+			tabIndex={ -2 }
 		>
 			{/* { badge && <span className="badge badge-light d-sm-none">{ badge }</span> } */}
 			<h5 id={ id } className="title">
@@ -67,6 +68,8 @@ const getItem = (ev, items) => items.find(item => item.signature === ev.currentT
 const MultipleChoiceDialog = props => {
 	const { activeDialog, isTranslatingMore, moreItemsLink, multipleChoiceItems,
 	onMultipleChoiceCancel, onMultipleChoiceMore, onMultipleChoiceSelect } = props;
+	const listRef = useRef(null);
+	const { focusNext, focusPrev, receiveBlur, receiveFocus } = useFocusManager(listRef);
 	const persistBtnWidth = useRef(null); // To avoid button size change when spinner is shown, store the button width in a ref when it is firts rendered
 	const intl = useIntl();
 	const useDescriptionColumn = !!multipleChoiceItems?.some(item => item.value.description);
@@ -75,8 +78,26 @@ const MultipleChoiceDialog = props => {
 		if(isTriggerEvent(ev)) {
 			const item = getItem(ev, multipleChoiceItems);
 			onMultipleChoiceSelect(item);
+			ev.stopPropagation();
 		}
 	}, [multipleChoiceItems, onMultipleChoiceSelect]);
+
+	const handleListKeyDown = useCallback(ev => {
+		if (ev.key === 'ArrowDown') {
+			focusNext(ev, { useCurrentTarget: false });
+		} else if (ev.key === 'ArrowUp') {
+			focusPrev(ev, { useCurrentTarget: false });
+		}
+	}, [focusNext, focusPrev]);
+
+	const handleModalAfterOpen = useCallback(() => {
+		listRef.current.focus();
+	}, []);
+
+	const handleMoreButtonClick = useCallback(() => {
+		listRef.current.focus(); // move focus back to the list, because the button will be disabled
+		onMultipleChoiceMore();
+	}, [onMultipleChoiceMore]);
 
 	const title = intl.formatMessage({ id: 'zbib.multipleChoice.prompt', defaultMessage: 'Please select a citation from the list' });
 
@@ -86,6 +107,7 @@ const MultipleChoiceDialog = props => {
 			contentLabel={ title }
 			className={cx("multiple-choice-dialog modal modal-lg", { 'modal-with-footer': moreItemsLink })}
 			onRequestClose={ onMultipleChoiceCancel }
+			onAfterOpen={ handleModalAfterOpen }
 		>
 			<div className="modal-content" tabIndex={ -1 }>
 				<div className="modal-header">
@@ -101,8 +123,13 @@ const MultipleChoiceDialog = props => {
 						<Icon type={'24/remove'} role="presentation" width="24" height="24" />
 					</Button>
 				</div>
-				<div className="modal-body">
+				<div className="modal-body" tabIndex={-1}>
 					<ul
+						tabIndex={0}
+						ref={listRef}
+						onFocus={receiveFocus}
+						onBlur={receiveBlur}
+						onKeyDown={handleListKeyDown}
 						aria-label="Results"
 						className={ cx("results", { 'single-column': !useDescriptionColumn }) }
 					>
@@ -129,7 +156,7 @@ const MultipleChoiceDialog = props => {
 							style={ isTranslatingMore ? { width: persistBtnWidth.current } : {} }
 							disabled={ isTranslatingMore }
 							className="btn-outline-secondary btn-min-width btn-flex"
-							onClick={onMultipleChoiceMore}
+							onClick={handleMoreButtonClick}
 						>
 							{ isTranslatingMore ? <Spinner /> : <FormattedMessage id="zbib.multipleChoice.more" defaultMessage="More…" /> }
 						</Button>

@@ -108,7 +108,7 @@ describe('Import', () => {
 		renderWithProviders(<Container />);
 		const user = userEvent.setup();
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		await user.click(getByRole(modal, 'button', { name: 'Add' }));
 		const newItemSection = await screen.findByRole('region', { name: 'New item…' });
 
@@ -126,7 +126,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
 		const incomingStyleTab = getByRole(modal, 'tab', { name: 'Nature' });
 		expect(getByRole(modal, 'button', { name: 'Add' })).toBeInTheDocument();
@@ -149,7 +149,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
 		const incomingStyleTab = getByRole(modal, 'tab', { name: 'Cite Them Right 12th edition - Harvard' });
 		expect(getByRole(modal, 'button', { name: 'Add' })).toBeInTheDocument();
@@ -173,7 +173,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
 		expect(getByRole(modal, 'tab', { name: 'Nature' })).toBeInTheDocument();
 				await user.click(getByRole(modal, 'button', { name: 'Add' }));
@@ -196,7 +196,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(queryByRole(modal, 'tab')).not.toBeInTheDocument();
 		await user.click(getByRole(modal, 'button', { name: 'Add' }));
 
@@ -217,7 +217,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(queryByRole(modal, 'tab')).not.toBeInTheDocument();
 		await user.click(getByRole(modal, 'button', { name: 'Add' }));
 
@@ -247,7 +247,7 @@ describe('Import', () => {
 		window.location = new URL('http://localhost/import?q=1234&style=the-journals-of-gerontology-series-a');
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
-		const modal = await screen.findByRole('dialog', { name: 'Confirm Add Citation' }, { timeout: 3000 });
+		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
 		expect(getByRole(modal, 'tab', { name: 'MLA' })).toBeInTheDocument();
 		// this style has a very long title and empty titleShort tag (which should be ignored).
 		// In this scenario tab shows a truncated full title and button uses different label that doesn't include style title
