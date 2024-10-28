@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { Fragment, useCallback, useRef, useState, memo, useEffect } from 'react';
+import { Fragment, useCallback, useRef, useState, memo } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Icon } from 'web-common/components';
 import { isTriggerEvent, pick } from 'web-common/utils';
