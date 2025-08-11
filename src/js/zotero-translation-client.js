@@ -1,5 +1,5 @@
 import { isLikeZoteroItem, mergeFetchOptions } from './utils.js';
-import { Zotero } from './zotero-shim.js';
+import { getZotero } from 'web-common/zotero';
 
 const defaults = {
 	translateURL: typeof window != 'undefined' && window.location.origin || '',
@@ -92,10 +92,7 @@ class ZoteroTranslationClient {
 	}
 
 	get itemsCSL() {
-		if (!Zotero.Schema.CSL_TYPE_MAPPINGS) {
-			throw new Error('Zotero.Schema must be initialized before calling itemsCSL');
-		}
-		return this.items.map(i => Zotero.Utilities.Item.itemToCSLJSON({ ...i, uri: i.key, }))
+		return this.items.map(i => getZotero().Utilities.Item.itemToCSLJSON({ ...i, uri: i.key, }))
 	}
 
 	get itemsRaw() {
@@ -193,7 +190,7 @@ class ZoteroTranslationClient {
 				items.forEach(item => {
 					if(item.accessDate === 'CURRENT_TIMESTAMP') {
 						const dt = new Date(Date.now());
-						item.accessDate = Zotero.Date.dateToSQL(dt, true);
+						item.accessDate = getZotero().Date.dateToSQL(dt, true);
 					}
 					if(add) {
 						this.addItem(item);

@@ -68,7 +68,7 @@ const config = {
 			// @floating-ui targets Safari >= 12, we target Safari >= 10, so we need to
 			// include @floating-ui in babel transpilation
 			babelrc: false,
-			include: ['src/js/**', 'modules/zotero-utilities/**', 'modules/web-common/**', 'node_modules/@floating-ui/**'],
+			include: ['src/js/**', 'modules/web-common/**', 'node_modules/@floating-ui/**'],
 			babelHelpers: 'bundled'
 		}),
 		filesize({ showMinifiedSize: false, showGzippedSize: !!process.env.DEBUG }),

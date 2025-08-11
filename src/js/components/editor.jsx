@@ -1,16 +1,16 @@
+import { Button } from 'web-common/components';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { getZotero } from 'web-common/zotero';
+import { useDebouncedCallback } from 'use-debounce';
+import { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
+import { usePrevious } from 'web-common/hooks';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import { useEffect, useCallback, useMemo, useReducer, useRef, memo } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Button } from 'web-common/components';
-import { usePrevious } from 'web-common/hooks';
 
-import ItemBox from './itembox';
-import Modal from './modal';
 import { hideFields, noEditFields } from '../constants/item';
 import { reverseMap } from '../utils';
-import { Zotero } from '../zotero-shim.js';
+import ItemBox from './itembox';
+import Modal from './modal';
 
 const ITEM_UPDATED = 'ITEM_UPDATED';
 const BEGIN_ITEM_UPDATE = 'BEGIN_ITEM_UPDATE';
@@ -178,7 +178,7 @@ const Editor = props => {
 		}
 
 		if (fieldKey === 'accessDate' || fieldKey === 'date' || fieldKey === baseMappings?.[editor.item.itemType]?.['date']) {
-			newValue = Zotero.Date.parseDescriptiveString(newValue);
+			newValue = getZotero().Date.parseDescriptiveString(newValue);
 		}
 
 		if(!('key' in editor.item)) {

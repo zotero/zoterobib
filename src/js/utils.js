@@ -1,7 +1,8 @@
 import balanced from 'balanced-match';
+import { CiteprocWrapper } from 'web-common/cite';
 
 import ZoteroBib from './zotero-translation-client';
-import CiteprocWrapper from './citeproc-wrapper';
+import supportedLocales from '../../data/supported-locales.json';
 
 
 const ensureNoBlankItems = itemsCSL => itemsCSL.map(item => {
@@ -51,22 +52,13 @@ const validateUrl = url => {
 
 const retrieveStylesData = async url => {
 	try {
-		const response = await fetchWithCachedFallback(url);
+		const response = await fetch(url);
 		if (!response.ok) { throw new Error(); }
 		return await response.json();
 	} catch (_) {
 		throw new Error('Failed to load styles data');
 	}
 };
-
-const fetchWithCachedFallback = async url => {
-	try {
-		return await fetch(url);
-	} catch (_) {
-		// try to fallback for a cached version
-		return await fetch(url, { 'cache': 'force-cache' });
-	}
-}
 
 const validateItem = async(item, itemTypeFields, itemTypeCreatorTypes) => {
 	//remove item properties that should not appear on this item type
@@ -119,14 +111,13 @@ const saveToPermalink = async (url, data) => {
 const getOneTimeBibliographyOrFallback = async (itemsCSL, citationStyleXml, styleHasBibliography, useLegacy, opts = {}) => {
 	var bibliographyItems, bibliographyMeta = null;
 
-	const citeproc = await CiteprocWrapper.new({
+	const citeproc = await CiteprocWrapper.new(citationStyleXml, {
 		format: 'html',
-		style: citationStyleXml,
-		formatOptions: {
-			linkAnchors: false
-		},
+		formatOptions: { linkAnchors: false },
+		supportedLocales,
+		useCiteprocJS: useLegacy,
 		...opts
-	}, useLegacy);
+	});
 	citeproc.includeUncited("All");
 	citeproc.insertReferences(itemsCSL);
 
@@ -346,46 +337,6 @@ const enumerateObjects = (objects, key = 'id', start = 0) => {
 	return objects.map((o, i) => ({ ...o, [key]: i + start }));
 }
 
-const normalizeLocaleName = locale => {
-	const localeSplit = locale.split('-');
-	return locale = localeSplit.length > 1 ?
-		`${localeSplit[0].toLowerCase()}-${localeSplit[1].toUpperCase()}` :
-		localeSplit[0].toLowerCase();
-}
-
-const pickBestLocale = (userLocales, supportedLocales, fallback = 'en-US') => {
-	if (!Array.isArray(userLocales)) {
-		userLocales = [userLocales];
-	}
-
-	for (let i = 0; i < userLocales.length; i++) {
-		const locale = normalizeLocaleName(userLocales[i]);
-		const langCode = locale.substr(0, 2);
-		const possibleLocales = supportedLocales.filter(supportedLocale => supportedLocale.substr(0, 2) === langCode);
-
-		if (possibleLocales.length === 1) {
-			return possibleLocales[0];
-		} else if (possibleLocales.length > 0) {
-			if (possibleLocales.includes(locale)) {
-				return locale;
-			}
-			const canonical = `${langCode}-${langCode.toUpperCase()}`;
-			if (possibleLocales.includes(canonical)) {
-				return canonical;
-			}
-
-			possibleLocales.sort();
-			return possibleLocales[0];
-		}
-
-		const matchingLocale = supportedLocales.find(supportedLocale => supportedLocale.startsWith(locale));
-		if (matchingLocale) {
-			return matchingLocale;
-		}
-	}
-	return fallback;
-}
-
 const isDuplicate = (newItem, items = []) => {
 	const result = items.find(item =>
 		(item.ISBN && (item.ISBN === newItem.ISBN)) ||
@@ -450,7 +401,6 @@ export {
 	ensureNoBlankItems,
 	enumerateObjects,
 	fetchFromPermalink,
-	fetchWithCachedFallback,
 	fetchSchema,
 	getExpandedCitationStyles,
 	getItemsCSL,
@@ -461,7 +411,6 @@ export {
 	isLikeZoteroItem,
 	mergeFetchOptions,
 	parseIdentifier,
-	pickBestLocale,
 	processMultipleChoiceItems,
 	processSentenceCaseAPAField,
 	processSentenceCaseAPAItems,

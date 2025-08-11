@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon, Tabs, Tab, TabPane } from 'web-common/components';
 import { isTriggerEvent } from 'web-common/utils';
+import { formatBib, formatFallback } from 'web-common/cite';
 
 import Modal from './modal';
-import { formatBib, formatFallback } from '../cite';
 
 const ConfirmAddDialog = props => {
 	const { activeDialog, onConfirmAddCancel, onConfirmAddConfirm, incomingStyle, itemToConfirm, selectedStyle } = props;

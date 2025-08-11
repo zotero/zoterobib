@@ -1,7 +1,7 @@
 import { Fragment, memo, useCallback, useId, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'web-common/components';
-import { formatBib, formatFallback } from '../cite';
+import { formatBib, formatFallback } from 'web-common/cite';
 import { FormattedMessage } from 'react-intl';
 import { useFocusManager } from 'web-common/hooks';
 

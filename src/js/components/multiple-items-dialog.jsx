@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
-import { memo, useEffect, useMemo, useCallback, useRef, useState, forwardRef, useImperativeHandle } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Icon } from 'web-common/components';
+import { formatBib, formatFallback } from 'web-common/cite';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { isTriggerEvent } from 'web-common/utils';
+import { memo, useEffect, useMemo, useCallback, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { useFocusManager, usePrevious } from 'web-common/hooks';
+import PropTypes from 'prop-types';
 
 import Modal from './modal';
-import { formatBib, formatFallback } from '../cite';
 
 const MultipleLitemsList = forwardRef(({ multipleItems, selectedItems, onItemSelectionChange }, ref) => {
 	const listRef = useRef(null);

@@ -6,6 +6,9 @@ import { saveAs } from 'file-saver';
 import { useIntl } from 'react-intl';
 import { usePrevious } from 'web-common/hooks';
 import { pick, omit } from 'web-common/utils';
+import { CiteprocWrapper, fetchAndParseIndependentStyle, formatBib, formatFallback,
+	getBibliographyFormatParameters } from 'web-common/cite';
+import { configureZoteroShim } from 'web-common/zotero';
 
 import {
 	calcOffset, dedupMultipleChoiceItems, ensureNoBlankItems, fetchFromPermalink, fetchSchema,
@@ -18,10 +21,7 @@ import exportFormats from '../constants/export-formats';
 import ZoteroBib from '../zotero-translation-client.js';
 import ZBib from './zbib';
 import { useUserTypeDetector } from '../hooks';
-import { formatBib, formatFallback, getBibliographyFormatParameters } from '../cite';
-import CiteprocWrapper from '../citeproc-wrapper';
-import { fetchAndParseIndependentStyle } from '../common/citation-style';
-import { configureZoteroShim } from '../zotero-shim';
+import supportedLocales from '../../../data/supported-locales.json';
 
 
 const defaultItem = {
@@ -363,14 +363,13 @@ const BibWebContainer = props => {
 		dispatch({ type: BEGIN_BUILD_BIBLIOGRAPHY });
 
 		//TODO: if citeproc.current use setStyle on CiteprocWrapper, once it supports localeOverride
-		citeproc.current = await CiteprocWrapper.new({
-			style: state.xml,
+		citeproc.current = await CiteprocWrapper.new(state.xml, {
 			format: 'html',
+			formatOptions: { linkAnchors: isReadOnly },
 			localeOverride: state.localeOverride,
-			formatOptions: {
-				linkAnchors: isReadOnly,
-			}
-		}, useLegacy.current);
+			supportedLocales,
+			useCiteprocJS: useLegacy.current,
+		});
 
 		const t0 = performance.now();
 		citeproc.current.includeUncited("All");

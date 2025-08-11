@@ -22,7 +22,7 @@
     "build:html": "node scripts/build-html.cjs",
     "build:collect-locale": "node scripts/collect-locale.js",
     "build:styles-json": "node scripts/build-styles-json.cjs",
-    "build:fetch-citeproc": "node scripts/fetch-citeproc-js.cjs",
+    "build:fetch-citeproc": "node scripts/fetch-citeproc-js.mjs",
     "build:static": "mkdir -p build/static && rsync -vazL src/static/* build/static/",
     "build:postprocess": "postcss build/static/bib.css --use autoprefixer --use cssnano --no-map -r",
     "build:prepare-for-tests": "run-p \"build:collect-locale\" \"build:styles-json\"",
