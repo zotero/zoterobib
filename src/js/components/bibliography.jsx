@@ -11,7 +11,7 @@ import { useDnd } from '../hooks';
 const BIB_ITEM = 'BIB_ITEM';
 
 const BibliographyItem = memo(props => {
-	const { allowReorder, copySingleState, isDropdownOpen, formattedItem, isFirst, isLast,
+	const { allowReorder, copySingleState, isDropdownOpen, formattedItem, isError, isFirst, isLast,
 		isNoteStyle, isNumericStyle, onCopyCitationDialogOpen, onCopySingle, onDeleteCitation,
 		onDelayedCloseDropdown, onEditCitationClick, onReorderCitations, onSelectCitation, onToggleDropdown,
 		rawItem
@@ -113,7 +113,7 @@ const BibliographyItem = memo(props => {
 			key={rawItem.key}
 			data-dnd-candidate
 			data-key={rawItem.key}
-			className="citation-container"
+			className={cx("citation-container", { error: isError })}
 			onClick={onSelectCitation}
 			tabIndex={-2}
 			onKeyDown={handleKeyDown}
@@ -249,18 +249,19 @@ const BibliographyItem = memo(props => {
 BibliographyItem.displayName = 'BibliographyItem';
 
 BibliographyItem.propTypes = {
-	isDropdownOpen: PropTypes.bool,
-	onDelayedCloseDropdown: PropTypes.func,
 	allowReorder: PropTypes.bool,
 	copySingleState: PropTypes.object,
 	dropdownsOpen: PropTypes.array,
 	formattedItem: PropTypes.string,
+	isDropdownOpen: PropTypes.bool,
+	isError: PropTypes.bool,
 	isFirst: PropTypes.bool,
 	isLast: PropTypes.bool,
 	isNoteStyle: PropTypes.bool,
 	isNumericStyle: PropTypes.bool,
 	onCopyCitationDialogOpen: PropTypes.func,
 	onCopySingle: PropTypes.func,
+	onDelayedCloseDropdown: PropTypes.func,
 	onDeleteCitation: PropTypes.func,
 	onEditCitationClick: PropTypes.func,
 	onReorderCitations: PropTypes.func,
@@ -403,6 +404,7 @@ const Bibliography = props => {
 							allowReorder={(!styleHasBibliography || !isSortedStyle) && bibliography.items.length > 1}
 							isFirst={index === 0}
 							isLast={index === bibliography.items.length - 1}
+							isError={bibliographyRenderedNodes?.[index]?.classList.contains('csl-error')}
 						/>
 					))}
 				</ul>

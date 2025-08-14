@@ -1,16 +1,10 @@
-//
-// Bibliography
-//
-
 .bibliography {
 	padding: 0;
 	list-style: none;
 	text-align: left;
 
 	.write & {
-		margin: $space-lg (
-			-$grid-gutter-width * 0.5
-		);
+		margin: $space-lg (-$grid-gutter-width * 0.5);
 
 		@media (min-width: $bp-md) {
 			margin: $space-lg 0;
@@ -34,6 +28,10 @@
 			&.dnd-target.dnd-target-below::after {
 				border-top: 1px solid $shade-2;
 				height: var(--dnd-height, 50px);
+			}
+
+			&.error {
+				color: lighten($text-color, 50%);
 			}
 		}
 	}
@@ -104,7 +102,7 @@
 		@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
 			outline-offset: -3px;
 
-			&+.citation {
+			& + .citation {
 				border-top-color: transparent;
 			}
 		}
@@ -146,7 +144,7 @@
 		min-width: 0; // Enable word-wrap for long URLs
 	}
 
-	>.btn-icon,
+	> .btn-icon,
 	.dropdown {
 		margin-top: -$space-lg;
 		margin-bottom: -$space-lg;
@@ -170,7 +168,7 @@
 		}
 	}
 
-	>.btn-icon {
+	> .btn-icon {
 		flex: 0 0 auto;
 	}
 

@@ -368,6 +368,7 @@ const BibWebContainer = props => {
 			formatOptions: { linkAnchors: isReadOnly },
 			localeOverride: state.localeOverride,
 			supportedLocales,
+			skipErrors: isReadOnly,
 			useCiteprocJS: useLegacy.current,
 		});
 
@@ -398,6 +399,7 @@ const BibWebContainer = props => {
 			meta = null;
 		}
 
+		console.log({ itemsCSL: bib.current.itemsCSL, items, meta });
 		dispatch({ type: COMPLETE_BUILD_BIBLIOGRAPHY, items, meta, lookup });
 	}, [isReadOnly, state.xml, state.localeOverride, state.styleHasBibliography]);
 
@@ -563,7 +565,7 @@ const BibWebContainer = props => {
 	const getCopyData = useCallback(async (format, itemsCSL) => {
 		itemsCSL = itemsCSL || bib.current.itemsCSL;
 		const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-			itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format }
+			itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format, skipErrors: true }
 		);
 
 		if(bibliographyItems) {
@@ -610,7 +612,7 @@ const BibWebContainer = props => {
 			}
 		} else {
 			const { bibliographyItems, bibliographyMeta } = await getOneTimeBibliographyOrFallback(
-				bib.current.itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format }
+				bib.current.itemsCSL, state.xml, state.styleHasBibliography, useLegacy.current, { format, skipErrors: true }
 			);
 
 			if(format === 'rtf') {
