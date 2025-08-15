@@ -204,21 +204,19 @@ const CopyCitationDialog = props => {
 							/>
 						</div>
 					</div>
-					{ !isNoteStyle && (
-						<div className="form-group">
-							<div className="checkbox">
-								<label>
-									<input
-										disabled={ isCopied }
-										type="checkbox"
-										checked={copyCitationState.modifiers.mode === 'SuppressAuthor' }
-										onChange={ handleSuppressAuthorChange }
-									/>
-									<FormattedMessage id="zbib.citation.omitAuthor" defaultMessage="Omit Author" />
-								</label>
-							</div>
+					<div className="form-group">
+						<div className="checkbox">
+							<label>
+								<input
+									disabled={ isCopied }
+									type="checkbox"
+									checked={copyCitationState.modifiers.mode === 'SuppressAuthor' }
+									onChange={ handleSuppressAuthorChange }
+								/>
+								<FormattedMessage id="zbib.citation.omitAuthor" defaultMessage="Omit Author" />
+							</label>
 						</div>
-					) }
+					</div>
 					<div>
 						<h5 id="copy-citation-preview-header">
 							<FormattedMessage id="zbib.citation.preview" defaultMessage="Preview" />
