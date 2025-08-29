@@ -8,9 +8,9 @@ const stylesURL = 'https://www.zotero.org/styles-files/styles.json';
 
 const styles = [
 	'apa',
-	'chicago-note-bibliography',
+	'chicago-shortened-notes-bibliography',
 	'modern-language-association',
-	'turabian-fullnote-bibliography'
+	'turabian-notes-bibliography'
 ];
 const defaultStyle = 'modern-language-association';
 
