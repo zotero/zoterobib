@@ -101,25 +101,25 @@ describe('Citations', () => {
 		await waitFor(
 			async () => expect(
 				await findByRole(dialog, 'figure', { name: 'Preview' })
-			).toHaveTextContent('(Bose and Sarma, chap.42)')
+			).toHaveTextContent('(Bose and Sarma, ch. 42)')
 		);
 
 		await user.click(getByRole(dialog, 'checkbox', { name: 'Omit Author' }));
 		await waitFor(
 			async () => expect(
 				await findByRole(dialog, 'figure', { name: 'Preview' })
-			).toHaveTextContent('(chap.42)')
+			).toHaveTextContent('(ch. 42)')
 		);
 
 		const clipboardText = await navigator.clipboard.readText();
-		expect(clipboardText).not.toBe('(chap.42)');
+		expect(clipboardText).not.toBe('(ch. 42)');
 		user.click(getByRole(dialog, 'button', { name: 'Copy Citation' }));
 		expect(await findByRole(dialog, 'button', { name: 'Copied!' })).toBeInTheDocument();
 		expect(queryByRole(dialog, 'button', { name: 'Copy Citation' })).not.toBeInTheDocument();
 		await waitFor(
 			() => expect(screen.queryByRole('dialog', { name: 'Copy Citation' })).not.toBeInTheDocument()
 		);
-		expect(copy).toHaveBeenCalledWith('(chap.42)');
+		expect(copy).toHaveBeenCalledWith('(ch. 42)');
 	});
 
 	test('Supports copying a single bibliography entry', async () => {

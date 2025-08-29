@@ -398,8 +398,6 @@ const BibWebContainer = props => {
 			items = bib.current.itemsRaw.map(item => ({ id: item.key, value: render.allClusters[item.key] }));
 			meta = null;
 		}
-
-		console.log({ itemsCSL: bib.current.itemsCSL, items, meta });
 		dispatch({ type: COMPLETE_BUILD_BIBLIOGRAPHY, items, meta, lookup });
 	}, [isReadOnly, state.xml, state.localeOverride, state.styleHasBibliography]);
 

@@ -8,7 +8,8 @@ import { applyAdditionalJestTweaks } from './utils/common';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
-import turabianFullnoteStyle from './fixtures/turabian-fullnote-bibliography.xml';
+import turabianNotesBibStyle from './fixtures/turabian-notes-bibliography.xml';
+import chicagoNotesBibStyle from './fixtures/chicago-notes-bibliography-subsequent-author-title-17th-edition.xml'
 import natureStyle from './fixtures/nature.xml';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
@@ -67,8 +68,15 @@ describe('Editor', () => {
 
 	test('Supports changing style', async () => {
 		server.use(
-			http.get('https://www.zotero.org/styles/turabian-fullnote-bibliography', () => {
-				return HttpResponse.text(turabianFullnoteStyle, {
+			http.get('https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-title-17th-edition', () => {
+				return HttpResponse.text(chicagoNotesBibStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
+			}),
+		);
+		server.use(
+			http.get('https://www.zotero.org/styles/turabian-notes-bibliography', () => {
+				return HttpResponse.text(turabianNotesBibStyle, {
 					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
 				});
 			}),
@@ -77,7 +85,9 @@ describe('Editor', () => {
 		renderWithProviders(<Container />);
 		const user = userEvent.setup();
 		let bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
-		expect(getAllByRole(bibliography, 'listitem')[0]).toHaveTextContent(/https:\/\/doi\.org\/10\.1016\/0006-291x\(75\)90482-9/);
+		expect(
+			getAllByRole(bibliography, 'listitem')[0].querySelector('.csl-entry-container').innerHTML
+		).toEqual('Bose, K. S., and R. H. Sarma. “Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution.” <i>Biochemical and Biophysical Research Communications</i>, vol. 66, no. 4, Oct. 1975, pp. 1173–79. <i>PubMed</i>, https://doi.org/10.1016/0006-291x(75)90482-9.');
 		const styleSelector = screen.getByRole('combobox', { name: "Citation Style" });
 		expect(styleSelector).toHaveTextContent(/Modern Language Association/);
 		await user.click(styleSelector);
@@ -85,7 +95,9 @@ describe('Editor', () => {
 		await userEvent.click(option);
 		expect(screen.getByRole('combobox', { name: "Citation Style", expanded: false })).toHaveTextContent(/Turabian/);
 		bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
-		expect(getAllByRole(bibliography, 'listitem')[0]).not.toHaveTextContent(/https:\/\/doi\.org\/10\.1016\/0006-291x\(75\)90482-9/);
+		expect(
+			getAllByRole(bibliography, 'listitem')[0].querySelector('.csl-entry-container').innerHTML
+		).toEqual('Bose, K. S., and R. H. Sarma. “Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution.” <i>Biochemical and Biophysical Research Communications</i> 66, no. 4 (October 1975): 1173–79. https://doi.org/10.1016/0006-291x(75)90482-9.');
 	});
 
 	test('Supports installing new style', async () => {

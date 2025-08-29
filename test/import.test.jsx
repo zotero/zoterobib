@@ -127,7 +127,7 @@ describe('Import', () => {
 		renderWithProviders(<Container />);
 
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
-		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
+		expect(getByRole(modal, 'tab', { name: 'MLA Handbook (in-text citations)', selected: true })).toBeInTheDocument();
 		const incomingStyleTab = getByRole(modal, 'tab', { name: 'Nature' });
 		expect(getByRole(modal, 'button', { name: 'Add' })).toBeInTheDocument();
 		await user.click(incomingStyleTab);
@@ -150,7 +150,7 @@ describe('Import', () => {
 		renderWithProviders(<Container />);
 
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
-		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
+		expect(getByRole(modal, 'tab', { name: 'MLA Handbook (in-text citations)', selected: true })).toBeInTheDocument();
 		const incomingStyleTab = getByRole(modal, 'tab', { name: 'Cite Them Right 12th edition - Harvard' });
 		expect(getByRole(modal, 'button', { name: 'Add' })).toBeInTheDocument();
 		await user.click(incomingStyleTab);
@@ -174,7 +174,7 @@ describe('Import', () => {
 		renderWithProviders(<Container />);
 
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
-		expect(getByRole(modal, 'tab', { name: 'MLA', selected: true })).toBeInTheDocument();
+		expect(getByRole(modal, 'tab', { name: 'MLA Handbook (in-text citations)', selected: true })).toBeInTheDocument();
 		expect(getByRole(modal, 'tab', { name: 'Nature' })).toBeInTheDocument();
 				await user.click(getByRole(modal, 'button', { name: 'Add' }));
 
@@ -213,7 +213,7 @@ describe('Import', () => {
 	});
 
 	test('Recognizes current and incoming citation styles are the same, even when dealing with an alais, when adding via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=mla');
+		window.location = new URL('http://localhost/import?q=1234&style=modern-language-association');
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -248,7 +248,7 @@ describe('Import', () => {
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
-		expect(getByRole(modal, 'tab', { name: 'MLA' })).toBeInTheDocument();
+		expect(getByRole(modal, 'tab', { name: 'MLA Handbook (in-text citations)' })).toBeInTheDocument();
 		// this style has a very long title and empty titleShort tag (which should be ignored).
 		// In this scenario tab shows a truncated full title and button uses different label that doesn't include style title
 		await user.click(getByRole(modal, 'tab', { name: /The Journals of Gerontology/ }));

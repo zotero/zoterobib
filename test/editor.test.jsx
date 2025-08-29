@@ -3,6 +3,7 @@ import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 import { getAllByRole, getByRole, screen, waitFor, queryByRole } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { getZotero } from 'web-common/zotero';
 
 import { applyAdditionalJestTweaks } from './utils/common';
 import Container from '../src/js/components/container';
@@ -180,6 +181,7 @@ describe('Editor', () => {
 	});
 
 	test("It parses descriptive string as date", async () => {
+		localStorage.removeItem('zotero-bib-items');
 		renderWithProviders(<Container />);
 		const user = userEvent.setup();
 		const manualEntryButton = screen.getByRole(
@@ -187,13 +189,22 @@ describe('Editor', () => {
 		);
 		await user.click(manualEntryButton);
 		const dialog = await screen.findByRole('dialog', { name: 'Item Editor' });
+
+
+		const inputTypeCombo = screen.getByRole('combobox', { name: 'Item Type' });
+		await user.click(inputTypeCombo);
+		await user.selectOptions(getByRole(inputTypeCombo, 'listbox'), 'Web Page');
+
 		const dateField = getByRole(dialog, 'textbox', { name: 'Date' });
 		await user.type(dateField, 'today');
+
 		const doneButton = screen.getByRole('button', { name: 'Done' });
 		await user.click(doneButton);
 		const bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
-		const expectedDate = new Date().toISOString().slice(0, 10);
-		expect(bibliography).toHaveTextContent(new RegExp(expectedDate));
+		const citation = getAllByRole(bibliography, 'listitem')[0]
+			.querySelector('.csl-entry-container').innerHTML;
+		const dateParsedBackFromCitation = getZotero().Date.strToISO(citation);
+		const expectedDate = getZotero().Date.parseDescriptiveString('today');
+		expect(dateParsedBackFromCitation).toEqual(expectedDate);
 	});
-
 });
