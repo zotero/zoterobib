@@ -22,6 +22,7 @@ import ZoteroBib from '../zotero-translation-client.js';
 import ZBib from './zbib';
 import { useUserTypeDetector } from '../hooks';
 import supportedLocales from '../../../data/supported-locales.json';
+import renamedStyles from '../../../data/renamed-styles.json';
 
 
 const defaultItem = {
@@ -537,6 +538,10 @@ const BibWebContainer = props => {
 			const remoteData = await fetchFromPermalink(`${config.storeURL}/${remoteId}`);
 			if(remoteData && 'items' in remoteData) {
 				if(remoteData.citationStyle) {
+					if (remoteData.citationStyle in renamedStyles) {
+						console.warn(`Using renamed citation style ${remoteData.citationStyle} to ${renamedStyles[remoteData.citationStyle]}`);
+						remoteData.citationStyle = renamedStyles[remoteData.citationStyle];
+					}
 					await fetchAndSelectStyle(dispatch, remoteData.citationStyle, { isConfirmed: true });
 
 					var citationStyleMeta = citationStyles.find(cs => cs.name === remoteData.citationStyle);

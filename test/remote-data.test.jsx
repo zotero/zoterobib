@@ -13,6 +13,8 @@ import localeForCiteproc from './fixtures/locales-en-us.xml';
 import natureStyle from './fixtures/nature.xml';
 import localesGBForCiteproc from './fixtures/locales-en-gb.xml';
 import stylesJson from './fixtures/styles.json';
+import turabianNotesBibStyle from './fixtures/turabian-notes-bibliography.xml';
+import chicagoNotesBibStyle from './fixtures/chicago-notes-bibliography-subsequent-author-title-17th-edition.xml'
 
 import CSL from 'citeproc';
 window.CSL = CSL;
@@ -95,5 +97,50 @@ describe('Remote Data', () => {
 		expect(dialog).toHaveTextContent(/There is an existing bibliography with 5 entries in the editor\. If you continue, the existing bibliography will be replaced with this one\./);
 		await user.click(getByRole(dialog, 'button', { name: 'Continue' }));
 		expect(history.replaceState).toHaveBeenCalledWith(null, null, '/');
+	});
+
+	test('Looks up the style name for renamed styles', async () => {
+		jest.spyOn(history, 'replaceState');
+		let hasFetchedRenamedStyle = false;
+		let hasFetchedParentStyle = false;
+		server.use(
+			http.get('https://www.zotero.org/styles/chicago-notes-bibliography-subsequent-author-title-17th-edition', () => {
+				hasFetchedParentStyle = true;
+				return HttpResponse.text(chicagoNotesBibStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
+			}),
+		);
+		server.use(
+			http.get('https://www.zotero.org/styles/turabian-notes-bibliography', () => {
+				hasFetchedRenamedStyle = true;
+				return HttpResponse.text(turabianNotesBibStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
+			}),
+		);
+		server.use(
+			http.get('http://localhost/store/d3b2fbdeadff4a00aecd048451a962b9', () => {
+				return HttpResponse.json({
+					"title": "bib in legacy style",
+					"citationStyle": "turabian-fullnote-bibliography",
+					"items": [
+						...localStorage100Items.slice(10, 20),
+					],
+				});
+			}),
+		);
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		await screen.findByRole('progressbar');
+		await waitFor(() => {
+			expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+		}, { timeout: 3000 });
+		await user.click(screen.getByRole('button', { name: 'Edit Bibliography' }));
+		const dialog = await screen.findByRole('dialog', { name: 'Clear existing bibliography?' });
+		await user.click(getByRole(dialog, 'button', { name: 'Continue' }));
+		expect(history.replaceState).toHaveBeenCalledWith(null, null, '/');
+		expect(hasFetchedRenamedStyle).toBe(true);
+		expect(hasFetchedParentStyle).toBe(true);
 	});
 });
