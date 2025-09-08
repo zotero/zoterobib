@@ -6,13 +6,12 @@ import { findByRole, getAllByRole, getByRole, screen, waitFor, queryByRole } fro
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks } from './utils/common';
+import { installMockedXHR, uninstallMockedXHR, installUnhandledRequestHandler } from './utils/xhr-mock';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
-import localeForCiteproc from './fixtures/locales-en-us.xml';
-import localesGBForCiteproc from './fixtures/locales-en-gb.xml';
 import natureStyle from './fixtures/nature.xml';
 
 import CSL from 'citeproc';
@@ -27,12 +26,8 @@ describe('Citations', () => {
 	const server = setupServer(...handlers)
 
 	beforeAll(() => {
-		server.listen({
-			onUnhandledRequest: (req) => {
-				// https://github.com/mswjs/msw/issues/946#issuecomment-1202959063
-				test(`${req.method} ${req.url} is not handled`, () => { });
-			},
-		});
+		installUnhandledRequestHandler(server);
+		installMockedXHR();
 	});
 
 	beforeEach(() => {
@@ -63,15 +58,17 @@ describe('Citations', () => {
 			JSON.stringify(localStorage100Items.slice(0, 5)) // improve performance by using a small slice
 		);
 		localStorage.setItem('zotero-bib-title', 'hello world');
-		localStorage.setItem('zotero-style-locales-en-US', localeForCiteproc);
-		localStorage.setItem('zotero-style-locales-en-GB', localesGBForCiteproc);
 	});
 
 	afterEach(() => {
 		server.resetHandlers();
 		localStorage.clear();
 	});
-	afterAll(() => server.close());
+
+	afterAll(() => {
+		uninstallMockedXHR();
+		server.close();
+	});
 
 	test('Supports copying citation with options', async () => {
 		renderWithProviders(<Container />);

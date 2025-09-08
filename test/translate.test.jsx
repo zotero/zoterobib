@@ -5,12 +5,12 @@ import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, fireE
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks, waitForPosition } from './utils/common';
+import { installMockedXHR, uninstallMockedXHR, installUnhandledRequestHandler } from './utils/xhr-mock';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
-import localeForCiteproc from './fixtures/locales-en-us.xml';
 import responseTranslateIdentifier from './fixtures/response-translate-identifier.json';
 import responseTranslateDOI from './fixtures/response-translate-doi.json';
 import responseTranslateItems from './fixtures/response-translate-items.json';
@@ -31,12 +31,8 @@ describe('Translate', () => {
 	const server = setupServer(...handlers)
 
 	beforeAll(() => {
-		server.listen({
-			onUnhandledRequest: (req) => {
-				// https://github.com/mswjs/msw/issues/946#issuecomment-1202959063
-				test(`${req.method} ${req.url} is not handled`, () => { });
-			},
-		});
+		installUnhandledRequestHandler(server);
+		installMockedXHR();
 	});
 
 	beforeEach(() => {
@@ -59,14 +55,17 @@ describe('Translate', () => {
 			JSON.stringify(localStorage100Items.slice(0, 5)) // improve performance by using a small slice
 		);
 		localStorage.setItem('zotero-bib-title', 'hello world');
-		localStorage.setItem('zotero-style-locales-en-US', localeForCiteproc);
 	});
 
 	afterEach(() => {
 		server.resetHandlers();
 		localStorage.clear();
 	});
-	afterAll(() => server.close());
+
+	afterAll(() => {
+		uninstallMockedXHR();
+		server.close();
+	});
 
 	test('Translates identifier', async () => {
 		let hasTranslated = false;

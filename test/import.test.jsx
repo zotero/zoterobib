@@ -5,15 +5,14 @@ import { getAllByRole, getByRole, getByText, screen, waitFor, queryByRole, query
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks } from './utils/common';
+import { installMockedXHR, uninstallMockedXHR, installUnhandledRequestHandler } from './utils/xhr-mock';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
-import localeForCiteproc from './fixtures/locales-en-us.xml';
 import responseTranslateIdentifier from './fixtures/response-translate-identifier.json';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
 import theJournalsOfGerontologySeriesA from './fixtures/the-journals-of-gerontology-series-a';
-import localesGBForCiteproc from './fixtures/locales-en-gb.xml';
 import natureStyle from './fixtures/nature.xml';
 import harvardCiteThemRight from './fixtures/harvard-cite-them-right.xml';
 import stylesJson from './fixtures/styles.json';
@@ -28,12 +27,8 @@ describe('Import', () => {
 	const server = setupServer(...handlers)
 
 	beforeAll(() => {
-		server.listen({
-			onUnhandledRequest: (req) => {
-				// https://github.com/mswjs/msw/issues/946#issuecomment-1202959063
-				test(`${req.method} ${req.url} is not handled`, () => { });
-			},
-		});
+		installUnhandledRequestHandler(server);
+		installMockedXHR();
 	});
 
 	beforeEach(() => {
@@ -83,25 +78,23 @@ describe('Import', () => {
 				});
 			}),
 		);
-		server.use(
-			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
-				return HttpResponse.xml(localesGBForCiteproc);
-			}),
-		);
 
 		localStorage.setItem(
 			'zotero-bib-items',
 			JSON.stringify(localStorage100Items.slice(0, 5)) // improve performance by using a small slice
 		);
 		localStorage.setItem('zotero-bib-title', 'hello world');
-		localStorage.setItem('zotero-style-locales-en-US', localeForCiteproc);
 	});
 
 	afterEach(() => {
 		server.resetHandlers();
 		localStorage.removeItem('zotero-bib-citation-style');
 	});
-	afterAll(() => server.close());
+
+	afterAll(() => {
+		uninstallMockedXHR();
+		server.close();
+	});
 
 	test('Shows confirmation dialog when adding a single item via /import endpoint', async () => {
 		window.location = new URL('http://localhost/import?q=1234');

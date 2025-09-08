@@ -5,6 +5,7 @@ import { findByRole, getAllByRole, getByRole, screen, waitFor } from '@testing-l
 import userEvent from '@testing-library/user-event'
 
 import { applyAdditionalJestTweaks } from './utils/common';
+import { installMockedXHR, uninstallMockedXHR, installUnhandledRequestHandler } from './utils/xhr-mock';
 import Container from '../src/js/components/container';
 import { renderWithProviders } from './utils/render';
 import modernLanguageAssociationStyle from './fixtures/modern-language-association.xml';
@@ -13,8 +14,6 @@ import chicagoNotesBibStyle from './fixtures/chicago-notes-bibliography-subseque
 import natureStyle from './fixtures/nature.xml';
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
-import localeForCiteproc from './fixtures/locales-en-us.xml';
-import localesGBForCiteproc from './fixtures/locales-en-gb.xml';
 import stylesJson from './fixtures/styles.json';
 import localStorageItemsForApa from './fixtures/local-storage-items-for-apa.json';
 import apaStyle from './fixtures/apa.xml';
@@ -29,12 +28,8 @@ describe('Editor', () => {
 	const server = setupServer(...handlers)
 
 	beforeAll(() => {
-		server.listen({
-			onUnhandledRequest: (req) => {
-				// https://github.com/mswjs/msw/issues/946#issuecomment-1202959063
-				test(`${req.method} ${req.url} is not handled`, () => { });
-			},
-		});
+		installUnhandledRequestHandler(server);
+		installMockedXHR();
 	});
 
 	beforeEach(() => {
@@ -57,14 +52,17 @@ describe('Editor', () => {
 			JSON.stringify(localStorage100Items.slice(0, 5)) // improve performance by using a small slice
 		);
 		localStorage.setItem('zotero-bib-title', 'hello world');
-		localStorage.setItem('zotero-style-locales-en-US', localeForCiteproc);
 	});
 
 	afterEach(() => {
 		server.resetHandlers();
 		localStorage.clear();
 	});
-	afterAll(() => server.close());
+
+	afterAll(() => {
+		uninstallMockedXHR();
+		server.close();
+	});
 
 	test('Supports changing style', async () => {
 		server.use(
@@ -111,11 +109,6 @@ describe('Editor', () => {
 				return HttpResponse.text(natureStyle, {
 					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
 				});
-			}),
-		);
-		server.use(
-			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
-				return HttpResponse.xml(localesGBForCiteproc);
 			}),
 		);
 		renderWithProviders(<Container />);
@@ -183,11 +176,6 @@ describe('Editor', () => {
 				return HttpResponse.text(natureStyle, {
 					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
 				});
-			}),
-		);
-		server.use(
-			http.get('http://localhost/static/locales/locales-en-GB.xml', () => {
-				return HttpResponse.xml(localesGBForCiteproc);
 			}),
 		);
 		localStorage.setItem(
