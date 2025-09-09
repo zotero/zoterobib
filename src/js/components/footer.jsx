@@ -19,7 +19,7 @@ const Footer = props => {
 				</nav> }
 			<small className="copyright">
 				<ul>
-					<li>© 2018–2024 Zotero</li>
+					<li>© 2018–2025 Zotero</li>
 					{isReadOnly && (
 						<li><a href="https://twitter.com/zotero">@zotero</a></li>
 					)}
