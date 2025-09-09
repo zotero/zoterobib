@@ -30,8 +30,7 @@ describe('Remote Data', () => {
 	});
 
 	beforeEach(() => {
-		delete window.location;
-		window.location = new URL('http://localhost/d3b2fbdeadff4a00aecd048451a962b9');
+		window.jsdom.reconfigure({ url: 'http://localhost/d3b2fbdeadff4a00aecd048451a962b9' });
 		server.use(
 			http.get('https://api.zotero.org/schema', () => {
 				return HttpResponse.json(schema);

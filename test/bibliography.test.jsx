@@ -35,8 +35,7 @@ describe('Citations', () => {
 
 	beforeEach(() => {
 		copy.mockReturnValue(true);
-		delete window.location;
-		window.location = new URL('http://localhost/');
+		window.jsdom.reconfigure({ url: 'http://localhost/' });
 		server.use(
 			http.get('https://api.zotero.org/schema', () => {
 				return HttpResponse.json(schema);
@@ -97,6 +96,9 @@ describe('Citations', () => {
 		await user.click(button);
 		const menuoption = await screen.findByRole('menuitem', { name: 'Download RTF (all word processors)' });
 		await user.click(menuoption);
+		await waitFor(
+			() => expect(fileSaver.saveAs.mock.calls.length).toBe(1)
+		);
 		const text = await getFileAsText(fileSaver.saveAs.mock.calls[0][0]);
 		expect(text.slice(0, 5)).toEqual('{\\rtf');
 		expect(text).toEqual(expect.stringContaining('\\uc0\\u8220{}Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution.\\uc0\\u8221{}'));
@@ -132,7 +134,7 @@ describe('Citations', () => {
 				const items = await request.json();
 				expect(url.searchParams.get('format')).toEqual('ris');
 				expect(items).toHaveLength(5);
-				expect(items.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
+				expect(items.map(item => item.title)).toEqual(expect.arrayContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
 				return HttpResponse.text('RIS FORMAT', {
 					headers: { 'Content-Type': 'application/x-research-info-systems' },
 				});
@@ -144,6 +146,9 @@ describe('Citations', () => {
 		await user.click(button);
 		const menuoption = await screen.findByRole('menuitem', { name: 'Download RIS' });
 		await user.click(menuoption);
+		await waitFor(
+			() => expect(fileSaver.saveAs.mock.calls.length).toBe(1)
+		);
 		const text = await getFileAsText(fileSaver.saveAs.mock.calls[0][0]);
 		expect(text).toEqual('RIS FORMAT');
 		await waitFor(
@@ -157,8 +162,8 @@ describe('Citations', () => {
 				const url = new URL(request.url);
 				const items = await request.json();
 				expect(url.searchParams.get('format')).toEqual('bibtex');
-				expect(items).toHaveLength(5);
-				expect(items.map(item => item.title)).toEqual(expect.objectContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
+				expect(items).toHaveLength(5)
+				expect(items.map(item => item.title)).toEqual(expect.arrayContaining(localStorage100Items.slice(0, 5).map(item => item.title)))
 				return HttpResponse.text('BibTeX FORMAT', {
 					headers: { 'Content-Type': 'application/x-bibtex' },
 				});
@@ -170,6 +175,9 @@ describe('Citations', () => {
 		await user.click(button);
 		const menuoption = await screen.findByRole('menuitem', { name: 'Download BibTeX' });
 		await user.click(menuoption);
+		await waitFor(
+			() => expect(fileSaver.saveAs.mock.calls.length).toBe(1)
+		);
 		const text = await getFileAsText(fileSaver.saveAs.mock.calls[0][0]);
 		expect(text).toEqual('BibTeX FORMAT');
 		await waitFor(

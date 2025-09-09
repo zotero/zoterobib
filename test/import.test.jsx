@@ -32,7 +32,7 @@ describe('Import', () => {
 	});
 
 	beforeEach(() => {
-		delete window.location;
+		window.jsdom.reconfigure({ url: 'http://localhost/' });
 		server.use(
 			http.get('https://api.zotero.org/schema', () => {
 				return HttpResponse.json(schema);
@@ -97,7 +97,7 @@ describe('Import', () => {
 	});
 
 	test('Shows confirmation dialog when adding a single item via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234' });
 		renderWithProviders(<Container />);
 		const user = userEvent.setup();
 
@@ -115,7 +115,7 @@ describe('Import', () => {
 	});
 
 	test('Switches citation style when adding new citation via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=nature');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=nature' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -138,7 +138,7 @@ describe('Import', () => {
 	});
 
 	test('Installs citation style, even if provided as alias, when adding new citation via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=harvard-university-west-london');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=harvard-university-west-london' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -162,7 +162,7 @@ describe('Import', () => {
 	});
 
 	test('Presevers current citation style while adding new citation via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=nature');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=nature' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -185,7 +185,7 @@ describe('Import', () => {
 	});
 
 	test('Recognizes current and incoming citation styles are the same when adding via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=modern-language-association');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=modern-language-association' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -206,7 +206,7 @@ describe('Import', () => {
 	});
 
 	test('Recognizes current and incoming citation styles are the same, even when dealing with an alais, when adding via /import endpoint', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=modern-language-association');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=modern-language-association' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 
@@ -228,7 +228,7 @@ describe('Import', () => {
 
 	test('Confirmation is not required if bibliography is empty', async () => {
 		localStorage.removeItem('zotero-bib-items');
-		window.location = new URL('http://localhost/import?q=1234&style=nature');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=nature' });
 		renderWithProviders(<Container />);
 		await waitFor(() => expect(getByText(screen.getByRole('region', { name: 'New item…' }), /1\./)).toBeInTheDocument(), { timeout: 3000 });
 		const bibliography = screen.getByRole("list", { name: "Bibliography" });
@@ -237,7 +237,7 @@ describe('Import', () => {
 	});
 
 	test('Confirmation dialog works with a style that have very long names and empty titleShort', async () => {
-		window.location = new URL('http://localhost/import?q=1234&style=the-journals-of-gerontology-series-a');
+		window.jsdom.reconfigure({ url: 'http://localhost/import?q=1234&style=the-journals-of-gerontology-series-a' });
 		const user = userEvent.setup();
 		renderWithProviders(<Container />);
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
