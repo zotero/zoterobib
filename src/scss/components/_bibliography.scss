@@ -1,13 +1,17 @@
+@use "sass:color";
+@use "sass:selector";
+@use "../abstracts/variables";
+
 .bibliography {
 	padding: 0;
 	list-style: none;
 	text-align: left;
 
 	.write & {
-		margin: $space-lg (-$grid-gutter-width * 0.5);
+		margin: variables.$space-lg (-(variables.$grid-gutter-width) * 0.5);
 
-		@media (min-width: $bp-md) {
-			margin: $space-lg 0;
+		@media (min-width: variables.$bp-md) {
+			margin: variables.$space-lg 0;
 		}
 
 		.citation-container {
@@ -17,31 +21,31 @@
 				display: block;
 				height: 0;
 				width: 100%;
-				background-color: rgba($asphalt-light, .2);
+				background-color: rgba(variables.$asphalt-light, .2);
 			}
 
 			&:last-child {
-				border-bottom: 1px solid $shade-2;
+				border-bottom: 1px solid variables.$shade-2;
 			}
 
 			&.dnd-target.dnd-target-above::before,
 			&.dnd-target.dnd-target-below::after {
-				border-top: 1px solid $shade-2;
+				border-top: 1px solid variables.$shade-2;
 				height: var(--dnd-height, 50px);
 			}
 
 			&.error {
-				color: lighten($text-color, 50%);
+				color: color.adjust(variables.$text-color, $lightness: 50%);
 			}
 		}
 	}
 
 	.read-only & {
 		font-size: 18px;
-		margin-bottom: $space-xl - 7px;
+		margin-bottom: variables.$space-xl - 7px;
 
-		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 7px;
+		@media (min-width: variables.$bp-md) {
+			margin-bottom: variables.$space-xxl - 7px;
 		}
 	}
 }
@@ -49,16 +53,16 @@
 .citation {
 	display: flex;
 	align-items: center;
-	padding: ($space-lg - 7px) ($space-md - $space-xs) ($space-lg - 7px) $space-md; // Caps height
-	border-top: 1px solid $shade-2;
+	padding: (variables.$space-lg - 7px) (variables.$space-md - variables.$space-xs) (variables.$space-lg - 7px) variables.$space-md; // Caps height
+	border-top: 1px solid variables.$shade-2;
 	cursor: pointer;
 	position: relative;
 
-	@media (max-width: $bp-md - 1px) {
-		padding-right: $space-md - 2px;
+	@media (max-width: variables.$bp-md - 1px) {
+		padding-right: variables.$space-md - 2px;
 	}
 
-	@media (min-width: $bp-md) {
+	@media (min-width: variables.$bp-md) {
 		&::before {
 			content: "";
 			position: absolute;
@@ -74,9 +78,9 @@
 	}
 
 	&.dnd-ghost {
-		border: 1px solid $shade-5;
-		background-color: $shade-1;
-		box-shadow: 0 2px 20px rgba($shade-10, 0.2);
+		border: 1px solid variables.$shade-5;
+		background-color: variables.$shade-1;
+		box-shadow: 0 2px 20px rgba(variables.$shade-10, 0.2);
 
 		.drag-handle,
 		.btn-remove,
@@ -86,10 +90,10 @@
 	}
 
 	&:hover {
-		@at-root #{selector-replace(&, ".citation", "body:not(.dnd-in-progress) .citation")} {
-			background-color: $shade-1;
+		@at-root #{selector.replace(&, ".citation", "body:not(.dnd-in-progress) .citation")} {
+			background-color: variables.$shade-1;
 
-			@media (min-width: $bp-md) {
+			@media (min-width: variables.$bp-md) {
 				.drag-handle,
 				.btn-remove {
 					opacity: 1;
@@ -99,7 +103,7 @@
 	}
 
 	&:focus {
-		@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
+		@at-root #{selector.replace(&, ".citation", ".keyboard .citation")} {
 			outline-offset: -3px;
 
 			& + .citation {
@@ -109,10 +113,10 @@
 	}
 
 	.citation-options-menu {
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: none;
 
-			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
+			@at-root #{selector.replace(&, ".citation", ".keyboard .citation")} {
 				position: absolute;
 				right: -36px;
 				display: block;
@@ -121,41 +125,41 @@
 	}
 
 	.drag-handle {
-		padding-right: $space-md;
+		padding-right: variables.$space-md;
 		display: none;
 		cursor: grab;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: block;
 		}
 
-		@at-root #{selector-replace(&, ".citation", ".mouse .citation")} {
+		@at-root #{selector.replace(&, ".citation", ".mouse .citation")} {
 			opacity: 0;
 		}
 
 		.icon {
-			color: $blue;
+			color: variables.$blue;
 		}
 	}
 
 	.csl-entry-container {
 		flex: 1 1 0;
-		margin-right: ($space-md - $space-xs);
+		margin-right: (variables.$space-md - variables.$space-xs);
 		min-width: 0; // Enable word-wrap for long URLs
 	}
 
 	> .btn-icon,
 	.dropdown {
-		margin-top: -$space-lg;
-		margin-bottom: -$space-lg;
+		margin-top: -(variables.$space-lg);
+		margin-bottom: -(variables.$space-lg);
 	}
 
 	.show {
 		.dropdown-toggle {
-			background: $btn-secondary-color;
+			background: variables.$btn-secondary-color;
 
 			.icon {
-				color: $shade-0;
+				color: variables.$shade-0;
 			}
 		}
 
@@ -163,7 +167,7 @@
 			text-align: left;
 
 			.feedback {
-				color: $btn-success-color;
+				color: variables.$btn-success-color;
 			}
 		}
 	}
@@ -177,41 +181,41 @@
 
 		&.success {
 			opacity: 1.0;
-			background-color: $btn-success-color;
+			background-color: variables.$btn-success-color;
 
 			&:active {
-				background-color: darken($btn-success-color, 8%);
+				background-color: color.adjust(variables.$btn-success-color, $lightness: -8%);
 			}
 
 			.icon {
-				color: $shade-0;
+				color: variables.$shade-0;
 			}
 		}
 
 		&:focus {
-			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
-				border-color: $btn-secondary-color;
+			@at-root #{selector.replace(&, ".citation", ".keyboard .citation")} {
+				border-color: variables.$btn-secondary-color;
 
 				&:active {
-					border-color: darken($btn-secondary-color, 8%);
+					border-color: color.adjust(variables.$btn-secondary-color, $lightness: -8%);
 				}
 			}
 		}
 
 		&:active {
 			.icon {
-				color: $shade-0;
+				color: variables.$shade-0;
 			}
 		}
 	}
 
 	.btn-remove {
 		position: absolute;
-		width: $space-md;
-		height: $space-md;
+		width: variables.$space-md;
+		height: variables.$space-md;
 		top: 50%;
 		right: -24px;
-		margin: -8px 0 0 0;
+		margin: -8px 0 0;
 		border-radius: 50%;
 		display: none;
 
@@ -219,20 +223,20 @@
 			opacity: 1;
 		}
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: block;
 
-			@at-root #{selector-replace(&, ".citation", ".mouse .citation")} {
+			@at-root #{selector.replace(&, ".citation", ".mouse .citation")} {
 				opacity: 0;
 			}
 
-			@at-root #{selector-replace(&, ".citation", ".keyboard .citation")} {
+			@at-root #{selector.replace(&, ".citation", ".keyboard .citation")} {
 				display: none;
 			}
 
 			&:active {
 				.icon {
-					color: $shade-0;
+					color: variables.$shade-0;
 				}
 			}
 		}

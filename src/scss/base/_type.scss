@@ -1,11 +1,9 @@
-//
-// Type
-//
+@use "../abstracts/variables";
 
 body {
-	font-family: $font-family-base;
-	font-size: $font-size-base;
-	line-height: $line-height-base;
+	font-family: variables.$font-family-base;
+	font-size: variables.$font-size-base;
+	line-height: variables.$line-height-base;
 }
 
 h1,
@@ -18,8 +16,8 @@ h4,
 .h4,
 h5,
 .h5 {
-	font-weight: $headings-font-weight;
-	line-height: $headings-line-height;
+	font-weight: variables.$headings-font-weight;
+	line-height: variables.$headings-line-height;
 }
 
 h1,
@@ -33,59 +31,59 @@ h3,
 
 h1,
 .h1 {
-	font-size: $h1-font-size-mobile;
-	margin-bottom: $lead-font-size-mobile;
+	font-size: variables.$h1-font-size-mobile;
+	margin-bottom: variables.$lead-font-size-mobile;
 	margin-top: 0;
 
-	@media (min-width: $bp-md) {
-		font-size: $h1-font-size;
-		margin-bottom: $lead-font-size;
+	@media (min-width: variables.$bp-md) {
+		font-size: variables.$h1-font-size;
+		margin-bottom: variables.$lead-font-size;
 	}
 }
 
 h2,
 .h2 {
 	margin-top: 0;
-	font-size: $h2-font-size-mobile;
-	margin-bottom: ($space-xl - 6px);
+	font-size: variables.$h2-font-size-mobile;
+	margin-bottom: (variables.$space-xl - 6px);
 
-	@media (min-width: $bp-md) {
-		font-size: $h2-font-size;
-		margin-bottom: ($space-xxl - 8px);
+	@media (min-width: variables.$bp-md) {
+		font-size: variables.$h2-font-size;
+		margin-bottom: (variables.$space-xxl - 8px);
 	}
 }
 
 h3,
 .h3 {
-	font-size: $h3-font-size-mobile;
+	font-size: variables.$h3-font-size-mobile;
 
-	@media (min-width: $bp-md) {
-		font-size: $h3-font-size;
+	@media (min-width: variables.$bp-md) {
+		font-size: variables.$h3-font-size;
 	}
 }
 
 h4,
 .h4 {
-	font-size: $h4-font-size-mobile;
+	font-size: variables.$h4-font-size-mobile;
 	margin: 0;
 	letter-spacing: -0.01em;
 	// todo: letter-spacing
 
-	@media (min-width: $bp-md) {
-		font-size: $h4-font-size;
+	@media (min-width: variables.$bp-md) {
+		font-size: variables.$h4-font-size;
 	}
 }
 
 h5,
 .h5 {
-	font-size: $h5-font-size;
+	font-size: variables.$h5-font-size;
 	margin-top: 0;
-	margin-bottom: $space-xs;
+	margin-bottom: variables.$space-xs;
 	letter-spacing: 0;
 }
 
 a {
-	color: $link-color;
+	color: variables.$link-color;
 	text-decoration: none;
 
 	&:hover {
@@ -104,19 +102,19 @@ b {
 }
 
 .lead {
-	font-size: $lead-font-size-mobile;
-	font-weight: $lead-font-weight;
+	font-size: variables.$lead-font-size-mobile;
+	font-weight: variables.$lead-font-weight;
 	margin-top: 0;
 	letter-spacing: -0.01em;
 	// todo: letter-spacing
 
-	@media (min-width: $bp-md) {
-		font-size: $lead-font-size;
+	@media (min-width: variables.$bp-md) {
+		font-size: variables.$lead-font-size;
 		margin-left: auto;
 		margin-right: auto;
 	}
 
-	@media (min-width: $bp-lg) {
+	@media (min-width: variables.$bp-lg) {
 		width: 80%;
 	}
 }

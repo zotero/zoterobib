@@ -1,7 +1,3 @@
-//
-// Utilities
-//
-
-@import "utilities/text";
-@import "utilities/display";
-@import "utilities/screen-reader";
+@use "utilities/text";
+@use "utilities/display";
+@use "utilities/screen-reader";

@@ -1,25 +1,23 @@
-//
-// Error message
-//
+@use "../abstracts/variables";
 
 .message {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	color: $message-color;
-	padding: $space-xl ($grid-gutter-width * 0.5);
+	color: variables.$message-color;
+	padding: variables.$space-xl (variables.$grid-gutter-width * 0.5);
 	text-align: center;
-	font-size: $message-font-size-mobile;
+	font-size: variables.$message-font-size-mobile;
 	font-weight: 300;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
 
-	@media (min-width: $bp-md) {
+	@media (min-width: variables.$bp-md) {
 		flex-direction: row;
-		font-size: $message-font-size;
-		line-height: $line-height-base + 0.1;
-		padding: ($space-xxl - 11px) ($grid-gutter-width * 0.5) ($space-xxl - 11px) 92px;
+		font-size: variables.$message-font-size;
+		line-height: variables.$line-height-base + 0.1;
+		padding: (variables.$space-xxl - 11px) (variables.$grid-gutter-width * 0.5) (variables.$space-xxl - 11px) 92px;
 
 		&::before {
 			content: ""; // Center/right justification hack
@@ -38,7 +36,7 @@
 		margin-top: 3px;
 		margin-bottom: -8px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: block;
 			margin-top: 0;
 			margin-bottom: 0;
@@ -48,31 +46,31 @@
 	.close {
 		flex: 0 0 auto;
 		order: -1;
-		width: $space-xxl;
-		height: $space-xxl;
+		width: variables.$space-xxl;
+		height: variables.$space-xxl;
 		margin-top: -16px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			order: 0;
-			width: $space-xxxl;
-			height: $space-xxxl;
-			margin: (-$space-xl * 0.5) $space-sm (-$space-xl * 0.5) 0;
+			width: variables.$space-xxxl;
+			height: variables.$space-xxxl;
+			margin: (-(variables.$space-xl) * 0.5) variables.$space-sm (-(variables.$space-xl) * 0.5) 0;
 		}
 
 		&:focus {
 			.keyboard & {
-				border-color: $message-focus-color;
-				box-shadow: 0 0 0 $input-btn-focus-width $message-focus-color;
+				border-color: variables.$message-focus-color;
+				box-shadow: 0 0 0 variables.$input-btn-focus-width variables.$message-focus-color;
 			}
 		}
 
 		.icon {
-			color: $message-color;
+			color: variables.$message-color;
 		}
 
 		&:active {
 			.icon {
-				color: $message-color;
+				color: variables.$message-color;
 			}
 		}
 	}
@@ -80,28 +78,28 @@
 	.btn:not(.btn-icon) {
 		font-size: 20px;
 		font-weight: bold;
-		margin-top: $space-xl - 8px;
+		margin-top: variables.$space-xl - 8px;
 		margin-bottom: 8px;
 
-		@media (min-width: $bp-md) {
-			margin: -1em 0 -1em $space-lg;
+		@media (min-width: variables.$bp-md) {
+			margin: -1em 0 -1em variables.$space-lg;
 			vertical-align: 2px;
 		}
 	}
 
 	&.error {
-		background: $message-error-bg;
+		background: variables.$message-error-bg;
 	}
 
 	&.warning {
-		background: $message-warning-bg;
+		background: variables.$message-warning-bg;
 	}
 
 	&.info {
-		background: $message-info-bg;
+		background: variables.$message-info-bg;
 	}
 
 	&.success {
-		background: $message-success-bg;
+		background: variables.$message-success-bg;
 	}
 }

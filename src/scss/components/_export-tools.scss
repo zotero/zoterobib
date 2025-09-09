@@ -1,6 +1,6 @@
-//
-// Export tools
-//
+@use "sass:color";
+@use "../../../modules/web-common/scss/abstracts/functions/asset-url";
+@use "../abstracts/variables";
 
 .export-tools {
 	.btn-secondary {
@@ -10,24 +10,24 @@
 		&:focus {
 			.keyboard & {
 				box-shadow: none; // Use padding as focus state (no gradients in box-shadows possible)
-				padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-xl + 2px);
+				padding: (variables.$btn-padding-y-xl + 2px) (variables.$btn-padding-x-xl + 2px);
 				margin: -2px;
 
 				&:hover {
-					box-shadow: 0 4px 4px $btn-box-shadow-color;
+					box-shadow: 0 4px 4px variables.$btn-box-shadow-color;
 				}
 			}
 		}
 	}
 
 	.btn-xl {
-		@media (max-width: ($bp-sm - 1px)) {
-			padding-left: $btn-padding-x-lg;
-			padding-right: $btn-padding-x-lg;
+		@media (max-width: (variables.$bp-sm - 1px)) {
+			padding-left: variables.$btn-padding-x-lg;
+			padding-right: variables.$btn-padding-x-lg;
 
 			&:focus {
 				.keyboard & {
-					padding: ($btn-padding-y-xl + 2px) ($btn-padding-x-lg + 2px);
+					padding: (variables.$btn-padding-y-xl + 2px) (variables.$btn-padding-x-lg + 2px);
 				}
 			}
 		}
@@ -37,8 +37,8 @@
 		background-image:
 			linear-gradient(
 				to right,
-				$btn-secondary-color,
-				mix($violet, $btn-secondary-color, 79%)
+				variables.$btn-secondary-color,
+				color.mix(variables.$violet, variables.$btn-secondary-color, 79%)
 			);
 		background-clip: border-box;
 		position: relative;
@@ -47,8 +47,8 @@
 			background-image:
 				linear-gradient(
 					to right,
-					lighten($btn-secondary-color, 4%),
-					lighten(mix($violet, $btn-secondary-color, 79%), 4%)
+					color.adjust(variables.$btn-secondary-color, $lightness: 4%),
+					color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: 4%)
 				);
 		}
 
@@ -56,8 +56,8 @@
 			background-image:
 				linear-gradient(
 					to right,
-					darken($btn-secondary-color, 8%),
-					darken(mix($violet, $btn-secondary-color, 79%), 8%)
+					color.adjust(variables.$btn-secondary-color, $lightness: -8%),
+					color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%)
 				);
 		}
 	}
@@ -67,8 +67,8 @@
 			background-image:
 				linear-gradient(
 					to right,
-					mix($violet, $btn-secondary-color, 79%),
-					$violet
+					color.mix(variables.$violet, variables.$btn-secondary-color, 79%),
+					variables.$violet
 				);
 			position: relative;
 
@@ -76,8 +76,8 @@
 				background-image:
 					linear-gradient(
 						to right,
-						lighten(mix($violet, $btn-secondary-color, 79%), 4%),
-						lighten($violet, 4%)
+						color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: 4%),
+						color.adjust(variables.$violet, $lightness: 4%)
 					);
 			}
 
@@ -85,8 +85,8 @@
 				background-image:
 					linear-gradient(
 						to right,
-						darken(mix($violet, $btn-secondary-color, 79%), 8%),
-						darken($violet, 8%)
+						color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%),
+						color.adjust(variables.$violet, $lightness: -8%)
 					);
 			}
 
@@ -97,8 +97,8 @@
 				left: -2px;
 				bottom: 10px;
 				width: 1px;
-				background: rgba(255, 255, 255, 0.8);
-				transition: opacity $btn-transition;
+				background: rgb(255 255 255 / 80%);
+				transition: opacity variables.$btn-transition;
 			}
 		}
 
@@ -109,8 +109,8 @@
 					background-image:
 						linear-gradient(
 							to right,
-							darken(mix($violet, $btn-secondary-color, 79%), 8%),
-							darken($violet, 8%)
+							color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%),
+							color.adjust(variables.$violet, $lightness: -8%)
 						);
 				}
 
@@ -123,7 +123,7 @@
 				.dropdown-toggle {
 					&,
 					&:hover {
-						background: darken($btn-success-color, 8%);
+						background: color.adjust(variables.$btn-success-color, $lightness: -8%);
 					}
 				}
 			}
@@ -133,7 +133,7 @@
 			text-align: left;
 
 			.feedback {
-				color: $btn-success-color;
+				color: variables.$btn-success-color;
 			}
 		}
 
@@ -163,23 +163,23 @@
 
 		&.success {
 			> .btn {
-				background: $btn-success-color;
+				background: variables.$btn-success-color;
 
 				&:hover {
-					background: lighten($btn-success-color, 4%);
+					background: color.adjust(variables.$btn-success-color, $lightness: 4%);
 				}
 
 				&:active {
-					background: darken($btn-success-color, 8%);
+					background: color.adjust(variables.$btn-success-color, $lightness: -8%);
 				}
 			}
 		}
 	}
 
 	.dropdown-caret {
-		width: $space-md;
-		height: $space-md;
+		width: variables.$space-md;
+		height: variables.$space-md;
 		display: inline-block;
-		background: image-url("bg-icons/16/chevron-11-down-light.svg");
+		background: asset-url.image-url("bg-icons/16/chevron-11-down-light.svg");
 	}
 }

@@ -1,9 +1,7 @@
-//
-// Forms
-//
+@use "../abstracts/variables";
 
 ::placeholder {
-	color: $placeholder-color;
+	color: variables.$placeholder-color;
 	opacity: 1; // Set opacity for Firefox
 }
 
@@ -14,10 +12,10 @@
 .form-row {
 	display: flex;
 	flex-wrap: wrap;
-	margin: 0 (-$form-gutter-width * 0.5);
+	margin: 0 (-(variables.$form-gutter-width) * 0.5);
 
-	> [class*=col-] {
-		padding: 0 ($form-gutter-width * 0.5);
+	> [class*="col-"] {
+		padding: 0 (variables.$form-gutter-width * 0.5);
 	}
 
 	.col-xs-6 {
@@ -27,10 +25,10 @@
 }
 
 .form-group {
-	margin-bottom: $space-sm;
+	margin-bottom: variables.$space-sm;
 
 	&.compact {
-		margin-bottom: $space-min;
+		margin-bottom: variables.$space-min;
 	}
 }
 
@@ -43,26 +41,22 @@
 	}
 
 	.form-control-lg + .icon-spin {
-		width: $space-lg;
-		height: $space-lg;
-		top: $space-sm;
-		right: $space-md + $input-border-width;
+		width: variables.$space-lg;
+		height: variables.$space-lg;
+		top: variables.$space-sm;
+		right: variables.$space-md + variables.$input-border-width;
 	}
 
 	.form-control-sm {
 		& + .icon-spin {
-			width: $space-md;
-			height: $space-md;
-			top: $space-xs;
-			right: $input-btn-padding-x-sm + $input-border-width;
+			width: variables.$space-md;
+			height: variables.$space-md;
+			top: variables.$space-xs;
+			right: variables.$input-btn-padding-x-sm + variables.$input-border-width;
 		}
 
 		&.select-component + .icon-spin {
-			right:
-				$input-btn-padding-x-sm
-				+ $input-border-width
-				+ $space-md
-				+ $space-min;
+			right: variables.$input-btn-padding-x-sm + variables.$input-border-width + variables.$space-md + variables.$space-min;
 		}
 	}
 }
@@ -70,31 +64,31 @@
 .form-control {
 	display: block;
 	width: 100%;
-	border: $input-border-width solid $input-border-color;
-	line-height: $input-line-height;
+	border: variables.$input-border-width solid variables.$input-border-color;
+	line-height: variables.$input-line-height;
 	font-size: inherit;
 	font-family: inherit;
 	color: inherit;
 	// todo: padding
-	border-radius: $input-border-radius;
-	transition: border $input-transition, box-shadow $input-transition, padding $input-transition;
+	border-radius: variables.$input-border-radius;
+	transition: border variables.$input-transition, box-shadow variables.$input-transition, padding variables.$input-transition;
 	margin: 0; // Remove margin in Safari
 	background-clip: padding-box; // Remove inner shadow on iOS
 
 	&:focus {
-		border: $input-border-width solid $input-focus-color;
-		box-shadow: 0 0 0 2px $secondary;
+		border: variables.$input-border-width solid variables.$input-focus-color;
+		box-shadow: 0 0 0 2px variables.$secondary;
 		outline: none;
 	}
 }
 
 .form-control-lg {
-	padding: $input-padding-y-lg $input-padding-x-lg;
-	border-radius: $input-border-radius-lg;
+	padding: variables.$input-padding-y-lg variables.$input-padding-x-lg;
+	border-radius: variables.$input-border-radius-lg;
 
 	.busy & {
 		&:not(.select-component) {
-			padding-right: $input-padding-x-lg + $space-lg + 1px;
+			padding-right: variables.$input-padding-x-lg + variables.$space-lg + 1px;
 		}
 	}
 
@@ -103,17 +97,17 @@
 		border: none;
 
 		.select-control {
-			padding: $input-padding-y-lg $input-padding-x-lg;
+			padding: variables.$input-padding-y-lg variables.$input-padding-x-lg;
 		}
 	}
 }
 
 .form-control-sm {
-	padding: $input-btn-padding-y-sm $input-btn-padding-x-sm;
+	padding: variables.$input-btn-padding-y-sm variables.$input-btn-padding-x-sm;
 
 	.busy & {
 		&:not(.select-component) {
-			padding-right: $input-btn-padding-x-sm + $space-md + 1px;
+			padding-right: variables.$input-btn-padding-x-sm + variables.$space-md + 1px;
 		}
 	}
 
@@ -122,7 +116,7 @@
 		border: none;
 
 		.select-control {
-			padding: $input-btn-padding-y-sm + 4px $input-btn-padding-x-sm;
+			padding: variables.$input-btn-padding-y-sm + 4px variables.$input-btn-padding-x-sm;
 		}
 	}
 }
@@ -138,7 +132,7 @@ label {
 
 .checkbox,
 .radio {
-	padding: ($input-btn-padding-y-sm + 1px) 0;
+	padding: (variables.$input-btn-padding-y-sm + 1px) 0;
 
 	label {
 		display: flex;
@@ -146,6 +140,6 @@ label {
 
 	[type] {
 		font-size: inherit;
-		margin: $space-min ($space-min + $space-min * 0.5) 0 0;
+		margin: variables.$space-min (variables.$space-min + variables.$space-min * 0.5) 0 0;
 	}
 }

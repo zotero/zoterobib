@@ -1,76 +1,47 @@
-// stylelint-disable
-
-
-//
-// ZBib
-//
-
-//
-// Abstracts
-//
-
-@import "abstracts/variables";
-@import "abstracts/functions";
-@import "abstracts/mixins";
-@import "abstracts/utilities";
-
-
-//
-// Base
-//
-
-@import "base/reset";
-@import "base/base";
-@import "base/type";
-@import "base/outline";
-
-
-//
-// Layout
-//
-
-@import "layout/fonts";
-@import "layout/grid";
-@import "layout/forms";
-@import "layout/csl";
-@import "layout/sections";
-@import "layout/section-cite";
-@import "layout/section-export";
-@import "layout/section-link";
-@import "layout/section-about";
-@import "layout/section-brand";
-@import "layout/badge";
-@import "layout/messages";
-@import "layout/inline-feedback";
-@import "layout/faq";
-@import "layout/footer";
-
-
-//
-// Components
-//
-
-@import "components/cite-tools";
-@import "components/dnd";
-@import "../../modules/web-common/scss/icon";
-@import "components/button";
-@import "components/review";
-@import "components/bibliography-section";
-@import "components/bibliography";
-@import "../../modules/web-common/scss/select";
-@import "components/editable";
-@import "../../modules/web-common/scss/dropdown";
-@import "components/react-modal";
-@import "components/editor";
-@import "components/style-installer";
-@import "components/multiple-choice-dialog";
-@import "components/message";
-@import "components/export-tools";
-@import "components/permalink-tools";
-@import "components/brand";
-@import "components/input";
-@import "components/copy-citation-dialog";
-@import "components/about";
-@import "components/creators";
-@import "components/crash-handler";
-@import "../../modules/web-common/scss/tabs";
+@use "abstracts/variables";
+@use "abstracts/functions";
+@use "abstracts/mixins";
+@use "abstracts/utilities";
+@use "base/reset";
+@use "base/base";
+@use "base/type";
+@use "base/outline";
+@use "layout/fonts";
+@use "layout/grid";
+@use "layout/forms";
+@use "layout/csl";
+@use "layout/sections";
+@use "layout/section-cite";
+@use "layout/section-export";
+@use "layout/section-link";
+@use "layout/section-about";
+@use "layout/section-brand";
+@use "layout/badge";
+@use "layout/messages";
+@use "layout/inline-feedback";
+@use "layout/faq";
+@use "layout/footer";
+@use "components/cite-tools";
+@use "components/dnd";
+@use "../../modules/web-common/scss/icon";
+@use "components/button";
+@use "components/review";
+@use "components/bibliography-section";
+@use "components/bibliography";
+@use "../../modules/web-common/scss/select";
+@use "components/editable";
+@use "../../modules/web-common/scss/dropdown";
+@use "components/react-modal";
+@use "components/editor";
+@use "components/style-installer";
+@use "components/multiple-choice-dialog";
+@use "components/message";
+@use "components/export-tools";
+@use "components/permalink-tools";
+@use "components/brand";
+@use "components/input";
+@use "components/copy-citation-dialog";
+@use "components/about";
+@use "components/creators";
+@use "components/crash-handler";
+@use "../../modules/web-common/scss/tabs";

@@ -1,32 +1,30 @@
-//
-// Section cite
-//
+@use "../abstracts/variables";
 
 .section-cite {
 	border-top: none;
-	padding-top: $section-padding-mobile + 21px; // Distance to baseline meta-nav
+	padding-top: variables.$section-padding-mobile + 21px; // Distance to baseline meta-nav
 	position: relative;
 
-	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 9px;
+	@media (min-width: variables.$bp-md) {
+		padding-top: variables.$section-padding - 9px;
 	}
 
 	.meta-nav {
 		position: absolute;
-		right: $grid-gutter-width * 0.5;
-		top: $space-sm;
+		right: variables.$grid-gutter-width * 0.5;
+		top: variables.$space-sm;
 		cursor: pointer;
 
 		a + a {
-			margin-left: $space-md;
+			margin-left: variables.$space-md;
 		}
 	}
 
 	.brand {
-		margin-bottom: $space-xl - 1px;
+		margin-bottom: variables.$space-xl - 1px;
 
-		@media (min-width: $bp-md) {
-			margin-bottom: $space-xxl - 1px;
+		@media (min-width: variables.$bp-md) {
+			margin-bottom: variables.$space-xxl - 1px;
 		}
 	}
 }

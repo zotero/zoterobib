@@ -1,6 +1,5 @@
-//
-// Editor
-//
+@use "../../../modules/web-common/scss/abstracts/mixins/utilities";
+@use "../abstracts/variables";
 
 .editor {
 	.metadata-list {
@@ -10,37 +9,37 @@
 	}
 
 	.metadata {
-		margin-bottom: $space-min;
+		margin-bottom: variables.$space-min;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: flex;
 		}
 
 		&.abstract,
 		&.extra {
-			margin-top: $space-lg;
+			margin-top: variables.$space-lg;
 		}
 	}
 
 	.key {
 		display: flex;
-		color: $label-color;
-		margin-bottom: $space-min;
+		color: variables.$label-color;
+		margin-bottom: variables.$space-min;
 		min-width: 0; // Fix truncation
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			flex: 0 0 33%;
 			text-align: right;
-			padding-right: $space-xs;
+			padding-right: variables.$space-xs;
 			margin-bottom: 0;
 		}
 
 		a {
-			color: $label-color;
+			color: variables.$label-color;
 			text-decoration: none;
 
 			&[href]:hover {
-				color: $link-color;
+				color: variables.$link-color;
 			}
 		}
 	}
@@ -49,23 +48,23 @@
 		display: flex;
 		min-width: 0; // Prevent overflow
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			flex: 1 1 0;
-			padding-left: $space-xs;
+			padding-left: variables.$space-xs;
 
 			> *:not(:first-child) {
-				margin-left: $space-min * 0.5;
+				margin-left: variables.$space-min * 0.5;
 			}
 
 			> *:not(:last-child) {
-				margin-right: $space-min * 0.5;
+				margin-right: variables.$space-min * 0.5;
 			}
 		}
 	}
 
 	.creators-entry {
 		.key {
-			@media (min-width: $bp-md) {
+			@media (min-width: variables.$bp-md) {
 				justify-content: flex-end;
 			}
 
@@ -77,7 +76,7 @@
 			.select-component {
 				&:hover {
 					.select-control {
-						color: $link-color;
+						color: variables.$link-color;
 					}
 
 					.select-arrow {
@@ -88,7 +87,7 @@
 				&.is-focused {
 					.select-control {
 						box-shadow: none;
-						color: $secondary;
+						color: variables.$secondary;
 					}
 
 					.select-arrow {
@@ -99,11 +98,11 @@
 				.select-control {
 					cursor: pointer;
 					border-color: transparent;
-					border-width: $input-border-width 0;
+					border-width: variables.$input-border-width 0;
 					padding-left: 0;
 					padding-right: 0;
 
-					@media (min-width: $bp-md) {
+					@media (min-width: variables.$bp-md) {
 						justify-content: flex-end;
 					}
 				}
@@ -125,19 +124,19 @@
 				}
 
 				.select-arrow-container {
-					@media (min-width: $bp-md) {
+					@media (min-width: variables.$bp-md) {
 						order: -1;
 						margin: 0;
 					}
 				}
 
 				.select-arrow {
-					margin-left: $space-min;
+					margin-left: variables.$space-min;
 					background: url("/static/images/bg-icons/16/chevron-11-down-777.svg");
 
-					@media (min-width: $bp-md) {
+					@media (min-width: variables.$bp-md) {
 						margin-left: 0;
-						margin-right: $space-min;
+						margin-right: variables.$space-min;
 					}
 				}
 
@@ -149,7 +148,7 @@
 				}
 
 				.select-option:not(.select-divider) {
-					padding: $input-btn-padding-y-sm $input-btn-padding-x-lg;
+					padding: variables.$input-btn-padding-y-sm variables.$input-btn-padding-x-lg;
 				}
 			}
 		}
@@ -157,21 +156,21 @@
 		.value {
 			flex-wrap: wrap;
 
-			@media (min-width: $bp-md) {
+			@media (min-width: variables.$bp-md) {
 				> *:not(:first-child) {
-					margin-left: $space-min * 0.5;
+					margin-left: variables.$space-min * 0.5;
 				}
 
 				> *:not(:last-child) {
-					margin-right: $space-min * 0.5;
+					margin-right: variables.$space-min * 0.5;
 				}
 			}
 
 			.input-group {
 				flex: 1 1 100%;
-				margin-bottom: $space-min;
+				margin-bottom: variables.$space-min;
 
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					flex: 1 1 0;
 					margin-bottom: 0;
 				}
@@ -179,12 +178,12 @@
 
 			.btn-icon {
 				flex: 1 1 0;
-				border: $input-border-width solid $input-border-color;
-				margin-right: $space-min;
+				border: variables.$input-border-width solid variables.$input-border-color;
+				margin-right: variables.$space-min;
 
 				&:focus {
 					.keyboard & {
-						border: $input-border-width solid $input-focus-color;
+						border: variables.$input-border-width solid variables.$input-focus-color;
 					}
 				}
 
@@ -192,9 +191,9 @@
 					margin-right: 0;
 				}
 
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					flex: 0 0 auto;
-					margin-right: $space-min * 0.5;
+					margin-right: variables.$space-min * 0.5;
 
 					&:last-child {
 						margin-right: 0;
@@ -207,9 +206,9 @@
 	// Dev
 
 	label {
-		@include text-truncate;
+		@include utilities.text-truncate;
 		flex: 1 1 0;
-		padding: ($input-btn-padding-y-sm + 1px) 0;
+		padding: (variables.$input-btn-padding-y-sm + 1px) 0;
 
 		&[for="DOI"],
 		&[for="url"] {
@@ -219,7 +218,7 @@
 			min-width: 0;
 
 			a {
-				@include text-truncate;
+				@include utilities.text-truncate;
 				display: inline-block;
 				vertical-align: top; // Overflow hidden inline-block elements align with bottom margin
 				max-width: 100%;

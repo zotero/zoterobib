@@ -1,16 +1,14 @@
-//
-// Sections
-//
+@use "../abstracts/variables";
 
 .section {
-	padding: $section-padding-mobile 0;
-	border-top: 1px solid $shade-2;
+	padding: variables.$section-padding-mobile 0;
+	border-top: 1px solid variables.$shade-2;
 
-	@media (min-width: $bp-md) {
-		padding: $section-padding 0;
+	@media (min-width: variables.$bp-md) {
+		padding: variables.$section-padding 0;
 	}
 
 	.review + & {
-		border-top-color: $review-border-color;
+		border-top-color: variables.$review-border-color;
 	}
 }

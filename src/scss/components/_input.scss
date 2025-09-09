@@ -1,3 +1,5 @@
+@use "../abstracts/variables";
+
 .input-group {
 	flex: 1 1 auto;
 	display: flex;
@@ -6,6 +8,6 @@
 
 	.icon-spin {
 		flex: 0 0 auto;
-		margin-left: $space-xs;
+		margin-left: variables.$space-xs;
 	}
 }

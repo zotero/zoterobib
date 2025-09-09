@@ -1,30 +1,28 @@
-//
-// Cite tools
-//
+@use "../abstracts/variables";
 
 .cite-tools {
 	text-align: center;
 
 	.id-input-container {
 		display: flex;
-		margin-bottom: $space-lg;
+		margin-bottom: variables.$space-lg;
 
-		@media (min-width: $bp-md) {
-			margin-bottom: $space-xl;
+		@media (min-width: variables.$bp-md) {
+			margin-bottom: variables.$space-xl;
 		}
 	}
 
 	.input-group {
-		margin-right: $space-min;
+		margin-right: variables.$space-min;
 	}
 
 	.form-control {
 		font-size: 1.125em;
-		transition: border $input-transition, box-shadow $input-transition, padding $input-transition;
+		transition: border variables.$input-transition, box-shadow variables.$input-transition, padding variables.$input-transition;
 
 		&:focus {
-			padding-top: ($input-padding-y-lg - 2px);
-			padding-bottom: ($input-padding-y-lg - 2px);
+			padding-top: (variables.$input-padding-y-lg - 2px);
+			padding-bottom: (variables.$input-padding-y-lg - 2px);
 		}
 	}
 }

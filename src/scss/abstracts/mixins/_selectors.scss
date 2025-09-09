@@ -1,23 +1,22 @@
-//
-// Selectors
-// --------------------------------------------------
+@use "sass:selector";
+@use "sass:string";
+@use "../functions/strings";
 
-// State mixin
 @mixin state($states...) {
 	@each $state in $states {
 		$string: $state;
 
 		@each $token in ">", "+", "~" {
-			$string: str-replace($string, $token, " ");
+			$string: strings.str-replace($string, $token, " ");
 		}
 
-		$string: str-replace($string, "  ", " ");
+		$string: strings.str-replace($string, "  ", " ");
 
-		$selectors: str-parse($string, " ");
+		$selectors: strings.str-parse($string, " ");
 
 		@each $sel in $selectors {
-			@if str-index(#{&}, $sel) != null {
-				@at-root #{selector-replace(&, $sel, $state)} {
+			@if string.index(#{&}, $sel) != null { // stylelint-disable-line scss/at-if-no-null
+				@at-root #{selector.replace(&, $sel, $state)} {
 					@content;
 				}
 			}
@@ -25,7 +24,7 @@
 	}
 }
 
-// Variant mixin (alias)
+// variant mixin is an alias of state mixin
 @mixin variant($args...) {
 	@include state($args...) {
 		@content;

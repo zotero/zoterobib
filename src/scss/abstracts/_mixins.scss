@@ -1,8 +1,4 @@
-//
-// Mixins
-//
-
-@import "mixins/breakpoints";
-@import "mixins/button";
-@import "mixins/selectors";
-@import "mixins/text-truncate";
+@use "mixins/breakpoints";
+@use "mixins/button";
+@use "mixins/selectors";
+@use "mixins/text-truncate";

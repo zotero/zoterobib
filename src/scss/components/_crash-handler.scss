@@ -1,6 +1,8 @@
+@use "../abstracts/variables";
+
 .crash-handler {
 	align-items: center;
-	color: $shade-9;
+	color: variables.$shade-9;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -8,19 +10,19 @@
 	text-align: center;
 	width: 100%;
 
-	@media (min-width: $bp-md) {
+	@media (min-width: variables.$bp-md) {
 		justify-content: center;
 		max-width: 640px;
 		padding: 2em 1em;
 	}
 
 	h1 {
-		font-size: $h1-font-size;
+		font-size: variables.$h1-font-size;
 		flex: 0 0 auto;
 
-		@media (max-width: $bp-md - 1px) {
-			background: $asphalt;
-			color: $shade-1;
+		@media (max-width: (variables.$bp-md - 1px)) {
+			background: variables.$asphalt;
+			color: variables.$shade-1;
 			display: block;
 			width: 100%;
 			padding: 1em;
@@ -29,19 +31,19 @@
 
 	p {
 		flex: 0 0 auto;
-		font-size: $font-size-lg;
+		font-size: variables.$font-size-lg;
 		margin: 1.5em 1em 2.5em;
 	}
 
 	textarea {
-		font-size: $font-size-sm;
-		border: 1px solid $shade-3;
-		color: $shade-9;
+		font-size: variables.$font-size-sm;
+		border: 1px solid variables.$shade-3;
+		color: variables.$shade-9;
 		flex: 1 1 auto;
 		max-width: calc(100% - 2em);
 		resize: none;
 
-		@media (max-width: $bp-md - 1px) {
+		@media (max-width: (variables.$bp-md - 1px)) {
 			margin: 1em auto;
 		}
 	}

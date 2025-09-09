@@ -1,6 +1,5 @@
-//
-// Section bibliography
-//
+@use "../abstracts/functions/asset-url";
+@use "../abstracts/variables";
 
 .section-bibliography {
 	text-align: center;
@@ -9,7 +8,7 @@
 		.spinner-container {
 			display: flex;
 			justify-content: center;
-			margin-top: $space-lg + 13px;
+			margin-top: variables.$space-lg + 13px;
 		}
 
 		& ~ .section {
@@ -20,51 +19,51 @@
 	.empty-bibliography {
 		width: 160px;
 		height: auto;
-		margin-bottom: $space-xl - 16px;
+		margin-bottom: variables.$space-xl - 16px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			width: auto;
-			margin-bottom: $space-xxl - 18px;
+			margin-bottom: variables.$space-xxl - 18px;
 		}
 	}
 
 	.empty-title {
-		margin-bottom: $lead-font-size-mobile * 0.5;
+		margin-bottom: variables.$lead-font-size-mobile * 0.5;
 
-		@media (min-width: $bp-md) {
-			margin-bottom: $lead-font-size * 0.5;
+		@media (min-width: variables.$bp-md) {
+			margin-bottom: variables.$lead-font-size * 0.5;
 		}
 	}
 
 	.empty-lead {
 		margin-bottom: -8px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			margin-bottom: -10px;
 		}
 	}
 
 	.write & {
 		&:not(.empty) {
-			padding-top: $section-padding-mobile - 17px;
+			padding-top: variables.$section-padding-mobile - 17px;
 
-			@media (min-width: $bp-md) {
-				padding-top: $section-padding - 22px;
+			@media (min-width: variables.$bp-md) {
+				padding-top: variables.$section-padding - 22px;
 			}
 		}
 
 		.bibliography-title {
 			display: flex;
 			align-items: center;
-			transition: background-color $input-transition;
-			border-radius: $border-radius-sm;
-			margin-bottom: $space-xl - 12px;
+			transition: background-color variables.$input-transition;
+			border-radius: variables.$border-radius-sm;
+			margin-bottom: variables.$space-xl - 12px;
 
-			@media (min-width: $bp-md) {
-				margin-bottom: $space-xxl - 18px;
+			@media (min-width: variables.$bp-md) {
+				margin-bottom: variables.$space-xxl - 18px;
 
 				&:hover {
-					background-color: $shade-1;
+					background-color: variables.$shade-1;
 					transition: background-color 0.15s 0.15s ease;
 				}
 			}
@@ -74,40 +73,40 @@
 			}
 
 			.editable {
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					justify-content: center;
 				}
 			}
 
 			.editable-content {
-				line-height: $headings-line-height;
+				line-height: variables.$headings-line-height;
 				padding: 8px 0;
 				text-align: left;
-				word-wrap: break-word;
+				overflow-wrap: break-word;
 
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					text-align: inherit;
 				}
 			}
 
 			.editable-control {
 				border-width: 1px;
-				box-shadow: 0 0 0 2px $secondary;
+				box-shadow: 0 0 0 2px variables.$secondary;
 				line-height: normal; // Heading line-height would clip decenders
 				padding: 8px 0;
 				text-align: left;
 				margin: -5.5px;
 
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					text-align: inherit;
 				}
 			}
 
 			.btn-icon {
 				flex: 0 0 auto;
-				margin-left: $space-sm;
+				margin-left: variables.$space-sm;
 
-				@media (min-width: $bp-md) {
+				@media (min-width: variables.$bp-md) {
 					display: none;
 				}
 			}
@@ -124,28 +123,28 @@
 		.select-component {
 			.select-control {
 				border-color: transparent;
-				background: $style-selector-bg;
-				color: $style-selector-color;
-				padding: $input-padding-y-lg $input-padding-x-lg;
-				border-radius: $input-border-radius-lg;
+				background: variables.$style-selector-bg;
+				color: variables.$style-selector-color;
+				padding: variables.$input-padding-y-lg variables.$input-padding-x-lg;
+				border-radius: variables.$input-border-radius-lg;
 				cursor: pointer;
 				transition:
-					background-color $input-transition,
-					border $input-transition,
-					box-shadow $input-transition;
+					background-color variables.$input-transition,
+					border variables.$input-transition,
+					box-shadow variables.$input-transition;
 
 				&:hover {
-					background: $style-selector-hover-bg;
+					background: variables.$style-selector-hover-bg;
 				}
 			}
 
 			&.is-focused {
 				.select-control {
-					box-shadow: 0 0 0 2px $secondary;
+					box-shadow: 0 0 0 2px variables.$secondary;
 					outline: none;
 
 					&:hover {
-						box-shadow: 0 0 0 2px $style-selector-hover-bg;
+						box-shadow: 0 0 0 2px variables.$style-selector-hover-bg;
 					}
 				}
 			}
@@ -172,20 +171,20 @@
 			}
 
 			.select-arrow {
-				background: image-url("bg-icons/16/chevron-11-down-light.svg");
+				background: asset-url.image-url("bg-icons/16/chevron-11-down-light.svg");
 			}
 
 			.select-menu-outer {
-				padding: $space-xs 0;
+				padding: variables.$space-xs 0;
 				left: 0;
 				right: 0;
 			}
 
 			.select-option:not(.select-divider) {
-				padding: $space-min $input-btn-padding-x-lg;
+				padding: variables.$space-min variables.$input-btn-padding-x-lg;
 
 				&:last-child {
-					color: $link-color;
+					color: variables.$link-color;
 				}
 			}
 		}
@@ -199,17 +198,17 @@
 
 	.read-only & {
 		border-top: none;
-		padding-top: $section-padding-mobile - 10px; // t height
+		padding-top: variables.$section-padding-mobile - 10px; // t height
 
-		@media (min-width: $bp-md) {
-			padding-top: $section-padding - 12px; // t height
+		@media (min-width: variables.$bp-md) {
+			padding-top: variables.$section-padding - 12px; // t height
 		}
 
 		.h2 {
-			margin-bottom: $space-xl - 17px;
+			margin-bottom: variables.$space-xl - 17px;
 
-			@media (min-width: $bp-md) {
-				margin-bottom: ($space-xxl - 19px);
+			@media (min-width: variables.$bp-md) {
+				margin-bottom: (variables.$space-xxl - 19px);
 			}
 		}
 	}

@@ -1,13 +1,12 @@
-//
-// Grid
-//
+@use "../abstracts/variables";
+
 
 .container {
-	max-width: $container-width;
+	max-width: variables.$container-width;
 	margin: auto;
-	padding: 0 ($grid-gutter-width * 0.5);
+	padding: 0 (variables.$grid-gutter-width * 0.5);
 
-	@media (min-width: $bp-md) {
-		width: calc(100% - #{$space-xxl});
+	@media (min-width: variables.$bp-md) {
+		width: calc(100% - #{variables.$space-xxl});
 	}
 }

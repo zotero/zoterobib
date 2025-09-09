@@ -1,6 +1,4 @@
-//
-// Review
-//
+@use "../abstracts/variables";
 
 .section-review {
 	padding: 0;
@@ -9,22 +7,22 @@
 
 .review {
 	font-size: 20px;
-	background: $review-bg;
-	border-top-color: $review-border-color;
+	background: variables.$review-bg;
+	border-top-color: variables.$review-border-color;
 	position: relative;
 	min-height: 143px; // Dev
 
-	@media (min-width: $bp-md) {
+	@media (min-width: variables.$bp-md) {
 		min-height: 184px; // Dev
 	}
 
 	.container {
-		padding-top: $space-xl - 7px;
-		padding-bottom: $space-xl;
+		padding-top: variables.$space-xl - 7px;
+		padding-bottom: variables.$space-xl;
 
-		@media (min-width: $bp-md) {
-			padding-top: $space-xxl - 7px; // Caps height
-			padding-bottom: $space-xxl;
+		@media (min-width: variables.$bp-md) {
+			padding-top: variables.$space-xxl - 7px; // Caps height
+			padding-bottom: variables.$space-xxl;
 		}
 	}
 
@@ -36,25 +34,25 @@
 		transform: translateY(calc(-50% - 2px));
 		text-align: center;
 		margin: 0;
-		color: $secondary;
+		color: variables.$secondary;
 		opacity: 0.5;
 	}
 
 	.actions {
 		text-align: center;
-		margin-top: $space-lg - 8px;
+		margin-top: variables.$space-lg - 8px;
 
-		@media (min-width: $bp-md) {
-			margin-top: $space-xl - 8px;
+		@media (min-width: variables.$bp-md) {
+			margin-top: variables.$space-xl - 8px;
 		}
 	}
 
 	.btn {
 		& + .btn {
-			margin-left: $space-sm;
+			margin-left: variables.$space-sm;
 		}
 
-		@media (max-width: $bp-sm - 1px) {
+		@media (max-width: (variables.$bp-sm - 1px)) {
 			min-width: 0;
 		}
 	}

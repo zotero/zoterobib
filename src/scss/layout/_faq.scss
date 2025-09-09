@@ -1,13 +1,11 @@
-//
-// FAQ
-//
+@use "../abstracts/variables";
 
 .back-link {
 	position: absolute;
-	left: $grid-gutter-width * 0.5;
-	top: $space-sm;
+	left: variables.$grid-gutter-width * 0.5;
+	top: variables.$space-sm;
 
-	@media (max-width: $bp-md - 1px) {
+	@media (max-width: variables.$bp-md - 1px) {
 		left: 50%;
 		transform: translateX(-50%);
 	}
@@ -15,11 +13,11 @@
 
 .faq {
 	height: auto;
-	margin-bottom: $section-padding-mobile;
+	margin-bottom: variables.$section-padding-mobile;
 	font-size: 18px;
 
-	@media (min-width: $bp-md) {
-		margin-bottom: $section-padding;
+	@media (min-width: variables.$bp-md) {
+		margin-bottom: variables.$section-padding;
 	}
 
 	h2,
@@ -31,7 +29,7 @@
 		text-align: center;
 		margin-top: 67px; // Like optical padding-bottom on nav
 
-		@media (max-width: $bp-md - 1px) {
+		@media (max-width: variables.$bp-md - 1px) {
 			margin-top: 78px; // Like optical padding-bottom on nav
 		}
 	}
@@ -49,9 +47,9 @@
 
 	nav {
 		text-align: center;
-		border-bottom: 1px solid $shade-2;
-		padding-bottom: $section-padding-mobile;
-		margin-bottom: $section-padding-mobile;
+		border-bottom: 1px solid variables.$shade-2;
+		padding-bottom: variables.$section-padding-mobile;
+		margin-bottom: variables.$section-padding-mobile;
 
 		ul {
 			padding: 0;
@@ -63,9 +61,9 @@
 			margin-top: 1em;
 		}
 
-		@media (min-width: $bp-md) {
-			padding-bottom: $section-padding;
-			margin-bottom: $section-padding;
+		@media (min-width: variables.$bp-md) {
+			padding-bottom: variables.$section-padding;
+			margin-bottom: variables.$section-padding;
 
 			ul {
 				display: inline-flex;
@@ -75,7 +73,7 @@
 				margin-top: 0;
 
 				& + li {
-					margin-left: $space-xl;
+					margin-left: variables.$space-xl;
 				}
 			}
 		}
@@ -86,9 +84,9 @@
 	}
 
 	.anchor-link {
-		margin-left: $space-xs;
+		margin-left: variables.$space-xs;
 		opacity: 0;
-		transition: opacity $link-transition;
+		transition: opacity variables.$link-transition;
 
 		&:hover {
 			text-decoration: none;

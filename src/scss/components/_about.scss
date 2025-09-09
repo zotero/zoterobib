@@ -1,27 +1,25 @@
-//
-// About
-//
+@use "../abstracts/variables";
 
 .about {
-	background: $about-bg;
-	color: $shade-0;
+	background: variables.$about-bg;
+	color: variables.$shade-0;
 	text-align: center;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
 	.container {
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			width: auto; // Reset
 			max-width: 640px;
 		}
 
-		@media (min-width: $bp-lg) {
+		@media (min-width: variables.$bp-lg) {
 			max-width: 972px;
 		}
 	}
 
 	.column {
-		@media (min-width: $bp-lg) {
+		@media (min-width: variables.$bp-lg) {
 			flex: 0 0 50%;
 
 			&:nth-child(1) {
@@ -35,7 +33,7 @@
 	}
 
 	.h4 {
-		margin-bottom: $space-xs;
+		margin-bottom: variables.$space-xs;
 	}
 
 	a {
@@ -57,39 +55,39 @@
 		display: block;
 		margin: 0 auto (96px - 27px);
 
-		@media (max-width: ($bp-md - 1px)) {
+		@media (max-width: (variables.$bp-md - 1px)) {
 			left: 6px;
 			width: 156px;
 			height: auto;
-			margin: 0 auto ($space-xxxl - 17px);
+			margin: 0 auto (variables.$space-xxxl - 17px);
 		}
 	}
 
 	.features {
 		text-align: left;
 		margin-top: 80px - 17px;
-		margin-bottom: $space-xxxl - 6px;
+		margin-bottom: variables.$space-xxxl - 6px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			margin-top: 120px - 20px;
-			margin-bottom: $space-max - 6px;
+			margin-bottom: variables.$space-max - 6px;
 		}
 
-		@media (min-width: $bp-lg) {
+		@media (min-width: variables.$bp-lg) {
 			display: flex;
 		}
 	}
 
 	.feature {
-		padding-left: 66px + $space-md;
+		padding-left: 66px + variables.$space-md;
 		position: relative;
-		margin-bottom: $space-xxxl - 15px;
+		margin-bottom: variables.$space-xxxl - 15px;
 
-		@media (min-width: $bp-md) {
-			margin-bottom: $space-max - 16px;
+		@media (min-width: variables.$bp-md) {
+			margin-bottom: variables.$space-max - 16px;
 		}
 
-		@media (min-width: $bp-lg) {
+		@media (min-width: variables.$bp-lg) {
 			&:last-child {
 				margin-bottom: 0;
 			}
@@ -101,7 +99,7 @@
 		left: 0;
 		top: -23px;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			top: -20px;
 		}
 	}
@@ -113,12 +111,12 @@
 
 	.support {
 		font-weight: 300;
-		font-size: $lead-font-size-mobile;
-		margin-top: $space-xl - 13px;
+		font-size: variables.$lead-font-size-mobile;
+		margin-top: variables.$space-xl - 13px;
 
-		@media (min-width: $bp-md) {
-			font-size: $lead-font-size;
-			margin-top: $space-xxl - 15px;
+		@media (min-width: variables.$bp-md) {
+			font-size: variables.$lead-font-size;
+			margin-top: variables.$space-xxl - 15px;
 		}
 	}
 }

@@ -1,10 +1,9 @@
-//
-// Permalink tools
-//
+@use "sass:color";
+@use "../abstracts/variables";
 
 .permalink-tools {
 	.btn-wrap {
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			display: flex;
 		}
 	}
@@ -13,18 +12,19 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: $space-xxl;
+		height: variables.$space-xxl;
 	}
 
 	.icon-spin {
-		width: $permalink-spinner-size;
-		height: $permalink-spinner-size;
+		width: variables.$permalink-spinner-size;
+		height: variables.$permalink-spinner-size;
 	}
 
 	.safari-warning {
-		margin: 2em 0 2em 0;
+		margin: 2em 0;
+
 		p {
-			margin: .25em 0 .25em 0;
+			margin: .25em 0;
 		}
 	}
 
@@ -32,27 +32,27 @@
 		flex: 1 1 0;
 
 		&:first-child {
-			margin-bottom: $space-md;
+			margin-bottom: variables.$space-md;
 
-			@media (min-width: $bp-md) {
+			@media (min-width: variables.$bp-md) {
 				margin-bottom: 0;
-				margin-right: $grid-gutter-width;
+				margin-right: variables.$grid-gutter-width;
 			}
 		}
 
 		&.success {
-			background-color: $btn-success-color;
+			background-color: variables.$btn-success-color;
 
 			&:active {
-				background-color: darken($btn-success-color, 8%);
+				background-color: color.adjust(variables.$btn-success-color, $lightness: -8%);
 			}
 
 			&:focus {
 				.keyboard & {
-					box-shadow: 0 0 0 $input-btn-focus-width $btn-success-color;
+					box-shadow: 0 0 0 variables.$input-btn-focus-width variables.$btn-success-color;
 
 					&:active {
-						box-shadow: 0 0 0 $input-btn-focus-width darken($btn-success-color, 8%);
+						box-shadow: 0 0 0 variables.$input-btn-focus-width color.adjust(variables.$btn-success-color, $lightness: -8%);
 					}
 				}
 			}

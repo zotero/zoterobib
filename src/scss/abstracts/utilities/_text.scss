@@ -1,7 +1,5 @@
-//
-// Text utilities
-//
+@use "../mixins/text-truncate";
 
 .text-truncate {
-	@include text-truncate;
+	@include text-truncate.text-truncate;
 }

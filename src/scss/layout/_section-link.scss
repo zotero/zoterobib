@@ -1,13 +1,11 @@
-//
-// Section link
-//
+@use "../abstracts/variables";
 
 .section-link {
 	text-align: center;
-	padding-top: $section-padding-mobile - 10px; // t height
+	padding-top: variables.$section-padding-mobile - 10px; // t height
 
-	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 12px; // t height
+	@media (min-width: variables.$bp-md) {
+		padding-top: variables.$section-padding - 12px; // t height
 	}
 
 	.header-wrapper {
@@ -17,14 +15,14 @@
 
 	.whats-this {
 		display: inline-block;
-		width: $space-md;
-		height: $space-md;
+		width: variables.$space-md;
+		height: variables.$space-md;
 		text-indent: -9999px;
 		overflow: hidden;
-		vertical-align: $space-sm;
+		vertical-align: variables.$space-sm;
 		margin-left: 7px;
 		border-radius: 50%;
-		transition: box-shadow $link-transition;
+		transition: box-shadow variables.$link-transition;
 		position: relative;
 
 		.icon-question-mark {
@@ -34,29 +32,29 @@
 
 			.circle-small,
 			.character {
-				transition: fill $link-transition;
+				transition: fill variables.$link-transition;
 			}
 
 			.circle-large,
 			.character {
-				fill: $secondary;
+				fill: variables.$secondary;
 			}
 
 			.circle-small {
-				fill: $shade-0;
+				fill: variables.$shade-0;
 			}
 		}
 
 		&:hover {
-			box-shadow: 0 2px 4px $btn-box-shadow-color;
+			box-shadow: 0 2px 4px variables.$btn-box-shadow-color;
 
 			.icon-question-mark {
 				.circle-small {
-					fill: $secondary;
+					fill: variables.$secondary;
 				}
 
 				.character {
-					fill: $shade-0;
+					fill: variables.$shade-0;
 				}
 			}
 		}

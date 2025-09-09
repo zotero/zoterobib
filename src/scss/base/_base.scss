@@ -1,6 +1,4 @@
-//
-// Base
-//
+@use "../abstracts/variables";
 
 * {
 	box-sizing: border-box;
@@ -11,17 +9,17 @@ a,
 li[tabindex] {
 	&:focus {
 		outline: none;
-		outline-offset: $outline-offset;
+		outline-offset: variables.$outline-offset;
 
 		.keyboard & {
-			outline: $outline-width solid $outline-color;
+			outline: variables.$outline-width solid variables.$outline-color;
 		}
 	}
 }
 
 ::selection {
-	color: $shade-0;
-	background-color: $secondary;
+	color: variables.$shade-0;
+	background-color: variables.$secondary;
 }
 
 html,
@@ -32,9 +30,9 @@ main,
 }
 
 body {
-	min-width: $body-min-width;
-	color: $body-color;
-	background-color: $body-bg;
+	min-width: variables.$body-min-width;
+	color: variables.$body-color;
+	background-color: variables.$body-bg;
 }
 
 .zotero-bib-container {
@@ -44,8 +42,8 @@ body {
 		align-items: center;
 
 		.icon-spin {
-			width: $zotero-bib-spinner-size;
-			height: $zotero-bib-spinner-size;
+			width: variables.$zotero-bib-spinner-size;
+			height: variables.$zotero-bib-spinner-size;
 		}
 	}
 }

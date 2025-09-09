@@ -1,6 +1,4 @@
-//
-// Section export
-//
+@use "../abstracts/variables";
 
 .section-export {
 	text-align: center;
@@ -10,10 +8,10 @@
 	}
 
 	.write & {
-		padding-top: $section-padding-mobile - 10px; // t height
+		padding-top: variables.$section-padding-mobile - 10px; // t height
 
-		@media (min-width: $bp-md) {
-			padding-top: $section-padding - 12px; // t height
+		@media (min-width: variables.$bp-md) {
+			padding-top: variables.$section-padding - 12px; // t height
 		}
 	}
 

@@ -1,26 +1,26 @@
-//
-// Button
-//
+@use "sass:color";
+@use "../abstracts/mixins/button";
+@use "../abstracts/variables";
 
 .btn {
 	display: inline-block;
 	vertical-align: middle;
-	border: $btn-border-width solid transparent;
+	border: variables.$btn-border-width solid transparent;
 	font-family: inherit;
-	font-size: $font-size-base;
-	line-height: $btn-line-height;
+	font-size: variables.$font-size-base;
+	line-height: variables.$btn-line-height;
 	user-select: none;
 	white-space: nowrap;
 	text-align: center;
 	font-weight: 400;
-	border-radius: $btn-border-radius;
-	padding: $btn-padding-y $btn-padding-x;
+	border-radius: variables.$btn-border-radius;
+	padding: variables.$btn-padding-y variables.$btn-padding-x;
 	margin: 0; // Remove margin in Safari
 	transition:
-		color $btn-transition,
-		background-color $btn-transition,
-		border-color $btn-transition,
-		box-shadow $btn-transition;
+		color variables.$btn-transition,
+		background-color variables.$btn-transition,
+		border-color variables.$btn-transition,
+		box-shadow variables.$btn-transition;
 
 	&:not(:disabled) {
 		cursor: pointer;
@@ -40,22 +40,22 @@ a.btn {
 }
 
 .btn-xl {
-	font-size: $font-size-lg;
+	font-size: variables.$font-size-lg;
 	font-weight: 300;
-	padding: $btn-padding-y-xl $btn-padding-x-xl;
+	padding: variables.$btn-padding-y-xl variables.$btn-padding-x-xl;
 	border-width: 2px;
 	letter-spacing: -0.01em;
 }
 
 .btn-lg {
-	font-size: $font-size-lg;
+	font-size: variables.$font-size-lg;
 	font-weight: 300;
-	padding: $btn-padding-y-lg $btn-padding-x-lg;
+	padding: variables.$btn-padding-y-lg variables.$btn-padding-x-lg;
 	border-width: 2px;
 }
 
 .btn-sm {
-	padding: $btn-padding-y-sm $btn-padding-x-sm;
+	padding: variables.$btn-padding-y-sm variables.$btn-padding-x-sm;
 }
 
 .btn-block {
@@ -64,68 +64,68 @@ a.btn {
 }
 
 .btn-min-width {
-	min-width: $space-max + $space-md;
+	min-width: variables.$space-max + variables.$space-md;
 }
 
 .btn-primary {
-	@include button-variant($btn-primary-color);
+	@include button.button-variant(variables.$btn-primary-color);
 }
 
 .btn-secondary {
-	@include button-variant($btn-secondary-color);
+	@include button.button-variant(variables.$btn-secondary-color);
 }
 
 .btn-light {
-	@include button-variant($btn-light-color);
+	@include button.button-variant(variables.$btn-light-color);
 }
 
 .btn-outline-primary {
-	@include button-variant($btn-primary-color, $outline: true);
+	@include button.button-variant(variables.$btn-primary-color, $outline: true);
 }
 
 .btn-outline-secondary {
-	@include button-variant($btn-secondary-color, $outline: true);
+	@include button.button-variant(variables.$btn-secondary-color, $outline: true);
 }
 
 .btn-outline-light {
-	@include button-variant($btn-light-color, $outline: true);
+	@include button.button-variant(variables.$btn-light-color, $outline: true);
 }
 
 .btn-outline-inverse-error {
-	@include button-variant($btn-error-color, $outline: true, $inverse: true);
+	@include button.button-variant(variables.$btn-error-color, $outline: true, $inverse: true);
 }
 
 .btn-outline-inverse-warning {
-	@include button-variant($btn-warning-color, $outline: true, $inverse: true);
+	@include button.button-variant(variables.$btn-warning-color, $outline: true, $inverse: true);
 }
 
 .btn-outline-inverse-info {
-	@include button-variant($btn-info-color, $outline: true, $inverse: true);
+	@include button.button-variant(variables.$btn-info-color, $outline: true, $inverse: true);
 }
 
 .btn-outline-inverse-success {
-	@include button-variant($btn-success-color, $outline: true, $inverse: true);
+	@include button.button-variant(variables.$btn-success-color, $outline: true, $inverse: true);
 }
 
 .btn-outline-inverse-blue-dark {
-	@include button-variant($blue-dark, $outline: true, $inverse: true);
+	@include button.button-variant(variables.$blue-dark, $outline: true, $inverse: true);
 }
 
 .btn-icon {
 	position: relative;
-	width: $btn-icon-size;
-	height: $btn-icon-size;
+	width: variables.$btn-icon-size;
+	height: variables.$btn-icon-size;
 	padding: 0;
 	line-height: 1;
-	background-color: $btn-icon-bg;
+	background-color: variables.$btn-icon-bg;
 
 	&:focus {
 		.keyboard & {
-			border-color: $btn-secondary-color;
-			box-shadow: 0 0 0 $input-btn-focus-width $btn-secondary-color;
+			border-color: variables.$btn-secondary-color;
+			box-shadow: 0 0 0 variables.$input-btn-focus-width variables.$btn-secondary-color;
 
 			&:active {
-				border-color: darken($btn-secondary-color, 8%);
+				border-color: color.adjust(variables.$btn-secondary-color, $lightness: -8%);
 			}
 		}
 	}
@@ -135,12 +135,12 @@ a.btn {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		transition: color $btn-transition;
+		transition: color variables.$btn-transition;
 	}
 
 	&:active:not(:disabled) {
 		.icon {
-			color: $shade-7;
+			color: variables.$shade-7;
 		}
 	}
 }
@@ -148,13 +148,13 @@ a.btn {
 .btn-link {
 	display: inline;
 	border: 0;
-	color: $link-color;
+	color: variables.$link-color;
 	background-color: transparent;
 	padding: 7px 12px;
 	border-radius: 0;
 
 	.keyboard &:focus {
-		outline: $outline-width solid $focus-color;
+		outline: variables.$outline-width solid variables.$focus-color;
 		outline-offset: -3px;
 	}
 

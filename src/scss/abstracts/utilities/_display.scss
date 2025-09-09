@@ -1,8 +1,7 @@
-//
-// Display
-//
+@use "../variables";
 
-@each $key, $value in $grid-breakpoints {
+
+@each $key, $value in variables.$grid-breakpoints {
 	@media (min-width: $value) {
 		.d-#{$key}-none {
 			display: none !important;

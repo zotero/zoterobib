@@ -1,62 +1,40 @@
-// stylelint-disable
+@use "sass:color";
+@forward "../../../modules/web-common/scss/abstracts/defaults";
+@use "../../../modules/web-common/scss/abstracts/defaults" as *;
 
-// Variables should follow the `$component-state-property-size` formula
-
-//
-// Variables
-//
-
-
-//
-// Colors
-//
-
-$red:           #e42535;
-$blue:          #2464e5;
-$blue-dark:     #333c66;
-$blue-darkest:  #3d4466;
-$violet:        #5959ff;
-$asphalt:       #7a8799;
+$red: #e42535;
+$blue: #2464e5;
+$blue-dark: #333c66;
+$blue-darkest: #3d4466;
+$violet: #5959ff;
+$asphalt: #7a8799;
 $asphalt-light: #dadee3;
-
-$primary:   $red;
-$secondary: $blue;
-$error:     $primary;
-$warning:   #ff794d;
-$success:   #31a149;
-$info:      $blue;
-
+$warning: #ff794d;
+$success: #31a149;
 $shade-0: #fff;
 $shade-1: #f6f6f6;
 $shade-2: #ebebeb;
 $shade-3: #ddd;
-$shade-4: #ccc;
 $shade-4: #bbb;
 $shade-5: #949494; // the lightest shade that can be used on white and still meet 3:1 contrast (WCAG AA for large text)
 $shade-6: #757575; // the lightest shade that can be used on white and still meet 4.5:1 contrast (WCAG AA for normal text)
 $shade-7: #222;
-$shade-8:  #333;
-$shade-9:  #111;
+$shade-8: #333;
+$shade-9: #111;
 $shade-10: #000;
 
+$primary: $red;
+$secondary: $blue;
+$error: $primary;
+$info: $blue;
 $focus-color: $secondary;
-
-//
-// Body
-//
-
 $body-color: $shade-7;
-$body-bg:    $shade-0;
-
+$body-bg: $shade-0;
 $selection-color: $shade-0;
-$selection-bg:    $secondary;
+$selection-bg: $secondary;
 
-
-//
-// Type
-//
-
-$font-family-sans-serif: AvenirNextLTPro, system-ui; // todo
+// Typography
+$font-family-sans-serif: avenirnextltpro, system-ui; // todo
 $font-family-base: $font-family-sans-serif;
 
 $font-size-base: 16px;
@@ -86,38 +64,29 @@ $headings-font-weight: 300;
 $link-color: $secondary;
 $link-transition: 0.15s ease;
 
-$lead-font-size:        24px;
+$lead-font-size: 24px;
 $lead-font-size-mobile: 20px;
-$lead-font-weight:      300;
+$lead-font-weight: 300;
 
 $text-color: $shade-9;
 
 
-//
 // Space
-//
-
-$space-min:  4px;
-$space-xs:   8px;
-$space-sm:   12px;
-$space-md:   16px;
-$space-lg:   24px;
-$space-xl:   32px;
-$space-xxl:  48px;
+$space-min: 4px;
+$space-xs: 8px;
+$space-sm: 12px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-xxl: 48px;
 $space-xxxl: 64px;
-$space-max:  96px;
+$space-max: 96px;
 
-
-
-
-//
 // Grid
-//
-
 $body-min-width: 320px;
 
 $grid-gutter-width: $space-xl;
-$container-width:   768px + $grid-gutter-width;
+$container-width: 768px + $grid-gutter-width;
 
 $bp-xs: 0px;
 $bp-sm: 568px;
@@ -125,60 +94,46 @@ $bp-md: 768px;
 $bp-lg: 1004px;
 $bp-xl: 1200px;
 
-$grid-breakpoints: (
-	xs: $bp-xs,
-	sm: $bp-sm,
-	md: $bp-md,
-	lg: $bp-lg,
-	xl: $bp-xl
-);
+$grid-breakpoints: (xs: $bp-xs,
+		sm: $bp-sm,
+		md: $bp-md,
+		lg: $bp-lg,
+		xl: $bp-xl);
 
 
-//
 // Components
-//
-
 $padding-x-sm: $space-sm;
 $padding-x-md: $space-md;
 
-$default-padding-x:       $space-sm;
+$default-padding-x: $space-sm;
 $default-padding-x-touch: $space-md;
 
-$border-radius:    4px;
+$border-radius: 4px;
 $border-radius-sm: 3px;
 $border-radius-lg: 6px;
 
 $border-width: 1px;
 
 $menu-bg: $body-bg;
-$menu-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.2);
+$menu-box-shadow: 0 0 0 1px rgb(0 0 0 / 8%), 0 3px 8px rgb(0 0 0 / 20%);
 $menu-border-radius: $border-radius-sm;
 $menu-item-hover-bg: $shade-1;
 $menu-item-selected-bg: $shade-2;
 $menu-devider: $shade-2;
 $menu-no-results-color: $shade-5;
 
-//
 // Z-index master list
-//
-
-$z-index-menu: 		50;
-$z-index-modal: 	60;
-$z-index-messages:	100;
+$z-index-menu: 50;
+$z-index-modal: 60;
+$z-index-messages: 100;
 
 
-//
 // Sections
-//
-
-$section-padding:        $space-xxxl + $space-xs;
+$section-padding: $space-xxxl + $space-xs;
 $section-padding-mobile: $space-xxl;
 
 
-//
 // Buttons & forms
-//
-
 $input-btn-focus-width: 2px;
 $input-btn-border-radius: $border-radius-sm;
 
@@ -189,11 +144,7 @@ $input-btn-padding-y-lg: 11px;
 $input-btn-padding-x-sm: $space-sm;
 $input-btn-padding-y-sm: 3px;
 
-
-//
 // Buttons
-//
-
 $btn-border-width: $border-width;
 
 $btn-line-height: $line-height-base;
@@ -207,28 +158,24 @@ $btn-padding-y-lg: 6px;
 $btn-padding-x-sm: $space-sm;
 $btn-padding-y-sm: 3px;
 
-$btn-primary-color:   $primary;
+$btn-primary-color: $primary;
 $btn-secondary-color: $secondary;
-$btn-light-color:     $shade-5;
-$btn-error-color:     $error;
-$btn-warning-color:   $warning;
-$btn-info-color:      $info;
-$btn-success-color:   $success;
+$btn-light-color: $shade-5;
+$btn-error-color: $error;
+$btn-warning-color: $warning;
+$btn-info-color: $info;
+$btn-success-color: $success;
 
-$btn-icon-bg:   transparent;
+$btn-icon-bg: transparent;
 $btn-icon-size: $space-xl; // btn-sm size
 
 $btn-border-radius: $border-radius-sm;
 
-$btn-box-shadow-color: rgba(0, 0, 0, 0.2);
+$btn-box-shadow-color: rgb(0 0 0 / 20%);
 
 $btn-transition: 0.15s ease;
 
-
-//
 // Forms
-//
-
 $form-gutter-width: $space-md;
 
 $input-line-height: $line-height-base;
@@ -239,66 +186,52 @@ $input-padding-y-lg: 11px;
 $input-border-radius: $input-btn-border-radius;
 $input-border-radius-lg: $border-radius-sm;
 
-$input-focus-color:  $secondary;
+$input-focus-color: $secondary;
 $input-border-color: $shade-6;
-$placeholder-color:  $shade-5;
-$label-color:        $shade-6;
+$placeholder-color: $shade-5;
+$label-color: $shade-6;
 
 $input-border-width: $border-width;
 
 $input-transition: 0.15s ease;
 
 // Forms
-$form-bg-touch:             $shade-1;
-$input-color:               $text-color;
-$input-bg:                  $body-bg;
-$input-border-color-touch:  $shade-5;
-$checkbox-border-touch:     $shade-4;
+$form-bg-touch: $shade-1;
+$input-color: $text-color;
+$input-bg: $body-bg;
+$input-border-color-touch: $shade-5;
+$checkbox-border-touch: $shade-4;
 $checkbox-checked-bg-touch: $secondary;
 
-//
 // Icon
-//
-
 $icon-color: $secondary;
 $icon-spin-size: $space-xl;
 $icon-spin-size-sm: $space-md;
 $icon-active-color: $shade-9;
 
-//
 // Outline
-//
-
-$outline-color:  $secondary;
-$outline-width:  3px;
+$outline-color: $secondary;
+$outline-width: 3px;
 $outline-offset: 2px;
 
 // Editable
-// --------------------------------------------------
-
-$editable-border-width:  $outline-width;
-$editable-padding:       2px;
+$editable-border-width: $outline-width;
+$editable-padding: 2px;
 $editable-border-radius: 3px;
 
-$editable-color:             $text-color;
-$editable-bg:                $shade-0;
-$editable-border-color:      $secondary;
-$editable-hover-percent:     0.04;
-$editable-hover-bg:          rgba($shade-10, $editable-hover-percent);
-$editable-backdrop-bg:       $shade-1;
-$editable-backdrop-hover-bg: darken($shade-1, ($editable-hover-percent * 100%));
+$editable-color: $text-color;
+$editable-bg: $shade-0;
+$editable-border-color: $secondary;
+$editable-hover-percent: 0.04;
+$editable-hover-bg: rgba($shade-10, $editable-hover-percent);
+$editable-backdrop-bg: $shade-1;
+$editable-backdrop-hover-bg: color.adjust($shade-1, $lightness: -($editable-hover-percent * 100%)); // stylelint-disable-line scss/operator-no-unspaced
 
-//
 // Icons
-//
-
 $spinner-color: $secondary;
 
 
-//
 // Badge
-//
-
 $badge-font-size: 12px;
 $badge-padding-x: $space-xs;
 $badge-padding-y: $space-min - 2px;
@@ -306,133 +239,97 @@ $badge-light-border-color: $shade-3;
 $badge-light-bg: $shade-0;
 
 
-//
 // Zotero bib
-//
-
 $zotero-bib-spinner-size: $space-xl;
 
-
-//
 // Style selector
-//
-
 $style-selector-bg: $secondary;
-$style-selector-hover-bg: lighten($secondary, 4%);
+$style-selector-hover-bg: color.adjust($secondary, $lightness: 4%);
 $style-selector-color: $shade-0;
 
 
-//
 // Style installer
-//
-
 $style-border-color: $shade-2;
 
-
-//
 // React-modal
-//
-
-$modal-backdrop-bg:           rgba($blue-darkest, 0.5);
-$modal-content-bg:            $shade-0;
-$modal-header-color:          $shade-0;
-$modal-header-bg:             $blue-dark;
-$modal-title-line-height:     $space-xl;
-$modal-footer-border-width:   1px;
-$modal-footer-border-color:   $shade-2;
-$modal-md:                    500px;
-$modal-lg:                    800px;
+$modal-backdrop-bg: rgba($blue-darkest, 0.5);
+$modal-content-bg: $shade-0;
+$modal-header-color: $shade-0;
+$modal-header-bg: $blue-dark;
+$modal-title-line-height: $space-xl;
+$modal-footer-border-width: 1px;
+$modal-footer-border-color: $shade-2;
+$modal-md: 500px;
+$modal-lg: 800px;
 $modal-header-padding-mobile: $space-md;
-$modal-inner-padding-mobile:  $space-md;
-$modal-header-padding-md:     $space-lg;
-$modal-inner-padding-md:      $space-lg;
-$modal-header-padding-lg:     $space-xl;
-$modal-inner-padding-lg:      $space-xl;
-$modal-icon-spin-color:       $shade-0;
+$modal-inner-padding-mobile: $space-md;
+$modal-header-padding-md: $space-lg;
+$modal-inner-padding-md: $space-lg;
+$modal-header-padding-lg: $space-xl;
+$modal-inner-padding-lg: $space-xl;
+$modal-icon-spin-color: $shade-0;
 
 
-//
 // Multiple choice dialog
-//
-
 $result-border-color: $shade-2;
-$result-padding:      $space-md;
-$result-hover-color:  $shade-0;
-$result-hover-bg:     $shade-1;
+$result-padding: $space-md;
+$result-hover-color: $shade-0;
+$result-hover-bg: $shade-1;
 
 
-//
 // Message
-//
-
-$message-font-size:        $space-lg;
+$message-font-size: $space-lg;
 $message-font-size-mobile: 20px;
-$message-color:            $shade-0;
-$message-focus-color:      $shade-0;
-$message-error-bg:         $error;
-$message-warning-bg:       $warning;
-$message-info-bg:          $info;
-$message-success-bg:       $success;
+$message-color: $shade-0;
+$message-focus-color: $shade-0;
+$message-error-bg: $error;
+$message-warning-bg: $warning;
+$message-info-bg: $info;
+$message-success-bg: $success;
 
 
-//
 // Permalink tools
-//
-
 $permalink-spinner-size: $space-xl;
 
 
 // Menu (select, dropdown, …)
 $menu-color: $text-color;
-$menu-color-disabled: lighten($text-color, 33%);
+$menu-color-disabled: color.adjust($text-color, $lightness: 33%);
 $menu-bg: $body-bg;
-$menu-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 3px 8px rgba(0, 0, 0, 0.2);
-$menu-item-hover-bg: mix($shade-10, $shade-1, 2%);
+$menu-box-shadow: 0 0 0 1px rgb(0 0 0 / 8%), 0 3px 8px rgb(0 0 0 / 20%);
+$menu-item-hover-bg: color.mix($shade-10, $shade-1, 2%);
 $menu-item-selected-bg: $shade-2;
 $menu-item-selected-hover-bg: $shade-3;
 $menu-devider: $shade-2;
 $menu-no-results-color: $shade-5;
 
 $menu-border-radius: $border-radius-sm;
-$dropdown-item-padding-x-touch: $space-md;
-$dropdown-item-padding-y-touch: 9px;
 
-
-//
 // Review
-//
-
-$review-bg: mix($secondary, $shade-0, 7%);
-$review-border-color: mix($secondary, $shade-0, 14%);
+$review-bg: color.mix($secondary, $shade-0, 7%);
+$review-border-color: color.mix($secondary, $shade-0, 14%);
 
 
-//
 // Copy citation dialog
-//
-
 $preview-bg: $review-bg;
 $preview-border-color: $review-border-color;
 
-
-//
 // About
-//
-
-$about-bg:    $blue-dark;
+$about-bg: $blue-dark;
 $about-color: $shade-0;
 
 // Metadata list
-$metadata-list-offset:             33%;
-$key-color:                $shade-6;
-$handle-color-touch:       $shade-4;
-$handle-color-mouse:       $shade-6;
-$metadata-heading-color:   $shade-5;
+$metadata-list-offset: 33%;
+$key-color: $shade-6;
+$handle-color-touch: $shade-4;
+$handle-color-mouse: $shade-6;
+$metadata-heading-color: $shade-5;
 $metadata-separator-color: $shade-3;
 
 // Creators
-$creators-last-name-max-width:       67%;
+$creators-last-name-max-width: 67%;
 $creators-value-padding-right-touch: 31px;
-$creator-color-transition: .5s cubic-bezier(1,0,.5,.5);
+$creator-color-transition: .5s cubic-bezier(1, 0, .5, .5);
 $creator-color-transition-delay: .1s;
 
 $select-chevron-icon: "bg-icons/16/chevron-11-down-777.svg";

@@ -1,12 +1,10 @@
-//
-// Section about
-//
+@use "../abstracts/variables";
 
 .section-about {
 	padding-top: 80px;
 	padding-bottom: 80px - 8px;
 
-	@media (min-width: $bp-md) {
+	@media (min-width: variables.$bp-md) {
 		padding-top: 120px;
 		padding-bottom: 120px - 10px;
 	}

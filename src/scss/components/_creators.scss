@@ -1,8 +1,6 @@
-//
-// Creators entry
-// --------------------------------------------------
-
-// Creators field
+@use "../../../modules/web-common/scss/abstracts/functions/asset-url";
+@use "../../../modules/web-common/scss/abstracts/mixins/selectors";
+@use "../abstracts/variables";
 @use "sass:math";
 
 .creators-entry {
@@ -10,22 +8,22 @@
 
 	&.color-exit,
 	&.color-exit .select-value {
-		color: $blue;
+		color: variables.$blue;
 	}
 
 	&.color-exit-active,
 	&.color-exit-active .select-value {
 		color: inherit;
-		transition: color $creator-color-transition;
-		transition-delay: $creator-color-transition-delay;
+		transition: color variables.$creator-color-transition;
+		transition-delay: variables.$creator-color-transition-delay;
 	}
 
-	@include state(".panel.editing .creators-entry") {
-		$handle-width: 2 * $default-padding-x-touch + $space-lg + $input-border-width;
+	@include selectors.state(".panel.editing .creators-entry") {
+		$handle-width: 2 * variables.$default-padding-x-touch + variables.$space-lg + variables.$input-border-width;
 
-		padding-left: 2 * $default-padding-x-touch + $space-lg;
+		padding-left: 2 * variables.$default-padding-x-touch + variables.$space-lg;
 		padding-right: $handle-width;
-		background: image-url("icons/chevron-13.svg") no-repeat right ($handle-width + 4px) center $input-bg;
+		background: asset-url.image-url("icons/chevron-13.svg") no-repeat right ($handle-width + 4px) center variables.$input-bg;
 
 		&.single,
 		&.virtual {
@@ -34,20 +32,20 @@
 		}
 
 		&::before {
-			left: 2 * $default-padding-x-touch + $space-lg;
+			left: 2 * variables.$default-padding-x-touch + variables.$space-lg;
 		}
 
-		@include variant(".title + .creators-entry") {
+		@include selectors.variant(".title + .creators-entry") {
 			padding-top: 0;
-			border-top-left-radius: $input-border-radius;
-			border-top-right-radius: $input-border-radius;
+			border-top-left-radius: variables.$input-border-radius;
+			border-top-right-radius: variables.$input-border-radius;
 
 			&::before {
-				@media (max-width: $bp-sm - 1px) {
+				@media (max-width: (variables.$bp-sm - 1px)) {
 					left: 0;
 				}
 
-				@media (max-width: $bp-md - 1px) {
+				@media (max-width: (variables.$bp-md - 1px)) {
 					content: none;
 				}
 			}
@@ -65,13 +63,13 @@
 					position: absolute;
 					left: 0;
 					right: 0;
-					height: $outline-width;
-					background-color: $focus-color;
+					height: variables.$outline-width;
+					background-color: variables.$focus-color;
 				}
 
 				&::before {
 					top: auto;
-					bottom: calc(100% - #{$input-border-width});
+					bottom: calc(100% - #{variables.$input-border-width});
 				}
 
 				&::after {
@@ -82,17 +80,16 @@
 	}
 
 	.key {
-		@media (max-width: $bp-md - 1px) {
-			@include state(".editing .creators-entry.virtual") {
+		@media (max-width: (variables.$bp-md - 1px)) {
+			@include selectors.state(".editing .creators-entry.virtual") {
 				flex-basis:
 					calc(
-						(100% - #{2 * $default-padding-x-touch + $input-border-width + $space-lg})
-						* #{math.div($metadata-list-offset, 100%)}
+						(100% - #{2 * variables.$default-padding-x-touch + variables.$input-border-width + variables.$space-lg}) * #{math.div(variables.$metadata-list-offset, 100%)}
 					); // Align with creators
 			}
 		}
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			justify-content: flex-end;
 		}
 
@@ -106,7 +103,7 @@
 			border: none;
 			background-color: transparent;
 			line-height: normal;
-			color: $key-color;
+			color: variables.$key-color;
 			user-select: none; // Reset
 			box-shadow: none;
 
@@ -117,15 +114,15 @@
 				padding: 0;
 				box-shadow: none;
 
-				@media (max-width: $bp-md - 1px) {
+				@media (max-width: (variables.$bp-md - 1px)) {
 					flex-direction: row-reverse;
-					padding: ($input-btn-padding-y-sm + 1px) 0;
+					padding: (variables.$input-btn-padding-y-sm + 1px) 0;
 				}
 
-				@include state(".select-component:hover", ".select-component.is-focused") {
-					@include state(".select-component:not(.is-disabled)") {
+				@include selectors.state(".select-component:hover", ".select-component.is-focused") {
+					@include selectors.state(".select-component:not(.is-disabled)") {
 						cursor: pointer;
-						color: $link-color;
+						color: variables.$link-color;
 					}
 				}
 			}
@@ -151,21 +148,21 @@
 			}
 
 			.select-arrow {
-				background-image: image-url("bg-icons/16/chevron-11-down-777.svg");
+				background-image: asset-url.image-url("bg-icons/16/chevron-11-down-777.svg");
 
-				@include state(".creators-entry:hover") {
-					@include state(".select-component:not(.is-disabled)") {
+				@include selectors.state(".creators-entry:hover") {
+					@include selectors.state(".select-component:not(.is-disabled)") {
 						display: block;
 					}
 				}
 
-				@include state(".select-component:hover") {
-					background-image: image-url("bg-icons/16/chevron-11-down-secondary.svg");
+				@include selectors.state(".select-component:hover") {
+					background-image: asset-url.image-url("bg-icons/16/chevron-11-down-secondary.svg");
 				}
 
-				@include state(".select-component.is-focused") {
+				@include selectors.state(".select-component.is-focused") {
 					display: block;
-					background-image: image-url("bg-icons/16/chevron-11-down-secondary.svg");
+					background-image: asset-url.image-url("bg-icons/16/chevron-11-down-secondary.svg");
 				}
 			}
 
@@ -179,25 +176,26 @@
 	}
 
 	.value {
-		@media (max-width: $bp-md - 1px) {
-			@include state(".editing .creators-entry") {
+		@media (max-width: (variables.$bp-md - 1px)) {
+			@include selectors.state(".editing .creators-entry") {
 				align-items: center;
-				padding-right: $creators-value-padding-right-touch;
+				padding-right: variables.$creators-value-padding-right-touch;
 			}
 
-			@include state(".editing .creators-entry.single") {
-				padding-right: $creators-value-padding-right-touch + $space-xs;
-			}
-			@include state(".editing .creators-entry.virtual") {
-				padding-right: $creators-value-padding-right-touch + $space-xs;
+			@include selectors.state(".editing .creators-entry.single") {
+				padding-right: variables.$creators-value-padding-right-touch + variables.$space-xs;
 			}
 
-			@include state(".creators-entry.virtual") {
-				color: $placeholder-color;
+			@include selectors.state(".editing .creators-entry.virtual") {
+				padding-right: variables.$creators-value-padding-right-touch + variables.$space-xs;
+			}
+
+			@include selectors.state(".creators-entry.virtual") {
+				color: variables.$placeholder-color;
 			}
 		}
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			> *:not(:first-child) {
 				margin-left: 2px;
 			}
@@ -215,10 +213,10 @@
 			}
 
 			&:first-child {
-				@include state(".creators-entry.creators-twoslot") {
+				@include selectors.state(".creators-entry.creators-twoslot") {
 					display: flex;
 					flex: 0 1 auto;
-					max-width: calc(#{$creators-last-name-max-width} - 30px); // Substract buttons and margins / 2
+					max-width: calc(#{variables.$creators-last-name-max-width} - 30px); // Substract buttons and margins / 2
 
 					&::after {
 						content: ",";

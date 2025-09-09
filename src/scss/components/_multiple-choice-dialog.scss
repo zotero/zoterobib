@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "../abstracts/variables";
+
 .multiple-items-dialog,
 .multiple-choice-dialog,
 .confirm-add-dialog {
@@ -5,7 +8,7 @@
 		overflow: auto;
 		max-height: calc(100vh - 96px);
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			max-height: calc(90vh - 96px - 32px); // 90% of the screen, accounting for the modal header and modal margin
 		}
 	}
@@ -13,7 +16,7 @@
 	&.modal-with-footer .modal-body {
 		max-height: calc(100vh - 96px - 104px);
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			max-height: calc(90vh - 96px - 104px - 32px);
 		}
 	}
@@ -28,11 +31,11 @@
 
 	.results {
 		position: relative;
-		margin: 0 - $modal-inner-padding-mobile;
+		margin: 0 - variables.$modal-inner-padding-mobile;
 		padding: 0;
 		list-style: none;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			margin: 0;
 		}
 	}
@@ -42,21 +45,21 @@
 		position: relative;
 
 		> * {
-			border-top: 1px solid $result-border-color;
-			padding: $result-padding;
+			border-top: 1px solid variables.$result-border-color;
+			padding: variables.$result-padding;
 		}
 
 		> *:first-child {
-			padding-inline: $space-md;
+			padding-inline: variables.$space-md;
 		}
 
 		&:hover {
 			> * {
-				background-color: $result-hover-bg;
+				background-color: variables.$result-hover-bg;
 
 				.badge {
-					background-color: $result-hover-bg;
-					border-color: darken($badge-light-border-color, 4%);
+					background-color: variables.$result-hover-bg;
+					border-color: color.adjust(variables.$badge-light-border-color, $lightness: -4%);
 				}
 			}
 		}
@@ -64,7 +67,7 @@
 		&:focus, &:focus-within {
 			.keyboard & {
 				outline-offset: -3px;
-				outline: 3px solid $blue;
+				outline: 3px solid variables.$blue;
 
 				& + .result {
 					border-top-color: transparent;
@@ -73,13 +76,14 @@
 		}
 
 		.checkbox {
+			align-self: center;
 			outline: none;
 		}
 
 		.badge {
 			margin-bottom: 6px;
 
-			@media (min-width: $bp-sm) {
+			@media (min-width: variables.$bp-sm) {
 				vertical-align: 2px;
 				margin-bottom: 0;
 			}
@@ -93,39 +97,34 @@
 		}
 
 		.title-container {
-			margin-right: $space-min + $space-min * 0.5;
+			margin-right: variables.$space-min + variables.$space-min * 0.5;
 		}
 
 		.description {
 			margin: 0;
 		}
 
-		.checkbox {
-			align-self: center;
-		}
-
 		.csl-entry {
-			word-break: break-word;
+			word-break: break-word; // stylelint-disable-line declaration-property-value-keyword-no-deprecated
 		}
 	}
 
 	.more-items-action {
 		$btn-height:
-			2 * ($border-width + $btn-padding-y)
-			+ $font-size-base * $line-height-base;
+			2 * (variables.$border-width + variables.$btn-padding-y) + variables.$font-size-base * variables.$line-height-base;
 
 		align-items: center;
 		display: flex;
 		justify-content: center;
-		padding-top: $space-md;
-		border-top: $border-width solid $shade-2;
-		min-height: $border-width + $space-md + $btn-height;
-		margin: $space-md (-$space-md) 0;
+		padding-top: variables.$space-md;
+		border-top: variables.$border-width solid variables.$shade-2;
+		min-height: variables.$border-width + variables.$space-md + $btn-height;
+		margin: variables.$space-md (-(variables.$space-md)) 0;
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			margin: 0;
-			padding-top: $space-lg;
-			min-height: $border-width + $space-lg + $btn-height;
+			padding-top: variables.$space-lg;
+			min-height: variables.$border-width + variables.$space-lg + $btn-height;
 		}
 	}
 
@@ -147,7 +146,7 @@
 			flex: 0 0 100px;
 		}
 
-		@media (min-width: $bp-md) {
+		@media (min-width: variables.$bp-md) {
 			.description {
 				flex: 0 0 200px;
 			}

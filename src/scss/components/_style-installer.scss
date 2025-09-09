@@ -1,12 +1,11 @@
-//
-// Style installer
-//
+@use "../abstracts/variables";
+
 
 .style-installer {
 	.form-control {
-		margin-top: $space-xs;
+		margin-top: variables.$space-xs;
 
-		@media (min-width: $bp-sm) {
+		@media (min-width: variables.$bp-sm) {
 			margin-top: 0;
 		}
 	}
@@ -14,35 +13,35 @@
 	.style-list {
 		list-style: none;
 		padding: 0;
-		margin: $space-lg (-$space-md) 0;
+		margin: variables.$space-lg (-(variables.$space-md)) 0;
 
-		@media (min-width: $bp-sm) {
-			margin: $space-xl 0 0 0;
+		@media (min-width: variables.$bp-sm) {
+			margin: variables.$space-xl 0 0 0;
 		}
 	}
 
 	.style {
 		align-items: center;
-		border-top: 1px solid $style-border-color;
+		border-top: 1px solid variables.$style-border-color;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		padding: ($space-lg - 9px) $space-md $space-lg $space-md;
-		padding: $space-sm;
+		padding: (variables.$space-lg - 9px) variables.$space-md variables.$space-lg variables.$space-md;
+		padding: variables.$space-sm;
 
 		.btn {
 			flex: 0 0 auto;
 			align-self: center; // In column
-			margin-left: $space-sm;
-			min-width: $space-max - $space-xs;
+			margin-left: variables.$space-sm;
+			min-width: variables.$space-max - variables.$space-xs;
 		}
 	}
 
 	.style-title {
 		flex: 1 1 auto;
-		margin-bottom: $space-md - 7px; // Space between baseline and x-height
+		margin-bottom: variables.$space-md - 7px; // Space between baseline and x-height
 
-		@media (min-width: $bp-sm) {
+		@media (min-width: variables.$bp-sm) {
 			margin-bottom: 0;
 		}
 	}

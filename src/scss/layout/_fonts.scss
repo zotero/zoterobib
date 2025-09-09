@@ -1,6 +1,4 @@
-//
-// Fonts
-//
+@use "../abstracts/functions/asset-url";
 
 /**
  * @license
@@ -47,79 +45,79 @@
 @import url("//hello.myfonts.net/count/36500b");
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 600;
 	font-style: italic;
-	src: font-url('36500B_0_0.eot');
+	src: asset-url.font-url('36500B_0_0.eot');
 	src:
-		font-url('36500B_0_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_0_0.woff2') format('woff2'),
-		font-url('36500B_0_0.woff') format('woff'),
-		font-url('36500B_0_0.ttf') format('truetype'),
-		font-url('36500B_0_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_0_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_0_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_0_0.woff') format('woff'),
+		asset-url.font-url('36500B_0_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_0_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 600;
 	font-style: normal;
-	src: font-url('36500B_1_0.eot');
+	src: asset-url.font-url('36500B_1_0.eot');
 	src:
-		font-url('36500B_1_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_1_0.woff2') format('woff2'),
-		font-url('36500B_1_0.woff') format('woff'),
-		font-url('36500B_1_0.ttf') format('truetype'),
-		font-url('36500B_1_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_1_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_1_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_1_0.woff') format('woff'),
+		asset-url.font-url('36500B_1_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_1_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 400;
 	font-style: italic;
-	src: font-url('36500B_2_0.eot');
+	src: asset-url.font-url('36500B_2_0.eot');
 	src:
-		font-url('36500B_2_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_2_0.woff2') format('woff2'),
-		font-url('36500B_2_0.woff') format('woff'),
-		font-url('36500B_2_0.ttf') format('truetype'),
-		font-url('36500B_2_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_2_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_2_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_2_0.woff') format('woff'),
+		asset-url.font-url('36500B_2_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_2_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 300;
 	font-style: italic;
-	src: font-url('36500B_3_0.eot');
+	src: asset-url.font-url('36500B_3_0.eot');
 	src:
-		font-url('36500B_3_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_3_0.woff2') format('woff2'),
-		font-url('36500B_3_0.woff') format('woff'),
-		font-url('36500B_3_0.ttf') format('truetype'),
-		font-url('36500B_3_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_3_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_3_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_3_0.woff') format('woff'),
+		asset-url.font-url('36500B_3_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_3_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 300;
 	font-style: normal;
-	src: font-url('36500B_4_0.eot');
+	src: asset-url.font-url('36500B_4_0.eot');
 	src:
-		font-url('36500B_4_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_4_0.woff2') format('woff2'),
-		font-url('36500B_4_0.woff') format('woff'),
-		font-url('36500B_4_0.ttf') format('truetype'),
-		font-url('36500B_4_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_4_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_4_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_4_0.woff') format('woff'),
+		asset-url.font-url('36500B_4_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_4_0.svg#wf') format('svg');
 }
 
 @font-face {
-	font-family: 'AvenirNextLTPro';
+	font-family: AvenirNextLTPro;
 	font-weight: 400;
 	font-style: normal;
-	src: font-url('36500B_5_0.eot');
+	src: asset-url.font-url('36500B_5_0.eot');
 	src:
-		font-url('36500B_5_0.eot?#iefix') format('embedded-opentype'),
-		font-url('36500B_5_0.woff2') format('woff2'),
-		font-url('36500B_5_0.woff') format('woff'),
-		font-url('36500B_5_0.ttf') format('truetype'),
-		font-url('36500B_5_0.svg#wf') format('svg');
+		asset-url.font-url('36500B_5_0.eot?#iefix') format('embedded-opentype'),
+		asset-url.font-url('36500B_5_0.woff2') format('woff2'),
+		asset-url.font-url('36500B_5_0.woff') format('woff'),
+		asset-url.font-url('36500B_5_0.ttf') format('truetype'),
+		asset-url.font-url('36500B_5_0.svg#wf') format('svg');
 }

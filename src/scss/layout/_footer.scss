@@ -1,15 +1,17 @@
+@use "../abstracts/variables";
+
 footer {
-	padding: (43px - 6px) ($grid-gutter-width * 0.5) (43px - 5px);
+	padding: (43px - 6px) (variables.$grid-gutter-width * 0.5) (43px - 5px);
 	text-align: center;
-	border-top: 1px solid $shade-2;
+	border-top: 1px solid variables.$shade-2;
 
 	@media print {
 		display: none;
 	}
 
-	@media (min-width: $bp-md) {
-		padding-top: ($space-xxxl - 6px);
-		padding-bottom: ($space-xxxl - 5px);
+	@media (min-width: variables.$bp-md) {
+		padding-top: (variables.$space-xxxl - 6px);
+		padding-bottom: (variables.$space-xxxl - 5px);
 	}
 
 	&,
@@ -19,18 +21,18 @@ footer {
 
 	&.faq-footer {
 		border-top-color: transparent;
-		max-width: $container-width;
+		max-width: variables.$container-width;
 		margin: auto;
 		position: relative;
 
 		&::before {
 			content: "";
 			position: absolute;
-			left: $grid-gutter-width * 0.5;
-			right: $grid-gutter-width * 0.5;
+			left: variables.$grid-gutter-width * 0.5;
+			right: variables.$grid-gutter-width * 0.5;
 			top: -1px;
 			height: 1px;
-			background-color: $shade-2;
+			background-color: variables.$shade-2;
 		}
 	}
 
@@ -64,9 +66,9 @@ footer {
 .zotero-bib-container {
 	&.write {
 		footer {
-			color: $shade-0;
-			border-top-color: rgba(0, 0, 0, 0.2);
-			background: $about-bg;
+			color: variables.$shade-0;
+			border-top-color: rgb(0 0 0 / 20%);
+			background: variables.$about-bg;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 
@@ -85,10 +87,10 @@ footer {
 		footer {
 			border-top: none;
 			padding-top: 0;
-			padding-bottom: $section-padding-mobile - 5px;
+			padding-bottom: variables.$section-padding-mobile - 5px;
 
-			@media (min-width: $bp-md) {
-				padding-bottom: $section-padding - 5px;
+			@media (min-width: variables.$bp-md) {
+				padding-bottom: variables.$section-padding - 5px;
 			}
 		}
 	}

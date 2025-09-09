@@ -1,10 +1,10 @@
-//
-// Button
-//
+@use "sass:color";
+@use "../variables";
+// stylelint-disable nesting-selector-no-missing-scoping-root
 
 @mixin button-variant($color, $outline: null, $inverse: null) {
-	$btn-color: if($inverse, $shade-0, $color);
-	$shade-0: if($inverse, $color, $shade-0);
+	$btn-color: if($inverse, variables.$shade-0, $color);
+	$shade-0: if($inverse, $color, variables.$shade-0);
 
 	background-color: if($outline, transparent, $btn-color);
 	border-color: if($outline, $btn-color, transparent);
@@ -16,7 +16,7 @@
 
 	&:hover {
 		background-color: $btn-color;
-		box-shadow: 0 2px 4px $btn-box-shadow-color;
+		box-shadow: 0 2px 4px variables.$btn-box-shadow-color;
 
 		&,
 		.icon {
@@ -25,8 +25,8 @@
 	}
 
 	&:active {
-		background-color: darken($btn-color, 8%);
-		border-color: if($outline, darken($btn-color, 8%), transparent);
+		background-color: color.adjust($btn-color, $lightness: -8%);
+		border-color: if($outline, color.adjust($btn-color, $lightness: -8%), transparent);
 		box-shadow: none;
 
 		&,
@@ -48,39 +48,39 @@
 
 	&:focus {
 		.keyboard & {
-			box-shadow: 0 0 0 $input-btn-focus-width $btn-color;
+			box-shadow: 0 0 0 variables.$input-btn-focus-width $btn-color;
 
 			&:hover {
 				box-shadow:
-					0 0 0 $input-btn-focus-width $btn-color,
-					0 4px 4px $btn-box-shadow-color;
+					0 0 0 variables.$input-btn-focus-width $btn-color,
+					0 4px 4px variables.$btn-box-shadow-color;
 			}
 
 			&:active {
-				box-shadow: 0 0 0 $input-btn-focus-width darken($btn-color, 8%);
+				box-shadow: 0 0 0 variables.$input-btn-focus-width color.adjust($btn-color, $lightness: -8%);
 			}
 		}
 	}
 
 	&.success {
-		background-color: $btn-success-color;
+		background-color: variables.$btn-success-color;
 
 		&:active {
-			background-color: darken($btn-success-color, 8%);
+			background-color: color.adjust(variables.$btn-success-color, $lightness: -8%);
 		}
 
 		&:focus {
 			.keyboard & {
-				box-shadow: 0 0 0 $input-btn-focus-width $btn-success-color;
+				box-shadow: 0 0 0 variables.$input-btn-focus-width variables.$btn-success-color;
 
 				&:hover {
 					box-shadow:
-						0 0 0 $input-btn-focus-width $btn-success-color,
-						0 4px 4px $btn-box-shadow-color;
+						0 0 0 variables.$input-btn-focus-width variables.$btn-success-color,
+						0 4px 4px variables.$btn-box-shadow-color;
 				}
 
 				&:active {
-					box-shadow: 0 0 0 $input-btn-focus-width darken($btn-success-color, 8%);
+					box-shadow: 0 0 0 variables.$input-btn-focus-width color.adjust(variables.$btn-success-color, $lightness: -8%);
 				}
 			}
 		}

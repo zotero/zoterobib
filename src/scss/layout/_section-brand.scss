@@ -1,17 +1,15 @@
-//
-// Section brand
-//
+@use "../abstracts/variables";
 
 .section-brand {
-	padding-top: $section-padding-mobile - 9px;
-	padding-bottom: $space-xl - 7px;
+	padding-top: variables.$section-padding-mobile - 9px;
+	padding-bottom: variables.$space-xl - 7px;
 
 	@media print {
 		display: none;
 	}
 
-	@media (min-width: $bp-md) {
-		padding-top: $section-padding - 9px;
-		padding-bottom: $space-xxl - 7px;
+	@media (min-width: variables.$bp-md) {
+		padding-top: variables.$section-padding - 9px;
+		padding-bottom: variables.$space-xxl - 7px;
 	}
 }
