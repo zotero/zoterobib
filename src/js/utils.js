@@ -40,11 +40,11 @@ const validateUrl = url => {
 	try {
 		url = new URL(url);
 		return url.toString();
-	} catch (e) {
+	} catch (e) { // eslint-disable-line no-unused-vars
 		try {
 			url = new URL(`http://${url}`);
 			return url.toString();
-		} catch (e) {
+		} catch (e) { // eslint-disable-line no-unused-vars
 			return false;
 		}
 	}
@@ -55,7 +55,7 @@ const retrieveStylesData = async url => {
 		const response = await fetch(url);
 		if (!response.ok) { throw new Error(); }
 		return await response.json();
-	} catch (_) {
+	} catch (_) { // eslint-disable-line no-unused-vars
 		throw new Error('Failed to load styles data');
 	}
 };

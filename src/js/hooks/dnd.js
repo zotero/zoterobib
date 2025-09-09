@@ -155,7 +155,7 @@ const useDnd = ({ type, data, ref, onPickup = noop, onVerify = alwaysTrue, onCom
 
 					cleanupNodes.clear();
 					onCleanup(cleanupEv, draggedItem);
-				} catch(e) {
+				} catch(e) { // eslint-disable-line no-unused-vars
 					//
 				}
 
