@@ -60,7 +60,7 @@ const retrieveStylesData = async url => {
 	}
 };
 
-const validateItem = async(item, itemTypeFields, itemTypeCreatorTypes) => {
+const validateItem = (item, itemTypeFields, itemTypeCreatorTypes) => {
 	//remove item properties that should not appear on this item type
 	for (var prop in item) {
 		if (!([...itemTypeFields.map(f => f.field), 'creators', 'key', 'itemType', 'version', 'tags'].includes(prop))) {

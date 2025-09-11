@@ -12,6 +12,7 @@ import modernLanguageAssociationStyle from './fixtures/modern-language-associati
 import schema from './fixtures/schema.json';
 import localStorage100Items from './fixtures/local-storage-100-items.json';
 import responseTranslateIdentifier from './fixtures/response-translate-identifier.json';
+import responseTranslateIdentifierWrongAuthor from './fixtures/response-translate-identifier-wrong-author.json';
 import responseTranslateDOI from './fixtures/response-translate-doi.json';
 import responseTranslateItems from './fixtures/response-translate-items.json';
 import responseTranslateSearch from './fixtures/response-translate-search.json';
@@ -433,5 +434,40 @@ describe('Translate', () => {
 		)).not.toHaveAttribute('readonly')
 
 		expect(hasTranslated).toBe(false);
+	});
+
+	test("It validates items returned from the translator", async () => {
+		localStorage.setItem('zotero-bib-citation-style', 'apa');
+		let hasTranslated = false;
+		server.use(
+			http.get('https://www.zotero.org/styles/apa', () => {
+				return HttpResponse.text(apaStyle, {
+					headers: { 'Content-Type': 'application/vnd.citationstyles.style+xml' },
+				});
+			}),
+		);
+		server.use(
+			http.post('http://localhost/web', async ({ request }) => {
+				expect(await request.text()).toBe('https://example.com/family-dog');
+				hasTranslated = true;
+				await delay(100); // delayed to make sure input becomes readonly
+				return HttpResponse.json(responseTranslateIdentifierWrongAuthor);
+			})
+		);
+
+		renderWithProviders(<Container />);
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+		const user = userEvent.setup();
+		await user.type(input, 'https://example.com/family-dog{enter}');
+
+		let newItemSection;
+		await waitFor(async () => {
+			newItemSection = await screen.findByRole('region', { name: 'New item…' });
+			// creator type `author` is not valid for itemType `videoRecording` and should be replaced with `director` in order for the citation to render correctly
+			return expect(getByText(newItemSection, /Bar, F\. \(Director\)/)).toBeInTheDocument();
+		});
+		expect(hasTranslated).toBe(true);
 	});
 });

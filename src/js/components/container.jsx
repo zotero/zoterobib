@@ -852,16 +852,11 @@ const BibWebContainer = props => {
 			...patch
 		};
 
-		try {
-			await validateItem(
-				updatedItem,
-				state.meta.itemTypeFields?.[updatedItem?.itemType],
-				state.meta.itemTypeCreatorTypes?.[updatedItem?.itemType]
-			);
-		} catch(e) {
-			handleError('Failed to obtain metadata. Please check your connection and try again.', e);
-			return;
-		}
+		validateItem(
+			updatedItem,
+			state.meta.itemTypeFields?.[updatedItem?.itemType],
+			state.meta.itemTypeCreatorTypes?.[updatedItem?.itemType]
+		);
 
 		if(state.isSentenceCaseStyle) {
 			const itemsMetaData = JSON.parse(localStorage.getItem('zotero-bib-items-metadata')) || {};
@@ -1172,6 +1167,12 @@ const BibWebContainer = props => {
 					return;
 				}
 				var rootItems = translationResponse.items.filter(item => !item.parentItem);
+				rootItems.forEach(item => validateItem(
+						item,
+						state.meta.itemTypeFields?.[item?.itemType],
+						state.meta.itemTypeCreatorTypes?.[item?.itemType]
+					)
+				);
 
 				if (rootItems.length > 1) {
 					const multipleItems = {
