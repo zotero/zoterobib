@@ -1,4 +1,4 @@
-import { Fragment, memo, useCallback, useRef } from 'react';
+import { Fragment, memo, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -23,6 +23,7 @@ import PermalinkTools from './permalink-tools';
 import Review from './review';
 import StyleInstaller from './style-installer';
 import WhatsThis from './whats-this';
+import ThemeButton from "./theme";
 
 const commonFormats = {
 	b: (chunks) => <b>{chunks}</b>,  
@@ -85,6 +86,7 @@ const ZBib = props => {
 								onBlur={receiveBlur}
 								onKeyDown={handleKeyDown}
 							>
+								<ThemeButton/>
 								<a tabIndex={-2} onClick={ props.onHelpClick }>
 									<FormattedMessage id="zbib.help" defaultMessage="Help" />
 								</a>

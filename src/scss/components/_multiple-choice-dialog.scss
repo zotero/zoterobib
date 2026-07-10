@@ -59,7 +59,7 @@
 
 				.badge {
 					background-color: variables.$result-hover-bg;
-					border-color: color.adjust(variables.$badge-light-border-color, $lightness: -4%);
+					border-color: color-mix(in srgb, variables.$badge-light-border-color 96%, black 4%);
 				}
 			}
 		}

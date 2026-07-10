@@ -2,7 +2,7 @@
 
 .section {
 	padding: variables.$section-padding-mobile 0;
-	border-top: 1px solid variables.$shade-2;
+	border-top: 1px solid var(--large-divisor-color);
 
 	@media (min-width: variables.$bp-md) {
 		padding: variables.$section-padding 0;

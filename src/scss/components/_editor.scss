@@ -150,6 +150,10 @@
 				.select-option:not(.select-divider) {
 					padding: variables.$input-btn-padding-y-sm variables.$input-btn-padding-x-lg;
 				}
+
+				.select-option {
+					color: var(--input-selection-text-color);
+				}
 			}
 		}
 

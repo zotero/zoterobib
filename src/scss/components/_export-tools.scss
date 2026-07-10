@@ -38,7 +38,7 @@
 			linear-gradient(
 				to right,
 				variables.$btn-secondary-color,
-				color.mix(variables.$violet, variables.$btn-secondary-color, 79%)
+				color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%)
 			);
 		background-clip: border-box;
 		position: relative;
@@ -47,8 +47,8 @@
 			background-image:
 				linear-gradient(
 					to right,
-					color.adjust(variables.$btn-secondary-color, $lightness: 4%),
-					color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: 4%)
+					color-mix(in srgb, variables.$btn-secondary-color 96%, white 4%),
+					color-mix(in srgb, color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%) 96%, white 4%)
 				);
 		}
 
@@ -56,8 +56,8 @@
 			background-image:
 				linear-gradient(
 					to right,
-					color.adjust(variables.$btn-secondary-color, $lightness: -8%),
-					color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%)
+					color-mix(in srgb, variables.$btn-secondary-color 92%, black 8%),
+					color-mix(in srgb, color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%) 92%, black 8%)
 				);
 		}
 	}
@@ -67,7 +67,7 @@
 			background-image:
 				linear-gradient(
 					to right,
-					color.mix(variables.$violet, variables.$btn-secondary-color, 79%),
+					color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%),
 					variables.$violet
 				);
 			position: relative;
@@ -76,8 +76,8 @@
 				background-image:
 					linear-gradient(
 						to right,
-						color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: 4%),
-						color.adjust(variables.$violet, $lightness: 4%)
+						color-mix(in srgb, color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%) 96%, white 4%),
+						color-mix(in srgb, variables.$violet 96%, white 4%)
 					);
 			}
 
@@ -85,8 +85,8 @@
 				background-image:
 					linear-gradient(
 						to right,
-						color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%),
-						color.adjust(variables.$violet, $lightness: -8%)
+						color-mix(in srgb, color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%) 92%, black 8%),
+						color-mix(in srgb, variables.$violet 92%, dark 8%)
 					);
 			}
 
@@ -109,8 +109,8 @@
 					background-image:
 						linear-gradient(
 							to right,
-							color.adjust(color.mix(variables.$violet, variables.$btn-secondary-color, 79%), $lightness: -8%),
-							color.adjust(variables.$violet, $lightness: -8%)
+							color-mix(in srgb, color-mix(in srgb, variables.$violet 79%, variables.$btn-secondary-color 21%) 92%, black 8%),
+							color-mix(in srgb, variables.$violet 92%, black 8%)
 						);
 				}
 
@@ -123,7 +123,7 @@
 				.dropdown-toggle {
 					&,
 					&:hover {
-						background: color.adjust(variables.$btn-success-color, $lightness: -8%);
+						background: color-mix(in srgb, variables.$btn-success-color 92%, black 8%);
 					}
 				}
 			}
@@ -166,11 +166,11 @@
 				background: variables.$btn-success-color;
 
 				&:hover {
-					background: color.adjust(variables.$btn-success-color, $lightness: 4%);
+					background: color-mix(in srgb, variables.$btn-success-color 96%, white 4%);
 				}
 
 				&:active {
-					background: color.adjust(variables.$btn-success-color, $lightness: -8%);
+					background: color-mix(in srgb, variables.$btn-success-color 92%, black 8%);
 				}
 			}
 		}

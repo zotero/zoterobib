@@ -46,7 +46,7 @@
 			}
 
 			.circle-small {
-				fill: variables.$shade-0;
+				fill: var(--shade-0);
 			}
 		}
 
@@ -59,7 +59,7 @@
 				}
 
 				.character {
-					fill: variables.$shade-0;
+					fill: var(--shade-0);
 				}
 			}
 		}

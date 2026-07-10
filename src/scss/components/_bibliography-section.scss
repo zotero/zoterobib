@@ -63,8 +63,9 @@
 				margin-bottom: variables.$space-xxl - 18px;
 
 				&:hover {
-					background-color: variables.$shade-1;
+					background-color: var(--shade-2);
 					transition: background-color 0.15s 0.15s ease;
+					
 				}
 			}
 
@@ -155,6 +156,10 @@
 				padding: 0;
 			}
 
+			.select-value-label {
+				color: var(--white);
+			}
+
 			.select-arrow-container {
 				margin-right: 0;
 			}
@@ -171,10 +176,16 @@
 
 			.select-option:not(.select-divider) {
 				padding: variables.$space-min variables.$input-btn-padding-x-lg;
+				color: var(--input-selection-text-color);
 
 				&:last-child {
 					color: variables.$link-color;
 				}
+			}
+
+			.select-option:hover {
+
+				color: var(--shade-9);
 			}
 		}
 	}

@@ -21,21 +21,21 @@
 				display: block;
 				height: 0;
 				width: 100%;
-				background-color: rgba(variables.$asphalt-light, .2);
+				background-color: color-mix(in srgb, var(--asphalt-light) 20%, transparent 80%);
 			}
 
 			&:last-child {
-				border-bottom: 1px solid variables.$shade-2;
+				border-bottom: 1px solid var(--medium-divisor-color);
 			}
 
 			&.dnd-target.dnd-target-above::before,
 			&.dnd-target.dnd-target-below::after {
-				border-top: 1px solid variables.$shade-2;
+				border-top: 1px solid var(--medium-divisor-color);
 				height: var(--dnd-height, 50px);
 			}
 
 			&.error {
-				color: color.adjust(variables.$text-color, $lightness: 50%);
+				color: color-mix(in srgb, variables.$text-color 50%, white 50%);
 			}
 		}
 	}
@@ -54,11 +54,11 @@
 	display: flex;
 	align-items: center;
 	padding: (variables.$space-lg - 7px) (variables.$space-md - variables.$space-xs) (variables.$space-lg - 7px) variables.$space-md; // Caps height
-	border-top: 1px solid variables.$shade-2;
+	border-top: 1px solid var(--small-divisor-color);
 	cursor: pointer;
 	position: relative;
 
-	@media (max-width: variables.$bp-md - 1px) {
+	@media (max-width: (variables.$bp-md - 1px)) {
 		padding-right: variables.$space-md - 2px;
 	}
 
@@ -80,7 +80,7 @@
 	&.dnd-ghost {
 		border: 1px solid variables.$shade-5;
 		background-color: variables.$shade-1;
-		box-shadow: 0 2px 20px rgba(variables.$shade-10, 0.2);
+		box-shadow: 0 2px 20px color-mix(in srgb, var(--shade-10) 20%, transparent 80%);
 
 		.drag-handle,
 		.btn-remove,
@@ -91,7 +91,7 @@
 
 	&:hover {
 		@at-root #{selector.replace(&, ".citation", "body:not(.dnd-in-progress) .citation")} {
-			background-color: variables.$shade-1;
+			background-color: var(--citation-hover-color);
 
 			@media (min-width: variables.$bp-md) {
 				.drag-handle,
@@ -184,7 +184,7 @@
 			background-color: variables.$btn-success-color;
 
 			&:active {
-				background-color: color.adjust(variables.$btn-success-color, $lightness: -8%);
+				background-color: color-mix(in srgb, variables.$btn-success-color 92%, black 8%);
 			}
 
 			.icon {
@@ -197,7 +197,7 @@
 				border-color: variables.$btn-secondary-color;
 
 				&:active {
-					border-color: color.adjust(variables.$btn-secondary-color, $lightness: -8%);
+					border-color: color-mix(in srgb, variables.$btn-secondary-color 92%, black 8%);
 				}
 			}
 		}

@@ -115,8 +115,27 @@
 		padding: 0;
 		border: none;
 
+		color: var(--shade-9);
+
 		.select-control {
 			padding: variables.$input-btn-padding-y-sm + 4px variables.$input-btn-padding-x-sm;
+		}
+
+
+		.select-menu-outer {
+			
+			.select-option:hover {
+				color: var(--input-selection-hover-text-color);
+			}
+
+			.select-option {
+				color: var(--input-selection-hover-text-color);
+			}
+
+			.select-option.is-selected {
+				color: var(--input-selection-hover-text-color);
+			}
+
 		}
 	}
 }

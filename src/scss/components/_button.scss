@@ -125,7 +125,7 @@ a.btn {
 			box-shadow: 0 0 0 variables.$input-btn-focus-width variables.$btn-secondary-color;
 
 			&:active {
-				border-color: color.adjust(variables.$btn-secondary-color, $lightness: -8%);
+				border-color: color-mix(in srgb, variables.$btn-secondary-color 92%, black 8%);
 			}
 		}
 	}

@@ -25,8 +25,8 @@
 	}
 
 	&:active {
-		background-color: color.adjust($btn-color, $lightness: -8%);
-		border-color: if(sass($outline): color.adjust($btn-color, $lightness: -8%); else: transparent);
+		background-color: color-mix(in srgb, $btn-color 92%, black 8%);
+		border-color: if(sass($outline), color-mix(in srgb, $btn-color 92%, black 8%), transparent);
 		box-shadow: none;
 
 		&,
@@ -57,7 +57,7 @@
 			}
 
 			&:active {
-				box-shadow: 0 0 0 variables.$input-btn-focus-width color.adjust($btn-color, $lightness: -8%);
+				box-shadow: 0 0 0 variables.$input-btn-focus-width color-mix(in srgb, $btn-color 92%, black 8%);
 			}
 		}
 	}
@@ -66,7 +66,7 @@
 		background-color: variables.$btn-success-color;
 
 		&:active {
-			background-color: color.adjust(variables.$btn-success-color, $lightness: -8%);
+			background-color: color-mix(in srgb, variables.$btn-success-color 92%, black 8%);
 		}
 
 		&:focus {
@@ -80,7 +80,7 @@
 				}
 
 				&:active {
-					box-shadow: 0 0 0 variables.$input-btn-focus-width color.adjust(variables.$btn-success-color, $lightness: -8%);
+					box-shadow: 0 0 0 variables.$input-btn-focus-width color-mix(in srgb, variables.$btn-success-color 92%, black 8%);
 				}
 			}
 		}

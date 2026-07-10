@@ -11,6 +11,17 @@ import '@formatjs/intl-pluralrules/locale-data/en.js' // locale-data for en
 
 const targetDom = document.getElementById('zotero-bib');
 
+// Run Theme update
+let theme = localStorage.getItem("theme") ?? "light";
+
+if (document.body.classList.contains("dark") && theme == "light") {
+	document.body.classList.remove("dark");
+}
+
+else if (theme=="dark") {
+	document.body.classList.add("dark");
+}
+
 if(targetDom) {
 	const config = JSON.parse(document.getElementById('zotero-bib-config').textContent);
 	ZoteroBibComponent.init(targetDom, config);

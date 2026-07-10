@@ -43,7 +43,6 @@ footer {
 	.copyright {
 		display: block;
 		font-size: 12px;
-		opacity: 0.62; // minimum for black text on white background to meet WCAG 2.0 contrast requirements
 
 		ul {
 			list-style: none;
@@ -74,10 +73,10 @@ footer {
 
 			.copyright {
 				opacity: 1;
-				color: #a5a9bb;
+				color: var(--footer-text-color);
 
 				a {
-					color: #a5a9bb;
+					color: var(--footer-text-color);
 				}
 			}
 		}
