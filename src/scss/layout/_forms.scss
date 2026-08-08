@@ -36,26 +36,22 @@
 	position: relative;
 	min-width: 0; // Needed for react-select inside
 
-	.icon-spin {
+	.spinner {
 		position: absolute;
 	}
 
-	.form-control-lg + .icon-spin {
-		width: variables.$space-lg;
-		height: variables.$space-lg;
+	.form-control-lg + .spinner {
 		top: variables.$space-sm;
 		right: variables.$space-md + variables.$input-border-width;
 	}
 
 	.form-control-sm {
-		& + .icon-spin {
-			width: variables.$space-md;
-			height: variables.$space-md;
+		& + .spinner {
 			top: variables.$space-xs;
 			right: variables.$input-btn-padding-x-sm + variables.$input-border-width;
 		}
 
-		&.select-component + .icon-spin {
+		&.select-component + .spinner {
 			right: variables.$input-btn-padding-x-sm + variables.$input-border-width + variables.$space-md + variables.$space-min;
 		}
 	}

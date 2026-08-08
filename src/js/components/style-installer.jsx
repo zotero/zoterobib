@@ -310,7 +310,7 @@ const StyleInstaller = props => {
 						</ul>
 				</div>
 			</div>
-		) : <Spinner /> }
+		) : <Spinner large /> }
 		</Modal>
 	);
 }

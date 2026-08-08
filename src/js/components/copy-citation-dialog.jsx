@@ -254,7 +254,7 @@ const CopyCitationDialog = props => {
 					</div>
 				</div>
 			</div>
-			) : <Spinner />}
+			) : <Spinner large />}
 		</Modal>
 	);
 }

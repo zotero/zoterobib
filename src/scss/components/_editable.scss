@@ -70,7 +70,7 @@
 		}
 
 		@include selectors.state(".busy:not(.textarea) .editable-control") {
-			padding-right: variables.$icon-spin-size-sm + variables.$editable-padding + 1px;
+			padding-right: variables.$spinner-size-sm + variables.$editable-padding + 1px;
 		}
 	}
 
@@ -86,7 +86,7 @@
 		}
 	}
 
-	.icon-spin {
+	.spinner {
 		@media (min-width: variables.$bp-md) {
 			top: 0;
 			right: 0;
@@ -196,7 +196,7 @@
 					padding-right: variables.$space-md;
 
 					@include selectors.state(".busy .pseudo-editable") {
-						padding-right: variables.$icon-spin-size-sm + variables.$editable-padding + 1px;
+						padding-right: variables.$spinner-size-sm + variables.$editable-padding + 1px;
 					}
 				}
 			}
@@ -229,7 +229,7 @@
 		}
 	}
 
-	& + .icon-spin {
+	& + .spinner {
 		right: 0;
 	}
 }

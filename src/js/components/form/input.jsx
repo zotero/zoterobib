@@ -113,7 +113,7 @@ const Input = memo(forwardRef((props, ref) => {
 	return (
 		<div className={ groupClassName }>
 			{ inputComponent }
-			{ isBusy ? <Spinner /> : null }
+			{ isBusy ? <Spinner small={ className.includes('form-control-sm') } /> : null }
 		</div>
 	);
 }));

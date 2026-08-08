@@ -205,8 +205,6 @@ $checkbox-checked-bg-touch: $secondary;
 
 // Icon
 $icon-color: $secondary;
-$icon-spin-size: $space-xl;
-$icon-spin-size-sm: $space-md;
 $icon-active-color: $shade-9;
 
 // Outline
@@ -227,8 +225,9 @@ $editable-hover-bg: rgba($shade-10, $editable-hover-percent);
 $editable-backdrop-bg: $shade-1;
 $editable-backdrop-hover-bg: color.adjust($shade-1, $lightness: -($editable-hover-percent * 100%)); // stylelint-disable-line scss/operator-no-unspaced
 
-// Icons
+// Spinner -- box size of the web-common `small` preset (geometry lives in web-common)
 $spinner-color: $secondary;
+$spinner-size-sm: $space-md;
 
 
 // Badge
@@ -238,9 +237,6 @@ $badge-padding-y: $space-min - 2px;
 $badge-light-border-color: $shade-3;
 $badge-light-bg: $shade-0;
 
-
-// Zotero bib
-$zotero-bib-spinner-size: $space-xl;
 
 // Style selector
 $style-selector-bg: $secondary;
@@ -267,7 +263,7 @@ $modal-header-padding-md: $space-lg;
 $modal-inner-padding-md: $space-lg;
 $modal-header-padding-lg: $space-xl;
 $modal-inner-padding-lg: $space-xl;
-$modal-icon-spin-color: $shade-0;
+$modal-spinner-color: $shade-0;
 
 
 // Multiple choice dialog
@@ -286,10 +282,6 @@ $message-error-bg: $error;
 $message-warning-bg: $warning;
 $message-info-bg: $info;
 $message-success-bg: $success;
-
-
-// Permalink tools
-$permalink-spinner-size: $space-xl;
 
 
 // Menu (select, dropdown, …)

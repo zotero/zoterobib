@@ -30,7 +30,7 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 	return (
         <div className={cx('permalink-tools', { 'loading': isSavingPermalink }) }>
 			{ isSavingPermalink ? (
-				<Spinner />
+				<Spinner large />
 			) : permalink ? (
 				<div className="btn-wrap">
 					<Button

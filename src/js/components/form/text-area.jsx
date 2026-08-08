@@ -106,7 +106,7 @@ const TextAreaInput = memo(forwardRef((props, ref) => {
 	return (
 		<div className={ groupClassName }>
 			{ textarea }
-			{ isBusy && <Spinner /> }
+			{ isBusy && <Spinner small={ !!className?.includes('form-control-sm') } /> }
 		</div>
 	);
 }));

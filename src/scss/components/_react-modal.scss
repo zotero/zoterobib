@@ -45,10 +45,8 @@
 			height: calc(100% - 2 * #{variables.$space-xl});
 		}
 
-		.icon-spin {
-			width: variables.$icon-spin-size;
-			height: variables.$icon-spin-size;
-			color: variables.$modal-icon-spin-color;
+		.spinner {
+			color: variables.$modal-spinner-color;
 		}
 	}
 }

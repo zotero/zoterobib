@@ -104,7 +104,7 @@ const SelectInput = forwardRef((props, ref) => {
 					{ ... pick(rest, p => p.startsWith('data-')) }
 				/>
 			) }
-			{ isBusy ? <Spinner className="small" /> : null }
+			{ isBusy ? <Spinner small /> : null }
 		</div>
 	);
 });

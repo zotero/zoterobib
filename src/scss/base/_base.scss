@@ -34,16 +34,3 @@ body {
 	color: variables.$body-color;
 	background-color: variables.$body-bg;
 }
-
-.zotero-bib-container {
-	&.loading {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		.icon-spin {
-			width: variables.$zotero-bib-spinner-size;
-			height: variables.$zotero-bib-spinner-size;
-		}
-	}
-}
