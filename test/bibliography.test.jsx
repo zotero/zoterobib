@@ -91,6 +91,7 @@ describe('Citations', () => {
 		expect(copy.mock.calls[0][0]).toEqual(
 			expect.stringContaining('Bose, K. S., and R. H. Sarma. “Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution.”')
 		);
+		expect(copy.mock.calls[0][1]).toEqual(expect.objectContaining({ format: 'text/html' }));
 		await waitFor(
 			() => expect(screen.queryByRole('button', { name: 'Copied!' })).not.toBeInTheDocument(),
 			{ timeout: 2000 }

@@ -1,11 +1,10 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useReducer } from 'react';
-import copy from 'copy-to-clipboard';
 import SmoothScroll from 'smooth-scroll';
 import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import { useIntl } from 'react-intl';
 import { usePrevious } from 'web-common/hooks';
-import { pick, omit } from 'web-common/utils';
+import { copyWithHtml, pick, omit } from 'web-common/utils';
 import { CiteprocWrapper, fetchAndParseIndependentStyle, formatBib, formatFallback,
 	getBibliographyFormatParameters } from 'web-common/cite';
 import { configureZoteroShim } from 'web-common/zotero';
@@ -242,7 +241,6 @@ const BibWebContainer = props => {
 	const citeproc = useRef(null);
 	const bib = useRef(null);
 	const abortController = useRef(null);
-	const copyDataInclude = useRef(null);
 	const revertCitationStyle = useRef(null);
 	const lastDeletedItem = useRef(null);
 	const duplicate = useRef(null);
@@ -614,18 +612,6 @@ const BibWebContainer = props => {
 					formatFallback(bibliographyItems) :
 				bibliographyItems.map(i => i.value).join('\n');
 
-
-			if(exportFormats[format].include) {
-				copyDataInclude.current = [
-				{
-					mime: exportFormats[format].mime,
-					data: copyData
-				},
-				{
-					mime: exportFormats[exportFormats[format].include].mime,
-					data: await getCopyData(exportFormats[format].include)
-				}];
-			}
 			return copyData;
 		}
 
@@ -714,12 +700,7 @@ const BibWebContainer = props => {
 	}, []);
 
 	const handleCitationCopy = useCallback(() => {
-		copyDataInclude.current = [
-			{ mime: 'text/plain', data: copyCitationState.inTextPlain },
-			{ mime: 'text/html', data: copyCitationState.inTextHtml },
-		];
-
-		return copy(copyCitationState.inTextPlain);
+		return copyWithHtml(copyCitationState.inTextPlain, copyCitationState.inTextHtml);
 	}, [copyCitationState.inTextHtml, copyCitationState.inTextPlain]);
 
 	const handleCopySingle = useCallback(async citationKey => {
@@ -736,12 +717,7 @@ const BibWebContainer = props => {
 			const bibliographyPlain = await getCopyData('plain',
 				getItemsCSL([state.bibliography.lookup[citationKey]])
 			);
-			copyDataInclude.current = [
-				{ mime: 'text/plain', data: bibliographyPlain },
-				{ mime: 'text/html', data: bibliographyHtml },
-			];
-
-			if(copy(bibliographyPlain)) {
+			if(await copyWithHtml(bibliographyPlain, bibliographyHtml)) {
 				setCopySingleState({ citationKey, copied: true });
 				copySingleTimeout.current = setTimeout(() => {
 					setCopySingleState({ citationKey: null, copied: false });
@@ -751,16 +727,6 @@ const BibWebContainer = props => {
 			setCopySingleState({ citationKey: null, copied: false });
 		}
 	}, [getCopyData, state.bibliography.lookup]);
-
-	const handleCopyToClipboard = useCallback(ev => {
-		if(copyDataInclude.current) {
-			copyDataInclude.current.forEach(copyDataFormat => {
-				ev.clipboardData.setData(copyDataFormat.mime, copyDataFormat.data);
-			});
-			ev.preventDefault();
-			copyDataInclude.current = null;
-		}
-	}, []);
 
 	const handleCitationModifierChange = useCallback(citationCopyModifiers => {
 		setCopyCitationState(state => ({ ...state, modifiers: citationCopyModifiers }));
@@ -1409,8 +1375,6 @@ const BibWebContainer = props => {
 	}, [state.incomingStyle, state.selected, prevIncomingStyleName, installCitationStyle]);
 
 	useEffect(() => {
-		document.addEventListener('copy', handleCopyToClipboard, true);
-
 		const params = new URLSearchParams(location.search);
 		//citeproc-rs is opt-in, i.e. if truthy then useLegacy = false, defaults to true
 		useLegacy.current = !params.get('use_experimental_citeproc') || (['false', '0']).includes(params.get('use_experimental_citeproc'));

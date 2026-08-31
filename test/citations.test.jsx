@@ -115,7 +115,7 @@ describe('Citations', () => {
 		await waitFor(
 			() => expect(screen.queryByRole('dialog', { name: 'Copy Citation' })).not.toBeInTheDocument()
 		);
-		expect(copy).toHaveBeenCalledWith('(ch. 42)');
+		expect(copy).toHaveBeenCalledWith('(ch. 42)', expect.objectContaining({ format: 'text/html' }));
 	});
 
 	test('Supports copying a single bibliography entry', async () => {
@@ -128,6 +128,7 @@ describe('Citations', () => {
 
 		await user.click(getByRole(firstCitation, 'button', { name: 'Copy Bibliography Entry' }));
 		expect(copy.mock.calls[0][0]).toMatch(/Bose, K\. S\., and R\. H\. Sarma. “Delineation of the Intimate Details of the Backbone Conformation of Pyridine Nucleotide Coenzymes in Aqueous Solution\.”/);
+		expect(copy.mock.calls[0][1]).toEqual(expect.objectContaining({ format: 'text/html' }));
 
 	});
 

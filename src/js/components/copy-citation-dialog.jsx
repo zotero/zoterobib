@@ -119,8 +119,8 @@ const CopyCitationDialog = props => {
 		onCitationCopyDialogClose();
 	}, [onCitationCopyDialogClose]);
 
-	const handleConfirm = useCallback(() => {
-		if(onCitationCopy()) {
+	const handleConfirm = useCallback(async () => {
+		if(await onCitationCopy()) {
 			setIsCopied(true);
 			timeout.current = setTimeout(() => {
 				onCitationCopyDialogClose();

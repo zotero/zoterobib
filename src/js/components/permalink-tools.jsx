@@ -18,8 +18,8 @@ const PermalinkTools = ({ bibliography, isSafari, onSave, permalink }) => {
 		}
 	}, [onSave, permalink]);
 
-	const handleCopy = useCallback(() => {
-		if(copy(permalink) && !isRecentlyCopied) {
+	const handleCopy = useCallback(async () => {
+		if(await copy(permalink) && !isRecentlyCopied) {
 			setIsRecentlyCopied(true);
 			setTimeout(() => {
 				setIsRecentlyCopied(false)

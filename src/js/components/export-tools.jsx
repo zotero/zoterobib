@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'web-common/components';
-import { isTriggerEvent } from 'web-common/utils';
+import { copyWithHtml, isTriggerEvent } from 'web-common/utils';
 import { usePrevious } from 'web-common/hooks';
 
 
@@ -76,7 +76,9 @@ const ExportTools = props => {
 			setIsDropdownOpen(false);
 		}
 		const text = await getCopyData(format);
-		const result = copy(text);
+		const result = exportFormats[format].include === 'html' ?
+			await copyWithHtml(text, await getCopyData('html')) :
+			await copy(text);
 		if(result) {
 			handleClipoardSuccess(format);
 		}
