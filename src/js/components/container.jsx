@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { saveAs } from 'file-saver';
 import { useIntl } from 'react-intl';
 import { usePrevious } from 'web-common/hooks';
-import { copyWithHtml, pick, omit } from 'web-common/utils';
+import { CHOICE, CHOICE_EXHAUSTED, EMPTY, ERROR, MULTIPLE, NOT_FOUND, copyWithHtml, pick, omit } from 'web-common/utils';
 import { CiteprocWrapper, fetchAndParseIndependentStyle, formatBib, formatFallback,
 	getBibliographyFormatParameters } from 'web-common/cite';
 import { configureZoteroShim } from 'web-common/zotero';
@@ -858,31 +858,20 @@ const BibWebContainer = props => {
 
 	const handleMultipleChoiceMore = useCallback(async () => {
 		setIsTranslatingMore(true);
-		try {
-			let { result, items, next } = await bib.current.translateIdentifier(identifier, {
-				endpoint: moreItemsLink,
-				add: false
-			});
+		const { result, items, next } = await bib.current.translateIdentifier(identifier, { endpoint: moreItemsLink });
+		setIsTranslatingMore(false);
 
-			switch(result) {
-				case ZoteroBib.COMPLETE:
-				case ZoteroBib.MULTIPLE_CHOICES:
-					setIsTranslatingMore(false);
-					setActiveDialog('MULTIPLE_CHOICE_DIALOG');
-					setMoreItemsLink(next);
-					setMultipleChoiceItems(dedupMultipleChoiceItems([
-						...multipleChoiceItems,
-						...(await processMultipleChoiceItems(items, state.meta.itemTypes))
-					]));
-				break;
-				case ZoteroBib.FAILED:
-					handleError('An error occurred while fetching more items.');
-					setIsTranslatingMore(false);
-				break;
-			}
-		} catch(e) {
-			handleError('An error occurred while fetching more items.', e);
-			setIsTranslatingMore(false);
+		if(result === CHOICE || result === CHOICE_EXHAUSTED) {
+			setActiveDialog('MULTIPLE_CHOICE_DIALOG');
+			setMoreItemsLink(next);
+			setMultipleChoiceItems(dedupMultipleChoiceItems([
+				...multipleChoiceItems,
+				...(await processMultipleChoiceItems(items, state.meta.itemTypes))
+			]));
+		} else if(result === EMPTY) {
+			setMoreItemsLink(null);
+		} else {
+			handleError('An error occurred while fetching more items.');
 		}
 	}, [handleError, identifier, moreItemsLink, multipleChoiceItems, state.meta]);
 
@@ -1077,7 +1066,7 @@ const BibWebContainer = props => {
 		setItemUnderReview(null);
 		setPermalink(null);
 
-		const opts = { add: false };
+		const opts = {};
 
 		if(typeof(AbortController) === 'function') {
 			abortController.current = new AbortController();
@@ -1086,32 +1075,28 @@ const BibWebContainer = props => {
 
 		let isUrl = !!multipleSelectedItems || (!shouldImport && isLikeUrl(identifier));
 		if(identifier || isUrl) {
-			try {
-				var translationResponse;
-				if(isUrl) {
-					let url = validateUrl(identifier);
-					if(url) {
-						setIdentifier(url);
-					}
-					if(multipleSelectedItems) {
-						translationResponse = await bib.current.translateUrlItems(url, multipleSelectedItems, opts);
-					} else {
-						translationResponse = await bib.current.translateUrl(url, opts);
-					}
-				} else if(shouldImport) {
-					translationResponse = await bib.current.translateImport(identifier, opts);
+			let translationResponse;
+			if(isUrl) {
+				let url = validateUrl(identifier);
+				if(url) {
+					setIdentifier(url);
+				}
+				if(multipleSelectedItems) {
+					translationResponse = await bib.current.translateUrlItems(url, multipleSelectedItems, opts);
 				} else {
-					translationResponse = await bib.current.translateIdentifier(identifier, opts);
+					translationResponse = await bib.current.translateUrl(url, opts);
 				}
-
-				dispatch({ type: TRANSLATION_RECEIVED, translationResponse, identifier, shouldConfirm, shouldImport, shouldUseIncomingStyle, isUrl });
-			} catch(e) {
-				if(e instanceof DOMException && e.message === 'The user aborted a request.') {
-					return;
-				}
-				handleError('An error occurred while citing this source.', e);
-				setIsTranslating(false);
+			} else if(shouldImport) {
+				translationResponse = await bib.current.translateImport(identifier, opts);
+			} else {
+				translationResponse = await bib.current.translateIdentifier(identifier, opts);
 			}
+
+			if(translationResponse.error?.name === 'AbortError') {
+				return;
+			}
+
+			dispatch({ type: TRANSLATION_RECEIVED, translationResponse, identifier, shouldConfirm, shouldImport, shouldUseIncomingStyle, isUrl });
 		} else {
 			handleError('Value entered doesn’t appear to be a valid URL or identifier');
 			setIsTranslating(false);
@@ -1123,15 +1108,7 @@ const BibWebContainer = props => {
 		const { xml, styleHasBibliography } = shouldUseIncomingStyle ? state.incomingStyle : state;
 
 		switch (translationResponse.result) {
-			case ZoteroBib.COMPLETE:
-				if (translationResponse.items.length === 0) {
-					dispatch({
-						type: POST_MESSAGE,
-						message: { id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
-					});
-					setIsTranslating(false);
-					return;
-				}
+			case MULTIPLE:
 				var rootItems = translationResponse.items.filter(item => !item.parentItem);
 				rootItems.forEach(item => validateItem(
 						item,
@@ -1188,7 +1165,8 @@ const BibWebContainer = props => {
 				});
 
 				break;
-			case ZoteroBib.MULTIPLE_CHOICES:
+			case CHOICE:
+			case CHOICE_EXHAUSTED:
 				setIsTranslating(false);
 				setActiveDialog('MULTIPLE_CHOICE_DIALOG');
 				setMoreItemsLink(translationResponse.next);
@@ -1196,8 +1174,19 @@ const BibWebContainer = props => {
 					await processMultipleChoiceItems(translationResponse.items, state.meta.itemTypes, isUrl)
 				));
 				break;
-			case ZoteroBib.FAILED:
-				handleError('An error occurred while citing this source.');
+			case EMPTY:
+				if(translationResponse.reason === NOT_FOUND) {
+					dispatch({
+						type: POST_MESSAGE,
+						message: { id: getNextMessageId(), kind: 'INFO', message: 'No results found', }
+					});
+				} else {
+					handleError('An error occurred while citing this source.', translationResponse.serverMessage);
+				}
+				setIsTranslating(false);
+				break;
+			case ERROR:
+				handleError('An error occurred while citing this source.', translationResponse.error ?? translationResponse.serverMessage);
 				setIsTranslating(false);
 				break;
 		}

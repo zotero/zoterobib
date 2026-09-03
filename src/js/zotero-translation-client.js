@@ -1,19 +1,17 @@
-import { isLikeZoteroItem, mergeFetchOptions } from './utils.js';
+import { isLikeZoteroItem } from './utils.js';
 import { getZotero } from 'web-common/zotero';
+import { requestTranslation, MULTIPLE } from 'web-common/utils';
 
 const defaults = {
 	translateURL: typeof window != 'undefined' && window.location.origin || '',
 	translatePrefix: '',
-	fetchConfig: {},
 	initialItems: [],
-	request: {},
 	storage: typeof window != 'undefined' && 'localStorage' in window && window.localStorage || {},
 	persist: true,
 	override: false,
 	storagePrefix: 'zotero-bib'
 };
 
-const [ COMPLETE, MULTIPLE_CHOICES, FAILED ] = [ 'COMPLETE', 'MULTIPLE_CHOICES', 'FAILED' ];
 class ZoteroTranslationClient {
 	constructor(opts) {
 		this.opts = {
@@ -99,16 +97,19 @@ class ZoteroTranslationClient {
 		return this.items;
 	}
 
-	async exportItems(format, opts = {}) {
-		let translateURL = `${this.opts.translateURL}/${this.opts.translatePrefix}export?format=${format}`;
-		let fetchOptions = mergeFetchOptions({
+	getTranslateURL(endpoint) {
+		return `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
+	}
+
+	async exportItems(format, { init } = {}) {
+		const response = await fetch(this.getTranslateURL(`/export?format=${format}`), {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(this.items.filter(i => 'key' in i )),
-		}, this.opts, opts);
-		const response = await fetch(translateURL, fetchOptions);
+			body: JSON.stringify(this.items.filter(i => 'key' in i)),
+			...init
+		});
 		if(response.ok) {
 			return await response.text();
 		} else {
@@ -116,107 +117,41 @@ class ZoteroTranslationClient {
 		}
 	}
 
-	async translateIdentifier(identifier, { endpoint = '/search', ...opts } = {}) {
-		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-
-		let init = mergeFetchOptions({
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain',
-			},
-			body: identifier,
-		}, this.opts, opts);
-
-		return await this.translate(translateURL, init, opts);
+	translateIdentifier(identifier, { endpoint = '/search', init } = {}) {
+		return this.translate(this.getTranslateURL(endpoint), identifier, init);
 	}
 
-	async translateUrlItems(url, items, { endpoint = '/web', ...opts } = {}) {
-		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-		let data = { url, items, session: this.session, ...this.opts.request };
-
-		let init = mergeFetchOptions({
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		}, this.opts, opts);
-
-		return await this.translate(translateURL, init, opts);
+	translateUrlItems(url, items, { endpoint = '/web', init } = {}) {
+		return this.translate(this.getTranslateURL(endpoint), { url, items, session: this.session }, init);
 	}
 
-	async translateUrl(url, { endpoint = '/web', ...opts } = {}) {
-		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-
-		let init = mergeFetchOptions({
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain',
-			},
-			body: url,
-		}, this.opts, opts);
-
-		return await this.translate(translateURL, init, opts);
+	translateUrl(url, { endpoint = '/web', init } = {}) {
+		return this.translate(this.getTranslateURL(endpoint), url, init);
 	}
 
-	async translateImport(data, { endpoint = '/import', ...opts } = {}) {
-		let translateURL = `${this.opts.translateURL}${this.opts.translatePrefix}${endpoint}`;
-		let init = mergeFetchOptions({
-			method: 'POST',
-			headers: {
-				'Content-Type': 'text/plain',
-			},
-			body: data,
-		}, this.opts, opts);
-
-		return await this.translate(translateURL, init, opts);
+	translateImport(data, { endpoint = '/import', init } = {}) {
+		return this.translate(this.getTranslateURL(endpoint), data, init);
 	}
 
-	async translate(url, fetchOptions, { add = true } = {}) {
-		const response = await fetch(url, fetchOptions);
-		var items, result, next = null;
+	// Keeps the web session for a follow-up request and resolves the `CURRENT_TIMESTAMP` placeholder,
+	// which only the Zotero API understands, since items are stored locally
+	async translate(url, body, init) {
+		const outcome = await requestTranslation(url, body, init);
 
-		if(response.headers.has('link')) {
-			const links = response.headers.get('link');
-			const matches = links.match(/<(.*?)>;\s+rel="next"/i);
-
-			if(matches && matches.length > 1) {
-				next = matches[1];
-			}
-		}
-		if(response.ok) {
-			items = await response.json();
-			if(Array.isArray(items)) {
-				items.forEach(item => {
-					if(item.accessDate === 'CURRENT_TIMESTAMP') {
-						const dt = new Date(Date.now());
-						item.accessDate = getZotero().Date.dateToSQL(dt, true);
-					}
-					if(add) {
-						this.addItem(item);
-					}
-				});
-			}
-			result = Array.isArray(items) ? COMPLETE : FAILED;
-		} else if(response.status === 300) {
-			var data = await response.json();
-			if('items' in data && 'session' in data) {
-				this.session = data.session;
-				items = data.items;
-			} else {
-				items = data;
-			}
-			result = MULTIPLE_CHOICES;
-		} else {
-			result = FAILED
+		if(outcome.session) {
+			this.session = outcome.session;
 		}
 
-		return { result, items, response, next };
-	}
+		if(outcome.result === MULTIPLE) {
+			outcome.items.forEach(item => {
+				if(item.accessDate === 'CURRENT_TIMESTAMP') {
+					item.accessDate = getZotero().Date.dateToSQL(new Date(Date.now()), true);
+				}
+			});
+		}
 
-	static get COMPLETE() { return COMPLETE }
-	static get MULTIPLE_CHOICES() { return MULTIPLE_CHOICES }
-	static get FAILED() { return FAILED }
+		return outcome;
+	}
 }
 
 export default ZoteroTranslationClient;

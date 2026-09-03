@@ -470,4 +470,45 @@ describe('Translate', () => {
 		});
 		expect(hasTranslated).toBe(true);
 	});
+
+	test('Shows a message when the identifier is not recognized by the translation server', async () => {
+		server.use(
+			http.post('http://localhost/search', async ({ request }) => {
+				expect(await request.text()).toBe('978-1979837125');
+				return HttpResponse.text('No items returned from any translator', { status: 501 });
+			})
+		);
+
+		renderWithProviders(<Container />);
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+		const user = userEvent.setup();
+		await user.type(input, '978-1979837125{enter}');
+
+		const status = await screen.findByRole('status', { name: 'No results found' });
+		expect(status).toHaveClass('info');
+		expect(input).not.toHaveAttribute('readonly');
+
+		const bibliography = screen.getByRole("list", { name: "Bibliography" });
+		expect(getAllByRole(bibliography, 'listitem')).toHaveLength(5);
+	});
+
+	test('Shows an error when the translation server cannot be reached', async () => {
+		server.use(
+			http.post('http://localhost/search', () => HttpResponse.error())
+		);
+
+		renderWithProviders(<Container />);
+		const input = await screen.findByRole(
+			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }
+		);
+		const user = userEvent.setup();
+		await user.type(input, '978-1979837125{enter}');
+
+		const status = await screen.findByRole('status', { name: 'An error occurred while citing this source.' });
+		expect(status).toHaveClass('error');
+		expect(input).not.toHaveAttribute('readonly');
+	});
+
 });
