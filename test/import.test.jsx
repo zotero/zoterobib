@@ -120,11 +120,15 @@ describe('Import', () => {
 		renderWithProviders(<Container />);
 
 		const modal = await screen.findByRole('dialog', { name: 'Add this citation to your bibliography?' }, { timeout: 3000 });
+		expect(getByRole(modal, 'tablist', { name: 'Citation Style' })).toBeInTheDocument();
+		expect(queryByRole(modal, 'navigation')).not.toBeInTheDocument();
 		expect(getByRole(modal, 'tab', { name: 'MLA Handbook (in-text citations)', selected: true })).toBeInTheDocument();
+		expect(getByRole(modal, 'tabpanel', { name: 'MLA Handbook (in-text citations)' })).toHaveTextContent(/Golden Retriever/);
 		const incomingStyleTab = getByRole(modal, 'tab', { name: 'Nature' });
 		expect(getByRole(modal, 'button', { name: 'Add' })).toBeInTheDocument();
 		await user.click(incomingStyleTab);
 		expect(getByRole(modal, 'tab', { name: 'Nature', selected: true })).toBeInTheDocument();
+		expect(getByRole(modal, 'tabpanel', { name: 'Nature' })).toHaveTextContent(/Golden Retriever/);
 		await user.click(getByRole(modal, 'button', { name: 'Add and switch to "Nature"' }));
 		await waitFor(() => expect(screen.getByRole(
 			'searchbox', { name: 'Enter a URL, ISBN, DOI, PMID, arXiv ID, or title' }

@@ -75,8 +75,13 @@ const ConfirmAddDialog = props => {
 
 					{ itemToConfirm.inIncomingStyle ? (
 						<>
-							<Tabs justified activateOnFocus>
+							<Tabs
+								justified
+								activateOnFocus
+								aria-label={ intl.formatMessage({ id: 'zbib.styleSelector.label', defaultMessage: 'Citation Style' }) }
+							>
 								<Tab
+									id="current-style-tab"
 									isActive={activeTab === "current-style-content"}
 									aria-controls="current-style-content"
 									onActivate={ handleSelectTab }
@@ -84,6 +89,7 @@ const ConfirmAddDialog = props => {
 									{ selectedStyle.titleShort ?? selectedStyle.title }
 								</Tab>
 								<Tab
+									id="incoming-style-tab"
 									isActive={activeTab === "incoming-style-content"}
 									aria-controls="incoming-style-content"
 									onActivate={ handleSelectTab }
@@ -94,12 +100,14 @@ const ConfirmAddDialog = props => {
 							<TabPane
 								isActive={ activeTab === "current-style-content" }
 								id="current-style-content"
+								aria-labelledby="current-style-tab"
 							>
 								<div dangerouslySetInnerHTML={{ __html: currentStyleHtml() } } />
 							</TabPane>
 							<TabPane
 								isActive={ activeTab === "incoming-style-content" }
 								id="incoming-style-content"
+								aria-labelledby="incoming-style-tab"
 							>
 								<div dangerouslySetInnerHTML={ { __html: incomingStyleHtml() } } />
 							</TabPane>
