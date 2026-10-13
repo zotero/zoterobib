@@ -205,4 +205,39 @@ describe('Editor', () => {
 		const expectedDate = getZotero().Date.parseDescriptiveString('today');
 		expect(dateParsedBackFromCitation).toEqual(expectedDate);
 	});
+
+	test.each([
+		['1995-1996', '1995–1996'],
+		['circa 1995', '[1995?]'],
+		['2004-06~', '[Jun. 2004?]'],
+		['-429', '429BC'],
+		['1000-900 BCE', '1000–900BC'],
+		['"May 2021"', 'May 2021'],
+		['January 20BC', 'Jan. 20BC'],
+		['March 15, 44 BC', '15 Mar. 44BC'],
+	])('It saves date %s as typed and cites it as %s', async (date, citedDate) => {
+		localStorage.removeItem('zotero-bib-items');
+		renderWithProviders(<Container />);
+		const user = userEvent.setup();
+		const manualEntryButton = screen.getByRole(
+			'button', { name: 'Manual Entry' }
+		);
+		await user.click(manualEntryButton);
+		const dialog = await screen.findByRole('dialog', { name: 'Item Editor' });
+
+		const inputTypeCombo = screen.getByRole('combobox', { name: 'Item Type' });
+		await user.click(inputTypeCombo);
+		await user.selectOptions(getByRole(inputTypeCombo, 'listbox'), 'Web Page');
+
+		await user.type(getByRole(dialog, 'textbox', { name: 'Title' }), 'Dated Page');
+		await user.type(getByRole(dialog, 'textbox', { name: 'Date' }), date);
+
+		const doneButton = screen.getByRole('button', { name: 'Done' });
+		await user.click(doneButton);
+		const bibliography = await screen.findByRole('list', { name: 'Bibliography' }, { timeout: 3000 });
+		const citation = getAllByRole(bibliography, 'listitem')[0]
+			.querySelector('.csl-entry-container');
+		expect(citation).toHaveTextContent(`Dated Page. ${citedDate}.`);
+		expect(JSON.parse(localStorage.getItem('zotero-bib-items'))[0].date).toBe(date);
+	});
 });
